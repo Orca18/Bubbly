@@ -35,4 +35,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Java-algorand-sdk
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
+    implementation 'com.github.Jesulonimi21:java-algorand-sdk:1.5.0'
 }
