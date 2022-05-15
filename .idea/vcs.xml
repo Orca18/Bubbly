@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/MyCode/Android_APP/2021/Tarot_Diary" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/Android_APP/ArkBlog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/Android_APP/ArkTest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/Android_APP/StudyTime" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/Android_APP/TarotDiary" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/Calendar_IOS" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/Notification_Channel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/arkBlog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyCode/artistarz_Test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/TeamProject" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/TeamProject/novarand" vcs="Git" />
+  </component>
+</project>
