@@ -11,6 +11,7 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_home_2_fill.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_home_2_fills.xml" value="0.36354166666666665" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_home_fill.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_search_line.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_user_fill.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/a_home.xml" value="0.3619791666666667" />
@@ -20,6 +21,11 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/d_profile.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/home.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/login.xml" value="0.33" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_a_home.xml" value="0.33" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_b_issue.xml" value="0.75" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_c_message.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_d_profile.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_d_wallet.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/posting.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/register.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/register_a.xml" value="0.33" />

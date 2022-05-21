@@ -25,7 +25,7 @@
         android:paddingHorizontal="14dp">
 
         <LinearLayout
-            android:id="@+id/message_tohome"
+            android:id="@+id/_tohome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -45,7 +45,7 @@
 
 
         <LinearLayout
-            android:id="@+id/message_toissue"
+            android:id="@+id/_toissue"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -64,7 +64,7 @@
 
 
         <LinearLayout
-            android:id="@+id/message_towallet"
+            android:id="@+id/_towallet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -76,14 +76,14 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="@null"
-                android:src="@drawable/ic_baseline_account_balance_wallet_24"
+                android:src="@drawable/ic_outline_account_balance_wallet_24"
                 app:tint="@color/black" />
 
         </LinearLayout>
 
 
         <LinearLayout
-            android:id="@+id/message_tomessage"
+            android:id="@+id/_tomessage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -101,7 +101,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/message_myprofile"
+            android:id="@+id/_tomyprofile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -113,7 +113,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="@null"
-                android:src="@drawable/ic_outline_person_24"
+                android:src="@drawable/ic_baseline_person_24"
                 app:tint="@color/black" />
 
         </LinearLayout>
