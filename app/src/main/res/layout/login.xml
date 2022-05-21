@@ -45,13 +45,13 @@
         <TextView
             android:id="@+id/text_view"
             android:layout_width="wrap_content"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="60dp"
-            android:fontFamily="@font/jalnan"
+            android:fontFamily="@font/chocolate"
             android:text="Bubbly"
             android:textColor="@color/black"
-            android:textSize="40dp" />
+            android:textSize="50dp" />
 
 
         <TextView
@@ -98,17 +98,34 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/edittext_radius"
             android:hint="비밀번호"
-            android:inputType="textEmailAddress"
+            android:inputType="textPassword"
             android:maxLines="1"
             android:padding="10dp"
             android:singleLine="true"
             android:textCursorDrawable="@drawable/rss_et_cursor"
             android:textSize="14dp" />
 
-        <LinearLayout
+
+
+
+        <Button
+            android:id="@+id/btn_login_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginHorizontal="54dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/black"
+            android:fontFamily="@font/spoqa_medium"
+            android:padding="5dp"
+            android:textSize="16dp"
+            android:text="로그인"
+            android:textColor="@color/white" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/find_id"
@@ -118,7 +135,7 @@
                 android:fontFamily="@font/spoqa_medium"
                 android:gravity="right"
                 android:text="가입하기"
-                android:textSize="14dp" />
+                android:textSize="15dp" />
 
             <View
                 android:layout_width="1dp"
@@ -134,23 +151,9 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/spoqa_medium"
                 android:text="계정 찾기"
-                android:textSize="14dp" />
+                android:textSize="15dp" />
 
         </LinearLayout>
-
-
-        <Button
-            android:id="@+id/btn_login_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="54dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="25dp"
-            android:backgroundTint="@color/black"
-            android:fontFamily="@font/spoqa_medium"
-            android:padding="5dp"
-            android:text="로그인"
-            android:textColor="@color/white" />
 
     </LinearLayout>
 
@@ -212,6 +215,7 @@
 
 
         <TextView
+            android:layout_marginTop="6dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="50dp"
