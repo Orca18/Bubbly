@@ -40,4 +40,8 @@ dependencies {
     // Java-algorand-sdk
     implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
     implementation 'com.github.Jesulonimi21:java-algorand-sdk:1.5.0'
+
+    // swipe
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_camera"
+            android:title="Camera"
+            android:icon="@drawable/ic_baseline_person_24"/>
+
+        <item
+            android:id="@+id/nav_camera2"
+            android:title="Camera2"
+            android:icon="@drawable/ic_baseline_person_24"/>
+
+        <item
+            android:id="@+id/nav_camera3"
+            android:title="Camera3"
+            android:icon="@drawable/ic_baseline_person_24"/>
+
+    </group>
+
+</menu>
