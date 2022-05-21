@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.airbnb.lottie.LottieAnimationView;
 
 public class Splash extends AppCompatActivity {
+    androidx.appcompat.widget.Toolbar toolbar;
 
     ImageView appname,splashimg;
 
@@ -20,6 +21,12 @@ public class Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+
+
+        // 툴바
+        toolbar = findViewById(R.id.splash_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 

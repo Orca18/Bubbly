@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/main_a_home_include" />
+    <include layout="@layout/main_a_home_include"/>
 
 
     <com.google.android.material.navigation.NavigationView

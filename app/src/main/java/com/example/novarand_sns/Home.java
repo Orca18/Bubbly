@@ -20,7 +20,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class Home extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.main_a_home);
 
         // 툴바
-        setContentView(R.layout.main_a_home);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -46,9 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        Item item = new Item(R.mipmap.ic_launcher, "테스트용", "22/05/22");
         for (int i = 0; i < 20; i++){
-                    list.add(item);
+                    list.add(new Item(R.mipmap.ic_launcher, "테스트용"+i, "22/05/22"));
         }
 
         ItemRecyclerViewAdapter itemRecyclerViewAdapter = new ItemRecyclerViewAdapter(this, R.layout.item, list);

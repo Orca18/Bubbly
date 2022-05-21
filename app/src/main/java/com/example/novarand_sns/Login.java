@@ -21,7 +21,7 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Login.this,MainActivity.class));
+                startActivity(new Intent(Login.this, Home.class));
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
             }
         });
