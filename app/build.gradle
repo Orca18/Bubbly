@@ -44,4 +44,7 @@ dependencies {
     // swipe
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 
+    // splash screen
+    implementation 'com.airbnb.android:lottie:3.4.1'
+
 }
