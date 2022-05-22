@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
+            android:name=".Register_A"
+            android:exported="false" />
+        <activity
+            android:name=".Register_B"
+            android:exported="false" />
+        <activity
             android:name=".Login"
             android:exported="false" />
         <activity

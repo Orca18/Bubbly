@@ -46,6 +46,7 @@ public class Home extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,7 @@ public class Home extends AppCompatActivity {
 
         // 리소스 ID 선언
         initiallize();
+        // 바텀 메뉴 (TODO 바텀
         // 리사이클러뷰 데이터 가져오기
         loadrecycler();
         // 클릭 리스너 모음
@@ -76,7 +78,7 @@ public class Home extends AppCompatActivity {
 
         for (int i = 0; i < 20; i++){
             // TODO 시간 계산 → String 으로 넣어주기
-            this.exampleList.add(new Posts_Item(임시프사, "이름"+i,"아이디"+i,"내용","",1,2,3,"", i+"h"));
+            this.exampleList.add(new Posts_Item(임시프사, "이름"+i,"아이디"+i,"내용", "",1,2,3, "", i+"h"));
 
         }
 

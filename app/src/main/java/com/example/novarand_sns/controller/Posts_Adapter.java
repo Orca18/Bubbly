@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.novarand_sns.R;
 import com.example.novarand_sns.model.Posts_Item;
 
@@ -51,7 +53,7 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
         holder.post_Username.setText(currentItem.getUserName());
         holder.post_UserID.setText(currentItem.getUserId());
         holder.post_Content.setText(currentItem.getPostContent());
-        Glide.with(holder.itemView.getContext()).load(currentItem.getPostMedia()).centerCrop().into(holder.contentIMG);
+        Glide.with(holder.itemView.getContext()).load(currentItem.getPostMedia()).fitCenter().apply(RequestOptions.bitmapTransform(new RoundedCorners(14))).into(holder.contentIMG);
         holder.post_likecount.setText(""+currentItem.getPostLikeCount());
         holder.post_replycount.setText(""+currentItem.getPostReplyCount());
         holder.post_rebucount.setText(""+currentItem.getPostRebuCount());
