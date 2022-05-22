@@ -53,6 +53,7 @@
     </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
+        app:lottie_colorFilter="@color/black"
         android:layout_marginTop="50dp"
         android:layout_gravity="bottom"
         android:id="@+id/lottie_voltz"

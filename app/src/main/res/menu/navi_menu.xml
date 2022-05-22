@@ -4,20 +4,17 @@
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/nav_camera"
-            android:title="Camera"
-            android:icon="@drawable/ic_baseline_person_24"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_camera"-->
+<!--            android:title="설정"/>-->
 
-        <item
-            android:id="@+id/nav_camera2"
-            android:title="Camera2"
-            android:icon="@drawable/ic_baseline_person_24"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_camera2"-->
+<!--            android:title="고객센터"/>-->
 
-        <item
-            android:id="@+id/nav_camera3"
-            android:title="Camera3"
-            android:icon="@drawable/ic_baseline_person_24"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_camera3"-->
+<!--            android:title="로그아웃" />-->
 
     </group>
 

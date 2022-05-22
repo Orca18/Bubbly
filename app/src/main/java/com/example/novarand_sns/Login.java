@@ -23,6 +23,7 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(Login.this, Home.class));
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                finish();
             }
         });
     }
