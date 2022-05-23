@@ -21,7 +21,7 @@
 
 
                 <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                    android:id="@+id/home_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/white"
@@ -93,7 +93,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.6dp"
-                android:layout_alignBottom="@+id/toolbar"
+                android:layout_alignBottom="@+id/home_toolbar"
                 android:background="#ccc" />
 
             <LinearLayout

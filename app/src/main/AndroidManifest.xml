@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
+            android:name=".Main_E_Wallet"
+            android:exported="false" />
+        <activity
             android:name=".Register_A"
             android:exported="false" />
         <activity
