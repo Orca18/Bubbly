@@ -101,7 +101,7 @@ public class MM_Issue extends AppCompatActivity {
                         break;
 
                     case R.id.issue_tomessage:
-                        Intent mIntent2 = new Intent(getApplicationContext(), Message.class);
+                        Intent mIntent2 = new Intent(getApplicationContext(), MM_Message.class);
                         mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent2);
                         finish();

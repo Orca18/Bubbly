@@ -2,6 +2,7 @@ package com.example.novarand_sns;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,9 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.novarand_sns.controller.Messages_Adapter;
+import com.example.novarand_sns.controller.Posts_Adapter;
+import com.example.novarand_sns.model.Messages_Item;
+import com.example.novarand_sns.model.Posts_Item;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MM_Message extends AppCompatActivity {
 
@@ -36,6 +46,12 @@ public class MM_Message extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
 
+    // 리사이클러 뷰
+    private Messages_Adapter adapter;
+    private List<Messages_Item> exampleList;
+    RecyclerView recyclerView;
+
+    private Parcelable recyclerViewState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +64,8 @@ public class MM_Message extends AppCompatActivity {
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
-
+        // 리사이클러뷰 데이터 가져오기
+        loadrecycler();
     }
 
 
@@ -65,6 +82,7 @@ public class MM_Message extends AppCompatActivity {
         navigationView = findViewById(R.id.message_navigation_view);
         sidemenu = findViewById(R.id.message_sidemenu);
         swipeRefreshLayout = findViewById(R.id.message_refresh);
+        recyclerView = findViewById(R.id.message_recyclerView);
 
         // 바텀 메뉴
         bthome = findViewById(R.id.message_tohome);
@@ -204,4 +222,59 @@ public class MM_Message extends AppCompatActivity {
         super.onPause();
         overridePendingTransition(0, 0);
     }
+
+    // ==============================================================================================
+
+    // 데이터 http 요청
+    private void loadrecycler() {
+        // 쓰레드 http 요청 & run 데이터 넣기
+        fillList();
+    }
+
+    // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
+    private void fillList() {
+        this.exampleList = new ArrayList();
+
+        String 임시이미지1 = "https://cdn.econovill.com/news/photo/202204/573467_495356_727.png";
+        String 임시이미지2 = "https://img-lb.inews24.com/image_gisa/202107/1626418981_1779.jpg";
+        String 임시이미지3 = "https://w.namu.la/s/faadee31d521afd584990cb798403ae1d9a5affbef213ae894026604566bbf1f00de845e734b94678f1ed7280f3729755e39422db14d905ee5a9798d568487e0f6b9dbdc235301185c0aa03aab341dbc";
+
+        this.exampleList.add(new Messages_Item(임시이미지1, "도지", "예???", "22:00"));
+        this.exampleList.add(new Messages_Item(임시이미지2, "이더리움", "레이아웃 귀찮다...", "18:18"));
+        this.exampleList.add(new Messages_Item(임시이미지3, "솔라나", "저는 인맥빨 코인입니다", "10:01"));
+
+        setUpRecyclerView();
+    }
+
+    private void setUpRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+
+        this.adapter = new Messages_Adapter(getApplicationContext(), this.exampleList);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(this.adapter);
+
+        //위치 유지
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+
+        //위치 유지
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
+        recyclerView.addOnScrollListener(onScrollListener);
+    }
+
+    // 바닥에 도달했을 때...
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+            int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+            if (lastVisibleItemPosition == itemTotalCount) {
+                //TODO 바닥 작업
+//                progressBar.setVisibility(View.VISIBLE);
+//                loadMoreData();
+            }
+        }
+    };
 }
