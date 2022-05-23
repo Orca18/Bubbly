@@ -42,7 +42,7 @@ public class MM_Home extends AppCompatActivity {
     ProgressBar progressBar;
 
     private Posts_Adapter adapter;
-    private List<Posts_Item> exampleList;
+    private List<Posts_Item> postsList;
 
     RecyclerView recyclerView;
 
@@ -78,7 +78,7 @@ public class MM_Home extends AppCompatActivity {
         getSupportActionBar().setTitle("");
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.home_recyclerView);
         navigationView = findViewById(R.id.home_navigation_view);
         sidemenu = findViewById(R.id.home_sidemenu);
         swipeRefreshLayout = findViewById(R.id.home_refresh);
@@ -157,7 +157,7 @@ public class MM_Home extends AppCompatActivity {
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
     private void fillList() {
-        this.exampleList = new ArrayList();
+        this.postsList = new ArrayList();
 
         String 임시프사 = "https://s2.coinmarketcap.com/static/img/coins/200x200/4030.png";
         String 임시미디어 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
@@ -165,7 +165,7 @@ public class MM_Home extends AppCompatActivity {
 
         for (int i = 0; i < 20; i++) {
             // TODO 시간 계산 → String 으로 넣어주기
-            this.exampleList.add(new Posts_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
+            this.postsList.add(new Posts_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
 
         }
 
@@ -176,7 +176,7 @@ public class MM_Home extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new Posts_Adapter(getApplicationContext(), this.exampleList);
+        this.adapter = new Posts_Adapter(getApplicationContext(), this.postsList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 

@@ -106,7 +106,7 @@ public class MM_Profile extends AppCompatActivity {
                         break;
 
                     case R.id.profile_towallet:
-                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Profile.class);
+                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Wallet.class);
                         mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent4);
                         finish();

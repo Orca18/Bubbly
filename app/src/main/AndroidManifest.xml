@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
+            android:name=".ChattingRoom"
+            android:exported="false" />
+        <activity
             android:name=".LL_Register_A"
             android:exported="false" />
         <activity

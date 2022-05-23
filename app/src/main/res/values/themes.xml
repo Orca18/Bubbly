@@ -12,10 +12,15 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <!--click high light 클릭시 이미지 뷰에 효과 주기용-->
+        <item name="colorControlHighlight">#555</item>
     </style>
 
     <style name="Theme.Novarand_SNS.NoActionBar" parent="Theme.Novarand_SNS">
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
+
+
 </resources>

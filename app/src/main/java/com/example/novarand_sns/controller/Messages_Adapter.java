@@ -1,5 +1,6 @@
 package com.example.novarand_sns.controller;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.novarand_sns.ChattingRoom;
 import com.example.novarand_sns.R;
 import com.example.novarand_sns.model.Messages_Item;
 import com.example.novarand_sns.model.Posts_Item;
@@ -61,10 +63,10 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
             @Override
             public void onClick(View view) {
                 //TODO 인텐트 만들어주기
-                //Intent intent = new Intent(mContext, 액티비티.class);
+                Intent intent = new Intent(mContext, ChattingRoom.class);
                 //어답터에서 클릭 이용할 때, 아래 해줘야됨!
-                //mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                Toast.makeText(view.getContext(),"일단 이동은 안함",Toast.LENGTH_SHORT).show();
+                mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                Toast.makeText(view.getContext(),"일단 기본 채팅방으로 (데이터 X)",Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -6,12 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class LL_Login extends AppCompatActivity {
 
-    Button login;
+    LinearLayout login;
     TextView register;
 
     @Override
@@ -27,7 +28,7 @@ public class LL_Login extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(LL_Login.this, MM_Home.class));
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                Toast.makeText(getApplicationContext(), "로그인 o_+",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "로그인 o_+",Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
