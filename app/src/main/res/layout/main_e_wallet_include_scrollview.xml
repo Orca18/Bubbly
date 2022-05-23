@@ -47,7 +47,7 @@
             <TextView
                 android:padding="10dp"
                 android:background="@color/gray"
-                android:text="출금하기기"
+                android:text="출금하기"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
