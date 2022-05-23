@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Register_B extends AppCompatActivity {
+public class LL_Register_B extends AppCompatActivity {
 
     LinearLayout done;
 

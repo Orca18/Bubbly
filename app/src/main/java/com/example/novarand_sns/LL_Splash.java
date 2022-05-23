@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-public class Splash extends AppCompatActivity {
+public class LL_Splash extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
 
     ImageView appname,splashimg;
@@ -38,7 +38,7 @@ public class Splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                startActivity(new Intent(Splash.this,Login.class));
+                startActivity(new Intent(LL_Splash.this, LL_Login.class));
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 finish();
             }

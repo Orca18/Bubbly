@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Login extends AppCompatActivity {
+public class LL_Login extends AppCompatActivity {
 
     Button login;
     TextView register;
@@ -25,7 +25,7 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Login.this, Home.class));
+                startActivity(new Intent(LL_Login.this, MM_Home.class));
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 Toast.makeText(getApplicationContext(), "로그인 o_+",Toast.LENGTH_SHORT).show();
                 finish();
@@ -35,7 +35,7 @@ public class Login extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Login.this, Register_A.class));
+                startActivity(new Intent(LL_Login.this, LL_Register_A.class));
             }
         });
 

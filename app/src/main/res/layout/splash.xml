@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Splash">
+    tools:context=".LL_Splash">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/splash_toolbar"

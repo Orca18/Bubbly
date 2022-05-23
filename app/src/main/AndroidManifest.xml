@@ -12,19 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
-            android:name=".Main_E_Wallet"
+            android:name=".LL_Register_A"
             android:exported="false" />
         <activity
-            android:name=".Register_A"
+            android:name=".LL_Register_B"
             android:exported="false" />
         <activity
-            android:name=".Register_B"
+            android:name=".LL_Login"
             android:exported="false" />
         <activity
-            android:name=".Login"
-            android:exported="false" />
-        <activity
-            android:name=".Splash"
+            android:name=".LL_Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Home"
+            android:name=".MM_Home"
             android:exported="false" />
     </application>
 

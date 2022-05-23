@@ -1,8 +1,6 @@
 package com.example.novarand_sns;
-import android.content.Intent;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,18 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.novarand_sns.controller.Posts_Adapter;
-import com.example.novarand_sns.model.Posts_Item;
 import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Home extends AppCompatActivity {
+public class MM_Message extends AppCompatActivity {
 
     // 뒤로가기 시간
     private long backKeyPressedTime = 0;
@@ -34,36 +25,28 @@ public class Home extends AppCompatActivity {
     // 바텀 메뉴
     LinearLayout bthome, btissue, btwallet, btmessage, btprofile;
 
+    // 툴바, 사이드 메뉴
     androidx.appcompat.widget.Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ImageView sidemenu;
 
-    ProgressBar progressBar;
-
-    private Posts_Adapter adapter;
-    private List<Posts_Item> exampleList;
-
-    RecyclerView recyclerView;
-
-    private Parcelable recyclerViewState;
-
+    // 새로고침, 프로그레스바
     SwipeRefreshLayout swipeRefreshLayout;
+    ProgressBar progressBar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_a_home);
+        setContentView(R.layout.main_c_message);
 
         // 리소스 ID 선언
         initiallize();
-        // 바텀 메뉴 (TODO 바텀 내비게이션)
+        // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
         bottomNavi();
-        // 클릭 리스너 모음
+        // 클릭 리스너 모음 - 스택 O
         clickListeners();
-        // 리사이클러뷰 데이터 가져오기
-        loadrecycler();
 
     }
 
@@ -73,22 +56,21 @@ public class Home extends AppCompatActivity {
     // 리소스 아이디 선언
     private void initiallize() {
         // 툴바
-        toolbar = findViewById(R.id.home_toolbar);
+        toolbar = findViewById(R.id.message_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        recyclerView = findViewById(R.id.recyclerView);
-        navigationView = findViewById(R.id.home_navigation_view);
-        sidemenu = findViewById(R.id.home_sidemenu);
-        swipeRefreshLayout = findViewById(R.id.home_refresh);
+        navigationView = findViewById(R.id.message_navigation_view);
+        sidemenu = findViewById(R.id.message_sidemenu);
+        swipeRefreshLayout = findViewById(R.id.message_refresh);
 
         // 바텀 메뉴
-        bthome = findViewById(R.id.home_tohome);
-        btissue = findViewById(R.id.home_toissue);
-        btmessage = findViewById(R.id.home_tomessage);
-        btprofile = findViewById(R.id.home_toprofile);
-        btwallet = findViewById(R.id.home_towallet);
+        bthome = findViewById(R.id.message_tohome);
+        btissue = findViewById(R.id.message_toissue);
+        btmessage = findViewById(R.id.message_tomessage);
+        btprofile = findViewById(R.id.message_toprofile);
+        btwallet = findViewById(R.id.message_towallet);
 
     }
 
@@ -98,20 +80,20 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.home_tohome:
+                    case R.id.message_tohome:
                         Toast.makeText(getApplicationContext(), "현재 위치", Toast.LENGTH_SHORT).show();
                         break;
 
-                    case R.id.home_toissue:
+                    case R.id.message_toissue:
                         break;
 
-                    case R.id.home_tomessage:
+                    case R.id.message_tomessage:
                         break;
 
-                    case R.id.home_toprofile:
+                    case R.id.message_toprofile:
                         break;
 
-                    case R.id.home_towallet:
+                    case R.id.message_towallet:
                         break;
 
                     default:
@@ -128,61 +110,6 @@ public class Home extends AppCompatActivity {
 
     }
 
-
-    // 데이터 http 요청
-    private void loadrecycler() {
-        // 쓰레드 http 요청 & run 데이터 넣기
-        fillList();
-    }
-
-    // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
-    private void fillList() {
-        this.exampleList = new ArrayList();
-
-        String 임시프사 = "https://s2.coinmarketcap.com/static/img/coins/200x200/4030.png";
-        String 임시미디어 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
-
-
-        for (int i = 0; i < 20; i++) {
-            // TODO 시간 계산 → String 으로 넣어주기
-            this.exampleList.add(new Posts_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
-
-        }
-
-        setUpRecyclerView();
-    }
-
-    private void setUpRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-        this.adapter = new Posts_Adapter(getApplicationContext(), this.exampleList);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(this.adapter);
-
-        //위치 유지
-        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-
-        //위치 유지
-        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-        recyclerView.addOnScrollListener(onScrollListener);
-    }
-
-    // 바닥에 도달했을 때...
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-            if (lastVisibleItemPosition == itemTotalCount) {
-                //TODO 바닥 작업
-//                progressBar.setVisibility(View.VISIBLE);
-//                loadMoreData();
-            }
-        }
-    };
 
     // 클릭 이벤트 모음
     private void clickListeners() {
