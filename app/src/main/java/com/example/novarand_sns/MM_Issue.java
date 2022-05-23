@@ -1,6 +1,8 @@
 package com.example.novarand_sns;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,19 +91,34 @@ public class MM_Issue extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.issue_tohome:
-                        Toast.makeText(getApplicationContext(), "현재 위치", Toast.LENGTH_SHORT).show();
+                        Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
+                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent1);
+                        finish();
                         break;
 
                     case R.id.issue_toissue:
                         break;
 
                     case R.id.issue_tomessage:
+                        Intent mIntent2 = new Intent(getApplicationContext(), Message.class);
+                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent2);
+                        finish();
                         break;
 
                     case R.id.issue_toprofile:
+                        Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
+                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent3);
+                        finish();
                         break;
 
                     case R.id.issue_towallet:
+                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Wallet.class);
+                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent4);
+                        finish();
                         break;
 
                     default:
@@ -190,5 +207,11 @@ public class MM_Issue extends AppCompatActivity {
         }
     }
 
+    // 액티비티 종료 시, 애니메이션 효과 없애기
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 
 }

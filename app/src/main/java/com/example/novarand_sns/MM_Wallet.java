@@ -1,18 +1,19 @@
 package com.example.novarand_sns;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -32,8 +33,8 @@ public class MM_Wallet extends AppCompatActivity {
     ImageView sidemenu;
 
     // 새로고침, 프로그레스바
-    SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
+    ScrollView scrollView;
 
 
     @Override
@@ -63,7 +64,7 @@ public class MM_Wallet extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.wallet_navigation_view);
         sidemenu = findViewById(R.id.wallet_sidemenu);
-        swipeRefreshLayout = findViewById(R.id.wallet_refresh);
+        scrollView = findViewById(R.id.text_scrollview);
 
         // 바텀 메뉴
         bthome = findViewById(R.id.wallet_tohome);
@@ -81,16 +82,31 @@ public class MM_Wallet extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.wallet_tohome:
-                        Toast.makeText(getApplicationContext(), "현재 위치", Toast.LENGTH_SHORT).show();
+                        Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
+                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent1);
+                        finish();
                         break;
 
                     case R.id.wallet_toissue:
+                        Intent mIntent2 = new Intent(getApplicationContext(), MM_Issue.class);
+                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent2);
+                        finish();
                         break;
 
                     case R.id.wallet_tomessage:
+                        Intent mIntent3 = new Intent(getApplicationContext(), MM_Message.class);
+                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent3);
+                        finish();
                         break;
 
                     case R.id.wallet_toprofile:
+                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Profile.class);
+                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent4);
+                        finish();
                         break;
 
                     case R.id.wallet_towallet:
@@ -138,17 +154,6 @@ public class MM_Wallet extends AppCompatActivity {
             }
         });
 
-        // 리사이클러뷰 새로고침 인식
-        swipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-//                        loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
-                        /* 업데이트가 끝났음을 알림 */
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                });
     }
 
 
@@ -182,5 +187,11 @@ public class MM_Wallet extends AppCompatActivity {
         }
     }
 
+    // 액티비티 종료 시, 애니메이션 효과 없애기
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 
 }

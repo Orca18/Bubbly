@@ -63,23 +63,20 @@
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
-            <RelativeLayout
+
+            <ScrollView
+                android:id="@+id/text_scrollview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:nestedScrollingEnabled="true"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/wallet_refresh"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <include layout="@layout/main_e_wallet_include_scrollview"/>
 
-            </RelativeLayout>
+
+            </ScrollView>
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
@@ -93,7 +90,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.6dp"
-                android:layout_alignBottom="@+id/home_toolbar"
                 android:background="#ccc" />
 
             <LinearLayout

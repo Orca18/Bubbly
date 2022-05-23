@@ -32,6 +32,18 @@
         <activity
             android:name=".MM_Home"
             android:exported="false" />
+        <activity
+            android:name=".MM_Issue"
+            android:exported="false" />
+        <activity
+            android:name=".MM_Message"
+            android:exported="false" />
+        <activity
+            android:name=".MM_Profile"
+            android:exported="false" />
+        <activity
+            android:name=".MM_Wallet"
+            android:exported="false" />
     </application>
 
 </manifest>

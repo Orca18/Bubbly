@@ -99,19 +99,39 @@ public class MM_Home extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.home_tohome:
-                        Toast.makeText(getApplicationContext(), "현재 위치", Toast.LENGTH_SHORT).show();
+                        // 복사용 코드
+//                        Intent mIntent = new Intent(getApplicationContext(), .class);
+//                        mIntent.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(mIntent);
+//                        finish();
                         break;
 
                     case R.id.home_toissue:
+                        Intent mIntent1 = new Intent(getApplicationContext(), MM_Issue.class);
+                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent1);
+                        finish();
                         break;
 
                     case R.id.home_tomessage:
+                        Intent mIntent2 = new Intent(getApplicationContext(), MM_Message.class);
+                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent2);
+                        finish();
                         break;
 
                     case R.id.home_toprofile:
+                        Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
+                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent3);
+                        finish();
                         break;
 
                     case R.id.home_towallet:
+                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Wallet.class);
+                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent4);
+                        finish();
                         break;
 
                     default:
@@ -253,6 +273,13 @@ public class MM_Home extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    // 액티비티 종료 시, 애니메이션 효과 없애기
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
     }
 
 
