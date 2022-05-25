@@ -18,5 +18,8 @@
     <color name="hint">#aaa</color>
     <color name="text">#555</color>
     <color name="customblue">#35438c</color>
+    <color name="blue">#0C70F2</color>
+    <color name="green">#5BCE38</color>
+    <color name="yellow">#FFD400</color>
 
 </resources>

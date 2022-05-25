@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -20,7 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.novarand_sns.controller.Posts_Adapter;
+import com.example.novarand_sns.controller.Ranking_Adapter;
 import com.example.novarand_sns.model.Posts_Item;
+import com.example.novarand_sns.model.Ranking_Item;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -45,6 +49,12 @@ public class MM_Issue extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
 
+    ListView listView;
+    ArrayList<Ranking_Item> rankingList;
+
+    // 카테고리 (임시 1.종합 / 2.잡담 / 3.커뮤니티)
+    LinearLayout cat1, cat2, cat3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +67,8 @@ public class MM_Issue extends AppCompatActivity {
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
+        // 리스트뷰
+        RankingList();
 
     }
 
@@ -74,6 +86,7 @@ public class MM_Issue extends AppCompatActivity {
         navigationView = findViewById(R.id.issue_navigation_view);
         sidemenu = findViewById(R.id.issue_sidemenu);
         swipeRefreshLayout = findViewById(R.id.issue_refresh);
+        listView = findViewById(R.id.issue_ranking_listview);
 
         // 바텀 메뉴
         bthome = findViewById(R.id.issue_tohome);
@@ -81,6 +94,11 @@ public class MM_Issue extends AppCompatActivity {
         btmessage = findViewById(R.id.issue_tomessage);
         btprofile = findViewById(R.id.issue_toprofile);
         btwallet = findViewById(R.id.issue_towallet);
+
+        // 카테고리
+        cat1 = findViewById(R.id.issue_category_hot);
+        cat2 = findViewById(R.id.issue_category_bubble);
+        cat3 = findViewById(R.id.issue_category_community);
 
     }
 
@@ -174,6 +192,33 @@ public class MM_Issue extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
+
+        // 카테고리들
+        cat1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                issacToast("종합 인기글? - 카테고리 상세 분할은 다음에...");
+            }
+        });
+
+        cat2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                issacToast("간단한 유머글? - 카테고리 상세 분할은 다음에...");
+            }
+        });
+
+        cat3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                issacToast("공개 커뮤니티 글 추천? - 카테고리 상세 분할은 다음에...");
+            }
+        });
+
+    }
+
+    private void issacToast(String msg) {
+        Toast.makeText(getApplicationContext(), ""+msg,Toast.LENGTH_SHORT).show();
     }
 
 
@@ -213,5 +258,21 @@ public class MM_Issue extends AppCompatActivity {
         super.onPause();
         overridePendingTransition(0, 0);
     }
+
+
+    // 랭킹 리스트 채우기
+    private void RankingList() {
+        rankingList  = new ArrayList<Ranking_Item>();
+        for (int i = 0; i < 10; i++){
+            rankingList.add(new Ranking_Item(i+1,"테스트", 108));
+            Log.i("dd", "RankingList: "+i);
+        }
+
+        // 리스트뷰 어답터 - 리스트뷰 연결
+        final Ranking_Adapter adapter = new Ranking_Adapter(this, rankingList);
+        listView.setAdapter(adapter);
+    }
+
+    // 토스트 띄우기
 
 }
