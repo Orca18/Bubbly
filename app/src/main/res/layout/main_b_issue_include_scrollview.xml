@@ -111,7 +111,7 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical">
 
         <TextView
@@ -127,9 +127,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="10dp"
             android:fontFamily="@font/spoqa_light"
-            android:text="최근 24시간 기준 사용자가 가장 많이 사용한 키워드입니다."
+            android:text="최근 24시간 기준 많이 언급된 키워드"
             android:textSize="14dp" />
 
         <ListView

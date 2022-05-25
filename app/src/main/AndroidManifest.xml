@@ -18,6 +18,9 @@
             android:name=".LL_Register_A"
             android:exported="false" />
         <activity
+            android:name=".SS_Profile"
+            android:exported="false" />
+        <activity
             android:name=".LL_Register_B"
             android:exported="false" />
         <activity

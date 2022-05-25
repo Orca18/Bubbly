@@ -26,6 +26,7 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/b_issue.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/c_message.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/d_profile.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/fragment_profile_tab1.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/home.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item.xml" value="0.23072916666666668" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_chat.xml" value="0.33" />
@@ -40,8 +41,9 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_b_issue_include_scrollview.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_c_message.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_c_message_include.xml" value="0.23072916666666668" />
-        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_d_profile.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_d_profile.xml" value="0.2" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_d_profile_include.xml" value="0.23072916666666668" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_d_profile_include_frame.xml" value="0.284375" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_d_wallet.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_e_wallet.xml" value="0.23822463768115942" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_e_wallet_include.xml" value="0.33" />
@@ -55,6 +57,7 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/register_a.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/register_b.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/splash.xml" value="0.22" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/sub_profile.xml" value="0.2796875" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/menu/drawer_menu.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/menu/navi_menu.xml" value="0.2942708333333333" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.21822916666666667" />

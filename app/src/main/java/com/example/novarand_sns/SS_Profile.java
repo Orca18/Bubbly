@@ -21,7 +21,7 @@ import com.example.novarand_sns.controller.FragmentAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
-public class MM_Profile extends AppCompatActivity {
+public class SS_Profile extends AppCompatActivity {
 
     // 뒤로가기 시간
     private long backKeyPressedTime = 0;
@@ -51,18 +51,16 @@ public class MM_Profile extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_d_profile);
+        setContentView(R.layout.sub_profile);
 
         // 유저 아이디 uid 받음
 //        Bundle extras = getIntent().getExtras();
 //        uid = extras.getString("uid");
 
-        // 리소스 ID 선언
+        // (기본) 리소스 ID 선언
         initiallize();
-        // 탭 레이아웃
+        // (추가) 탭 레이아웃
         tabInit();
-        // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
-        bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
 
@@ -116,102 +114,19 @@ public class MM_Profile extends AppCompatActivity {
     // 리소스 아이디 선언
     private void initiallize() {
         // 툴바
-        toolbar = findViewById(R.id.profile_toolbar);
+        toolbar = findViewById(R.id.ss_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.profile_navigation_view);
-        sidemenu = findViewById(R.id.profile_sidemenu);
-        swipeRefreshLayout = findViewById(R.id.profile_refresh);
-
-        // 바텀 메뉴
-        bthome = findViewById(R.id.profile_tohome);
-        btissue = findViewById(R.id.profile_toissue);
-        btmessage = findViewById(R.id.profile_tomessage);
-        btprofile = findViewById(R.id.profile_toprofile);
-        btwallet = findViewById(R.id.profile_towallet);
+        swipeRefreshLayout = findViewById(R.id.ss_profile_refresh);
 
     }
 
-    // 바텀 메뉴 클릭
-    private void bottomNavi() {
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.profile_tohome:
-                        Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
-                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent1);
-                        finish();
-                        break;
-
-                    case R.id.profile_toissue:
-                        Intent mIntent2 = new Intent(getApplicationContext(), MM_Issue.class);
-                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent2);
-                        finish();
-                        break;
-
-                    case R.id.profile_tomessage:
-                        Intent mIntent3 = new Intent(getApplicationContext(), MM_Message.class);
-                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent3);
-                        finish();
-                        break;
-
-                    case R.id.profile_toprofile:
-                        break;
-
-                    case R.id.profile_towallet:
-                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Wallet.class);
-                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent4);
-                        finish();
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        };
-
-        bthome.setOnClickListener(clickListener);
-        btissue.setOnClickListener(clickListener);
-        btwallet.setOnClickListener(clickListener);
-        btmessage.setOnClickListener(clickListener);
-        btprofile.setOnClickListener(clickListener);
-
-    }
 
 
     // 클릭 이벤트 모음
     private void clickListeners() {
-
-        // 좌측 상단 메뉴 버튼
-        sidemenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
-
-        // DrawerLayer (사이드 메뉴) 내부 카테고리 클릭 = 별로인듯... 그냥 참고용으로 쓰기 (메뉴 대신 헤더 xml 에서 전부 완성 시킴)
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-//                    case R.id.nav_camera:
-//                        item.setChecked(true);
-//                        Toast.makeText(getApplicationContext(), "ㅇㅇ",Toast.LENGTH_SHORT).show();
-//                        drawerLayout.closeDrawers();
-//                        return true;
-
-                }
-                return false;
-            }
-        });
 
         // 리사이클러뷰 새로고침 인식
         swipeRefreshLayout.setOnRefreshListener(

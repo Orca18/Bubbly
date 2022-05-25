@@ -243,7 +243,7 @@ public class MM_Message extends AppCompatActivity {
 
         this.exampleList.add(new Messages_Item(임시이미지1, "도지", "예???", "22:00"));
         this.exampleList.add(new Messages_Item(임시이미지2, "이더리움", "2.0 발표!? 그딴건 없단다", "18:18"));
-        this.exampleList.add(new Messages_Item(임시이미지3, "솔라나", "저는 인맥빨 코인입니다", "12:34"));
+        this.exampleList.add(new Messages_Item(임시이미지3, "솔라나", "역사증명", "12:34"));
         this.exampleList.add(new Messages_Item(임시이미지4, "김동현", "레이아웃 노가다 그만...", "10:08"));
 
         setUpRecyclerView();
