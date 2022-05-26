@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
+            android:name=".SS_PostDetail"
+            android:exported="false" />
+        <activity
+            android:name=".Add_Posting_Create"
+            android:exported="false" />
+        <activity
             android:name=".SS_Setting"
             android:exported="false" />
         <activity
@@ -22,6 +28,9 @@
             android:exported="false" />
         <activity
             android:name=".SS_Profile"
+            android:exported="false" />
+        <activity
+            android:name=".Add_Notice_List"
             android:exported="false" />
         <activity
             android:name=".LL_Register_B"

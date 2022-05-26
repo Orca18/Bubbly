@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -42,7 +41,7 @@ public class MM_Home extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    ImageView sidemenu;
+    ImageView sidemenu, alarm, creating;
 
     ProgressBar progressBar;
 
@@ -94,6 +93,8 @@ public class MM_Home extends AppCompatActivity {
         navigationView = findViewById(R.id.home_navigation_view);
         sidemenu = findViewById(R.id.home_sidemenu);
         swipeRefreshLayout = findViewById(R.id.home_refresh);
+        creating = findViewById(R.id.home_creating);
+        alarm =  findViewById(R.id.home_alarm);
 
         // 내비 안 메뉴
         view = navigationView.getHeaderView(0);
@@ -231,6 +232,24 @@ public class MM_Home extends AppCompatActivity {
 
     // 클릭 이벤트 모음
     private void clickListeners() {
+
+        // 작성
+        creating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent tocreating = new Intent(getApplicationContext(), Add_Posting_Create.class);
+                startActivity(tocreating);
+            }
+        });
+
+        // 작성
+        alarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent alarm = new Intent(getApplicationContext(), Add_Notice_List.class);
+                startActivity(alarm);
+            }
+        });
 
         // 좌측 상단 메뉴 버튼
         sidemenu.setOnClickListener(new View.OnClickListener() {
