@@ -13,11 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.novarand_sns.MM_Profile;
+import com.example.novarand_sns.MM_Wallet;
 import com.example.novarand_sns.R;
-import com.example.novarand_sns.SS_Profile;
 import com.example.novarand_sns.controller.Profile_Tab1_Adapter;
 import com.example.novarand_sns.model.Fragment_Tab1_Item;
-import com.example.novarand_sns.model.Posts_Item;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,7 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Fragment_Tab1_AllPosts extends Fragment {
+public class WalletFragment_Tab1_Activity extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
@@ -39,14 +38,14 @@ public class Fragment_Tab1_AllPosts extends Fragment {
 
     String uid;
 
-    public Fragment_Tab1_AllPosts() {
+    public WalletFragment_Tab1_Activity() {
         // Required empty public constructor
     }
 
 
     // TODO: Rename and change types and number of parameters
-    public static Fragment_Tab1_AllPosts newInstance(String param1, String param2) {
-        Fragment_Tab1_AllPosts fragment = new Fragment_Tab1_AllPosts();
+    public static WalletFragment_Tab1_Activity newInstance(String param1, String param2) {
+        WalletFragment_Tab1_Activity fragment = new WalletFragment_Tab1_Activity();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -56,7 +55,7 @@ public class Fragment_Tab1_AllPosts extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        uid = ((MM_Profile) getActivity()).getUid();
+        uid = ((MM_Wallet)getActivity()).getUid();
 
         postsItem = new ArrayList<>();
         fillList();
@@ -68,11 +67,25 @@ public class Fragment_Tab1_AllPosts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Inflate the layout for this fragment
         // 레이아웃
         v = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
 
+//        swipeRefreshLayout = v.findViewById(R.id.refresh_notice);
+//
+//        swipeRefreshLayout.setOnRefreshListener(
+//                new SwipeRefreshLayout.OnRefreshListener() {
+//                    @Override
+//                    public void onRefresh() {
+//                        fillList();
+//                        /* 업데이트가 끝났음을 알림 */
+//                        swipeRefreshLayout.setRefreshing(false);
+//                    }
+//                });
         return v;
     }
+
+
 
 
     private void fillList() {

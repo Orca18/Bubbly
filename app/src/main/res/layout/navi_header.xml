@@ -13,7 +13,7 @@
         android:layout_marginTop="30dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_image"
+            android:id="@+id/navi_header_profileimg"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:src="@drawable/skeleton"
@@ -52,14 +52,16 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginVertical="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginRight="20dp"
         android:background="@color/gray" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/navi_header_myActivity"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp">
+        android:paddingVertical="8dp">
 
         <ImageView
             android:layout_width="35dp"
@@ -81,9 +83,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/navi_header_myList"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp">
+        android:paddingVertical="8dp">
 
         <ImageView
             android:layout_width="35dp"
@@ -105,8 +108,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:id="@+id/navi_header_myCommunity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="8dp">
 
         <ImageView
             android:layout_width="35dp"
@@ -130,24 +135,27 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginVertical="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_marginRight="20dp"
         android:background="@color/gray" />
 
 
     <TextView
+        android:id="@+id/navi_header_setting_option"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:paddingVertical="4dp"
         android:fontFamily="@font/spoqa_regular"
         android:text="설정"
         android:textColor="@color/text_black"
         android:textSize="18dp" />
 
     <TextView
+        android:id="@+id/navi_header_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:paddingVertical="4dp"
         android:fontFamily="@font/spoqa_regular"
         android:text="고객센터"
         android:textColor="@color/text_black"
@@ -155,9 +163,10 @@
 
 
     <TextView
+        android:id="@+id/navi_header_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:paddingVertical="4dp"
         android:fontFamily="@font/spoqa_regular"
         android:text="로그아웃"
         android:textColor="@color/red"

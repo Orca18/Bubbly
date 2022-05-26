@@ -1,9 +1,14 @@
 package com.example.novarand_sns;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -81,7 +86,7 @@ public class MM_Profile extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("모든 글"));
         tabLayout.addTab(tabLayout.newTab().setText("답글"));
         tabLayout.addTab(tabLayout.newTab().setText("NFT"));
-        tabLayout.addTab(tabLayout.newTab().setText("좋아요&공유"));
+        tabLayout.addTab(tabLayout.newTab().setText("공유"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -119,6 +124,8 @@ public class MM_Profile extends AppCompatActivity {
         toolbar = findViewById(R.id.profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+
+
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.profile_navigation_view);
@@ -268,5 +275,6 @@ public class MM_Profile extends AppCompatActivity {
     public String getUid(){
         return uid;
     }
+
 
 }

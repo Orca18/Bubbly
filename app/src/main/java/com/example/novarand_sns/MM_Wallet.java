@@ -14,8 +14,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.novarand_sns.controller.FragmentAdapter;
+import com.example.novarand_sns.controller.WalletFragmentAdapter;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 public class MM_Wallet extends AppCompatActivity {
 
@@ -36,6 +41,11 @@ public class MM_Wallet extends AppCompatActivity {
     ProgressBar progressBar;
     ScrollView scrollView;
 
+    // 탭 레이아웃
+    TabLayout tabLayout;
+    ViewPager2 pager2;
+    WalletFragmentAdapter adapter;
+    String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,7 @@ public class MM_Wallet extends AppCompatActivity {
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
 
+        tabInit();
     }
 
 
@@ -194,4 +205,50 @@ public class MM_Wallet extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
+
+
+
+    private void tabInit() {
+        tabLayout = findViewById(R.id.wallet_tab_layout);
+        pager2 = findViewById(R.id.wallet_view_pager2);
+
+        FragmentManager fm = getSupportFragmentManager();
+        adapter = new WalletFragmentAdapter(fm, getLifecycle(), uid);
+        pager2.setAdapter(adapter);
+
+        tabLayout.addTab(tabLayout.newTab().setText("활동"));
+        tabLayout.addTab(tabLayout.newTab().setText("광고"));
+        tabLayout.addTab(tabLayout.newTab().setText("활동 내역"));
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                pager2.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+        pager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                tabLayout.selectTab(tabLayout.getTabAt(position));
+            }
+        });
+
+    }
+
+    // 프래그먼트 어답터에서 Uid 받기 위해서 필요
+    public String getUid(){
+        return uid;
+    }
 }

@@ -3,6 +3,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +32,7 @@ public class Profile_Tab1_Adapter extends RecyclerView.Adapter<Profile_Tab1_Adap
         View v;
 
         //TODO 리사이클러뷰 아이템 레이아웃
-        v = LayoutInflater.from(mContext).inflate(R.layout.item_feed_basic, parent, false);
+        v = LayoutInflater.from(mContext).inflate(R.layout.item_test, parent, false);
         Profile_Tab1_ViewHolder vHolder = new Profile_Tab1_ViewHolder(v);
 
         return vHolder;
@@ -42,6 +43,7 @@ public class Profile_Tab1_Adapter extends RecyclerView.Adapter<Profile_Tab1_Adap
     public void onBindViewHolder(@NonNull Profile_Tab1_ViewHolder holder, int position) {
 
         Fragment_Tab1_Item currentItem = this.mData.get(position);
+        holder.test.setText(currentItem.getTest1());
 
         //글라이드 이미지 세팅  TODO https://github.com/bumptech/glide
 //        Glide.with(holder.itemView.getContext()).load(currentItem.getImageResource()).centerCrop().into(holder.img);
@@ -66,13 +68,14 @@ public class Profile_Tab1_Adapter extends RecyclerView.Adapter<Profile_Tab1_Adap
 
     public static class Profile_Tab1_ViewHolder extends RecyclerView.ViewHolder {
 
-        String a;
+        TextView test;
 
         public Profile_Tab1_ViewHolder(@NonNull View itemView) {
             super(itemView);
             //TODO 선언
             //btn = itemView.findViewById(R.id.아이템_버튼);
             //img = itemView.findViewById(R.id.아이템_이미지뷰);
+            test = itemView.findViewById(R.id.test_text_view);
         }
     }
 

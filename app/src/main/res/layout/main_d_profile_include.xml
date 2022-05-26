@@ -24,7 +24,6 @@
                     android:id="@+id/profile_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/white"
                     app:layout_scrollFlags="scroll|enterAlways">
 
                     <ImageView
@@ -72,6 +71,7 @@
                     android:id="@+id/profile_refresh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+
 
                     <ScrollView
                         android:id="@+id/text_scrollview"

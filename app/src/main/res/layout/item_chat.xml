@@ -7,9 +7,13 @@
         android:id="@+id/chat_chat_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="ㅎㅎㅎ"
-        android:background="@color/gray"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="2dp"
+        android:background="@drawable/chat"
+        android:fontFamily="@font/spoqa_medium"
         android:padding="10dp"
-        android:layout_margin="10dp"/>
+        android:text="ㅎㅎㅎ"
+        android:textColor="@color/white"
+        android:textSize="14dp" />
 
 </LinearLayout>

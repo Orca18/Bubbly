@@ -1,4 +1,5 @@
 package com.example.novarand_sns;
+
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,6 +52,10 @@ public class MM_Home extends AppCompatActivity {
 
     SwipeRefreshLayout swipeRefreshLayout;
 
+    // 내비뷰 메뉴 레이아웃에 직접 구현
+    LinearLayout myAccount, myActivity, myList, myCommunity;
+    TextView settingOption, info, logout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +89,16 @@ public class MM_Home extends AppCompatActivity {
         sidemenu = findViewById(R.id.home_sidemenu);
         swipeRefreshLayout = findViewById(R.id.home_refresh);
 
+        myAccount = findViewById(R.id.navi_header_profileimg);
+        myActivity = findViewById(R.id.navi_header_myActivity);
+        myList = findViewById(R.id.navi_header_myList);
+        myCommunity = findViewById(R.id.navi_header_myCommunity);
+        settingOption = findViewById(R.id.navi_header_setting_option);
+        info = findViewById(R.id.navi_header_info);
+        logout = findViewById(R.id.navi_header_logout);
+
+
+
         // 바텀 메뉴
         bthome = findViewById(R.id.home_tohome);
         btissue = findViewById(R.id.home_toissue);
@@ -108,28 +124,28 @@ public class MM_Home extends AppCompatActivity {
 
                     case R.id.home_toissue:
                         Intent mIntent1 = new Intent(getApplicationContext(), MM_Issue.class);
-                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent1.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent1);
                         finish();
                         break;
 
                     case R.id.home_tomessage:
                         Intent mIntent2 = new Intent(getApplicationContext(), MM_Message.class);
-                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent2);
                         finish();
                         break;
 
                     case R.id.home_toprofile:
                         Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
-                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent3);
                         finish();
                         break;
 
                     case R.id.home_towallet:
                         Intent mIntent4 = new Intent(getApplicationContext(), MM_Wallet.class);
-                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent4.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent4);
                         finish();
                         break;
