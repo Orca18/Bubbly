@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,6 +54,9 @@ public class MM_Message extends AppCompatActivity {
 
     private Parcelable recyclerViewState;
 
+    LinearLayout myAccount, myActivity, myList, myCommunity;
+    TextView settingOption, info, logout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +87,15 @@ public class MM_Message extends AppCompatActivity {
         sidemenu = findViewById(R.id.message_sidemenu);
         swipeRefreshLayout = findViewById(R.id.message_refresh);
         recyclerView = findViewById(R.id.message_recyclerView);
+
+        // 내비 안 메뉴
+        myAccount = findViewById(R.id.navi_header_profileimg);
+        myActivity = findViewById(R.id.navi_header_myActivity);
+        myList = findViewById(R.id.navi_header_myList);
+        myCommunity = findViewById(R.id.navi_header_myCommunity);
+        settingOption = findViewById(R.id.navi_header_setting_option);
+        info = findViewById(R.id.navi_header_info);
+        logout = findViewById(R.id.navi_header_logout);
 
         // 바텀 메뉴
         bthome = findViewById(R.id.message_tohome);

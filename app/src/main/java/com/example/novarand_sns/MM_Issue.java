@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -55,6 +56,8 @@ public class MM_Issue extends AppCompatActivity {
     // 카테고리 (임시 1.종합 / 2.잡담 / 3.커뮤니티)
     LinearLayout cat1, cat2, cat3;
 
+    LinearLayout myAccount, myActivity, myList, myCommunity;
+    TextView settingOption, info, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +91,23 @@ public class MM_Issue extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.issue_refresh);
         listView = findViewById(R.id.issue_ranking_listview);
 
+        // 내비 안 메뉴
+        myAccount = findViewById(R.id.navi_header_profileimg);
+        myActivity = findViewById(R.id.navi_header_myActivity);
+        myList = findViewById(R.id.navi_header_myList);
+        myCommunity = findViewById(R.id.navi_header_myCommunity);
+        settingOption = findViewById(R.id.navi_header_setting_option);
+        info = findViewById(R.id.navi_header_info);
+        logout = findViewById(R.id.navi_header_logout);
+
         // 바텀 메뉴
         bthome = findViewById(R.id.issue_tohome);
         btissue = findViewById(R.id.issue_toissue);
         btmessage = findViewById(R.id.issue_tomessage);
         btprofile = findViewById(R.id.issue_toprofile);
         btwallet = findViewById(R.id.issue_towallet);
+
+
 
         // 카테고리
         cat1 = findViewById(R.id.issue_category_hot);

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -26,6 +27,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MM_Home extends AppCompatActivity {
 
@@ -53,9 +56,10 @@ public class MM_Home extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
 
     // 내비뷰 메뉴 레이아웃에 직접 구현
-    LinearLayout myAccount, myActivity, myList, myCommunity;
+    CircleImageView myAccount;
+    LinearLayout myActivity, myList, myCommunity;
     TextView settingOption, info, logout;
-
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +72,8 @@ public class MM_Home extends AppCompatActivity {
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
+        // 내비 터치
+        NaviTouch();
         // 리사이클러뷰 데이터 가져오기
         loadrecycler();
 
@@ -89,13 +95,16 @@ public class MM_Home extends AppCompatActivity {
         sidemenu = findViewById(R.id.home_sidemenu);
         swipeRefreshLayout = findViewById(R.id.home_refresh);
 
-        myAccount = findViewById(R.id.navi_header_profileimg);
-        myActivity = findViewById(R.id.navi_header_myActivity);
-        myList = findViewById(R.id.navi_header_myList);
-        myCommunity = findViewById(R.id.navi_header_myCommunity);
-        settingOption = findViewById(R.id.navi_header_setting_option);
-        info = findViewById(R.id.navi_header_info);
-        logout = findViewById(R.id.navi_header_logout);
+        // 내비 안 메뉴
+        view = navigationView.getHeaderView(0);
+        myAccount = view.findViewById(R.id.navi_header_profileimg);
+
+        myActivity = view.findViewById(R.id.navi_header_myActivity);
+        myList = view.findViewById(R.id.navi_header_myList);
+        myCommunity = view.findViewById(R.id.navi_header_myCommunity);
+        settingOption = view.findViewById(R.id.navi_header_setting_option);
+        info = view.findViewById(R.id.navi_header_info);
+        logout = view.findViewById(R.id.navi_header_logout);
 
 
 
@@ -259,6 +268,64 @@ public class MM_Home extends AppCompatActivity {
                     }
                 });
     }
+
+
+
+    // 내비 터치치
+   private void NaviTouch() {
+
+       // 내비뷰 메뉴 레이아웃에 직접 구현
+//       CircleImageView myAccount;
+//       LinearLayout myActivity, myList, myCommunity;
+//       TextView settingOption, info, logout;
+       myAccount.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
+           }
+       });
+       myActivity.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
+           }
+       });
+       myList.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
+           }
+       });
+       myCommunity.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
+           }
+       });
+       settingOption.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent settingIntent = new Intent(getApplicationContext(), SS_Setting.class);
+               startActivity(settingIntent);
+               overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+           }
+       });
+       info.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toast.makeText(getApplicationContext(), "고객센터",Toast.LENGTH_SHORT).show();
+           }
+       });
+       logout.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Toast.makeText(getApplicationContext(), "로그아웃",Toast.LENGTH_SHORT).show();
+           }
+       });
+
+
+    }
+
 
 
     @Override

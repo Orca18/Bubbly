@@ -1,5 +1,6 @@
 package com.example.novarand_sns;
 
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -86,6 +87,17 @@ public class SS_Setting extends AppCompatActivity {
 
     private void Toasting() {
         Toast.makeText(getApplicationContext(), "상세 설정 설계", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

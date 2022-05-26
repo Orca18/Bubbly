@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,6 +52,9 @@ public class MM_Profile extends AppCompatActivity {
     FragmentAdapter adapter;
 
     String uid;
+
+    LinearLayout myAccount, myActivity, myList, myCommunity;
+    TextView settingOption, info, logout;
 
 
     @Override
@@ -125,12 +129,19 @@ public class MM_Profile extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-
-
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.profile_navigation_view);
         sidemenu = findViewById(R.id.profile_sidemenu);
         swipeRefreshLayout = findViewById(R.id.profile_refresh);
+
+        // 내비 안 메뉴
+        myAccount = findViewById(R.id.navi_header_profileimg);
+        myActivity = findViewById(R.id.navi_header_myActivity);
+        myList = findViewById(R.id.navi_header_myList);
+        myCommunity = findViewById(R.id.navi_header_myCommunity);
+        settingOption = findViewById(R.id.navi_header_setting_option);
+        info = findViewById(R.id.navi_header_info);
+        logout = findViewById(R.id.navi_header_logout);
 
         // 바텀 메뉴
         bthome = findViewById(R.id.profile_tohome);
