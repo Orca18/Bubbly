@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Add_Posting_Create"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Add_Posting_Create">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -15,6 +15,7 @@
         android:foregroundTint="@color/white">
 
         <TextView
+            android:id="@+id/posting_create_posting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
@@ -28,14 +29,49 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-<!--    <View-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0.6dp"-->
-<!--        android:background="@color/gray"/>-->
+    <!--    <View-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0.6dp"-->
+    <!--        android:background="@color/gray"/>-->
 
-    <EditText
-        android:layout_weight="1"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <include layout="@layout/activity_posting_create_include"/>
+
+
+    </ScrollView>
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:background="@color/gray" />
+
+    <LinearLayout
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/posting_create_addimage"
+            android:layout_width="38dp"
+            android:layout_height="39dp"
+            android:src="@drawable/ic_outline_image_24" />
+
+
+        <ImageView
+            android:id="@+id/posting_create_addvideo"
+            android:layout_width="38dp"
+            android:layout_height="39dp"
+            android:src="@drawable/ic_baseline_videocam_24" />
+
+    </LinearLayout>
 
 </LinearLayout>

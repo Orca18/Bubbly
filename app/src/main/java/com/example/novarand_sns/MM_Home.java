@@ -246,7 +246,7 @@ public class MM_Home extends AppCompatActivity {
         alarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent alarm = new Intent(getApplicationContext(), Add_Notice_List.class);
+                Intent alarm = new Intent(getApplicationContext(), Option_Notice_List.class);
                 startActivity(alarm);
             }
         });
@@ -318,7 +318,8 @@ public class MM_Home extends AppCompatActivity {
        myCommunity.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
+               Intent mIntent = new Intent(getApplicationContext(), Community_Home.class);
+               startActivity(mIntent);
            }
        });
        settingOption.setOnClickListener(new View.OnClickListener() {

@@ -82,7 +82,7 @@
                         android:nestedScrollingEnabled="true"
                         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                        <include layout="@layout/main_b_issue_include_scrollview" />
+                        <include layout="@layout/main_b_issue_include_scrollview"/>
 
                     </ScrollView>
                 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

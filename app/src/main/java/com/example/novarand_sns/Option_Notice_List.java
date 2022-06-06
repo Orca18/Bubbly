@@ -6,6 +6,7 @@ import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +18,7 @@ import com.example.novarand_sns.model.Notices_Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Add_Notice_List extends AppCompatActivity {
+public class Option_Notice_List extends AppCompatActivity {
 
     Toolbar toolbar;
 
@@ -25,6 +26,8 @@ public class Add_Notice_List extends AppCompatActivity {
     private List<Notices_Item> exampleList;
     RecyclerView recyclerView;
     private Parcelable recyclerViewState;
+
+    private ItemTouchHelper mItemTouchHelper;
 
 
     @Override
@@ -71,21 +74,15 @@ public class Add_Notice_List extends AppCompatActivity {
         this.exampleList = new ArrayList();
 
 
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
-        this.exampleList.add(new Notices_Item("이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+
 
         setUpRecyclerView();
     }
@@ -105,6 +102,7 @@ public class Add_Notice_List extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         recyclerView.addOnScrollListener(onScrollListener);
+
     }
 
     // 바닥에 도달했을 때...

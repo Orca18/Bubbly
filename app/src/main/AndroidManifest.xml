@@ -3,6 +3,12 @@
     package="com.example.novarand_sns">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
 
     <application
         android:allowBackup="true"
@@ -12,11 +18,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
+            android:name=".Community_Home"
+            android:exported="false" />
+        <activity
             android:name=".SS_PostDetail"
             android:exported="false" />
         <activity
             android:name=".Add_Posting_Create"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SS_Setting"
             android:exported="false" />
@@ -30,7 +40,7 @@
             android:name=".SS_Profile"
             android:exported="false" />
         <activity
-            android:name=".Add_Notice_List"
+            android:name=".Option_Notice_List"
             android:exported="false" />
         <activity
             android:name=".LL_Register_B"

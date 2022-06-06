@@ -1,4 +1,10 @@
 package com.example.novarand_sns;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -55,11 +61,10 @@ public class ChattingRoom extends AppCompatActivity {
         this.exampleList = new ArrayList();
 
         // TODO 시간 계산 → String 으로 넣어주기
-        for (int i = 0; i < 10; i++){
-            this.exampleList.add(new Chat_Item("안녕하세요요 "+i+"트"));
-            this.exampleList.add(new Chat_Item("안녕 못해요~~ "+i+"트"));
+        for (int i = 0; i < 10; i++) {
+            this.exampleList.add(new Chat_Item("안녕하세요요 " + i + "트"));
+            this.exampleList.add(new Chat_Item("안녕 못해요~~ " + i + "트"));
         }
-
 
 
         setUpRecyclerView();
@@ -90,7 +95,7 @@ public class ChattingRoom extends AppCompatActivity {
 
             if (recyclerView.computeVerticalScrollOffset() == 0) {
                 // is top of scroll.
-                Toast.makeText(getApplicationContext(), "상단 인식 테스트 TODO 페이징",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "상단 인식 테스트 TODO 페이징", Toast.LENGTH_SHORT).show();
             }
 
 
