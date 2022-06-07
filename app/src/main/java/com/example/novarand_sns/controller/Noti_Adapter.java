@@ -1,32 +1,29 @@
 package com.example.novarand_sns.controller;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.novarand_sns.ChattingRoom;
 import com.example.novarand_sns.R;
 import com.example.novarand_sns.SS_PostDetail;
-import com.example.novarand_sns.model.Notices_Item;
+import com.example.novarand_sns.model.Noti_Item;
 
 import java.util.List;
 
 
-public class Notices_Adapter extends RecyclerView.Adapter<Notices_Adapter.NoticesViewHolder> {
+public class Noti_Adapter extends RecyclerView.Adapter<Noti_Adapter.NoticesViewHolder> {
 
     Context mContext;
-    List<Notices_Item> mData;
+    List<Noti_Item> mData;
 
-    public Notices_Adapter(Context mContext, List<Notices_Item> mData) {
+    public Noti_Adapter(Context mContext, List<Noti_Item> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -48,20 +45,46 @@ public class Notices_Adapter extends RecyclerView.Adapter<Notices_Adapter.Notice
     @Override
     public void onBindViewHolder(@NonNull NoticesViewHolder holder, int position) {
 
-        Notices_Item currentItem = this.mData.get(position);
-        holder.from.setText(currentItem.testFrom());
+        Noti_Item currentItem = this.mData.get(position);
+        holder.from.setText(currentItem.getTestText());
+
+        String notiID = mData.get(position).getTestText().toString();
 
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 인텐트 만들어주기
+
+                notiChecked(notiID);
+
                 Intent intent = new Intent(mContext, SS_PostDetail.class);
                 //어답터에서 클릭 이용할 때, 아래 해줘야됨!
                 mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // 해당 알림을 삭제했다는걸 서버에 보냄
+                notidelete(notiID);
+
+                mData.remove(currentItem);
+                notifyItemRemoved(holder.getAdapterPosition());
+                notifyItemRangeChanged(holder.getAdapterPosition(), mData.size());
+            }
+        });
         
 
+    }
+
+    // 알림 클릭함
+    private void notiChecked(String notiID) {
+
+    }
+
+    // 알림 삭제
+    private void notidelete(String notiID) {
     }
 
     @Override
@@ -83,7 +106,7 @@ public class Notices_Adapter extends RecyclerView.Adapter<Notices_Adapter.Notice
         }
     }
 
-    public void setFilter(List<Notices_Item> filterdNames) {
+    public void setFilter(List<Noti_Item> filterdNames) {
         this.mData = filterdNames;
         notifyDataSetChanged();
     }

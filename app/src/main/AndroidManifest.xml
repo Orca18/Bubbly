@@ -3,12 +3,10 @@
     package="com.example.novarand_sns">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-
 
     <application
         android:allowBackup="true"
@@ -17,6 +15,9 @@
         android:roundIcon="@drawable/skeleton"
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
+        <activity
+            android:name=".SS_KeywordResult"
+            android:exported="false" />
         <activity
             android:name=".Community_Home"
             android:exported="false" />

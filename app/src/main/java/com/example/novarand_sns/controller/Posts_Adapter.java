@@ -1,9 +1,11 @@
 package com.example.novarand_sns.controller;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.novarand_sns.R;
+import com.example.novarand_sns.SS_PostDetail;
 import com.example.novarand_sns.model.Posts_Item;
 
 import java.util.List;
@@ -72,6 +75,14 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
             }
         });
 
+        holder.ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, SS_PostDetail.class);
+                mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
     }
 
     @Override
@@ -86,6 +97,8 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
 
     	ImageView like, reply, retweet;
     	ImageView share;
+
+    	LinearLayout ll;
 
         public PostsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +116,8 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
             reply = itemView.findViewById(R.id.feed_basic_reply_icon);
             retweet = itemView.findViewById(R.id.feed_basic_retweet_icon);
             share = itemView.findViewById(R.id.feed_basic_share_icon);
+
+            ll = itemView.findViewById(R.id.item_feed_basic_ll);
         }
     }
 

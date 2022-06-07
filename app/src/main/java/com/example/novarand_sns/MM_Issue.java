@@ -211,7 +211,9 @@ public class MM_Issue extends AppCompatActivity {
         cat1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                issacToast("종합 인기글? - 카테고리 상세 분할은 다음에...");
+                Intent mIntent = new Intent(getApplicationContext(), SS_KeywordResult.class);
+                mIntent.putExtra("keyword", "종합");
+                startActivity(mIntent);
             }
         });
 
@@ -219,13 +221,20 @@ public class MM_Issue extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 issacToast("간단한 유머글? - 카테고리 상세 분할은 다음에...");
+                Intent mIntent2 = new Intent(getApplicationContext(), SS_KeywordResult.class);
+                mIntent2.putExtra("keyword", "잡담");
+                startActivity(mIntent2);
             }
+
         });
 
         cat3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 issacToast("공개 커뮤니티 글 추천? - 카테고리 상세 분할은 다음에...");
+                Intent mIntent2 = new Intent(getApplicationContext(), SS_KeywordResult.class);
+                mIntent2.putExtra("keyword", "커뮤니티");
+                startActivity(mIntent2);
             }
         });
 

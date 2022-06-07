@@ -10,10 +10,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.novarand_sns.controller.Messages_Adapter;
-import com.example.novarand_sns.controller.Notices_Adapter;
-import com.example.novarand_sns.model.Messages_Item;
-import com.example.novarand_sns.model.Notices_Item;
+import com.example.novarand_sns.controller.Noti_Adapter;
+import com.example.novarand_sns.model.Noti_Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +20,8 @@ public class Option_Notice_List extends AppCompatActivity {
 
     Toolbar toolbar;
 
-    private Notices_Adapter adapter;
-    private List<Notices_Item> exampleList;
+    private Noti_Adapter adapter;
+    private List<Noti_Item> exampleList;
     RecyclerView recyclerView;
     private Parcelable recyclerViewState;
 
@@ -41,12 +39,12 @@ public class Option_Notice_List extends AppCompatActivity {
     }
 
     private void initiallize() {
-        toolbar = findViewById(R.id.toolbar_creating);
+        toolbar = findViewById(R.id.toolbar_noti);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("알림");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = findViewById(R.id.alarm_list_recyclerView);
+        recyclerView = findViewById(R.id.noti_recyclerView);
 
     }
 
@@ -74,14 +72,14 @@ public class Option_Notice_List extends AppCompatActivity {
         this.exampleList = new ArrayList();
 
 
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
-        this.exampleList.add(new Notices_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
+        this.exampleList.add(new Noti_Item("알림 추가한 이름"));
 
 
         setUpRecyclerView();
@@ -91,7 +89,7 @@ public class Option_Notice_List extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new Notices_Adapter(getApplicationContext(), this.exampleList);
+        this.adapter = new Noti_Adapter(getApplicationContext(), this.exampleList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 

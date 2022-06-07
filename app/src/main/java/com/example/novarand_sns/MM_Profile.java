@@ -90,7 +90,7 @@ public class MM_Profile extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("모든 글"));
         tabLayout.addTab(tabLayout.newTab().setText("답글"));
         tabLayout.addTab(tabLayout.newTab().setText("NFT"));
-        tabLayout.addTab(tabLayout.newTab().setText("공유"));
+        tabLayout.addTab(tabLayout.newTab().setText("좋아요"));
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
