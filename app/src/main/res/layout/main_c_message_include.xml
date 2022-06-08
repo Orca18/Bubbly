@@ -44,20 +44,13 @@
                         android:textSize="20dp" />
 
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_outline_add_box_24"
-                        app:tint="#222" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_outline_notifications_24"
+                        android:src="@drawable/ic_outline_person_add_alt_1_24"
                         app:tint="#222" />
 
                 </androidx.appcompat.widget.Toolbar>

@@ -34,31 +34,33 @@
                         android:src="@drawable/ic_baseline_dehaze_24"
                         app:tint="#222" />
 
-                    <TextView
+                    <Button
+                        android:id="@+id/action_search"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/chocolate"
-                        android:text="Bubbly"
+                        android:background="@drawable/button_radius"
+                        android:backgroundTint="@color/blue"
+                        android:hint="검색버튼"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_outline_add_box_24"
-                        app:tint="#222" />
+                    <!--                    <ImageView-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_gravity="right"-->
+                    <!--                        android:layout_marginRight="10dp"-->
+                    <!--                        android:src="@drawable/ic_outline_add_box_24"-->
+                    <!--                        app:tint="#222" />-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_outline_notifications_24"
-                        app:tint="#222" />
+                    <!--                    <ImageView-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_gravity="right"-->
+                    <!--                        android:layout_marginRight="10dp"-->
+                    <!--                        android:src="@drawable/ic_outline_notifications_24"-->
+                    <!--                        app:tint="#222" />-->
 
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
@@ -75,7 +77,7 @@
 
 
                     <ScrollView
-                        android:id="@+id/text_scrollview"
+                        android:id="@+id/issue__scrollview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fillViewport="true"

@@ -1,21 +1,28 @@
 package com.example.novarand_sns;
 
+import android.app.appsearch.SearchResult;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -52,12 +59,15 @@ public class MM_Issue extends AppCompatActivity {
 
     ListView listView;
     ArrayList<Ranking_Item> rankingList;
+    ScrollView scrollView;
 
     // 카테고리 (임시 1.종합 / 2.잡담 / 3.커뮤니티)
     LinearLayout cat1, cat2, cat3;
 
     LinearLayout myAccount, myActivity, myList, myCommunity;
     TextView settingOption, info, logout;
+
+    Button search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +118,14 @@ public class MM_Issue extends AppCompatActivity {
         btwallet = findViewById(R.id.issue_towallet);
 
 
-
         // 카테고리
         cat1 = findViewById(R.id.issue_category_hot);
         cat2 = findViewById(R.id.issue_category_bubble);
         cat3 = findViewById(R.id.issue_category_community);
+
+        scrollView = findViewById(R.id.issue__scrollview);
+
+        search = findViewById(R.id.action_search);
 
     }
 
@@ -124,7 +137,7 @@ public class MM_Issue extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.issue_tohome:
                         Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
-                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent1.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent1);
                         finish();
                         break;
@@ -134,21 +147,21 @@ public class MM_Issue extends AppCompatActivity {
 
                     case R.id.issue_tomessage:
                         Intent mIntent2 = new Intent(getApplicationContext(), MM_Message.class);
-                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent2);
                         finish();
                         break;
 
                     case R.id.issue_toprofile:
                         Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
-                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent3);
                         finish();
                         break;
 
                     case R.id.issue_towallet:
                         Intent mIntent4 = new Intent(getApplicationContext(), MM_Wallet.class);
-                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent4.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent4);
                         finish();
                         break;
@@ -238,10 +251,16 @@ public class MM_Issue extends AppCompatActivity {
             }
         });
 
+        search.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);
+            startActivity(mIntent);
+            overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+        });
+
     }
 
     private void issacToast(String msg) {
-        Toast.makeText(getApplicationContext(), ""+msg,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "" + msg, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -256,6 +275,7 @@ public class MM_Issue extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     //뒤로가기 했을 때
     @Override
@@ -285,17 +305,17 @@ public class MM_Issue extends AppCompatActivity {
 
     // 랭킹 리스트 채우기
     private void RankingList() {
-        rankingList  = new ArrayList<Ranking_Item>();
-        for (int i = 0; i < 10; i++){
-            rankingList.add(new Ranking_Item(i+1,"테스트", 108));
-            Log.i("dd", "RankingList: "+i);
+        rankingList = new ArrayList<Ranking_Item>();
+        for (int i = 0; i < 10; i++) {
+            rankingList.add(new Ranking_Item(i + 1, "테스트", 108));
+            Log.i("dd", "RankingList: " + i);
         }
 
         // 리스트뷰 어답터 - 리스트뷰 연결
         final Ranking_Adapter adapter = new Ranking_Adapter(this, rankingList);
         listView.setAdapter(adapter);
-    }
 
-    // 토스트 띄우기
+
+    }
 
 }

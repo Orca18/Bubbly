@@ -16,6 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
+            android:name=".SS_SearchMode"
+            android:exported="false" />
+        <activity
+            android:name=".SS_SearchResult"
+            android:exported="false" />
+        <activity
             android:name=".SS_KeywordResult"
             android:exported="false" />
         <activity

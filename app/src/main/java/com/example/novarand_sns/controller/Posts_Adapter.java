@@ -1,7 +1,12 @@
 package com.example.novarand_sns.controller;
+
 import android.content.Context;
 import android.content.Intent;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,7 +27,7 @@ import com.example.novarand_sns.model.Posts_Item;
 import java.util.List;
 
 
-public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewHolder> {
+public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewHolder> implements View.OnCreateContextMenuListener {
 
     Context mContext;
     List<Posts_Item> mData;
@@ -31,7 +36,6 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
         this.mContext = mContext;
         this.mData = mData;
     }
-
 
 
     @NonNull
@@ -57,9 +61,9 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
         holder.post_UserID.setText(currentItem.getUserId());
         holder.post_Content.setText(currentItem.getPostContent());
         Glide.with(holder.itemView.getContext()).load(currentItem.getPostMedia()).fitCenter().apply(RequestOptions.bitmapTransform(new RoundedCorners(14))).into(holder.contentIMG);
-        holder.post_likecount.setText(""+currentItem.getPostLikeCount());
-        holder.post_replycount.setText(""+currentItem.getPostReplyCount());
-        holder.post_rebucount.setText(""+currentItem.getPostRebuCount());
+        holder.post_likecount.setText("" + currentItem.getPostLikeCount());
+        holder.post_replycount.setText("" + currentItem.getPostReplyCount());
+        holder.post_rebucount.setText("" + currentItem.getPostRebuCount());
         String shareURL = currentItem.getPostURL();
         holder.post_Time.setText(currentItem.getPostTime());
 
@@ -71,7 +75,7 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
                 //Intent intent = new Intent(mContext, 액티비티.class);
                 //어답터에서 클릭 이용할 때, 아래 해줘야됨!
                 //mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                Toast.makeText(view.getContext(),"일단은 공유 버튼만 구현 : "+shareURL,Toast.LENGTH_SHORT).show();
+                Toast.makeText(view.getContext(), "일단은 공유 버튼만 구현 : " + shareURL, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -90,15 +94,33 @@ public class Posts_Adapter extends RecyclerView.Adapter<Posts_Adapter.PostsViewH
         return mData.size();
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        MenuItem delete = menu.add(Menu.NONE, R.id.action_delete, 1, "delete");
+        delete.setOnMenuItemClickListener(onMenuItemClickListener);
+    }
+
+    private final MenuItem.OnMenuItemClickListener onMenuItemClickListener = new MenuItem.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    Toast.makeText(mContext.getApplicationContext(), "삭제",Toast.LENGTH_SHORT).show();
+                    return true;
+            }
+            return false;
+        }
+    };
+
     public static class PostsViewHolder extends RecyclerView.ViewHolder {
-    	ImageView userProfileIMG, contentIMG;
-    	TextView post_Username, post_UserID, post_Content, post_Time;
-    	TextView post_likecount, post_replycount, post_rebucount;
+        ImageView userProfileIMG, contentIMG;
+        TextView post_Username, post_UserID, post_Content, post_Time;
+        TextView post_likecount, post_replycount, post_rebucount;
 
-    	ImageView like, reply, retweet;
-    	ImageView share;
+        ImageView like, reply, retweet;
+        ImageView share;
 
-    	LinearLayout ll;
+        LinearLayout ll;
 
         public PostsViewHolder(@NonNull View itemView) {
             super(itemView);

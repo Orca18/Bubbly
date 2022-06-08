@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +31,8 @@ public class ChattingRoom extends AppCompatActivity {
     private Chat_Adapter adapter;
     private List<Chat_Item> exampleList;
     private Parcelable recyclerViewState;
+
+    private int position = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,15 +75,19 @@ public class ChattingRoom extends AppCompatActivity {
 
     private void setUpRecyclerView() {
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
 
         this.adapter = new Chat_Adapter(getApplicationContext(), this.exampleList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 
+        recyclerView.scrollToPosition(position);
+
         //위치 유지
         recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-
         //위치 유지
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
@@ -94,8 +101,11 @@ public class ChattingRoom extends AppCompatActivity {
 
 
             if (recyclerView.computeVerticalScrollOffset() == 0) {
-                // is top of scroll.
+                // 최상단
                 Toast.makeText(getApplicationContext(), "상단 인식 테스트 TODO 페이징", Toast.LENGTH_SHORT).show();
+                position = position + (exampleList.size()-1);
+                Toast.makeText(getApplicationContext(), "dd"+position, Toast.LENGTH_SHORT).show();
+
             }
 
 
