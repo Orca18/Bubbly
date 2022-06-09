@@ -1,15 +1,16 @@
 package com.example.novarand_sns;
+import android.util.Log;
+import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Button;
 
-import com.example.novarand_sns.controller.FragmentAdapter;
 import com.example.novarand_sns.controller.FragmentAdapter_SearchResult;
 import com.google.android.material.tabs.TabLayout;
 
@@ -17,21 +18,29 @@ public class SS_SearchResult extends AppCompatActivity {
 
     Toolbar toolbar;
 
+    Button searching;
+
     // 탭 레이아웃
     TabLayout tabLayout;
     ViewPager2 pager2;
     FragmentAdapter_SearchResult adapter;
     String uid;
 
+    String keyword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ss_search);
 
-        uid = "1";
+        Bundle extras = getIntent().getExtras();
+        keyword = extras.getString("keyword");
 
         initiallize();
         tabinit();
+
+        searching.setText(keyword);
+        Log.i("정보태그", "zzz"+keyword);
     }
 
 
@@ -41,6 +50,14 @@ public class SS_SearchResult extends AppCompatActivity {
         getSupportActionBar().setTitle("");
         // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        searching = findViewById(R.id.searchresult_toSearching);
+
+        searching.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);
+            mIntent.putExtra("keyword", keyword);
+            startActivity(mIntent);
+        });
     }
 
     private void tabinit() {

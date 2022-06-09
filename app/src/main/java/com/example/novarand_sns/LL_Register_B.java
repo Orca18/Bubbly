@@ -37,7 +37,6 @@ public class LL_Register_B extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                Toast.makeText(getApplicationContext(), "나중에 뒤로가기 추가@@@",Toast.LENGTH_SHORT).show();
             }
         });
     }

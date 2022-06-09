@@ -28,6 +28,8 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class MM_Message extends AppCompatActivity {
 
     // 뒤로가기 시간
@@ -54,8 +56,10 @@ public class MM_Message extends AppCompatActivity {
 
     private Parcelable recyclerViewState;
 
-    LinearLayout myAccount, myActivity, myList, myCommunity;
+    CircleImageView myAccount;
+    LinearLayout myActivity, myList, myCommunity;
     TextView settingOption, info, logout;
+    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +72,11 @@ public class MM_Message extends AppCompatActivity {
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
+        // 내비 터치
+        NaviTouch();
         // 리사이클러뷰 데이터 가져오기
         loadrecycler();
+
     }
 
 
@@ -89,13 +96,14 @@ public class MM_Message extends AppCompatActivity {
         recyclerView = findViewById(R.id.message_recyclerView);
 
         // 내비 안 메뉴
-        myAccount = findViewById(R.id.navi_header_profileimg);
-        myActivity = findViewById(R.id.navi_header_myActivity);
-        myList = findViewById(R.id.navi_header_myList);
-        myCommunity = findViewById(R.id.navi_header_myCommunity);
-        settingOption = findViewById(R.id.navi_header_setting_option);
-        info = findViewById(R.id.navi_header_info);
-        logout = findViewById(R.id.navi_header_logout);
+        view = navigationView.getHeaderView(0);
+        myAccount = view.findViewById(R.id.navi_header_profileimg);
+        myActivity = view.findViewById(R.id.navi_header_myActivity);
+        myList = view.findViewById(R.id.navi_header_myList);
+        myCommunity = view.findViewById(R.id.navi_header_myCommunity);
+        settingOption = view.findViewById(R.id.navi_header_setting_option);
+        info = view.findViewById(R.id.navi_header_info);
+        logout = view.findViewById(R.id.navi_header_logout);
 
         // 바텀 메뉴
         bthome = findViewById(R.id.message_tohome);
@@ -114,14 +122,14 @@ public class MM_Message extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.message_tohome:
                         Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
-                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent1.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent1);
                         finish();
                         break;
 
                     case R.id.message_toissue:
                         Intent mIntent2 = new Intent(getApplicationContext(), MM_Issue.class);
-                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent2.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent2);
                         finish();
                         break;
@@ -131,14 +139,14 @@ public class MM_Message extends AppCompatActivity {
 
                     case R.id.message_toprofile:
                         Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
-                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent3);
                         finish();
                         break;
 
                     case R.id.message_towallet:
                         Intent mIntent4 = new Intent(getApplicationContext(), MM_Wallet.class);
-                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        mIntent4.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                         startActivity(mIntent4);
                         finish();
                         break;
@@ -157,6 +165,67 @@ public class MM_Message extends AppCompatActivity {
 
     }
 
+    // 내비 터치치
+    private void NaviTouch() {
+
+        // 내비뷰 메뉴 레이아웃에 직접 구현
+//       CircleImageView myAccount;
+//       LinearLayout myActivity, myList, myCommunity;
+//       TextView settingOption, info, logout;
+        myAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
+                mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(mIntent3);
+                finish();
+            }
+        });
+        myActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myCommunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(getApplicationContext(), Community_Home.class);
+                startActivity(mIntent);
+            }
+        });
+        settingOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingIntent = new Intent(getApplicationContext(), SS_Setting.class);
+                startActivity(settingIntent);
+            }
+        });
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "고객센터", Toast.LENGTH_SHORT).show();
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                startActivity(toLogin);
+                finish();
+                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
 
     // 클릭 이벤트 모음
     private void clickListeners() {

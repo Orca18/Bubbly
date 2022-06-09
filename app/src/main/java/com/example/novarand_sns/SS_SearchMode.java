@@ -1,4 +1,5 @@
 package com.example.novarand_sns;
+import android.util.Log;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +17,15 @@ public class SS_SearchMode extends AppCompatActivity {
     Toolbar toolbar;
 
     EditText editText;
+    String keywordset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ss_search_mode);
+
+        Bundle extra = getIntent().getExtras();
+        keywordset = extra.getString("keyword","");
 
         toolbar = findViewById(R.id.searchmode_toolbar);
         setSupportActionBar(toolbar);
@@ -28,6 +33,8 @@ public class SS_SearchMode extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         editText = findViewById(R.id.searchmode_edittext);
+        editText.setText(keywordset);
+
         editText.requestFocus();
 
         // 키보드 보이기
@@ -35,10 +42,13 @@ public class SS_SearchMode extends AppCompatActivity {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
         editText.setOnKeyListener((v, keyCode, event) -> {
+            String keyword = editText.getText().toString();
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 Intent mIntent = new Intent(getApplicationContext(), SS_SearchResult.class);
-                mIntent.putExtra("keyword", "검색 결과 - 탭으로 바꾸기");
+                mIntent.putExtra("keyword", keyword);
+                Log.i("정보태그", "xxx"+keyword);
                 startActivity(mIntent);
+                finish();
             } else {
 
             }

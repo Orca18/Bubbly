@@ -57,14 +57,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:fontFamily="@font/spoqa_bold"
-            android:text="참여중인 커뮤니티들의 피드 리사이클러뷰"
+            android:text="내가 참여중인 커뮤니티 목록"
             android:textColor="@color/black"
             android:textSize="18dp" />
 
 
-
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/community_home_recyclerView"
+            android:id="@+id/community_home_recyclerView2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

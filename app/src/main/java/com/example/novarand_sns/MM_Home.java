@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -99,7 +100,7 @@ public class MM_Home extends AppCompatActivity {
         // 내비 안 메뉴
         view = navigationView.getHeaderView(0);
         myAccount = view.findViewById(R.id.navi_header_profileimg);
-
+        Log.i("정보태그", "마이어카운트"+myAccount);
         myActivity = view.findViewById(R.id.navi_header_myActivity);
         myList = view.findViewById(R.id.navi_header_myList);
         myCommunity = view.findViewById(R.id.navi_header_myCommunity);
@@ -300,19 +301,21 @@ public class MM_Home extends AppCompatActivity {
        myAccount.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
-           }
+               Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
+               mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+               startActivity(mIntent3);
+               finish();           }
        });
        myActivity.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
+               Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)",Toast.LENGTH_SHORT).show();
            }
        });
        myList.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Toast.makeText(getApplicationContext(), "프사",Toast.LENGTH_SHORT).show();
+               Toast.makeText(getApplicationContext(), "겉멋",Toast.LENGTH_SHORT).show();
            }
        });
        myCommunity.setOnClickListener(new View.OnClickListener() {
@@ -327,7 +330,6 @@ public class MM_Home extends AppCompatActivity {
            public void onClick(View v) {
                Intent settingIntent = new Intent(getApplicationContext(), SS_Setting.class);
                startActivity(settingIntent);
-               overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
            }
        });
        info.setOnClickListener(new View.OnClickListener() {
@@ -339,6 +341,10 @@ public class MM_Home extends AppCompatActivity {
        logout.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
+               overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+               startActivity(toLogin);
+               finish();
                Toast.makeText(getApplicationContext(), "로그아웃",Toast.LENGTH_SHORT).show();
            }
        });
