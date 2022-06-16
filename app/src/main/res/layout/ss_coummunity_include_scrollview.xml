@@ -33,10 +33,11 @@
             android:text="커뮤니티 피드"/>
 
         <Button
+            android:id="@+id/community_toList"
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="참여 중인 커뮤니티"/>
+            android:text="현재 참여 커뮤니티"/>
 
     </LinearLayout>
 
@@ -60,8 +61,6 @@
             android:text="참여중인 커뮤니티들의 피드 리사이클러뷰"
             android:textColor="@color/black"
             android:textSize="18dp" />
-
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/community_home_recyclerView"

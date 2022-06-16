@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Novarand_SNS.NoActionBar">
         <activity
+            android:name=".test_CreateAccount"
+            android:exported="false" />
+        <activity
             android:name=".SS_SearchMode"
             android:exported="false" />
         <activity
@@ -25,7 +28,10 @@
             android:name=".SS_KeywordResult"
             android:exported="false" />
         <activity
-            android:name=".Community_Home"
+            android:name=".Community_Home_Feeds"
+            android:exported="false" />
+        <activity
+            android:name=".Community_Home_List"
             android:exported="false" />
         <activity
             android:name=".SS_PostDetail"

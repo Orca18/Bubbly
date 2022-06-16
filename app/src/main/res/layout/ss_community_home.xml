@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Community_Home">
+    tools:context=".Community_Home_Feeds">
 
 
     <FrameLayout
@@ -29,14 +29,6 @@
                     app:layout_scrollFlags="scroll|enterAlways">
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:fontFamily="@font/chocolate"
-                        android:text="Bubbly"
-                        android:textColor="@color/black"
-                        android:textSize="20dp" />
 
 
                     <ImageView

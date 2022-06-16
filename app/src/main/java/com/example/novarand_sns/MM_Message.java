@@ -20,9 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.novarand_sns.controller.Messages_Adapter;
-import com.example.novarand_sns.controller.Posts_Adapter;
 import com.example.novarand_sns.model.Messages_Item;
-import com.example.novarand_sns.model.Posts_Item;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -196,7 +194,7 @@ public class MM_Message extends AppCompatActivity {
         myCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(getApplicationContext(), Community_Home.class);
+                Intent mIntent = new Intent(getApplicationContext(), Community_Home_Feeds.class);
                 startActivity(mIntent);
             }
         });

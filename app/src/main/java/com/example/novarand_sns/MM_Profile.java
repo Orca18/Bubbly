@@ -1,14 +1,9 @@
 package com.example.novarand_sns;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -185,7 +180,7 @@ public class MM_Profile extends AppCompatActivity {
         myCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(getApplicationContext(), Community_Home.class);
+                Intent mIntent = new Intent(getApplicationContext(), Community_Home_Feeds.class);
                 startActivity(mIntent);
             }
         });

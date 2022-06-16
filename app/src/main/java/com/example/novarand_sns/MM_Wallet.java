@@ -1,6 +1,7 @@
 package com.example.novarand_sns;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.novarand_sns.controller.FragmentAdapter;
+import com.algorand.algosdk.v2.client.common.AlgodClient;
 import com.example.novarand_sns.controller.WalletFragmentAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -55,10 +56,24 @@ public class MM_Wallet extends AppCompatActivity {
     TextView settingOption, info, logout;
     View view;
 
+    // TODO (임시)
+    TextView createAddress;
+    TextView refreshAmount;
+    TextView amount; //잔액
+
+    // TODO 알고 Amount 가져오기 (임시)
+    AlgodClient client;
+
+    // TODO 내 주소 (임시)
+    String address;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_e_wallet);
+
+        SharedPreferences mSharedPreferences =  getSharedPreferences("Account", MODE_PRIVATE);
+        address = mSharedPreferences.getString("Address", "");
 
         // 리소스 ID 선언
         initiallize();
@@ -69,7 +84,13 @@ public class MM_Wallet extends AppCompatActivity {
         // 내비 터치
         NaviTouch();
 
+        getAmount();
         tabInit();
+    }
+
+    private void getAmount() {
+        // 조회할 address 보내서 조회
+
     }
 
 
@@ -104,6 +125,10 @@ public class MM_Wallet extends AppCompatActivity {
         btprofile = findViewById(R.id.wallet_toprofile);
         btwallet = findViewById(R.id.wallet_towallet);
 
+        // 임시 지갑 생성 버튼
+        createAddress = findViewById(R.id.mm_wallet_createaddress);
+        refreshAmount = findViewById(R.id.mm_wallet_refresh);
+        amount = findViewById(R.id.wallet_amount);
     }
 
     // 바텀 메뉴 클릭
@@ -187,7 +212,7 @@ public class MM_Wallet extends AppCompatActivity {
         myCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(getApplicationContext(), Community_Home.class);
+                Intent mIntent = new Intent(getApplicationContext(), Community_Home_Feeds.class);
                 startActivity(mIntent);
             }
         });
@@ -214,11 +239,25 @@ public class MM_Wallet extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "로그아웃",Toast.LENGTH_SHORT).show();            }
         });
 
+        // TODO 임시 계좌 생성 버튼
+        createAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toLogin = new Intent(getApplicationContext(), test_CreateAccount.class);
+                startActivity(toLogin);
+            }
+        });
+
+        refreshAmount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO 잔액 다시 가져오기
+            }
+        });
 
     }
     // 클릭 이벤트 모음
     private void clickListeners() {
-
         // 좌측 상단 메뉴 버튼
         sidemenu.setOnClickListener(new View.OnClickListener() {
             @Override

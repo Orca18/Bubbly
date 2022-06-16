@@ -10,6 +10,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.novarand_sns.controller.FragmentAdapter_SearchResult;
 import com.google.android.material.tabs.TabLayout;
@@ -18,7 +20,7 @@ public class SS_SearchResult extends AppCompatActivity {
 
     Toolbar toolbar;
 
-    Button searching;
+    LinearLayout searching;
 
     // 탭 레이아웃
     TabLayout tabLayout;
@@ -26,6 +28,7 @@ public class SS_SearchResult extends AppCompatActivity {
     FragmentAdapter_SearchResult adapter;
     String uid;
 
+    TextView searchkeyword;
     String keyword;
 
     @Override
@@ -36,10 +39,11 @@ public class SS_SearchResult extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         keyword = extras.getString("keyword");
 
+
         initiallize();
         tabinit();
 
-        searching.setText(keyword);
+        searchkeyword.setText(keyword);
         Log.i("정보태그", "zzz"+keyword);
     }
 
@@ -52,6 +56,7 @@ public class SS_SearchResult extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         searching = findViewById(R.id.searchresult_toSearching);
+        searchkeyword = findViewById(R.id.searchresult_toSearching_text);
 
         searching.setOnClickListener(v -> {
             Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);

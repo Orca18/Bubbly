@@ -15,8 +15,8 @@
         android:paddingVertical="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_baseline_public_24" />
 
@@ -27,7 +27,7 @@
             android:fontFamily="@font/spoqa_medium"
             android:paddingHorizontal="5dp"
             android:text="공개 범위 : 전체 (or 커뮤니티에 게시합니다)"
-            android:textSize="16dp" />
+            android:textSize="14dp" />
 
     </LinearLayout>
 

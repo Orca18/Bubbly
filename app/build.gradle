@@ -57,4 +57,10 @@ dependencies {
     // 간단한 권한 요청 라이브러리
     implementation 'com.karumi:dexter:6.2.3'
 
+    // algorand
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.github.Jesulonimi21:java-algorand-sdk:1.5.0'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.61'
 }

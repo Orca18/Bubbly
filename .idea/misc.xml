@@ -11,11 +11,13 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/chat.xml" value="0.3234375" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/edittext_radius.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_account_box_fill.xml" value="0.378125" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.2203125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_home_2_fill.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_home_2_fills.xml" value="0.36354166666666665" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_home_fill.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_outline_bubble_chart_24.xml" value="0.3104166666666667" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_outline_favorite_border_24.xml" value="0.2203125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_search_line.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/ic_user_fill.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/linear_radius.xml" value="0.378125" />
@@ -25,6 +27,7 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/tab_selector.xml" value="0.30052083333333335" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/a_home.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/activity_chatting_room.xml" value="0.33" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/activity_create_account.xml" value="0.271875" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/activity_main.xml" value="0.2765625" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/activity_main_ewallet.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/activity_post_details.xml" value="0.3619791666666667" />
@@ -48,7 +51,7 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_chat_other.xml" value="0.240625" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_communityList.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_communitylist.xml" value="0.284375" />
-        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_feed_basic.xml" value="0.33" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_feed_basic.xml" value="0.67" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_message_basic.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_notice.xml" value="0.5" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/item_ranking_listview.xml" value="0.3619791666666667" />
@@ -58,7 +61,7 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_a_home.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_a_home_include.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_b_issue.xml" value="0.33" />
-        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_b_issue_include.xml" value="0.5" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_b_issue_include.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_b_issue_include_scrollview.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_c_message.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/main_c_message_include.xml" value="0.23072916666666668" />
@@ -83,8 +86,11 @@
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/splash.xml" value="0.22" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/ss_community.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/ss_community_home.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/ss_community_home2.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/ss_coummunity_include_scrollview.xml" value="0.26927083333333335" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/ss_coummunity_include_scrollview_2.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/sub_profile.xml" value="0.2796875" />
+        <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/layout/sub_profile_include.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/menu/drawer_menu.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/menu/feed_menu.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/menu/navi_menu.xml" value="0.2942708333333333" />

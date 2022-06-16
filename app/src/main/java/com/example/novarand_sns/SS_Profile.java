@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.novarand_sns.controller.FragmentAdapter;
+import com.example.novarand_sns.controller.FragmentAdapter_SS;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -43,7 +44,7 @@ public class SS_Profile extends AppCompatActivity {
     // 탭 레이아웃
     TabLayout tabLayout;
     ViewPager2 pager2;
-    FragmentAdapter adapter;
+    FragmentAdapter_SS adapter;
 
     String uid;
 
@@ -73,7 +74,7 @@ public class SS_Profile extends AppCompatActivity {
         pager2 = findViewById(R.id.profile_view_pager2);
 
         FragmentManager fm = getSupportFragmentManager();
-        adapter = new FragmentAdapter(fm, getLifecycle(), uid);
+        adapter = new FragmentAdapter_SS(fm, getLifecycle(), uid);
         pager2.setAdapter(adapter);
 
         tabLayout.addTab(tabLayout.newTab().setText("모든 글"));

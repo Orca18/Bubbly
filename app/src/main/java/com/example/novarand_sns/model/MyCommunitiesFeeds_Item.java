@@ -1,6 +1,6 @@
 package com.example.novarand_sns.model;
 
-public class MyCommunities_Item {
+public class MyCommunitiesFeeds_Item {
     // 프사 링크, 유저명, 아이디, 내용, 미디어, 좋아요수, 답글수, 리트윗수, 게시글 링크, 게시 시간
     private String profileImageURL;
     private String userName;
@@ -13,7 +13,7 @@ public class MyCommunities_Item {
     private String postURL;
     private String postTime;
 
-    public MyCommunities_Item(String imageUrl, String userName, String userId, String postContent, String postMedia, int postLikeCount, int postReplyCount, int postRebuCount, String postURL, String postTime) {
+    public MyCommunitiesFeeds_Item(String imageUrl, String userName, String userId, String postContent, String postMedia, int postLikeCount, int postReplyCount, int postRebuCount, String postURL, String postTime) {
         this.profileImageURL = imageUrl;
         this.userName = userName;
         this.userId = userId;

@@ -1,15 +1,9 @@
 package com.example.novarand_sns;
 
-import android.app.appsearch.SearchResult;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
-import android.os.Parcelable;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,21 +16,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.novarand_sns.controller.Posts_Adapter;
 import com.example.novarand_sns.controller.Ranking_Adapter;
-import com.example.novarand_sns.model.Posts_Item;
 import com.example.novarand_sns.model.Ranking_Item;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -70,7 +58,7 @@ public class MM_Issue extends AppCompatActivity {
     LinearLayout myActivity, myList, myCommunity;
     TextView settingOption, info, logout;
 
-    Button search;
+    LinearLayout search;
     View view;
 
     @Override
@@ -166,7 +154,7 @@ public class MM_Issue extends AppCompatActivity {
         myCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(getApplicationContext(), Community_Home.class);
+                Intent mIntent = new Intent(getApplicationContext(), Community_Home_Feeds.class);
                 startActivity(mIntent);
             }
         });

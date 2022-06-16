@@ -5,31 +5,34 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.novarand_sns.controller.MyCommunities_Adapter;
-import com.example.novarand_sns.controller.Posts_Adapter;
-import com.example.novarand_sns.model.MyCommunities_Item;
+import com.example.novarand_sns.controller.MyCommunitiesFeeds_Adapter;
+import com.example.novarand_sns.model.MyCommunitiesFeeds_Item;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Community_Home extends AppCompatActivity {
+public class Community_Home_Feeds extends AppCompatActivity {
 
     androidx.appcompat.widget.Toolbar toolbar;
 
     RecyclerView recyclerView;
 
-    private MyCommunities_Adapter adapter;
-    private List<MyCommunities_Item> postsList;
+    private MyCommunitiesFeeds_Adapter adapter;
+    private List<MyCommunitiesFeeds_Item> postsList;
 
     private Parcelable recyclerViewState;
 
     SwipeRefreshLayout swipeRefreshLayout;
+
+    Button toList;
 
 
     @Override
@@ -40,9 +43,10 @@ public class Community_Home extends AppCompatActivity {
         // 툴바
         toolbar = findViewById(R.id.community_home_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
+        getSupportActionBar().setTitle("커뮤니티 피드");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toList = findViewById(R.id.community_toList);
 
         recyclerView = findViewById(R.id.community_home_recyclerView);
         swipeRefreshLayout = findViewById(R.id.community_home_refresh);
@@ -60,6 +64,12 @@ public class Community_Home extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
+
+        toList.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), Community_Home_List.class);
+            startActivity(mIntent);
+            finish();
+        });
     }
 
     // 데이터 http 요청
@@ -78,7 +88,7 @@ public class Community_Home extends AppCompatActivity {
 
         for (int i = 0; i < 20; i++) {
             // TODO 시간 계산 → String 으로 넣어주기
-            this.postsList.add(new MyCommunities_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
+            this.postsList.add(new MyCommunitiesFeeds_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
 
         }
 
@@ -89,7 +99,7 @@ public class Community_Home extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new MyCommunities_Adapter(getApplicationContext(), this.postsList);
+        this.adapter = new MyCommunitiesFeeds_Adapter(getApplicationContext(), this.postsList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 
@@ -130,5 +140,10 @@ public class Community_Home extends AppCompatActivity {
     }
 
 
-
+    // 액티비티 종료 시, 애니메이션 효과 없애기
+    @Override
+    protected void onPause() {
+        super.onPause();
+        overridePendingTransition(0, 0);
+    }
 }

@@ -14,18 +14,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.novarand_sns.MM_Profile;
 import com.example.novarand_sns.R;
-import com.example.novarand_sns.SS_Profile;
 import com.example.novarand_sns.controller.Profile_Tab1_Adapter;
 import com.example.novarand_sns.model.Fragment_Tab1_Item;
-import com.example.novarand_sns.model.Posts_Item;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 

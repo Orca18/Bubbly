@@ -12,8 +12,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.novarand_sns.controller.Posts_Adapter;
-import com.example.novarand_sns.model.Posts_Item;
+import com.example.novarand_sns.controller.Feed_Adapter;
+import com.example.novarand_sns.model.Feed_Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +25,8 @@ public class SS_KeywordResult extends AppCompatActivity {
 
     String keywork = "기본";
 
-    private Posts_Adapter adapter;
-    private List<Posts_Item> postsList;
+    private Feed_Adapter adapter;
+    private List<Feed_Item> postsList;
 
     RecyclerView recyclerView;
 
@@ -80,7 +80,7 @@ public class SS_KeywordResult extends AppCompatActivity {
 
         for (int i = 0; i < 20; i++) {
             // TODO 시간 계산 → String 으로 넣어주기
-            this.postsList.add(new Posts_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
+            this.postsList.add(new Feed_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h",  false));
 
         }
 
@@ -91,7 +91,7 @@ public class SS_KeywordResult extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new Posts_Adapter(getApplicationContext(), this.postsList);
+        this.adapter = new Feed_Adapter(getApplicationContext(), this.postsList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 

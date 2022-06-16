@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:fontFamily="@font/spoqa_bold"
-                android:text="내 활동"
+                android:text="메시지"
                 android:textColor="@color/text_black" />
 
             <Button
@@ -38,11 +38,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
                 android:fontFamily="@font/spoqa_bold"
-                android:text="프로필 편집"
+                android:text="팔로우"
                 android:textColor="@color/text_black" />
 
         </LinearLayout>
-
 
         <TextView
             android:textColor="@color/text_black"
@@ -64,7 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_medium"
-            android:text="팀노바 메인넷팀 비공식 계정" />
+            android:text="자기소개 : 프로필 들어갈 곳인데\n회색 부분은 가려지게 커스텀" />
 
 
     </LinearLayout>

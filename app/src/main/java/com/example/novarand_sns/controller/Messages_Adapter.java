@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 import com.example.novarand_sns.ChattingRoom;
 import com.example.novarand_sns.R;
 import com.example.novarand_sns.model.Messages_Item;
-import com.example.novarand_sns.model.Posts_Item;
 
 import java.util.List;
 

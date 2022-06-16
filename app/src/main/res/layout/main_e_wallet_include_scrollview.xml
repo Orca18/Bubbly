@@ -20,6 +20,7 @@
             android:text="보유 버블 (토큰?)" />
 
         <TextView
+            android:id="@+id/wallet_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -44,7 +45,7 @@
                 android:textColor="@color/black" />
 
             <View
-                android:layout_width="100dp"
+                android:layout_width="20dp"
                 android:layout_height="0dp" />
 
             <TextView
@@ -56,6 +57,33 @@
                 android:text="출금하기"
                 android:textColor="@color/black" />
 
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp" />
+
+            <TextView
+                android:id="@+id/mm_wallet_createaddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:fontFamily="@font/spoqa_medium"
+                android:padding="10dp"
+                android:text="지갑 생성 (임시)"
+                android:textColor="@color/black" />
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="0dp" />
+
+            <TextView
+                android:id="@+id/mm_wallet_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:fontFamily="@font/spoqa_medium"
+                android:padding="10dp"
+                android:text="새로고침"
+                android:textColor="@color/black" />
         </LinearLayout>
 
     </LinearLayout>

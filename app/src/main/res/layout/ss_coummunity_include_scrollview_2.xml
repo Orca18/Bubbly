@@ -27,6 +27,7 @@
         android:paddingVertical="3dp">
 
         <Button
+            android:id="@+id/community_toFeeds"
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +37,7 @@
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="참여 중인 커뮤니티"/>
+            android:text="현재 참여 커뮤니티"/>
 
     </LinearLayout>
 

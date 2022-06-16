@@ -14,18 +14,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.novarand_sns.R;
-import com.example.novarand_sns.model.MyCommunities_Item;
-import com.example.novarand_sns.model.Posts_Item;
+import com.example.novarand_sns.model.MyCommunitiesFeeds_Item;
 
 import java.util.List;
 
 
-public class MyCommunities_Adapter extends RecyclerView.Adapter<MyCommunities_Adapter.PostsViewHolder> {
+public class MyCommunitiesFeeds_Adapter extends RecyclerView.Adapter<MyCommunitiesFeeds_Adapter.PostsViewHolder> {
 
     Context mContext;
-    List<MyCommunities_Item> mData;
+    List<MyCommunitiesFeeds_Item> mData;
 
-    public MyCommunities_Adapter(Context mContext, List<MyCommunities_Item> mData) {
+    public MyCommunitiesFeeds_Adapter(Context mContext, List<MyCommunitiesFeeds_Item> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }
@@ -48,7 +47,7 @@ public class MyCommunities_Adapter extends RecyclerView.Adapter<MyCommunities_Ad
     public void onBindViewHolder(@NonNull PostsViewHolder holder, int position) {
 
         // 1. 프사 링크 - 2. 유저명 - 3. 아이디 - 4. 내용 5. 미디어 6. 좋아요수 7. 답글수 8.  리트윗수 9. 게시글 링크 10. 게시 시간
-        MyCommunities_Item currentItem = this.mData.get(position);
+        MyCommunitiesFeeds_Item currentItem = this.mData.get(position);
 
         Glide.with(holder.itemView.getContext()).load(currentItem.getProfileImageURL()).centerCrop().into(holder.userProfileIMG);
         holder.post_Username.setText(currentItem.getUserName());
@@ -107,7 +106,7 @@ public class MyCommunities_Adapter extends RecyclerView.Adapter<MyCommunities_Ad
         }
     }
 
-    public void setFilter(List<MyCommunities_Item> filterdNames) {
+    public void setFilter(List<MyCommunitiesFeeds_Item> filterdNames) {
         this.mData = filterdNames;
         notifyDataSetChanged();
     }

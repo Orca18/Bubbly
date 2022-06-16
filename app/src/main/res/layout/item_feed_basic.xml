@@ -123,8 +123,9 @@
 
                     <ImageView
                         android:id="@+id/feed_basic_like_icon"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:padding="3dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:src="@drawable/ic_outline_favorite_border_24" />
@@ -146,8 +147,9 @@
 
                     <ImageView
                         android:id="@+id/feed_basic_reply_icon"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:padding="3dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:src="@drawable/ic_outline_chat_bubble_outline_24" />
@@ -169,8 +171,9 @@
 
                     <ImageView
                         android:id="@+id/feed_basic_retweet_icon"
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:padding="3dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:src="@drawable/ic_outline_bubble_chart_24" />

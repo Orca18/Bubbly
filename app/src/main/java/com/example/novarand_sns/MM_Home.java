@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.novarand_sns.controller.Posts_Adapter;
-import com.example.novarand_sns.model.Posts_Item;
+import com.example.novarand_sns.controller.Feed_Adapter;
+import com.example.novarand_sns.model.Feed_Item;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -46,8 +46,8 @@ public class MM_Home extends AppCompatActivity {
 
     ProgressBar progressBar;
 
-    private Posts_Adapter adapter;
-    private List<Posts_Item> postsList;
+    private Feed_Adapter adapter;
+    private List<Feed_Item> postsList;
 
     RecyclerView recyclerView;
 
@@ -95,19 +95,18 @@ public class MM_Home extends AppCompatActivity {
         sidemenu = findViewById(R.id.home_sidemenu);
         swipeRefreshLayout = findViewById(R.id.home_refresh);
         creating = findViewById(R.id.home_creating);
-        alarm =  findViewById(R.id.home_alarm);
+        alarm = findViewById(R.id.home_alarm);
 
         // 내비 안 메뉴
         view = navigationView.getHeaderView(0);
         myAccount = view.findViewById(R.id.navi_header_profileimg);
-        Log.i("정보태그", "마이어카운트"+myAccount);
+        Log.i("정보태그", "마이어카운트" + myAccount);
         myActivity = view.findViewById(R.id.navi_header_myActivity);
         myList = view.findViewById(R.id.navi_header_myList);
         myCommunity = view.findViewById(R.id.navi_header_myCommunity);
         settingOption = view.findViewById(R.id.navi_header_setting_option);
         info = view.findViewById(R.id.navi_header_info);
         logout = view.findViewById(R.id.navi_header_logout);
-
 
 
         // 바텀 메뉴
@@ -190,9 +189,10 @@ public class MM_Home extends AppCompatActivity {
         String 임시미디어 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
 
 
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 10; i++) {
             // TODO 시간 계산 → String 으로 넣어주기
-            this.postsList.add(new Posts_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
+            this.postsList.add(new Feed_Item(임시프사, "좋아요 안누른거" + i, "아이디" + i, "내용", "", 0, 2, 3, "", i + "h", false));
+            this.postsList.add(new Feed_Item(임시프사, "누른거" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h", true));
 
         }
 
@@ -203,7 +203,7 @@ public class MM_Home extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new Posts_Adapter(getApplicationContext(), this.postsList);
+        this.adapter = new Feed_Adapter(getApplicationContext(), this.postsList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 
@@ -290,68 +290,67 @@ public class MM_Home extends AppCompatActivity {
     }
 
 
-
     // 내비 터치치
-   private void NaviTouch() {
+    private void NaviTouch() {
 
-       // 내비뷰 메뉴 레이아웃에 직접 구현
+        // 내비뷰 메뉴 레이아웃에 직접 구현
 //       CircleImageView myAccount;
 //       LinearLayout myActivity, myList, myCommunity;
 //       TextView settingOption, info, logout;
-       myAccount.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
-               mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-               startActivity(mIntent3);
-               finish();           }
-       });
-       myActivity.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)",Toast.LENGTH_SHORT).show();
-           }
-       });
-       myList.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Toast.makeText(getApplicationContext(), "겉멋",Toast.LENGTH_SHORT).show();
-           }
-       });
-       myCommunity.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent mIntent = new Intent(getApplicationContext(), Community_Home.class);
-               startActivity(mIntent);
-           }
-       });
-       settingOption.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent settingIntent = new Intent(getApplicationContext(), SS_Setting.class);
-               startActivity(settingIntent);
-           }
-       });
-       info.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Toast.makeText(getApplicationContext(), "고객센터",Toast.LENGTH_SHORT).show();
-           }
-       });
-       logout.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
-               overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-               startActivity(toLogin);
-               finish();
-               Toast.makeText(getApplicationContext(), "로그아웃",Toast.LENGTH_SHORT).show();
-           }
-       });
+        myAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
+                mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(mIntent3);
+                finish();
+            }
+        });
+        myActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myCommunity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(getApplicationContext(), Community_Home_Feeds.class);
+                startActivity(mIntent);
+            }
+        });
+        settingOption.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingIntent = new Intent(getApplicationContext(), SS_Setting.class);
+                startActivity(settingIntent);
+            }
+        });
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "고객센터", Toast.LENGTH_SHORT).show();
+            }
+        });
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                startActivity(toLogin);
+                finish();
+                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
     }
-
 
 
     @Override
@@ -391,5 +390,22 @@ public class MM_Home extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case 121:
+                displayMessage("아이템 삭제");
+                return true;
+            case 122:
+                displayMessage("아이템 추가");
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    public void displayMessage(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
 
 }
