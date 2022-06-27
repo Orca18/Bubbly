@@ -1,5 +1,6 @@
 package com.example.novarand_sns;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
@@ -13,15 +14,20 @@ import com.algorand.algosdk.transaction.SignedTransaction;
 import com.algorand.algosdk.transaction.Transaction;
 import com.algorand.algosdk.util.Encoder;
 import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.algorand.algosdk.v2.client.common.Response;
 import com.algorand.algosdk.v2.client.model.PendingTransactionResponse;
 import com.algorand.algosdk.v2.client.model.TransactionParametersResponse;
+import com.example.novarand_sns.retrofit.ApiClient;
+import com.example.novarand_sns.retrofit.ApiInterface;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.Security;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /** 여기 파트는 깊게 안보셔도 됩니다. */
@@ -39,6 +45,9 @@ public class test_CreateAccount extends AppCompatActivity {
     AlgodClient client;
 
     TextView tv_mnemonic;
+
+    SharedPreferences preferences;
+    String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +76,35 @@ public class test_CreateAccount extends AppCompatActivity {
     //Method that creates a new account without using an existing mnemonic String
     //기존 니모닉 문자열을 사용하지 않고 새 계정을 생성하는 메소드
     public void createNewAccount() {
+        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+        ApiInterface createAddrToBlockchain_api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<String> call = createAddrToBlockchain_api.createAddrToBlockchain(user_id);
+        call.enqueue(new Callback<String>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    Log.e("성공 : 니모닉  - ", response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+            {
+                Log.e("에러", t.getMessage());
+            }
+        });
+
+
+
+
+
+
+
+        ///////////////////////////////////
         Account myAccount1 = null;
 
         try {

@@ -57,7 +57,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
         uid = ((MM_Profile)getActivity()).getUid();
 
         postsItem = new ArrayList<>();
-        fillList();
+//        fillList();
 
     }
 
@@ -90,101 +90,101 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
 
 
-    private void fillList() {
+//    private void fillList() {
+//
+//        // HttpUrlConnection
+//        Thread th = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    String page = "http://146.56.188.188/app/notice_list.php";
+//                    // URL 객체 생성
+//                    URL url = new URL(page);
+//                    // 연결 객체 생성
+//                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+//
+//                    // Post 파라미터
+////                    String params = "ccode="+code+"&start="+start+"&list="+list;
+//                    String params = "";
+//                    // 결과값 저장 문자열
+//                    final StringBuilder sb = new StringBuilder();
+//
+//                    // 연결되면
+//                    if (conn != null) {
+//                        Log.i("tag", "conn 연결");
+//                        // 응답 타임아웃 설정
+//                        conn.setRequestProperty("Accept", "application/json");
+//                        conn.setConnectTimeout(10000);
+//                        // POST 요청방식
+//                        conn.setRequestMethod("POST");
+//                        // 포스트 파라미터 전달
+//                        conn.getOutputStream().write(params.getBytes("utf-8"));
+//
+//
+//                        // url에 접속 성공하면 (200)
+//                        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+//
+//                            // 결과 값 읽어오는 부분
+//                            BufferedReader br = new BufferedReader(new InputStreamReader(
+//                                    conn.getInputStream(), "utf-8"
+//                            ));
+//                            String line;
+//                            while ((line = br.readLine()) != null) {
+//                                sb.append(line);
+//                            }
+//                            // 버퍼리더 종료
+//                            br.close();
+//                        }
+//                        // 연결 끊기
+//                        conn.disconnect();
+//                    }
+//
+//                    //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
+//                    // runOnUiThread(메인 스레드영역)
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            fillList2(sb.toString());
+//
+//                            Log.i("testt", "testt :" + sb.toString());
+//
+//                        }
+//                    });
+//                } catch (Exception e) {
+//                    Log.i("tag", "error :" + e);
+//                }
+//            }
+//        });
+//        th.start();
+//    }
+//
+//    private void fillList2(String memberinfo) {
+//        JsonParser Parser = new JsonParser();
+//        JsonObject jsonObj = (JsonObject) Parser.parse(memberinfo);
+//        JsonArray info = (JsonArray) jsonObj.get("result");
+//
+//        postsItem = new ArrayList<>();
+//
+//        for (int i = 0; i < info.size(); i++) {
+//            JsonObject object = (JsonObject) info.get(i);
+//            // String imgurl = "http://146.56.188.188/app/images/";
+//            postsItem.add(new Fragment_Tab1_Item("아아 테스트"));
+//        }
+//
+//        setUpRecyclerView();
+//    }
 
-        // HttpUrlConnection
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    String page = "http://146.56.188.188/app/notice_list.php";
-                    // URL 객체 생성
-                    URL url = new URL(page);
-                    // 연결 객체 생성
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-                    // Post 파라미터
-//                    String params = "ccode="+code+"&start="+start+"&list="+list;
-                    String params = "";
-                    // 결과값 저장 문자열
-                    final StringBuilder sb = new StringBuilder();
-
-                    // 연결되면
-                    if (conn != null) {
-                        Log.i("tag", "conn 연결");
-                        // 응답 타임아웃 설정
-                        conn.setRequestProperty("Accept", "application/json");
-                        conn.setConnectTimeout(10000);
-                        // POST 요청방식
-                        conn.setRequestMethod("POST");
-                        // 포스트 파라미터 전달
-                        conn.getOutputStream().write(params.getBytes("utf-8"));
-
-
-                        // url에 접속 성공하면 (200)
-                        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-
-                            // 결과 값 읽어오는 부분
-                            BufferedReader br = new BufferedReader(new InputStreamReader(
-                                    conn.getInputStream(), "utf-8"
-                            ));
-                            String line;
-                            while ((line = br.readLine()) != null) {
-                                sb.append(line);
-                            }
-                            // 버퍼리더 종료
-                            br.close();
-                        }
-                        // 연결 끊기
-                        conn.disconnect();
-                    }
-
-                    //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
-                    // runOnUiThread(메인 스레드영역)
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            fillList2(sb.toString());
-
-                            Log.i("testt", "testt :" + sb.toString());
-
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.i("tag", "error :" + e);
-                }
-            }
-        });
-        th.start();
-    }
-
-    private void fillList2(String memberinfo) {
-        JsonParser Parser = new JsonParser();
-        JsonObject jsonObj = (JsonObject) Parser.parse(memberinfo);
-        JsonArray info = (JsonArray) jsonObj.get("result");
-
-        postsItem = new ArrayList<>();
-
-        for (int i = 0; i < info.size(); i++) {
-            JsonObject object = (JsonObject) info.get(i);
-            // String imgurl = "http://146.56.188.188/app/images/";
-            postsItem.add(new Fragment_Tab1_Item("아아 테스트"));
-        }
-
-        setUpRecyclerView();
-    }
-
-    private void setUpRecyclerView() {
-        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
-        Profile_Tab1_Adapter noticesAdapter = new Profile_Tab1_Adapter(getContext(), postsItem);
-        myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myrecyclerview.setAdapter(noticesAdapter);
-    }
+//    private void setUpRecyclerView() {
+//        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
+//        Profile_Tab1_Adapter noticesAdapter = new Profile_Tab1_Adapter(getContext(), postsItem);
+//        myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        myrecyclerview.setAdapter(noticesAdapter);
+//    }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        fillList();
+//        fillList();
     }
 }

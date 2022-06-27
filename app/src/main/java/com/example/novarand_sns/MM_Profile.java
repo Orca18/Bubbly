@@ -2,8 +2,11 @@ package com.example.novarand_sns;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -21,6 +24,16 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.novarand_sns.controller.FragmentAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -55,6 +68,9 @@ public class MM_Profile extends AppCompatActivity {
     TextView settingOption, info, logout;
     View view;
 
+    ////////////////////
+    TextView tv_following;
+    Button bt_modify_profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +91,15 @@ public class MM_Profile extends AppCompatActivity {
         clickListeners();
         // 내비 터치
         NaviTouch();
+
+        tv_following = findViewById(R.id.tv_following);
+        tv_following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(getApplicationContext(), Following.class);
+                startActivity(mIntent);
+            }
+        });
 
 
     }
@@ -151,6 +176,8 @@ public class MM_Profile extends AppCompatActivity {
         btprofile = findViewById(R.id.profile_toprofile);
         btwallet = findViewById(R.id.profile_towallet);
 
+        bt_modify_profile = findViewById(R.id.bt_modify_profile);
+
     }    // 내비 터치치
 
     private void NaviTouch() {
@@ -168,13 +195,13 @@ public class MM_Profile extends AppCompatActivity {
         myActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
             }
         });
         myList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "겉멋",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {
@@ -204,7 +231,8 @@ public class MM_Profile extends AppCompatActivity {
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 startActivity(toLogin);
                 finish();
-                Toast.makeText(getApplicationContext(), "로그아웃",Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
+            }
         });
 
 
@@ -300,6 +328,16 @@ public class MM_Profile extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
+
+        bt_modify_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(getApplicationContext(), ModifyProfile.class);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(mIntent);
+            }
+        });
+
     }
 
 
@@ -344,6 +382,7 @@ public class MM_Profile extends AppCompatActivity {
     public String getUid() {
         return uid;
     }
+
 
 
 }

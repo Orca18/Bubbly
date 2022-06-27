@@ -49,7 +49,7 @@ public class SS_KeywordResult extends AppCompatActivity {
         // 새로고침 리스너
         refreshListeners();
         // 리사이클러뷰 데이터 가져오기 TODO 키워드 요청에 따라 가져오기
-        loadrecycler();
+//        loadrecycler();
     }
 
     private void initiallize() {

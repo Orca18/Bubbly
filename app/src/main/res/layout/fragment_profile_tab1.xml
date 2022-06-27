@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
       <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fragment_profile_tab1_recyclerview"
+            android:id="@+id/tab_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

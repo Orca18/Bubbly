@@ -10,7 +10,7 @@
     <TextView
         android:textSize="20dp"
         android:fontFamily="@font/spoqa_bold"
-        android:text="니모닉 보관하세요 (캡처 불가능하게)"
+        android:text="니모닉 보관"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

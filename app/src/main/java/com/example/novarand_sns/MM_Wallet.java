@@ -3,6 +3,7 @@ package com.example.novarand_sns;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,9 +21,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.algorand.algosdk.v2.client.common.AlgodClient;
+import com.example.novarand_sns.algoseverless.service.AlgoService;
 import com.example.novarand_sns.controller.WalletFragmentAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -60,12 +63,15 @@ public class MM_Wallet extends AppCompatActivity {
     TextView createAddress;
     TextView refreshAmount;
     TextView amount; //잔액
+    TextView send;
 
     // TODO 알고 Amount 가져오기 (임시)
     AlgodClient client;
 
     // TODO 내 주소 (임시)
     String address;
+    String mnemonic;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,7 @@ public class MM_Wallet extends AppCompatActivity {
 
         SharedPreferences mSharedPreferences =  getSharedPreferences("Account", MODE_PRIVATE);
         address = mSharedPreferences.getString("Address", "");
+        mnemonic = mSharedPreferences.getString("Mnemonic", "");
 
         // 리소스 ID 선언
         initiallize();
@@ -84,14 +91,10 @@ public class MM_Wallet extends AppCompatActivity {
         // 내비 터치
         NaviTouch();
 
-        getAmount();
+
         tabInit();
     }
 
-    private void getAmount() {
-        // 조회할 address 보내서 조회
-
-    }
 
 
     // ========================================================
@@ -129,6 +132,7 @@ public class MM_Wallet extends AppCompatActivity {
         createAddress = findViewById(R.id.mm_wallet_createaddress);
         refreshAmount = findViewById(R.id.mm_wallet_refresh);
         amount = findViewById(R.id.wallet_amount);
+        send = findViewById(R.id.mm_wallet_send);
     }
 
     // 바텀 메뉴 클릭
@@ -252,10 +256,49 @@ public class MM_Wallet extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO 잔액 다시 가져오기
+                AlgoService algoService = new AlgoService(
+                        "https://node.testnet.algoexplorerapi.io/",
+                        443,
+                        null,
+                        "https://algoindexer.testnet.algoexplorerapi.io/idx2",
+                        443);
+
+                Long amountLong = algoService.getAccountAmount(address).orElse(-1L);
+
+                amount.setText(""+amountLong);
+                Log.d("algoDebugAmount", ""+algoService);
+                Log.d("algoDebugAmount", ""+amountLong);
+                Log.d("algoDebugAmount", ""+address);
+
             }
         });
 
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendAlgo();
+            }
+        });
+
+
+
     }
+
+    private void sendAlgo() {
+        AlgoService algoService = new AlgoService("https://node.testnet.algoexplorerapi.io/",
+                443,
+                null,
+                "https://algoindexer.testnet.algoexplorerapi.io/idx2",
+                443,
+                "니모닉");
+        try {
+            String txId = algoService.sendAlgo("받는 주소", 1L, "보내는 사람의 니모닉");
+            return;
+        } catch (Exception e) {
+            return;
+        }
+    }
+
     // 클릭 이벤트 모음
     private void clickListeners() {
         // 좌측 상단 메뉴 버튼
@@ -323,8 +366,6 @@ public class MM_Wallet extends AppCompatActivity {
     }
 
 
-
-
     private void tabInit() {
         tabLayout = findViewById(R.id.wallet_tab_layout);
         pager2 = findViewById(R.id.wallet_view_pager2);
@@ -368,4 +409,6 @@ public class MM_Wallet extends AppCompatActivity {
     public String getUid(){
         return uid;
     }
+
+
 }

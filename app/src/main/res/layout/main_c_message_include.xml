@@ -59,7 +59,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_outline_person_add_alt_1_24"
+                        android:src="@drawable/ic_baseline_add_comment_24"
                         app:tint="#222" />
 
                 </androidx.appcompat.widget.Toolbar>

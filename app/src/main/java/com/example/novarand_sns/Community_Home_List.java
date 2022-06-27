@@ -26,10 +26,8 @@ public class Community_Home_List extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
 
     RecyclerView recyclerView;
-
     private MyCommunitiesList_Adapter adapter;
     private List<MyCommunitiesList_Item> postsList;
-
     private Parcelable recyclerViewState;
 
     SwipeRefreshLayout swipeRefreshLayout;

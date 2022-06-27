@@ -17,14 +17,7 @@ import com.example.novarand_sns.MM_Wallet;
 import com.example.novarand_sns.R;
 import com.example.novarand_sns.controller.Profile_Tab1_Adapter;
 import com.example.novarand_sns.model.Fragment_Tab1_Item;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +51,7 @@ public class WalletFragment_Tab1_Activity extends Fragment {
         uid = ((MM_Wallet)getActivity()).getUid();
 
         postsItem = new ArrayList<>();
-        fillList();
+//        fillList();
 
     }
 
@@ -88,61 +81,61 @@ public class WalletFragment_Tab1_Activity extends Fragment {
 
 
 
-    private void fillList() {
+//    private void fillList() {
+//
+//        // HttpUrlConnection
+//        Thread th = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
+//                    // runOnUiThread(메인 스레드영역)
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
+//
+//                            fill();
+//
+//                        }
+//                    });
+//                } catch (Exception e) {
+//                    Log.i("tag", "error :" + e);
+//                }
+//            }
+//        });
+//        th.start();
+//
+//
+//    }
 
-        // HttpUrlConnection
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
-                    // runOnUiThread(메인 스레드영역)
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-
-                            fill();
-
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.i("tag", "error :" + e);
-                }
-            }
-        });
-        th.start();
-
-
-    }
-
-    private void fill() {
-        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
-
-        Profile_Tab1_Adapter tab1_adapter = new Profile_Tab1_Adapter(getContext(), postsItem);
-        myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myrecyclerview.setAdapter(tab1_adapter);
-    }
+//    private void fill() {
+//        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
+//
+//        Profile_Tab1_Adapter tab1_adapter = new Profile_Tab1_Adapter(getContext(), postsItem);
+//        myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        myrecyclerview.setAdapter(tab1_adapter);
+//    }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        fillList();
+//        fillList();
     }
 }

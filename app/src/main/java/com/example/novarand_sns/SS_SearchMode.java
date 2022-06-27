@@ -1,7 +1,9 @@
 package com.example.novarand_sns;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.content.Intent;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -12,12 +14,25 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.example.novarand_sns.retrofit.ApiClient;
+import com.example.novarand_sns.retrofit.ApiInterface;
+import com.example.novarand_sns.retrofit.follower_Response;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SS_SearchMode extends AppCompatActivity {
 
     Toolbar toolbar;
 
     EditText editText;
     String keywordset;
+
+    SharedPreferences preferences;
+    String user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +59,30 @@ public class SS_SearchMode extends AppCompatActivity {
         editText.setOnKeyListener((v, keyCode, event) -> {
             String keyword = editText.getText().toString();
             if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                /////////////////////////////////////
+                preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+                user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+                ApiInterface createSerarchText_api = ApiClient.getApiClient().create(ApiInterface.class);
+                Call<String> call = createSerarchText_api.createSerarchText(user_id,keyword);
+                call.enqueue(new Callback<String>()
+                {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                    {
+                        Log.e("에러", t.getMessage());
+                    }
+                });
+
+                /////////////////////////////////////
                 Intent mIntent = new Intent(getApplicationContext(), SS_SearchResult.class);
                 mIntent.putExtra("keyword", keyword);
                 Log.i("정보태그", "xxx"+keyword);

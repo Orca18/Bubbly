@@ -102,11 +102,7 @@ public class Feed_Adapter extends RecyclerView.Adapter<Feed_Adapter.PostsViewHol
         holder.touchlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Log.i("정보태그", "좋아요표시여부:"+holder.좋아요표시여부);
-
-
-
                 if(currentItem.getLikebool().equals(false)){
                     // ↑ 피드 로드 됐을 때 기준, 좋아요 안눌렀어요
                     if(holder.좋아요표시여부.equals(false)){

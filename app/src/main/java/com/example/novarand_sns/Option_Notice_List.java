@@ -31,7 +31,7 @@ public class Option_Notice_List extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.alarm_list);
+        setContentView(R.layout.noti_list);
 
         initiallize();
 

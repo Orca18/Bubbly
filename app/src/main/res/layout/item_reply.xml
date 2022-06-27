@@ -6,15 +6,16 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_item_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="5dp"
         android:orientation="horizontal"
         android:padding="6dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:layout_marginLeft="5dp"
-            android:id="@+id/item_reply_profile"
+            android:id="@+id/iv_user_image"
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:layout_marginRight="14dp"
@@ -31,7 +32,7 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:id="@+id/item_reply_username"
+                    android:id="@+id/tv_user_nick"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="6dp"
@@ -52,7 +53,7 @@
 
                 <TextView
                     android:layout_gravity="center"
-                    android:id="@+id/item_reply_userID"
+                    android:id="@+id/tv_user_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/spoqa_medium"
@@ -75,7 +76,7 @@
 
                 <TextView
                     android:layout_marginRight="5dp"
-                    android:id="@+id/item_reply_time"
+                    android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/spoqa_medium"
@@ -83,7 +84,7 @@
                     android:textSize="15dp" />
 
                 <ImageView
-                    android:id="@+id/item_reply_options"
+                    android:id="@+id/iv_option"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_more_vert_24" />
@@ -92,7 +93,7 @@
 
             <TextView
                 android:layout_marginTop="1dp"
-                android:id="@+id/item_reply_content"
+                android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bubble Text - 버블 내용"
@@ -102,7 +103,7 @@
             <ImageView
                 android:layout_marginTop="4dp"
                 android:background="@drawable/shadow"
-                android:id="@+id/item_reply_media"
+                android:id="@+id/iv_media"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxHeight="100dp"/>
@@ -114,14 +115,14 @@
 
 
                 <LinearLayout
-                    android:id="@+id/item_reply_like"
+                    android:id="@+id/layout_like"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/item_reply_like_icon"
+                        android:id="@+id/iv_like_icon"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
@@ -129,7 +130,7 @@
                         android:src="@drawable/ic_outline_favorite_border_24" />
 
                     <TextView
-                        android:id="@+id/item_reply_likecount"
+                        android:id="@+id/tv_like_count"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -137,14 +138,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/item_reply_reply"
+                    android:id="@+id/layout_reply"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/item_reply_reply_icon"
+                        android:id="@+id/iv_reply_icon"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
@@ -152,7 +153,7 @@
                         android:src="@drawable/ic_outline_chat_bubble_outline_24" />
 
                     <TextView
-                        android:id="@+id/item_reply_reply_count"
+                        android:id="@+id/tv_reply_count"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -160,14 +161,14 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/item_reply_retweet"
+                    android:id="@+id/layout_retweet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/item_reply_retweet_icon"
+                        android:id="@+id/iv_retweet_icon"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_gravity="center"
@@ -176,7 +177,7 @@
 
 
                     <TextView
-                        android:id="@+id/item_reply_retweet_count"
+                        android:id="@+id/tv_retweet_count"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
@@ -190,7 +191,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/item_reply_share_icon"
+                        android:id="@+id/iv_share_icon"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="center"

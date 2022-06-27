@@ -2,6 +2,7 @@ package com.example.novarand_sns;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -17,18 +18,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.novarand_sns.controller.Feed_Adapter;
+import com.example.novarand_sns.controller.Post_Adapter;
 import com.example.novarand_sns.model.Feed_Item;
+import com.example.novarand_sns.retrofit.ApiClient;
+import com.example.novarand_sns.retrofit.ApiInterface;
+import com.example.novarand_sns.retrofit.post_Response;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MM_Home extends AppCompatActivity {
 
@@ -48,6 +57,15 @@ public class MM_Home extends AppCompatActivity {
 
     private Feed_Adapter adapter;
     private List<Feed_Item> postsList;
+    //////////////////////////////////////////////
+    Post_Adapter post_adapter;
+//    Post_Adapter.ItemClickListener itemClickListener;
+    ArrayList<post_Response> postList;
+    LinearLayoutManager linearLayoutManager;
+
+    SharedPreferences preferences;
+    String user_id;
+    ///////////////////////////////////////////////
 
     RecyclerView recyclerView;
 
@@ -66,6 +84,8 @@ public class MM_Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_a_home);
 
+
+
         // 리소스 ID 선언
         initiallize();
         // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
@@ -75,9 +95,25 @@ public class MM_Home extends AppCompatActivity {
         // 내비 터치
         NaviTouch();
         // 리사이클러뷰 데이터 가져오기
-        loadrecycler();
+
+//        linearLayoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+////        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
+//        //위치 유지
+//        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+//        //위치 유지
+//        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+//
+//        postList = new ArrayList<>();
+//        post_adapter = new Post_Adapter(MM_Home.this, postList,MM_Home.this);
+//        recyclerView.setAdapter(post_adapter);
+//        post_adapter.notifyDataSetChanged();
+
+        //loadrecycler();
+        selectPost_Followee_Communitt(); // 나와 팔로위, 속한 커뮤니티의 게시물 조회  api
 
     }
+
 
 
     // ========================================================
@@ -115,6 +151,7 @@ public class MM_Home extends AppCompatActivity {
         btmessage = findViewById(R.id.home_tomessage);
         btprofile = findViewById(R.id.home_toprofile);
         btwallet = findViewById(R.id.home_towallet);
+
 
     }
 
@@ -165,7 +202,6 @@ public class MM_Home extends AppCompatActivity {
                 }
             }
         };
-
         bthome.setOnClickListener(clickListener);
         btissue.setOnClickListener(clickListener);
         btwallet.setOnClickListener(clickListener);
@@ -174,6 +210,59 @@ public class MM_Home extends AppCompatActivity {
 
     }
 
+
+    private void selectPost_Followee_Communitt(){
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //위치 유지
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+        //위치 유지
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
+        postList = new ArrayList<>();
+        post_adapter = new Post_Adapter(getApplicationContext(), this.postList,getApplicationContext());
+        recyclerView.setAdapter(post_adapter);
+        post_adapter.notifyDataSetChanged();
+
+        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+        ApiInterface selectPostMeAndFolloweeAndCommunity_api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<post_Response>> call = selectPostMeAndFolloweeAndCommunity_api.selectPostMeAndFolloweeAndCommunity(user_id);
+        call.enqueue(new Callback<List<post_Response>>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+//                    progressBar.setVisibility(View.GONE);
+                    List<post_Response> responseResult = response.body();
+                    for(int i=0; i<responseResult.size(); i++){;
+                        postList.add(new post_Response(responseResult.get(i).getPost_id(),
+                                responseResult.get(i).getPost_writer_id(),
+                                responseResult.get(i).getWriter_name(),
+                                responseResult.get(i).getPost_contents(),
+                                responseResult.get(i).getFile_save_names(),
+                                responseResult.get(i).getLike_count(),
+                                responseResult.get(i).getLike_yn(),
+                                responseResult.get(i).getShare_post_yn(),
+                                responseResult.get(i).getNft_post_yn(),
+                                responseResult.get(i).getNick_name(),
+                                responseResult.get(i).getProfile_file_name(),
+                                responseResult.get(i).getCre_datetime(),
+                                responseResult.get(i).getMentioned_user_list()));
+                    }
+                    post_adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t)
+            {
+                Log.e("게시물 아이디로 게시물 조회", t.getMessage());
+            }
+        });
+    }
 
     // 데이터 http 요청
     private void loadrecycler() {

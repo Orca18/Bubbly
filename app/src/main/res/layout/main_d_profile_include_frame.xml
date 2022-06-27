@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
+                android:id="@+id/iv_user_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@drawable/google" />
@@ -34,6 +35,7 @@
                 android:textColor="@color/text_black" />
 
             <Button
+                android:id="@+id/bt_modify_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
@@ -45,6 +47,7 @@
 
 
         <TextView
+            android:id="@+id/tv_user_nick"
             android:textColor="@color/text_black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,6 +57,7 @@
             android:textSize="20dp" />
 
         <TextView
+            android:id="@+id/tv_user_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -61,10 +65,11 @@
             android:text="\u0040TeamNova" />
 
         <TextView
+            android:id="@+id/tv_following"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_medium"
-            android:text="팀노바 메인넷팀 비공식 계정" />
+            android:text="0팔로잉  0팔로워" />
 
 
     </LinearLayout>

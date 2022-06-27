@@ -1,23 +1,37 @@
 package com.example.novarand_sns;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.novarand_sns.retrofit.ApiClient;
+import com.example.novarand_sns.retrofit.ApiInterface;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LL_Login extends AppCompatActivity {
 
-    LinearLayout login;
-    TextView register;
+    LinearLayout bt_login;
+    TextView tv_register;
+    EditText et_login_id,et_login_pw;
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     String id, pw;
-
     Boolean sptest;
 
     @Override
@@ -25,31 +39,60 @@ public class LL_Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
-        login = findViewById(R.id.btn_login_login);
-        register = findViewById(R.id.login_register);
+        bt_login = findViewById(R.id.bt_login);
+        tv_register = findViewById(R.id.tv_register);
+        et_login_id = findViewById(R.id.et_login_id);
+        et_login_pw = findViewById(R.id.et_login_pw);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        editor = preferences.edit();
+
+        editor.remove("user_id");
+        editor.commit();
+
+        bt_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                Call<String> call = login_api.login(et_login_id.getText().toString(), et_login_pw.getText().toString());
+                call.enqueue(new Callback<String>()
+                {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            Log.e("로그인 데이터", response.body().toString());
+                            if(response.body().toString().equals("fail")){
+                                Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+                                String[] split = response.body().toString().split(":");
+                                String splitId = split[3];
+                                splitId = splitId.replace("}", "");
+                                Log.e("userID", splitId);
+                                editor.putString("user_id",splitId);
+                                editor.commit();
 
-//                Toast.makeText(getApplicationContext(), "로그인 o_+",Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(LL_Login.this, MM_Home.class));
+                                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                finish();
+                            }
+                        }
+                    }
 
-//                if(sptest){
-//                    SharedPreferences sharedPreferences= getSharedPreferences("login", MODE_PRIVATE);
-//                    SharedPreferences.Editor editor= sharedPreferences.edit();
-//                    editor.putString("email",id);
-//                    editor.putBoolean("status",true);
-//                    editor.commit();    //최종 커밋. 커밋을 해야 저장이 된다.
-//                    // 밑에 인텐트 여기에 넣어주기
-//                }
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                    {
+                        Log.e("로그인 에러", t.getMessage());
+                    }
+                });
 
-                startActivity(new Intent(LL_Login.this, MM_Home.class));
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                finish();
             }
         });
 
-        register.setOnClickListener(new View.OnClickListener() {
+        tv_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LL_Login.this, LL_Register_A.class));

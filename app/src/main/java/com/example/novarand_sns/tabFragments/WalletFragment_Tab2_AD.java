@@ -176,7 +176,7 @@ public class WalletFragment_Tab2_AD extends Fragment {
     }
 
     private void setUpRecyclerView() {
-        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
+//        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
         Profile_Tab1_Adapter noticesAdapter = new Profile_Tab1_Adapter(getContext(), postsItem);
         myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         myrecyclerview.setAdapter(noticesAdapter);
