@@ -2,6 +2,8 @@ package com.example.novarand_sns;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +23,16 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.novarand_sns.controller.FragmentAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -168,13 +180,13 @@ public class MM_Profile extends AppCompatActivity {
         myActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
             }
         });
         myList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "겉멋",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {
@@ -204,7 +216,8 @@ public class MM_Profile extends AppCompatActivity {
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 startActivity(toLogin);
                 finish();
-                Toast.makeText(getApplicationContext(), "로그아웃",Toast.LENGTH_SHORT).show();            }
+                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
+            }
         });
 
 
@@ -344,6 +357,7 @@ public class MM_Profile extends AppCompatActivity {
     public String getUid() {
         return uid;
     }
+
 
 
 }
