@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Bubbly.iml" filepath="$PROJECT_DIR$/.idea/modules/Bubbly.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bubbly.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bubbly.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bubbly.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bubbly.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bubbly.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bubbly.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Bubbly.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Bubbly.app.unitTest.iml" />
+    </modules>
+  </component>
+</project>

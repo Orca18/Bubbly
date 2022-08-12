@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Novarand_SNS" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Bubbly" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/white</item>
@@ -17,7 +17,7 @@
         <item name="colorControlHighlight">#555</item>
     </style>
 
-    <style name="Theme.Novarand_SNS.NoActionBar" parent="Theme.Novarand_SNS">
+    <style name="Theme.Bubbly.NoActionBar" parent="Theme.Bubbly">
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
