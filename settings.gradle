@@ -7,5 +7,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "Novarand_SNS"
+rootProject.name = "Bubbly"
 include ':app'
