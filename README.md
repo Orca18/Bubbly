@@ -1,1 +1,3 @@
 망했어
+
+Insights - Network Graph 확인 中...
