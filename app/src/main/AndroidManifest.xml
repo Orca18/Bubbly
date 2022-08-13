@@ -17,65 +17,68 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.example.bubbly.ReplyModify"
+            android:name=".ImageView_FullScreen"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.Add_Posting_Modify"
+            android:name=".ReplyModify"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.ModifyProfile"
+            android:name=".Add_Posting_Modify"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.Following"
+            android:name=".ModifyProfile"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.test_CreateAccount"
+            android:name=".Following"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.SS_SearchMode"
+            android:name=".test_CreateAccount"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.SS_SearchResult"
+            android:name=".SS_SearchMode"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.SS_KeywordResult"
+            android:name=".SS_SearchResult"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.Community_Home_Feeds"
+            android:name=".SS_KeywordResult"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.Community_Home_List"
+            android:name=".Community_Home_Feeds"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.SS_PostDetail"
+            android:name=".Community_Home_List"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.Add_Posting_Create"
+            android:name=".SS_PostDetail"
+            android:exported="false" />
+        <activity
+            android:name=".Add_Posting_Create"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.example.bubbly.SS_Setting"
+            android:name=".SS_Setting"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.ChattingRoom"
+            android:name=".ChattingRoom"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.LL_Register_A"
+            android:name=".LL_Register_A"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.SS_Profile"
+            android:name=".SS_Profile"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.Option_Notice_List"
+            android:name=".Option_Notice_List"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.LL_Register_B"
+            android:name=".LL_Register_B"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.LL_Login"
+            android:name=".LL_Login"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.LL_Splash"
+            android:name=".LL_Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,19 +87,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.bubbly.MM_Home"
+            android:name=".MM_Home"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.MM_Issue"
+            android:name=".MM_Issue"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.MM_Message"
+            android:name=".MM_Message"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.MM_Profile"
+            android:name=".MM_Profile"
             android:exported="false" />
         <activity
-            android:name="com.example.bubbly.MM_Wallet"
+            android:name=".MM_Wallet"
             android:exported="false" />
     </application>
 

@@ -8,63 +8,165 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingHorizontal="14dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="2dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/google" />
+                android:src="@drawable/blank_profile" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/spoqa_bold"
-                android:text="메시지"
-                android:textColor="@color/text_black" />
 
-            <Button
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/spoqa_bold"
-                android:text="팔로우"
-                android:textColor="@color/text_black" />
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_circle"
+                    android:scaleType="center"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_mail_outline_24"
+                    app:tint="@color/text_black" />
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_circle2"
+                    android:paddingVertical="6dp"
+                    android:paddingHorizontal="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/spoqa_bold"
+                        android:text="팔로우하기"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="16dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 
         <TextView
-            android:textColor="@color/text_black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="8dp"
             android:fontFamily="@font/spoqa_bold"
             android:text="팀노바"
-            android:textSize="20dp" />
+            android:textColor="@color/text_black"
+            android:textSize="22dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:textSize="15dp"
+                android:textColor="@color/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="\u0040" />
+
+
+            <TextView
+                android:textSize="15dp"
+                android:textColor="@color/text"
+                android:id="@+id/ss_profile_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="TeamNova" />
+
+        </LinearLayout>
+
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/spoqa_medium"
-            android:text="\u0040TeamNova" />
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/spoqa_regular"
+            android:text="자기소개 예시입니다\nbangju2022@gmail.com"
+            android:textColor="@color/text_black"
+            android:textSize="15dp" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:paddingHorizontal="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_bold"
+            android:paddingHorizontal="4dp"
+            android:text="633"
+            android:textColor="@color/text_black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_following"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_medium"
-            android:text="자기소개 : 프로필 들어갈 곳인데\n회색 부분은 가려지게 커스텀" />
+            android:text="팔로잉"
+            android:textSize="16dp" />
 
+        <View
+            android:layout_width="16dp"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_bold"
+            android:paddingHorizontal="4dp"
+            android:text="10,597"
+            android:textColor="@color/text_black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_medium"
+            android:text="팔로워"
+            android:textSize="16dp" />
 
     </LinearLayout>
 

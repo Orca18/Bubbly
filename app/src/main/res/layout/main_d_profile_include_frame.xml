@@ -9,44 +9,84 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:paddingHorizontal="14dp"
+        android:layout_marginTop="12dp">
+
 
         <LinearLayout
+            android:layout_marginTop="4dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_user_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/google" />
+                android:src="@drawable/blank_profile" />
+
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/spoqa_bold"
-                android:text="내 활동"
-                android:textColor="@color/text_black" />
+            <!--            <Button-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginHorizontal="5dp"-->
+            <!--                android:fontFamily="@font/spoqa_bold"-->
+            <!--                android:text="내 활동"-->
+            <!--                android:textColor="@color/text_black" />-->
 
-            <Button
-                android:id="@+id/bt_modify_profile"
+
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:fontFamily="@font/spoqa_bold"
-                android:text="프로필 편집"
-                android:textColor="@color/text_black" />
+                android:layout_height="wrap_content">
+
+
+                <View
+                    android:layout_width="10dp"
+                    android:layout_height="0dp"/>
+
+                <LinearLayout
+                    android:id="@+id/bt_modify_profile"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_circle3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="6dp"
+                    android:paddingHorizontal="20dp">
+
+                    <TextView
+                        android:textSize="16dp"
+                        android:fontFamily="@font/spoqa_bold"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="프로필 수정"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
-
+        <!--        <Button-->
+        <!--            android:id="@+id/bt_modify_profile"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginHorizontal="5dp"-->
+        <!--            android:fontFamily="@font/spoqa_bold"-->
+        <!--            android:text="프로필 편집"-->
+        <!--            android:textColor="@color/text_black" />-->
         <TextView
+            android:layout_marginTop="8dp"
             android:id="@+id/tv_user_nick"
             android:textColor="@color/text_black"
             android:layout_width="match_parent"
@@ -54,23 +94,96 @@
             android:layout_gravity="center"
             android:fontFamily="@font/spoqa_bold"
             android:text="팀노바"
-            android:textSize="20dp" />
+            android:textSize="22dp"  />
 
-        <TextView
-            android:id="@+id/tv_user_id"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/spoqa_medium"
-            android:text="\u0040TeamNova" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:textSize="15dp"
+                android:textColor="@color/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="\u0040" />
+
+
+            <TextView
+                android:textSize="15dp"
+                android:textColor="@color/text"
+                android:id="@+id/tv_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="TeamNova" />
+
+        </LinearLayout>
+
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/spoqa_regular"
+            android:textSize="15dp"
+            android:textColor="@color/text_black"
+            android:text="자기소개 예시입니다\nbangju2022@gmail.com" />
+
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textSize="16dp"
+            android:textColor="@color/text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_bold"
+            android:paddingHorizontal="4dp"
+            android:text="633" />
+
+        <TextView
+            android:textSize="16dp"
             android:id="@+id/tv_following"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_medium"
-            android:text="0팔로잉  0팔로워" />
+            android:text="팔로잉" />
 
+        <View
+            android:layout_width="16dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:textSize="16dp"
+            android:textColor="@color/text_black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_bold"
+            android:paddingHorizontal="4dp"
+            android:text="10,597" />
+
+        <TextView
+            android:textSize="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_medium"
+            android:text="팔로워" />
 
     </LinearLayout>
 

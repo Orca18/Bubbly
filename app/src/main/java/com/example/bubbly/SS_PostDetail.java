@@ -28,6 +28,7 @@ import com.example.bubbly.retrofit.reply_Response;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -37,7 +38,8 @@ public class SS_PostDetail extends AppCompatActivity {
     SharedPreferences preferences;
     String user_id,post_id;
 
-    ImageView iv_user_image,iv_media;
+    ImageView iv_media;
+    CircleImageView iv_user_image;
     TextView tv_user_nick,tv_user_id,tv_content,tv_time,tv_like_count,tv_reply_count,tv_retweet_count;
     EditText et_reply;
     Button bt_reply_add;
@@ -189,7 +191,6 @@ public class SS_PostDetail extends AppCompatActivity {
 
                     Glide.with(SS_PostDetail.this)
                             .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
-                            .circleCrop()
                             .into(iv_user_image);
 
                 }

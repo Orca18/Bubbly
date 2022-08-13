@@ -27,6 +27,7 @@
         android:paddingVertical="3dp">
 
         <Button
+            android:fontFamily="@font/spoqa_bold"
             android:id="@+id/community_toFeeds"
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
@@ -34,9 +35,12 @@
             android:text="커뮤니티 피드"/>
 
         <Button
+            android:backgroundTint="@color/black"
             android:layout_marginHorizontal="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="@font/spoqa_bold"
             android:text="현재 참여 커뮤니티"/>
 
     </LinearLayout>
@@ -53,14 +57,6 @@
         android:layout_marginTop="8dp"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="@font/spoqa_bold"
-            android:text="내가 참여중인 커뮤니티 목록"
-            android:textColor="@color/black"
-            android:textSize="18dp" />
 
 
         <androidx.recyclerview.widget.RecyclerView
