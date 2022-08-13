@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bubbly.controller.ExampleAdapter;
 import com.example.bubbly.controller.MyCommunitiesList_Adapter;
+import com.example.bubbly.model.ExampleItem;
 import com.example.bubbly.model.MyCommunitiesList_Item;
 
 import java.util.ArrayList;
@@ -24,8 +26,8 @@ public class Community_Home_List extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
 
     RecyclerView recyclerView;
-    private MyCommunitiesList_Adapter adapter;
-    private List<MyCommunitiesList_Item> postsList;
+    private ExampleAdapter adapter;
+    private List<ExampleItem> comList;
     private Parcelable recyclerViewState;
 
     SwipeRefreshLayout swipeRefreshLayout;
@@ -40,7 +42,7 @@ public class Community_Home_List extends AppCompatActivity {
         // 툴바
         toolbar = findViewById(R.id.community_home_toolbar2);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("커뮤니티 리스트");
+        getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toFeeds = findViewById(R.id.community_toFeeds);
@@ -77,14 +79,14 @@ public class Community_Home_List extends AppCompatActivity {
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
     private void fillList() {
-        this.postsList = new ArrayList();
+        this.comList = new ArrayList();
 
         String 임시프사 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
 
 
         for (int i = 0; i < 20; i++) {
             // TODO 시간 계산 → String 으로 넣어주기
-            this.postsList.add(new MyCommunitiesList_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h"));
+            this.comList.add(new ExampleItem("","","","",""));
 
         }
 
@@ -95,7 +97,7 @@ public class Community_Home_List extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new MyCommunitiesList_Adapter(getApplicationContext(), this.postsList);
+        this.adapter = new ExampleAdapter(getApplicationContext(), this.comList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 

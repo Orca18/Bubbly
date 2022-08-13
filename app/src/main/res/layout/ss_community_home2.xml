@@ -28,6 +28,29 @@
                     android:background="@color/white"
                     app:layout_scrollFlags="scroll|enterAlways">
 
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:id="@+id/communityhome2_action_search"
+                        android:layout_width="220dp"
+                        android:layout_height="34dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/edittext_radius"
+                        android:hint="검색버튼"
+                        android:textColor="@color/black"
+                        android:textSize="20dp">
+
+
+
+                        <TextView
+                            android:paddingLeft="5dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_gravity="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="커뮤니티 검색"/>
+
+                    </LinearLayout>
+
 
 
 

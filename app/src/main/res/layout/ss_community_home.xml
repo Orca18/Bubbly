@@ -28,7 +28,27 @@
                     android:background="@color/white"
                     app:layout_scrollFlags="scroll|enterAlways">
 
+                    <LinearLayout
+                        android:id="@+id/communityhome_action_search"
+                        android:layout_width="220dp"
+                        android:layout_height="34dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/edittext_radius"
+                        android:hint="검색버튼"
+                        android:orientation="horizontal"
+                        android:textColor="@color/black"
+                        android:textSize="20dp">
 
+
+                        <TextView
+                            android:paddingLeft="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:text="커뮤니티 검색 - 일단 미사용" />
+
+                    </LinearLayout>
 
 
                     <ImageView
@@ -49,7 +69,6 @@
 
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
-
 
 
             <RelativeLayout
