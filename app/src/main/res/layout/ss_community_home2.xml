@@ -58,25 +58,24 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/community_home_refresh"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <ScrollView
-                    android:id="@+id/text_scrollview"
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/community_home_refresh"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true"
-                    android:nestedScrollingEnabled="true"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                    android:layout_height="wrap_content">
 
-                    <include layout="@layout/ss_coummunity_include_scrollview_2" />
 
-                </ScrollView>
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    <ScrollView
+                        android:id="@+id/text_scrollview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fillViewport="true"
+                        android:nestedScrollingEnabled="true"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                        <include layout="@layout/ss_coummunity_include_scrollview_2" />
+
+                    </ScrollView>
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
             </RelativeLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
