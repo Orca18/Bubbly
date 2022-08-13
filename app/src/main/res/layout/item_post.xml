@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,13 +14,12 @@
         android:orientation="horizontal"
         android:padding="6dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_user_image"
             android:layout_width="54dp"
             android:layout_height="54dp"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="14dp"
-            android:src="@drawable/google" />
+            android:layout_marginRight="14dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,19 +37,18 @@
                     android:layout_gravity="center"
                     android:layout_marginRight="6dp"
                     android:ellipsize="end"
-                    android:fontFamily="@font/spoqa_bold"
                     android:maxLines="1"
+                    android:textStyle="bold"
                     android:text="유저명"
                     android:textColor="@color/black"
-                    android:textSize="15dp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/spoqa_medium"
                     android:text="\u0040"
-                    android:textSize="13dp" />
+                    android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/feed_basic_userID"
@@ -57,10 +56,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:ellipsize="end"
-                    android:fontFamily="@font/spoqa_medium"
                     android:maxLines="1"
                     android:text="사용자"
-                    android:textSize="14dp" />
+                    android:textSize="15dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -70,17 +68,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/spoqa_medium"
                     android:text="ㆍ"
                     android:textSize="15dp" />
 
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:fontFamily="@font/spoqa_medium"
-                    android:text="1h"
+                    android:text="1D"
                     android:textSize="15dp" />
 
                 <ImageView
@@ -95,23 +91,34 @@
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
                 android:text="Bubble Text - 버블 내용"
                 android:textColor="@color/black"
-                android:textSize="16dp" />
+                android:textSize="15dp" />
 
-            <ImageView
-                android:id="@+id/iv_media"
-                android:scaleType="fitXY"
+            <androidx.cardview.widget.CardView
+                app:cardCornerRadius="10dp"
+                card_view:cardElevation="0dp"
+                android:background="@drawable/bg_circle4"
                 android:layout_width="280dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="4dp"
-                android:maxHeight="100dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp">
+
+                <ImageView
+                    android:adjustViewBounds="true"
+                    android:maxHeight="340dp"
+                    android:scaleType="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/iv_media" />
+
+            </androidx.cardview.widget.CardView>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="8dp">
 
 
                 <LinearLayout
@@ -123,14 +130,17 @@
 
                     <ImageView
                         android:id="@+id/iv_like_icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
-                        android:src="@drawable/ic_outline_favorite_border_24" />
+                        android:src="@drawable/ic_outline_favorite_border_24"
+                        app:tint="@color/blueblack" />
 
                     <TextView
+                        android:textSize="13dp"
+                        android:textColor="@color/blueblack"
                         android:id="@+id/tv_like_count"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -146,15 +156,18 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        app:tint="@color/blueblack"
                         android:id="@+id/iv_reply_icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
                         android:src="@drawable/ic_outline_chat_bubble_outline_24" />
 
                     <TextView
+                        android:textSize="13dp"
+                        android:textColor="@color/blueblack"
                         android:id="@+id/tv_reply_count"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -170,9 +183,11 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:transitionName="recycleimage"
+                        app:tint="@color/blueblack"
                         android:id="@+id/iv_retweet_icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
@@ -180,6 +195,8 @@
 
 
                     <TextView
+                        android:textSize="13dp"
+                        android:textColor="@color/blueblack"
                         android:id="@+id/tv_retweet_count"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -194,12 +211,14 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:padding="3dp"
                         android:id="@+id/iv_share_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
-                        android:src="@drawable/ic_baseline_share_24" />
+                        android:src="@drawable/ic_baseline_share_24"
+                        app:tint="@color/blueblack" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -208,5 +227,8 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/partial_line" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eaeaea" />
 </LinearLayout>

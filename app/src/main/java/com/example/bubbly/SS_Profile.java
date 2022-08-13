@@ -144,29 +144,11 @@ public class SS_Profile extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home: {
                 // 왼쪽 상단 버튼 눌렀을 때
-                drawerLayout.openDrawer(GravityCompat.START);
+                finish();
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //뒤로가기 했을 때
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-            backKeyPressedTime = System.currentTimeMillis();
-            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
-            toast.show();
-            return;
-        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-            finish();
-            toast.cancel();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     // 액티비티 종료 시, 애니메이션 효과 없애기

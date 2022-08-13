@@ -73,4 +73,8 @@ dependencies {
 
     // gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // 이미지 전체화면 줌 기능
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+
 }

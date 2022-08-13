@@ -1,9 +1,11 @@
 package com.example.bubbly.controller;
+import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -22,14 +24,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.Add_Posting_Create;
+import com.example.bubbly.ImageView_FullScreen;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
+import com.example.bubbly.SS_Profile;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,75 +87,110 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
-                .circleCrop()
                 .into(holder.iv_user_image);
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getFile_save_names())
                 .into(holder.iv_media);
 
-        if(user_id.equals(post_response.getPost_writer_id())){
-            holder.iv_options.setVisibility(View.VISIBLE);
-        }
 
-        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+
+
+
+
+
+
+        // TODO 컨텍스트 메뉴 뜨는데, 클릭으로 변경하기 - 삭제하시겠습니까?
+        holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                MenuItem delete = menu.add(Menu.NONE, R.id.delete, 1, "게시글 삭제");
-                MenuItem modify = menu.add(Menu.NONE, R.id.modify, 2, "게시글 수정");
-                delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.delete:
-                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
-                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
-                                call.enqueue(new Callback<String>()
-                                {
-                                    @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                                    {
-                                        if (response.isSuccessful() && response.body() != null)
-                                        {
-                                            //Log.e("delete", String.valueOf(position));
-                                            lists.remove(position);
-                                            notifyItemRemoved(position);
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                                    {
-                                        Log.e("에러", t.getMessage());
-                                    }
-                                });
-                                return true;
+            public void onClick(View view) {
+                // if... 현재 사용자 ID = 게시글 사용자 ID
+                if(user_id.equals(post_response.getPost_writer_id())){
+                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(context, "동일한 사용자 => NFT 신청/수정/삭제",Toast.LENGTH_LONG).show();
+                            Log.i("ahah", "test: true");
                         }
-                        return false;
-                    }
-                });
-
-                modify.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.modify:
-                                Intent intent = new Intent(context, Add_Posting_Create.class);
-                                intent.putExtra("post_id",post_response.getPost_id());
-                                intent.putExtra("post_content",post_response.getPost_contents());
-                                intent.putExtra("post_file",post_response.getFile_save_names());
-                                intent.putExtra("post_mention",post_response.getMentioned_user_list());
-                                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                return true;
+                    };
+                } else {
+                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Toast.makeText(context, "다른 사용자 => 숨기기/신고 등...",Toast.LENGTH_LONG).show();
+                            Log.i("ahah", "test: false");
                         }
-                        return false;
-                    }
-                });
-
-
-
+                    };
+                }
             }
         });
+
+
+
+
+
+
+
+
+        // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
+//        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//            @Override
+//            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                MenuItem delete = menu.add(Menu.NONE, R.id.delete, 1, "게시글 삭제");
+//                MenuItem modify = menu.add(Menu.NONE, R.id.modify, 2, "게시글 수정");
+//                delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        switch (item.getItemId()) {
+//                            case R.id.delete:
+//                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+//                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
+//                                call.enqueue(new Callback<String>()
+//                                {
+//                                    @Override
+//                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+//                                    {
+//                                        if (response.isSuccessful() && response.body() != null)
+//                                        {
+//                                            //Log.e("delete", String.valueOf(position));
+//                                            lists.remove(position);
+//                                            notifyItemRemoved(position);
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+//                                    {
+//                                        Log.e("에러", t.getMessage());
+//                                    }
+//                                });
+//                                return true;
+//                        }
+//                        return false;
+//                    }
+//                });
+//
+//                modify.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        switch (item.getItemId()) {
+//                            case R.id.modify:
+//                                Intent intent = new Intent(context, Add_Posting_Create.class);
+//                                intent.putExtra("post_id",post_response.getPost_id());
+//                                intent.putExtra("post_content",post_response.getPost_contents());
+//                                intent.putExtra("post_file",post_response.getFile_save_names());
+//                                intent.putExtra("post_mention",post_response.getMentioned_user_list());
+//                                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//                                return true;
+//                        }
+//                        return false;
+//                    }
+//                });
+//
+//
+//
+//            }
+//        });
 
 
 
@@ -166,6 +206,26 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+
+        holder.iv_media.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ImageView_FullScreen.class);
+                intent.putExtra("img_url","https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getFile_save_names());
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+
+        holder.iv_user_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SS_Profile.class);
+                intent.putExtra("user_id",post_response.getPost_writer_id());
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
 
         holder.layout_like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,9 +372,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         public LinearLayout ll_item_layout,layout_like;
 //        ItemClickListener itemClickListener;
 
-        ImageView iv_user_image,iv_media,iv_options,iv_like_icon,iv_reply_icon,iv_retweet_icon,iv_share_icon;
+        ImageView iv_media,iv_options,iv_like_icon,iv_reply_icon,iv_retweet_icon,iv_share_icon;
         TextView tv_user_nick,tv_content,tv_like_count,tv_reply_count,tv_retweet_count,tv_time;
 
+        CircleImageView iv_user_image;
         public PostViewHolder(@NonNull View view)
         {
             super(view);
@@ -335,8 +396,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             tv_reply_count = view.findViewById(R.id.tv_reply_count);
             tv_retweet_count = view.findViewById(R.id.tv_retweet_count);
             tv_time = view.findViewById(R.id.tv_time);
-
-            iv_options.setVisibility(View.INVISIBLE);
 
 
 //            this.itemClickListener = itemClickListener;

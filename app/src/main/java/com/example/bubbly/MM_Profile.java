@@ -58,7 +58,7 @@ public class MM_Profile extends AppCompatActivity {
 
     ////////////////////
     TextView tv_following;
-    Button bt_modify_profile;
+    LinearLayout bt_modify_profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
