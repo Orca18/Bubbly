@@ -246,7 +246,7 @@ public class ModifyProfile extends AppCompatActivity {
                         RequestBody user_id  = createPartFromString(UserInfo.user_id);
                         //updateUserProfile http 요청
                         ApiInterface selectUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
-                        Call<String> call = selectUserInfo_api.updateUserProfile(part,user_id);
+                        Call<String> call = selectUserInfo_api.updateUserProfile(part,user_id,null);
                         call.enqueue(new Callback<String>()
                         {
                             @Override
