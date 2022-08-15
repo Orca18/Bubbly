@@ -1,12 +1,13 @@
 plugins {
     id 'com.android.application'
+    id'com.google.gms.google-services'
 }
 
 android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.example.Bubbly"
+        applicationId "com.example.bubbly"
         minSdk 25
         targetSdk 31
         versionCode 1
@@ -71,6 +72,18 @@ dependencies {
 // Scalars 변환기 라이브러리
     implementation 'com.squareup.retrofit2:converter-scalars:2.6.4'
 
+    // MQTT 클라이언트
+    implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.1'
+
     // gson
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // 파이어베이스 BOM - 앱과 호환되는 파이어베이스 라이브러리를 자동으로 매칭
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
+
+    // 구글 애널리틱스
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // FCM
+    implementation 'com.google.firebase:firebase-messaging'
 }

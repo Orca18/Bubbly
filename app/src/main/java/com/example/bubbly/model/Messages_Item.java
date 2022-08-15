@@ -1,5 +1,6 @@
 package com.example.bubbly.model;
 
+// 채팅방 아이템
 public class Messages_Item {
     // 프사, 이름, 내용
     private String chatProfile;

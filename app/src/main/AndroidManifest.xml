@@ -2,11 +2,30 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.bubbly">
 
+    <!-- 메시지 기본 아이콘 Set custom default icon. This is used when no icon is set for incoming notification messages.
+    See README(https://goo.gl/l4GJaQ) for more. -->
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@drawable/ic_baseline_send_24" />
+
+    <!-- 메시지 기본 색상 Set color used with incoming notification messages. This is used when no color is set for the incoming
+         notification message. See README(https://goo.gl/6BKBk7) for more. -->
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_color"
+        android:resource="@color/black" />
+
+    <!-- 알림 채널의 데이터가 없다면 아래 값을 디폴트로 사용한다.-->
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="@string/default_notification_channel_id" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -98,6 +117,20 @@
         <activity
             android:name="com.example.bubbly.MM_Wallet"
             android:exported="false" />
+        <!-- FCM 서비스-->
+        <service
+            android:name=".chatting.service.FCMService"
+            android:exported="false"
+            android:directBootAware="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- 채팅 서비스-->
+        <service
+            android:name=".chatting.service.ChatService"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>

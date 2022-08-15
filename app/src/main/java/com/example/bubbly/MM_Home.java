@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bubbly.chatting.service.FCMService;
 import com.example.bubbly.controller.Feed_Adapter;
 import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.model.Feed_Item;
@@ -29,6 +30,7 @@ import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.FirebaseApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +153,10 @@ public class MM_Home extends AppCompatActivity {
         btprofile = findViewById(R.id.home_toprofile);
         btwallet = findViewById(R.id.home_towallet);
 
-
+        // FCM토큰 refresh
+        //user_id = preferences.getString("user_id", "");
+        user_id = "1";
+        FCMService.refreshToken(user_id);
     }
 
     // 바텀 메뉴 클릭
