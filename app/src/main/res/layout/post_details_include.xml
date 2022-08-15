@@ -80,11 +80,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:layout_marginLeft="20dp"
-        android:paddingHorizontal="10dp"
+        android:layout_marginHorizontal="12dp"
         android:text="내용"
         android:textColor="@color/black"
-        android:textSize="18dp" />
+        android:textSize="22dp" />
 
     <androidx.cardview.widget.CardView
         android:layout_marginHorizontal="15dp"
@@ -108,11 +107,11 @@
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="6dp"
         android:paddingHorizontal="10dp"
         android:text="2022년 5월 26일ㆍ8:33 오후"
         android:textColor="@color/blueblack"
-        android:textSize="18dp" />
+        android:textSize="16dp" />
 
 
 <!--    <LinearLayout-->
@@ -130,14 +129,23 @@
 <!--    </LinearLayout>-->
 
 
-    <LinearLayout
-        android:background="#ccc"
+    <View
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="6dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp">
+        android:layout_height="1dp"
+        android:background="#ddd"/>
+
+
+    <LinearLayout
+        android:layout_marginVertical="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
         <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/layout_like"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -146,21 +154,16 @@
 
             <ImageView
                 android:id="@+id/iv_like_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_outline_favorite_border_24" />
 
-            <TextView
-                android:id="@+id/tv_like_count"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="0" />
         </LinearLayout>
 
         <LinearLayout
+            android:gravity="center"
             android:id="@+id/layout_reply"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -169,21 +172,16 @@
 
             <ImageView
                 android:id="@+id/iv_reply_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_outline_chat_bubble_outline_24" />
 
-            <TextView
-                android:id="@+id/tv_reply_count"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="0" />
         </LinearLayout>
 
         <LinearLayout
+            android:gravity="center"
             android:id="@+id/layout_retweet"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -192,22 +190,16 @@
 
             <ImageView
                 android:id="@+id/iv_retweet_icon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_outline_bubble_chart_24" />
 
-
-            <TextView
-                android:id="@+id/tv_retweet_count"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="0" />
         </LinearLayout>
 
         <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -215,8 +207,8 @@
 
             <ImageView
                 android:id="@+id/iv_share_icon"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="5dp"
                 android:src="@drawable/ic_baseline_share_24" />
@@ -224,7 +216,11 @@
 
     </LinearLayout>
 
-
+    <View
+        android:layout_marginHorizontal="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ddd"/>
 
     <androidx.recyclerview.widget.RecyclerView
         tools:listitem="@layout/item_feed_basic"

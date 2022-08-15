@@ -177,7 +177,7 @@ public class SS_PostDetail extends AppCompatActivity {
                     tv_user_id.setText(responseResult.get(0).getPost_writer_id());
                     tv_user_nick.setText(responseResult.get(0).getNick_name());
                     tv_content.setText(responseResult.get(0).getPost_contents());
-                    tv_like_count.setText(responseResult.get(0).getLike_count());
+//                    tv_like_count.setText(responseResult.get(0).getLike_count());
                     tv_time.setText(responseResult.get(0).getCre_datetime());
 
 

@@ -1,18 +1,17 @@
 package com.example.bubbly.controller;
 
+import android.view.Gravity;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.bubbly.Add_Posting_Create;
 import com.example.bubbly.ImageView_FullScreen;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
@@ -36,8 +30,6 @@ import com.example.bubbly.SS_Profile;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
-import com.example.bubbly.utils.BottomSheetFragment;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
@@ -99,44 +91,65 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 .into(holder.iv_media);
 
 
-        // TODO 컨텍스트 메뉴 뜨는데, 클릭으로 변경하기 - 삭제하시겠습니까?
+
+
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final CharSequence[] oItems = {"하나", "둘", "셋", "넷", "다셋"};
-                AlertDialog.Builder oDialog = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
-                oDialog.setTitle("색상을 선택하세요").setItems(oItems, new DialogInterface.OnClickListener() {
+                PopupMenu popup = new PopupMenu(holder.iv_options.getContext(), holder.itemView);
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(context, oItems[which], Toast.LENGTH_LONG).show();
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch(menuItem.getItemId()){
+                            case R.id.action_a:
+                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+                                return true;
+
+                            case R.id.action_b:
+                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
+                                call.enqueue(new Callback<String>()
+                                {
+                                    @Override
+                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                                    {
+                                        if (response.isSuccessful() && response.body() != null)
+                                        {
+                                            //Log.e("delete", String.valueOf(position));
+                                            lists.remove(position);
+                                            notifyItemRemoved(position);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                                    {
+                                        Log.e("에러", t.getMessage());
+                                    }
+                                });
+                                return true;
+
+                            case R.id.action_c:
+                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+                                return true;
+
+                            default:
+                                return false;
+                        }
+
                     }
-                }).setCancelable(false).show();
+                });
+                popup.inflate(R.menu.main_liist_menu);
+                popup.setGravity(Gravity.RIGHT|Gravity.END);
 
-                // if... 현재 사용자 ID = 게시글 사용자 ID
-//                if(user_id.equals(post_response.getPost_writer_id())){
-//                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            Toast.makeText(context, "동일한 사용자 => NFT 신청/수정/삭제",Toast.LENGTH_LONG).show();
-//                            Log.i("ahah", "test: true");
-//                        }
-//                    };
-//                } else {
-//                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            Toast.makeText(context, "다른 사용자 => 숨기기/신고 등...",Toast.LENGTH_LONG).show();
-//                            Log.i("ahah", "test: false");
-//                        }
-//                    };
-//                }
-
-
+                popup.show();
             }
         });
 
 
-        // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
+
+//        // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
 //        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 //            @Override
 //            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -173,7 +186,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 //                        return false;
 //                    }
 //                });
-//
+                // 수정 관련
 //                modify.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
 //                    @Override
 //                    public boolean onMenuItemClick(MenuItem item) {
@@ -381,6 +394,8 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             tv_reply_count = view.findViewById(R.id.tv_reply_count);
             tv_retweet_count = view.findViewById(R.id.tv_retweet_count);
             tv_time = view.findViewById(R.id.tv_time);
+
+
 
 
 //            this.itemClickListener = itemClickListener;

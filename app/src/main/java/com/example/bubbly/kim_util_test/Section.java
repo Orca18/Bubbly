@@ -1,4 +1,4 @@
-package com.example.bubbly.utils;
+package com.example.bubbly.kim_util_test;
 import java.util.List;
 
 // TODO https://www.youtube.com/watch?v=x5afKIu0JmY

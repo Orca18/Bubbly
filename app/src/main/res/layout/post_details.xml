@@ -24,6 +24,10 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <View
+        android:background="#ddd"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
