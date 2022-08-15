@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.bubbly">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/skeleton"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/skeleton"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Bubbly.NoActionBar"
+        android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Community_Create"
+            android:exported="false" />
+        <activity
+            android:name=".ImageView_FullScreen"
+            android:exported="false" />
+        <activity
+            android:name=".Community_Info"
+            android:exported="false" />
+        <activity
+            android:name=".ReplyModify"
+            android:exported="false" />
+        <activity
+            android:name=".Add_Posting_Modify"
+            android:exported="false" />
+        <activity
+            android:name=".ModifyProfile"
+            android:exported="false" />
+        <activity
+            android:name=".Following"
+            android:exported="false" />
+        <activity
+            android:name=".test_CreateAccount"
+            android:exported="false" />
+        <activity
+            android:name=".SS_SearchMode"
+            android:exported="false" />
+        <activity
+            android:name=".SS_SearchResult"
+            android:exported="false" />
+        <activity
+            android:name=".SS_KeywordResult"
+            android:exported="false" />
+        <activity
+            android:name=".Community_Home_Feeds"
+            android:exported="false" />
+        <activity
+            android:name=".Community_Joined_List"
+            android:exported="false" />
+        <activity
+            android:name=".SS_PostDetail"
+            android:exported="false" />
+        <activity
+            android:name=".Add_Posting_Create"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".SS_Setting"
+            android:exported="false" />
+        <activity
+            android:name=".ChattingRoom"
+            android:exported="false" />
+        <activity
+            android:name=".LL_Register_A"
+            android:exported="false" />
+        <activity
+            android:name=".SS_Profile"
+            android:exported="false" />
+        <activity
+            android:name=".Option_Notice_List"
+            android:exported="false" />
+        <activity
+            android:name=".LL_Register_B"
+            android:exported="false" />
+        <activity
+            android:name=".LL_Login"
+            android:exported="false" />
+        <activity
+            android:name=".LL_Splash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MM_Home"
+            android:exported="false" />
+        <activity
+            android:name=".MM_Issue"
+            android:exported="false" />
+        <activity
+            android:name=".MM_Message"
+            android:exported="false" />
+        <activity
+            android:name=".MM_Profile"
+            android:exported="false" />
+        <activity
+            android:name=".MM_Wallet"
+            android:exported="false" />
+    </application>
+
+</manifest>

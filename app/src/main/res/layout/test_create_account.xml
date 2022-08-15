@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".test_CreateAccount"
+    android:padding="10dp">
+
+    <TextView
+        android:textSize="20dp"
+        android:fontFamily="@font/spoqa_bold"
+        android:text="니모닉 보관"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/createAccount_mnemonic25words"
+        android:text="니모닉 나오는 칸"
+        android:fontFamily="@font/spoqa_medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
