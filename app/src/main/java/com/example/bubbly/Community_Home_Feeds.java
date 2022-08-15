@@ -66,7 +66,7 @@ public class Community_Home_Feeds extends AppCompatActivity {
                 });
 
         toList.setOnClickListener(v -> {
-            Intent mIntent = new Intent(getApplicationContext(), Community_Home_List.class);
+            Intent mIntent = new Intent(getApplicationContext(), Community_Joined_List.class);
             startActivity(mIntent);
             finish();
         });

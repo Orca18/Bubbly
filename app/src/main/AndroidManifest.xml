@@ -17,7 +17,13 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Community_Create"
+            android:exported="false" />
+        <activity
             android:name=".ImageView_FullScreen"
+            android:exported="false" />
+        <activity
+            android:name=".Community_Info"
             android:exported="false" />
         <activity
             android:name=".ReplyModify"
@@ -47,7 +53,7 @@
             android:name=".Community_Home_Feeds"
             android:exported="false" />
         <activity
-            android:name=".Community_Home_List"
+            android:name=".Community_Joined_List"
             android:exported="false" />
         <activity
             android:name=".SS_PostDetail"

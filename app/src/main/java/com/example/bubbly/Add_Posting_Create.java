@@ -2,12 +2,15 @@ package com.example.bubbly;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.content.Intent;
@@ -17,6 +20,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -68,7 +72,9 @@ public class Add_Posting_Create extends AppCompatActivity {
     ImageView playicon, imgdelete, thumbdelete;
     RelativeLayout r_img, r_thumb;
 
-    String post_id,post_content,post_file,post_mention;
+    String post_id, post_content, post_file, post_mention;
+    TextView section;
+    String category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,22 +89,23 @@ public class Add_Posting_Create extends AppCompatActivity {
         post_id = intent.getStringExtra("post_id");
         post_content = intent.getStringExtra("post_content");
         post_file = intent.getStringExtra("post_file");
+        // 커뮤니티 아이디가 있으면, 해당 커뮤니티를 기준으로 글을 올린다는 뜻
+        category = intent.getStringExtra("com_id");
 
 
-        if(post_content != null){
+        if (post_content != null) {
             et_content.setText(post_content);
         }
 
-        System.out.println("post_file"+post_file);
-        if(post_file != null){
-            imageList.add(Uri.parse("https://d2gf68dbj51k8e.cloudfront.net/"+post_file));
+        System.out.println("post_file" + post_file);
+        if (post_file != null) {
+            imageList.add(Uri.parse("https://d2gf68dbj51k8e.cloudfront.net/" + post_file));
             r_thumb.setVisibility(View.GONE);
             r_img.setVisibility(View.VISIBLE);
             Glide.with(Add_Posting_Create.this)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+post_file)
+                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_file)
                     .into(my_image);
         }
-
 
 
     }
@@ -127,7 +134,9 @@ public class Add_Posting_Create extends AppCompatActivity {
         r_img = findViewById(R.id.posting_create_img);
         r_thumb = findViewById(R.id.posting_create_thumb);
 
-        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
+
+        section = findViewById(R.id.posting_create_section);
 
     }
 
@@ -180,10 +189,9 @@ public class Add_Posting_Create extends AppCompatActivity {
         });
 
         posting.setOnClickListener(v -> {
-            if(post_id == null){
+            if (post_id == null) {
                 createPost(); // 게시글 작성
-            }
-            else{
+            } else {
                 updatePost(); // 게시글 수정
             }
         });
@@ -207,29 +215,38 @@ public class Add_Posting_Create extends AppCompatActivity {
             r_thumb.setVisibility(View.GONE);
         });
 
+        section.setOnClickListener(v -> {
+            final CharSequence[] oItems = {"기본", "커뮤1", "커뮤2"};
+            AlertDialog.Builder oDialog = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+            oDialog.setTitle("올릴 위치?").setItems(oItems, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(getApplicationContext(), oItems[which]+"... 업로드 시, 영역? 추가", Toast.LENGTH_LONG).show();
+                    section.setText(oItems[which]);
+                }
+            }).setCancelable(false).show();
+        });
+
     }
 
 
-    public void createPost(){
+    public void createPost() {
         List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
         //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
         if (imageList != null) {
             for (int i = 0; i < imageList.size(); i++) {
                 //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
-                parts.add(prepareFilePart("image"+i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+                parts.add(prepareFilePart("image" + i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
             }
         }
-        RequestBody size = createPartFromString(""+parts.size());
+        RequestBody size = createPartFromString("" + parts.size());
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
         ApiInterface createPost_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call = createPost_api.createPost(user_id,et_content.getText().toString(),size, parts,"n","0","1");
-        call.enqueue(new Callback<String>()
-        {
+        Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", "0", "1");
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     Log.e("게시글 생성", response.body().toString());
                     Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
                     mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -240,33 +257,29 @@ public class Add_Posting_Create extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e("게시글 생성 에러", t.getMessage());
             }
         });
     }
 
 
-    public void updatePost(){
+    public void updatePost() {
         List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
         //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
         if (imageList != null) {
             for (int i = 0; i < imageList.size(); i++) {
                 //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
-                parts.add(prepareFilePart("image"+i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+                parts.add(prepareFilePart("image" + i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
             }
         }
-        RequestBody size = createPartFromString(""+parts.size());
+        RequestBody size = createPartFromString("" + parts.size());
         ApiInterface updatePost_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call = updatePost_api.updatePost(post_id,et_content.getText().toString(),size, parts,post_mention,post_mention);
-        call.enqueue(new Callback<String>()
-        {
+        Call<String> call = updatePost_api.updatePost(post_id, et_content.getText().toString(), size, parts, post_mention, post_mention);
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     Log.e("게시글 수정", response.body().toString());
                     Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
                     mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -277,8 +290,7 @@ public class Add_Posting_Create extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e("게시글 수정 에러", t.getMessage());
             }
         });
@@ -373,7 +385,7 @@ public class Add_Posting_Create extends AppCompatActivity {
         File file = FileUtils.getFile(this, fileUri);
 
         // create RequestBody instance from file 리퀘스트바디를 파일로부터 만든다.
-        RequestBody requestFile = RequestBody.create (MediaType.parse(FileUtils.MIME_TYPE_IMAGE), file);
+        RequestBody requestFile = RequestBody.create(MediaType.parse(FileUtils.MIME_TYPE_IMAGE), file);
 
         // MultipartBody.Part is used to send also the actual file name //
         return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
