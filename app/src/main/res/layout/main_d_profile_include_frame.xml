@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="14dp"
-        android:layout_marginTop="12dp">
+        android:layout_marginTop="60dp">
 
 
         <LinearLayout
@@ -93,7 +93,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/spoqa_bold"
-            android:text="팀노바"
             android:textSize="22dp"  />
 
 
@@ -119,20 +118,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/spoqa_medium"
-                android:text="TeamNova" />
+                android:fontFamily="@font/spoqa_medium" />
 
         </LinearLayout>
 
 
         <TextView
+            android:id="@+id/tv_user_intro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/spoqa_regular"
             android:textSize="15dp"
             android:textColor="@color/text_black"
-            android:text="자기소개 예시입니다\nbangju2022@gmail.com" />
+            android:text="자기소개를 입력해주세요." />
 
 
 
@@ -150,16 +149,16 @@
 
         <TextView
             android:textSize="16dp"
+            android:id="@+id/tv_following"
             android:textColor="@color/text_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_bold"
             android:paddingHorizontal="4dp"
-            android:text="633" />
+            android:text="0" />
 
         <TextView
             android:textSize="16dp"
-            android:id="@+id/tv_following"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_medium"
@@ -171,12 +170,13 @@
 
         <TextView
             android:textSize="16dp"
+            android:id="@+id/tv_follower"
             android:textColor="@color/text_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_bold"
             android:paddingHorizontal="4dp"
-            android:text="10,597" />
+            android:text="0" />
 
         <TextView
             android:textSize="16dp"

@@ -22,8 +22,8 @@ public interface ApiInterface {
     Call<String> sendEmailCertificationNum(@Field("email_addr") String email_addr);
 
     // 아이디 인증번호 검증 api
-    @GET("userinfo/verfyEmailCertificationNum")
-    Call<String> verfyEmailCertificationNum(@Query("email_addr") String email_addr,
+    @GET("userinfo/verifyEmailCertificationNum")
+    Call<String> verifyEmailCertificationNum(@Query("email_addr") String email_addr,
                                             @Query("certification_num") String certification_num);
 
     // 휴대폰 인증번호 발송 api
@@ -32,13 +32,13 @@ public interface ApiInterface {
     Call<String> sendPhoneCertificationNum(@Field("phone_num") String phone_num);
 
     // 휴대폰 인증번호 검증 api
-    @GET("userinfo/verfyPhoneCertificationNum")
-    Call<String> verfyPhoneCertificationNum(@Query("phone_num") String phone_num,
+    @GET("userinfo/verifyPhoneCertificationNum")
+    Call<String> verifyPhoneCertificationNum(@Query("phone_num") String phone_num,
                                             @Query("certification_num") String certification_num);
 
     // 아이디 중복 조회 api
-    @GET("userinfo/selectIsExisingId")
-    Call<String> selectIsExisingId(@Query("login_id") String login_id);
+    @GET("userinfo/selectIsExistingId")
+    Call<String> selectIsExistingId(@Query("login_id") String login_id);
 
     // 회원정보 저장 api
     @FormUrlEncoded
@@ -57,9 +57,18 @@ public interface ApiInterface {
                                 @Part("phone_num") String phone_num,
                                 @Part("nick_name") String nick_name,
 //                                @Field("profile_file_name") String profile_file_name,
-                                @Part("profile_file_name") RequestBody profile_file_name,
+                                @Part("profile_file_name") String profile_file_name,
                                 @Part List<MultipartBody.Part> files,
-                                @Part("user_id") String user_id);
+                                @Part("user_id") String user_id,
+                                @Part("self_info") String self_info);
+
+
+    // 프로필 이미지 업데이트
+    @Multipart
+    @POST("userinfo/updateUserProfile")
+    Call<String> updateUserProfile(@Part MultipartBody.Part file,
+                                   @Part("user_id") RequestBody user_id,
+                                   @Part("profile_file_name") RequestBody profile_file_name);
 
     // 회원정보 조회 api
     @GET("userinfo/selectUserInfo")

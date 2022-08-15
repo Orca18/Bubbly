@@ -8,7 +8,7 @@
     <!--   기존 탭 리사이클러뷰 안에 있던 것 이동함. -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tab_recyclerview"
-        tools:listitem="@layout/item_following"
+        tools:listitem="@layout/item_follower"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

@@ -1,14 +1,20 @@
 package com.example.bubbly;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,6 +22,8 @@ import android.widget.Toast;
 
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
+
+import java.util.regex.Pattern;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,9 +35,11 @@ public class LL_Register_A extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
 
     EditText et_email,et_authentication_num,et_phone,et_authentication_phonenum;
-    TextView tv_send_email,tv_authentication_num_check,tv_send_phone,tv_et_authentication_phonenum_check,tv_next_text;
-
-    int authentication_check = 0; // 휴대폰,이메일 인증 체크
+    TextView tv_send_email,tv_authentication_num_check,tv_send_phone,tv_et_authentication_phonenum_check,tv_next_text,tv_privacyPolicy, tv_termsToUse;
+    CheckBox ck_agree_all, ck_agree_privatePolicy, ck_agree_termsToUse;
+    WebView wv_privacyPolicy, wv_termsToUse;
+    int authentication_check = 0; // 휴대폰,이메일 인증, 약관2개 체크
+    int authentication_check_target = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +61,13 @@ public class LL_Register_A extends AppCompatActivity {
         tv_send_phone = findViewById(R.id.tv_send_phone);
         et_authentication_phonenum = findViewById(R.id.et_authentication_phonenum);
         tv_et_authentication_phonenum_check = findViewById(R.id.tv_et_authentication_phonenum_check);
-
+        ck_agree_all = findViewById(R.id.ck_agree_all);
+        ck_agree_privatePolicy = findViewById(R.id.ck_agree_privacyPolicy);
+        ck_agree_termsToUse = findViewById(R.id.ck_agree_termsToUse);
+        tv_privacyPolicy = findViewById(R.id.tv_privacyPolicy);
+        tv_termsToUse = findViewById(R.id.tv_termsToUse);
+        wv_privacyPolicy = findViewById(R.id.wv_privacyPolicy);
+        wv_termsToUse = findViewById(R.id.wv_termsToUse);
 
         //next.setEnabled(false); // 초기 다음버튼 비활성화
         next.setOnClickListener(new View.OnClickListener() {
@@ -70,27 +86,40 @@ public class LL_Register_A extends AppCompatActivity {
        tv_send_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface sendEmailCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = sendEmailCertificationNum_api.sendEmailCertificationNum(et_email.getText().toString());
-                call.enqueue(new Callback<String>()
-                {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                //이메일 정규식 확인
+                Pattern pattern = android.util.Patterns.EMAIL_ADDRESS;
+                if(pattern.matcher(et_email.getText().toString()).matches()){
+                    Toast.makeText(getApplicationContext(), "이메일 형식에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show();
+                } else {
+                    //정규식 확인 완료 후 서버에 요청
+                    ApiInterface sendEmailCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    Call<String> call = sendEmailCertificationNum_api.sendEmailCertificationNum(et_email.getText().toString());
+                    call.enqueue(new Callback<String>()
                     {
-                        if (response.isSuccessful() && response.body() != null)
+                        @Override
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
                         {
-                            Log.e("이메일 전송", response.body().toString());
-                            et_email.setEnabled(false); // 이메일 전송 시 이메일 입력란 비활성화
-                            Toast.makeText(getApplicationContext(), "이메일 전송 완료!!",Toast.LENGTH_SHORT).show();
+                            if (response.isSuccessful() && response.body() != null)
+                            {
+                                Log.e("이메일 전송", response.body().toString());
+                                if(response.body().toString().equals("exist")){
+                                    Toast.makeText(getApplicationContext(), "동일한 이메일이 이미 존재합니다.",Toast.LENGTH_SHORT).show();
+                                }else if(response.body().toString().equals("fail")){
+                                    Toast.makeText(getApplicationContext(), "이메일 전송에 실패했습니다.",Toast.LENGTH_SHORT).show();
+                                }else{
+                                    et_email.setEnabled(false); // 이메일 전송 시 이메일 입력란 비활성화
+                                    Toast.makeText(getApplicationContext(), "이메일의 수신함을 확인해주세요.",Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                    {
-                        Log.e("이메일 전송 에러", t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                        {
+                            Log.e("이메일 전송 에러", t.getMessage());
+                            Toast.makeText(getApplicationContext(), "이메일 전송에 실패했습니다.",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
 
@@ -98,8 +127,8 @@ public class LL_Register_A extends AppCompatActivity {
        tv_authentication_num_check.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               ApiInterface verfyEmailCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
-               Call<String> call = verfyEmailCertificationNum_api.verfyEmailCertificationNum(et_email.getText().toString(),et_authentication_num.getText().toString());
+               ApiInterface verifyEmailCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+               Call<String> call = verifyEmailCertificationNum_api.verifyEmailCertificationNum(et_email.getText().toString(),et_authentication_num.getText().toString());
                call.enqueue(new Callback<String>()
                {
                    @Override
@@ -113,8 +142,8 @@ public class LL_Register_A extends AppCompatActivity {
                                System.out.println("authentication_check : "+authentication_check);
                                Toast.makeText(getApplicationContext(), "이메일 인증 완료.",Toast.LENGTH_SHORT).show();
                                et_authentication_num.setEnabled(false); // 인증완료 시 인증번호 입력란 비활성화
-                               if(authentication_check==2) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
-                                   tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
+                               if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                                   tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 하얀색
                                    next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
                                    next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
                                }
@@ -131,7 +160,6 @@ public class LL_Register_A extends AppCompatActivity {
                        Log.e("이메일 인증 에러", t.getMessage());
                    }
                });
-
            }
        });
 
@@ -140,27 +168,33 @@ public class LL_Register_A extends AppCompatActivity {
         tv_send_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface sendPhoneCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = sendPhoneCertificationNum_api.sendPhoneCertificationNum(et_phone.getText().toString());
-                call.enqueue(new Callback<String>()
-                {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                    {
-                        if (response.isSuccessful() && response.body() != null)
-                        {
-                            Log.e("휴대폰 인증번호 전송 성공", response.body().toString());
-                            et_phone.setEnabled(false); // 휴대폰 인증 전송 시 휴대폰번호 입력란 비활성화
-                            Toast.makeText(getApplicationContext(), "휴대폰 인증 전송",Toast.LENGTH_SHORT).show();
+                //하이픈 없이 전송
+                if(et_phone.getText().toString().contains("-")){
+                    Toast.makeText(getApplicationContext(), "숫자만 입력해주세요.",Toast.LENGTH_SHORT).show();
+                }else {
+                    ApiInterface sendPhoneCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    Call<String> call = sendPhoneCertificationNum_api.sendPhoneCertificationNum(et_phone.getText().toString());
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                Log.e("휴대폰 인증번호 전송 성공", response.body().toString());
+                                if(response.body().toString().equals("exist")){
+                                    Toast.makeText(getApplicationContext(), "동일한 휴대폰 번호가 이미 존재합니다.",Toast.LENGTH_SHORT).show();
+                                }else if(response.body().toString().equals("fail")){
+                                    Toast.makeText(getApplicationContext(), "문자 전송에 실패했습니다.",Toast.LENGTH_SHORT).show();
+                                }else{
+                                    et_phone.setEnabled(false); // 휴대폰 인증 전송 시 휴대폰번호 입력란 비활성화
+                                    Toast.makeText(getApplicationContext(), "휴대폰 인증 전송", Toast.LENGTH_SHORT).show();
+                                }
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                    {
-                        Log.e("휴대폰 인증번호 전송 에러", t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                            Log.e("휴대폰 인증번호 전송 에러", t.getMessage());
+                        }
+                    });
+                }
             }
         });
 
@@ -168,8 +202,8 @@ public class LL_Register_A extends AppCompatActivity {
         tv_et_authentication_phonenum_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface verfyPhoneCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = verfyPhoneCertificationNum_api.verfyPhoneCertificationNum(et_phone.getText().toString(),et_authentication_phonenum.getText().toString());
+                ApiInterface verifyPhoneCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+                Call<String> call = verifyPhoneCertificationNum_api.verifyPhoneCertificationNum(et_phone.getText().toString(),et_authentication_phonenum.getText().toString());
                 call.enqueue(new Callback<String>()
                 {
                     @Override
@@ -183,7 +217,7 @@ public class LL_Register_A extends AppCompatActivity {
                                 Log.e("휴대폰 인증", response.body().toString());
                                 Toast.makeText(getApplicationContext(), "휴대폰 인증 완료.",Toast.LENGTH_SHORT).show();
                                 et_authentication_phonenum.setEnabled(false); // 인증완료 시 인증번호 입력란 비활성화
-                                if(authentication_check==2) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                                if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
                                     tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
                                     next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
                                     next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
@@ -201,13 +235,108 @@ public class LL_Register_A extends AppCompatActivity {
                         Log.e("휴대폰 인증 에러", t.getMessage());
                     }
                 });
+            }
+        });
 
+
+        ck_agree_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ck_agree_all.isChecked()){
+                    ck_agree_privatePolicy.setChecked(false);
+                    ck_agree_termsToUse.setChecked(false);
+                    authentication_check-=2;
+                }else{
+                    ck_agree_privatePolicy.setChecked(true);
+                    ck_agree_termsToUse.setChecked(true);
+                    authentication_check+=2;
+                    if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                        tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
+                        next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
+                        next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                    }
+                }
+            }
+        });
+
+        ck_agree_privatePolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ck_agree_privatePolicy.isChecked()){
+                    authentication_check-=1;
+                }
+                else{
+                    authentication_check+=1;
+                    if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                        tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
+                        next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
+                        next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                    }
+                }
+            }
+        });
+
+        ck_agree_termsToUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(ck_agree_termsToUse.isChecked()){
+                    authentication_check-=1;
+                }
+                else{
+                    authentication_check+=1;
+                    if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                        tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
+                        next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
+                        next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                    }
+                }
+            }
+        });
+
+        tv_privacyPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayTermsWithWebView("개인정보보호정책","http://www.google.com");
+//                wv_privacyPolicy.loadUrl("http://www.google.com");
+//                wv_privacyPolicy.setVisibility(View.VISIBLE);
+            }
+        });
+
+        tv_termsToUse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayTermsWithWebView("이용약관","http://www.google.com");
+//                wv_termsToUse.loadUrl("http://www.google.com");
+//                wv_termsToUse.setVisibility(View.VISIBLE);
             }
         });
 
 
 
+
     } // onCreate 닫는곳
+
+    public void displayTermsWithWebView (String title, String url){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(title);
+        WebView wv = new WebView(this);
+        wv.loadUrl(url);
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+        alert.setView(wv);
+        alert.setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
+    }
 
 
     @Override

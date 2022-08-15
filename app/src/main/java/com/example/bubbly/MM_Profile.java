@@ -2,6 +2,7 @@ package com.example.bubbly;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.example.bubbly.controller.FragmentAdapter;
+import com.example.bubbly.model.UserInfo;
+import com.example.bubbly.retrofit.ApiClient;
+import com.example.bubbly.retrofit.ApiInterface;
+import com.example.bubbly.retrofit.follower_Response;
+import com.example.bubbly.retrofit.following_Response;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MM_Profile extends AppCompatActivity {
 
@@ -56,9 +68,10 @@ public class MM_Profile extends AppCompatActivity {
     TextView settingOption, info, logout;
     View view;
 
-    ////////////////////
-    TextView tv_following;
-    LinearLayout bt_modify_profile;
+    //프로필 데이터 보여주기
+    ImageView iv_user_image;
+    TextView tv_user_nick, tv_user_id, tv_user_intro, tv_following,tv_follower;
+    LinearLayout bt_modify_profile; //프로필 수정 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +83,7 @@ public class MM_Profile extends AppCompatActivity {
 //        uid = extras.getString("uid");
 
         // 리소스 ID 선언
-        initiallize();
+        initialize();
         // 탭 레이아웃
         tabInit();
         // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
@@ -80,15 +93,8 @@ public class MM_Profile extends AppCompatActivity {
         // 내비 터치
         NaviTouch();
 
-        tv_following = findViewById(R.id.tv_following);
-        tv_following.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent(getApplicationContext(), Following.class);
-                startActivity(mIntent);
-            }
-        });
-
+        //프로필 데이터 표시
+        setProfileData();
 
     }
 
@@ -136,7 +142,7 @@ public class MM_Profile extends AppCompatActivity {
     // ========================================================
 
     // 리소스 아이디 선언
-    private void initiallize() {
+    private void initialize() {
         // 툴바
         toolbar = findViewById(R.id.profile_toolbar);
         setSupportActionBar(toolbar);
@@ -164,9 +170,92 @@ public class MM_Profile extends AppCompatActivity {
         btprofile = findViewById(R.id.profile_toprofile);
         btwallet = findViewById(R.id.profile_towallet);
 
-        bt_modify_profile = findViewById(R.id.bt_modify_profile);
+        //프로필 데이터 보여주기
+        iv_user_image = findViewById(R.id.iv_user_image);
+        tv_user_nick = findViewById(R.id.tv_user_nick);
+        tv_user_id = findViewById(R.id.tv_user_id);
+        tv_user_intro = findViewById(R.id.tv_user_intro);
+        tv_following = findViewById(R.id.tv_following);
+        tv_follower = findViewById(R.id.tv_follower);
 
-    }    // 내비 터치치
+        bt_modify_profile = findViewById(R.id.bt_modify_profile);
+    }
+
+    //프로필데이터 가져와서 디스플레이하기
+    private void setProfileData(){
+        //이미지. 닉네임, id, 자기소개, 팔로잉, 팔로워
+        if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
+            Glide.with(MM_Profile.this)
+                    .load(UserInfo.profile_file_name)
+                    .circleCrop()
+                    .into(iv_user_image);
+        }else{
+            //아무런 처리하지 않음. 레이아웃에 설정된 default 값 표시
+        }
+
+        if(UserInfo.user_nick!=null && !UserInfo.user_nick.equals("")){
+            tv_user_nick.setText(UserInfo.user_nick);
+        }else{
+            tv_user_nick.setText(UserInfo.login_id);
+        }
+
+        tv_user_id.setText(UserInfo.login_id);
+
+        if(UserInfo.self_info!=null && !UserInfo.self_info.equals("")){
+            tv_user_intro.setText(UserInfo.self_info);
+        }else{
+            //아무런 처리하지 않음. 레이아웃에 설정된 default 값 표시
+        }
+
+        //팔로워리스트 가져오기
+        ApiInterface selectFollowerList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<follower_Response>> call_follower = selectFollowerList_api.selectFollowerList(UserInfo.user_id);
+        call_follower.enqueue(new Callback<List<follower_Response>>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<List<follower_Response>> call, @NonNull Response<List<follower_Response>> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    List<follower_Response> responseResult = response.body();
+                    tv_follower.setText(""+responseResult.size());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<follower_Response>> call, @NonNull Throwable t)
+            {
+                Log.e("에러", t.getMessage());
+            }
+        });
+
+        //팔로잉 리스트 가져오기
+        ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<following_Response>> call_following = selectFolloweeList_api.selectFolloweeList(UserInfo.user_id);
+        call_following.enqueue(new Callback<List<following_Response>>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<List<following_Response>> call, @NonNull Response<List<following_Response>> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    List<following_Response> responseResult = response.body();
+                    tv_following.setText(""+responseResult.size());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<following_Response>> call, @NonNull Throwable t)
+            {
+                Log.e("에러", t.getMessage());
+            }
+        });
+
+
+
+
+
+    }
 
     private void NaviTouch() {
 
@@ -317,6 +406,28 @@ public class MM_Profile extends AppCompatActivity {
                     }
                 });
 
+
+
+        //팔로잉 보기 (인텐트로 넘기지 않고 Following class에서 svr로 새로 요청해서 받을 것)
+        tv_following.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent(getApplicationContext(), Following.class);
+                startActivity(mIntent);
+            }
+        });
+
+        //팔로워 보기
+        tv_follower.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent mIntent = new Intent(getApplicationContext(), Follower.class);
+//                startActivity(mIntent);
+            }
+        });
+
+
+        //프로필 수정하기
         bt_modify_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
