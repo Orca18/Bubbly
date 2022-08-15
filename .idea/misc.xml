@@ -14,6 +14,7 @@
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/bottom_sheet_dialog_layout.xml" value="0.23697916666666666" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_communitylist.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_feed_basic.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_follower.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_joined_com_list.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_post.xml" value="0.5506493506493506" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_reply.xml" value="0.3619791666666667" />
@@ -21,15 +22,21 @@
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/main_b_issue_include.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/main_d_profile_include.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/main_d_profile_include_frame.xml" value="0.25" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/navi_header.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/post_details.xml" value="0.25" />
-        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/post_details_include.xml" value="0.5" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/post_details_include.xml" value="0.22" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/setting_option.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_community_home.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_community_home2.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_coummunity_include_scrollview.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_coummunity_include_scrollview_2.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/sub_profile.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/sub_profile_include.xml" value="0.25" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/feed_menu.xml" value="0.3614583333333333" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/follower_menu.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/main_liist_menu.xml" value="0.19895833333333332" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/navi_menu.xml" value="0.3614583333333333" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/post_menu.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/arrow.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/arrowsample.xml" value="0.378125" />
         <entry key="..\:/Users/luke0/Desktop/Novarand_SNS/app/src/main/res/drawable/button_radius.xml" value="0.3104166666666667" />

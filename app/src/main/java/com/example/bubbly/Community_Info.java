@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.retrofit.ApiClient;
@@ -42,6 +44,8 @@ public class Community_Info extends AppCompatActivity {
     RecyclerView recyclerView;
 
     private Parcelable recyclerViewState;
+    
+    LinearLayout posting;
 
 
 
@@ -53,16 +57,35 @@ public class Community_Info extends AppCompatActivity {
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
 
+        initialize();
+        clickable();
+
+        selectPost_Followee_Communit();
+    }
+
+    private void clickable() {
+        posting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(getApplicationContext(), Add_Posting_Create.class);
+                mIntent.putExtra("com_id","커뮤아이디");
+                startActivity(mIntent);
+            }
+        });
+    }
+
+    private void initialize() {
         // 툴바
         toolbar = findViewById(R.id.com_info_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        posting = findViewById(R.id.community_info_posting);
+
+
 
         recyclerView = findViewById(R.id.com_info_recyclerview);
-
-        selectPost_Followee_Communit();
     }
 
 

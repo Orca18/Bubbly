@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.example.bubbly.R;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-
+//                 final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
 // 활용하고 싶으면 onClick 에 오른쪽 코드=>                 bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     Context context;

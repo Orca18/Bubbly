@@ -65,13 +65,21 @@
 
     </LinearLayout>
 
+<LinearLayout
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:layout_marginBottom="4dp">
+
 
     <LinearLayout
+        android:id="@+id/community_info_posting"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:background="@color/white"
         android:paddingHorizontal="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -102,6 +110,7 @@
         </LinearLayout>
 
     </LinearLayout>
+</LinearLayout>
 
 
     <androidx.recyclerview.widget.RecyclerView

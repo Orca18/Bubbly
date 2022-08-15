@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/spoqa_medium"
-            android:hint="자판 올라가면 position 설정" />
+            android:hint="입력" />
 
         <Button
             android:id="@+id/bt_reply_add"

@@ -149,7 +149,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
 
 
-//        // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
+        // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
 //        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
 //            @Override
 //            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -203,9 +203,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 //                        return false;
 //                    }
 //                });
-//
-//
-//
 //            }
 //        });
 

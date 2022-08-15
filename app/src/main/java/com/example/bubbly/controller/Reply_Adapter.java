@@ -28,6 +28,7 @@ import com.example.bubbly.retrofit.reply_Response;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,10 +73,10 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         holder.tv_content.setText(reply_response.getComment_contents());
 
 
-        Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
-                .circleCrop()
-                .into(holder.iv_user_image);
+//        Glide.with(mContext)
+//                .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
+//                .circleCrop()
+//                .into(holder.iv_user_image);
 
         if(user_id.equals(reply_response.getComment_writer_id())){
             holder.iv_option.setVisibility(View.VISIBLE);
@@ -154,8 +155,9 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         public LinearLayout ll_item_layout,layout_like,layout_reply,layout_retweet;
         public TextView tv_user_nick,tv_user_id,tv_content, tv_time,tv_like_count,
                 tv_reply_count,tv_retweet_count;
-        public ImageView iv_user_image,iv_media,iv_like_icon,iv_reply_icon,iv_retweet_icon,
+        public ImageView iv_media,iv_like_icon,iv_reply_icon,iv_retweet_icon,
                 iv_option,iv_share_icon;
+        CircleImageView iv_user_image;
 
 
         public ReplyViewHolder(@NonNull View view)

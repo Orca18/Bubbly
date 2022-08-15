@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.controller.Reply_Adapter;
+import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
@@ -38,7 +39,7 @@ public class SS_PostDetail extends AppCompatActivity {
     SharedPreferences preferences;
     String user_id, post_id;
 
-    ImageView iv_media;
+    ImageView iv_media, iv_options;
     CircleImageView iv_user_image;
     TextView tv_user_nick, tv_user_id, tv_content, tv_time, tv_like_count, tv_reply_count, tv_retweet_count;
     EditText et_reply;
@@ -57,6 +58,27 @@ public class SS_PostDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_details);
 
+        initialize();
+
+        listeners();
+
+
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
+        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+
+        bt_reply_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createComment();
+            }
+        });
+
+        selectCommentUsingPostId(); // 게시글 아이디로 댓글 조회
+        selectPostUsingPostId(); // 게시글 아이디로 조회
+
+    } // onCreate 닫는곳
+
+    private void initialize() {
         toolbar = findViewById(R.id.post_details_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -82,21 +104,21 @@ public class SS_PostDetail extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.post_details_recyclerview);
 
+        iv_options = findViewById(R.id.post_details_options);
 
-        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
-        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+    }
 
-        bt_reply_add.setOnClickListener(new View.OnClickListener() {
+    private void listeners() {
+        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
+
+        iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                createComment();
+            public void onClick(View view) {
+                // 활용하고 싶으면 onClick 에 오른쪽 코드 =>
+                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
         });
-
-        selectCommentUsingPostId(); // 게시글 아이디로 댓글 조회
-        selectPostUsingPostId(); // 게시글 아이디로 조회
-
-    } // onCreate 닫는곳
+    }
 
     public void selectCommentUsingPostId() { // 게시글 아이디로 댓글 조회
         linearLayoutManager = new LinearLayoutManager(this);

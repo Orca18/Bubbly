@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="내 대표 게시글"
+            android:text="내 대표 게시글 지정"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
     </LinearLayout>

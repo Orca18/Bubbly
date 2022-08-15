@@ -10,6 +10,7 @@ import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.content.Intent;
@@ -72,7 +73,8 @@ public class Add_Posting_Create extends AppCompatActivity {
     RelativeLayout r_img, r_thumb;
 
     String post_id, post_content, post_file, post_mention;
-    Button section;
+    TextView section;
+    String category;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,8 @@ public class Add_Posting_Create extends AppCompatActivity {
         post_id = intent.getStringExtra("post_id");
         post_content = intent.getStringExtra("post_content");
         post_file = intent.getStringExtra("post_file");
+        // 커뮤니티 아이디가 있으면, 해당 커뮤니티를 기준으로 글을 올린다는 뜻
+        category = intent.getStringExtra("com_id");
 
 
         if (post_content != null) {
