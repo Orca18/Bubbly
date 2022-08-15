@@ -104,7 +104,7 @@ obj/
 .idea/compiler.xml
 .idea/copyright/profiles_settings.xml
 .idea/encodings.xml
-/.idea/misc.xml
+.idea/misc.xml
 .idea/modules.xml
 .idea/scopes/scope_settings.xml
 .idea/dictionaries
@@ -119,6 +119,7 @@ obj/
 .idea/gradle.xml
 .idea/jarRepositories.xml
 .idea/navEditor.xml
+.idea/deploymentTargetDropDown.xml
 
 # Legacy Eclipse project files
 .classpath
