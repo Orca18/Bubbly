@@ -83,7 +83,9 @@ public class MM_Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_a_home);
 
-
+        // 리사이클러뷰에 못넣어서.. 보관 (또는 삭제 예정)
+//        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(this);
+//        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
 
         // 리소스 ID 선언
         initiallize();
@@ -109,7 +111,7 @@ public class MM_Home extends AppCompatActivity {
 //        post_adapter.notifyDataSetChanged();
 
         //loadrecycler();
-        selectPost_Followee_Communitt(); // 나와 팔로위, 속한 커뮤니티의 게시물 조회  api
+        selectPost_Followee_Communit(); // 나와 팔로위, 속한 커뮤니티의 게시물 조회 api
 
     }
 
@@ -210,7 +212,7 @@ public class MM_Home extends AppCompatActivity {
     }
 
 
-    private void selectPost_Followee_Communitt(){
+    private void selectPost_Followee_Communit(){
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지
@@ -262,6 +264,14 @@ public class MM_Home extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
+
+
 
     // 데이터 http 요청
     private void loadrecycler() {
@@ -388,6 +398,7 @@ public class MM_Home extends AppCompatActivity {
         myAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawers();
                 Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
                 mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(mIntent3);
@@ -397,18 +408,21 @@ public class MM_Home extends AppCompatActivity {
         myActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawers();
                 Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
             }
         });
         myList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawers();
                 Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawers();
                 Intent mIntent = new Intent(getApplicationContext(), Community_Home_Feeds.class);
                 startActivity(mIntent);
             }
@@ -416,6 +430,7 @@ public class MM_Home extends AppCompatActivity {
         settingOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawers();
                 Intent settingIntent = new Intent(getApplicationContext(), SS_Setting.class);
                 startActivity(settingIntent);
             }
@@ -423,12 +438,14 @@ public class MM_Home extends AppCompatActivity {
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawers();
                 Toast.makeText(getApplicationContext(), "고객센터", Toast.LENGTH_SHORT).show();
             }
         });
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                drawerLayout.closeDrawers();
                 Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 startActivity(toLogin);

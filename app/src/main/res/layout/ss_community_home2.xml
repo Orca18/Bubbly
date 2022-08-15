@@ -29,6 +29,7 @@
                     app:layout_scrollFlags="scroll|enterAlways">
 
                     <LinearLayout
+                        android:gravity="center"
                         android:orientation="horizontal"
                         android:id="@+id/communityhome2_action_search"
                         android:layout_width="220dp"
@@ -55,11 +56,12 @@
 
 
                     <ImageView
+                        android:id="@+id/create_com"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_outline_add_box_24"
+                        android:src="@drawable/ic_baseline_add_business_24"
                         app:tint="#222" />
 
                     <ImageView

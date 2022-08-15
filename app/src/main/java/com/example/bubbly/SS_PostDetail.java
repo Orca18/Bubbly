@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.controller.Reply_Adapter;
+import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
@@ -36,11 +37,11 @@ import retrofit2.Response;
 public class SS_PostDetail extends AppCompatActivity {
 
     SharedPreferences preferences;
-    String user_id,post_id;
+    String user_id, post_id;
 
-    ImageView iv_media;
+    ImageView iv_media, iv_options;
     CircleImageView iv_user_image;
-    TextView tv_user_nick,tv_user_id,tv_content,tv_time,tv_like_count,tv_reply_count,tv_retweet_count;
+    TextView tv_user_nick, tv_user_id, tv_content, tv_time, tv_like_count, tv_reply_count, tv_retweet_count;
     EditText et_reply;
     Button bt_reply_add;
     Toolbar toolbar;
@@ -52,19 +53,40 @@ public class SS_PostDetail extends AppCompatActivity {
     private Parcelable recyclerViewState;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_details);
 
+        initialize();
+
+        listeners();
+
+
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
+        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+
+        bt_reply_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createComment();
+            }
+        });
+
+        selectCommentUsingPostId(); // 게시글 아이디로 댓글 조회
+        selectPostUsingPostId(); // 게시글 아이디로 조회
+
+    } // onCreate 닫는곳
+
+    private void initialize() {
         toolbar = findViewById(R.id.post_details_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        Intent intent = getIntent();
+        post_id = intent.getStringExtra("post_id");
 
         iv_user_image = findViewById(R.id.iv_user_image);
         iv_media = findViewById(R.id.iv_media);
@@ -82,25 +104,23 @@ public class SS_PostDetail extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.post_details_recyclerview);
 
-        Intent intent = getIntent();
-        post_id = intent.getStringExtra("post_id");
+        iv_options = findViewById(R.id.post_details_options);
 
-        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
-        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+    }
 
-        bt_reply_add.setOnClickListener(new View.OnClickListener() {
+    private void listeners() {
+        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
+
+        iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                createComment();
+            public void onClick(View view) {
+                // 활용하고 싶으면 onClick 에 오른쪽 코드 =>
+                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
         });
+    }
 
-        selectCommentUsingPostId(); // 게시글 아이디로 댓글 조회
-        selectPostUsingPostId(); // 게시글 아이디로 조회
-
-    } // onCreate 닫는곳
-
-    public void selectCommentUsingPostId(){ // 게시글 아이디로 댓글 조회
+    public void selectCommentUsingPostId() { // 게시글 아이디로 댓글 조회
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지
@@ -109,22 +129,20 @@ public class SS_PostDetail extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         replyList = new ArrayList<>();
-        reply_adapter = new Reply_Adapter(getApplicationContext(), this.replyList,getApplicationContext());
+        reply_adapter = new Reply_Adapter(getApplicationContext(), this.replyList, getApplicationContext());
         recyclerView.setAdapter(reply_adapter);
         reply_adapter.notifyDataSetChanged();
 
         ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<reply_Response>> call = selectCommentUsingPostId_api.selectCommentUsingPostId(post_id);
-        call.enqueue(new Callback<List<reply_Response>>()
-        {
+        call.enqueue(new Callback<List<reply_Response>>() {
             @Override
-            public void onResponse(@NonNull Call<List<reply_Response>> call, @NonNull Response<List<reply_Response>> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
+            public void onResponse(@NonNull Call<List<reply_Response>> call, @NonNull Response<List<reply_Response>> response) {
+                if (response.isSuccessful() && response.body() != null) {
 //                    progressBar.setVisibility(View.GONE);
                     List<reply_Response> responseResult = response.body();
-                    for(int i=0; i<responseResult.size(); i++){;
+                    for (int i = 0; i < responseResult.size(); i++) {
+                        ;
                         replyList.add(new reply_Response(responseResult.get(i).getPost_id(),
                                 responseResult.get(i).getComment_writer_id(),
                                 responseResult.get(i).getComment_depth(),
@@ -138,55 +156,56 @@ public class SS_PostDetail extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<reply_Response>> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<List<reply_Response>> call, @NonNull Throwable t) {
                 Log.e("게시물 아이디로 게시물 조회", t.getMessage());
             }
         });
     }
 
-    public void createComment(){ // 댓글 생성
+    public void createComment() { // 댓글 생성
         ApiInterface createComment_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call = createComment_api.createComment(post_id,"1",user_id,et_reply.getText().toString(),"!");
-        call.enqueue(new Callback<String>()
-        {
+        Call<String> call = createComment_api.createComment(post_id, "1", user_id, et_reply.getText().toString(), "!");
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
-                    Log.e("createComment 성공",response.body().toString());
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e("createComment 성공", response.body().toString());
                     selectCommentUsingPostId();
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e("createComment 에러", t.getMessage());
             }
         });
     }
 
-    public void selectPostUsingPostId(){ // 게시글 아이디로 조회
+    public void selectPostUsingPostId() { // 게시글 아이디로 조회
         ApiInterface selectPostUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<post_Response>> call = selectPostUsingPostId_api.selectPostUsingPostId(post_id,user_id);
-        call.enqueue(new Callback<List<post_Response>>()
-        {
+        Call<List<post_Response>> call = selectPostUsingPostId_api.selectPostUsingPostId(post_id, user_id);
+        call.enqueue(new Callback<List<post_Response>>() {
             @Override
-            public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
+            public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     List<post_Response> responseResult = response.body();
+
+//                    Log.e("데이터", "하하하"+responseResult.get(0).getPost_writer_id() + "/\n"
+//                            + responseResult.get(0).getNick_name() + "/\n"
+//                            + responseResult.get(0).getPost_contents() + "/\n"
+//                            + responseResult.get(0).getLike_count() + "/\n"
+//                            + responseResult.get(0).getCre_datetime() + "/");
+
                     tv_user_id.setText(responseResult.get(0).getPost_writer_id());
                     tv_user_nick.setText(responseResult.get(0).getNick_name());
                     tv_content.setText(responseResult.get(0).getPost_contents());
-                    tv_like_count.setText(responseResult.get(0).getLike_count());
+//                    tv_like_count.setText(responseResult.get(0).getLike_count());
                     tv_time.setText(responseResult.get(0).getCre_datetime());
 
+
+
                     Glide.with(SS_PostDetail.this)
-                            .load("https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(0).getFile_save_names())
+                            .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names())
                             .into(iv_media);
 
                     Glide.with(SS_PostDetail.this)
@@ -197,18 +216,11 @@ public class SS_PostDetail extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t) {
                 Log.e("에러", t.getMessage());
             }
         });
     }
-
-
-
-
-
-
 
 
     ////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 package com.example.bubbly.model;
 
-public class ExampleItem {
+public class Joined_Com_Item {
     private String mImageResource;
     private String mText1;
     private String mText2;
@@ -9,8 +9,9 @@ public class ExampleItem {
 
 
 
-    //TODO 필요한 형식으로 바꾸세요!
-    public ExampleItem(String imageResource, String text1, String text2, String text3, String text4) {
+    // TODO 필요한 형식으로 바꾸세요!
+    // 커뮤 고유아이디, 커뮤장 아이디, 커뮤 이미지, 커뮤 이름, 커뮤 설명, 커뮤 멤버 수, 내 NFT
+    public Joined_Com_Item(String imageResource, String text1, String text2, String text3, String text4) {
         this.mImageResource = imageResource;
         this.mText1 = text1;
         this.mText2 = text2;

@@ -8,30 +8,9 @@
     android:paddingHorizontal="10dp"
     tools:context=".Add_Posting_Create">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="10dp">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_baseline_public_24" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/spoqa_medium"
-            android:paddingHorizontal="5dp"
-            android:text="공개 범위 : 전체 (or 커뮤니티에 게시합니다)"
-            android:textSize="14dp" />
-
-    </LinearLayout>
 
     <LinearLayout
+        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -40,11 +19,14 @@
             android:layout_height="50dp"
             android:src="@drawable/google" />
 
-        <Button
+        <TextView
+            android:background="@drawable/bg_circle3"
+            android:id="@+id/posting_create_section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="10dp"
             android:layout_marginLeft="10dp"
-            android:text="내 피드 (or 커뮤니티 선택)" />
+            android:text="피드 위치" />
 
     </LinearLayout>
 
@@ -59,7 +41,7 @@
         android:hint="일하기 싫나요? (140자 제한, 10줄)"
         android:maxLength="140"
         android:maxLines="10"
-        android:paddingLeft="65dp"
+        android:layout_marginLeft="65dp"
         android:paddingTop="5dp"
         android:textColor="@color/text_black" />
 
