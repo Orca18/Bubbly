@@ -13,21 +13,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.bubbly.controller.ExampleAdapter;
-import com.example.bubbly.controller.MyCommunitiesList_Adapter;
-import com.example.bubbly.model.ExampleItem;
-import com.example.bubbly.model.MyCommunitiesList_Item;
+import com.example.bubbly.controller.JoinedCom_Adapter;
+import com.example.bubbly.model.Joined_Com_Item;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Community_Home_List extends AppCompatActivity {
+public class Community_Joined_List extends AppCompatActivity {
 
     androidx.appcompat.widget.Toolbar toolbar;
 
     RecyclerView recyclerView;
-    private ExampleAdapter adapter;
-    private List<ExampleItem> comList;
+    private JoinedCom_Adapter adapter;
+    private List<Joined_Com_Item> comList;
     private Parcelable recyclerViewState;
 
     SwipeRefreshLayout swipeRefreshLayout;
@@ -86,7 +84,7 @@ public class Community_Home_List extends AppCompatActivity {
 
         for (int i = 0; i < 20; i++) {
             // TODO 시간 계산 → String 으로 넣어주기
-            this.comList.add(new ExampleItem("","","","",""));
+            this.comList.add(new Joined_Com_Item("","","","",""));
 
         }
 
@@ -97,7 +95,7 @@ public class Community_Home_List extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new ExampleAdapter(getApplicationContext(), this.comList);
+        this.adapter = new JoinedCom_Adapter(getApplicationContext(), this.comList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 

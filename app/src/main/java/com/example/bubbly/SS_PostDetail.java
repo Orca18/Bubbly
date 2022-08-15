@@ -64,7 +64,8 @@ public class SS_PostDetail extends AppCompatActivity {
         // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        Intent intent = getIntent();
+        post_id = intent.getStringExtra("post_id");
 
         iv_user_image = findViewById(R.id.iv_user_image);
         iv_media = findViewById(R.id.iv_media);
@@ -82,8 +83,6 @@ public class SS_PostDetail extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.post_details_recyclerview);
 
-        Intent intent = getIntent();
-        post_id = intent.getStringExtra("post_id");
 
         preferences = getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
