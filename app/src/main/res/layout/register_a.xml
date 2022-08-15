@@ -154,8 +154,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/edittext_radius"
-                android:hint=" 전화번호 입력"
-                android:inputType="phone"
+                android:hint=" 전화번호 입력 (예:01012345678)"
+                android:inputType="number"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:singleLine="true"
@@ -231,6 +231,7 @@
                 android:fontFamily="@font/spoqa_bold"/>
 
             <CheckBox
+                android:id="@+id/ck_agree_all"
                 android:layout_width="30dp"
                 android:layout_height="30dp"/>
 
@@ -253,6 +254,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tv_privacyPolicy"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -262,6 +264,7 @@
                 android:fontFamily="@font/spoqa_medium"/>
 
             <CheckBox
+                android:id="@+id/ck_agree_privacyPolicy"
                 android:layout_width="30dp"
                 android:layout_height="20dp"/>
 
@@ -276,6 +279,7 @@
             android:gravity="center">
 
             <TextView
+                android:id="@+id/tv_termsToUse"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -285,6 +289,7 @@
                 android:fontFamily="@font/spoqa_medium"/>
 
             <CheckBox
+                android:id="@+id/ck_agree_termsToUse"
                 android:layout_width="30dp"
                 android:layout_height="20dp"/>
 
@@ -293,23 +298,22 @@
     </LinearLayout>
 
 
-
-
     <LinearLayout
         android:id="@+id/next"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="#eee">
+        android:background="#eee"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tv_next_text"
-            android:layout_marginVertical="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="14dp"
             android:fontFamily="@font/spoqa_bold"
+            android:enabled="false"
             android:text="다음"
-            android:textSize="18dp"/>
+            android:textSize="18dp" />
 
     </LinearLayout>
 
@@ -318,5 +322,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone" />
+
+    <WebView
+        android:id="@+id/wv_privacyPolicy"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+    <WebView
+        android:id="@+id/wv_termsToUse"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </LinearLayout>

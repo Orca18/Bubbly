@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/edittext_radius"
-                android:hint=" 비밀번호"
+                android:hint=" 비밀번호 (영숫자, 특수문자 포함 8-16자리)"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:padding="10dp"
@@ -139,6 +139,7 @@
                 android:maxLines="1"
                 android:padding="10dp"
                 android:singleLine="true"
+                android:enabled="false"
                 android:textCursorDrawable="@drawable/rss_et_cursor"
                 android:textSize="14dp">
             </EditText>

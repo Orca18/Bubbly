@@ -63,30 +63,33 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <RelativeLayout
+                android:id="@+id/relativeLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/profile_refresh"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-
-                    <ScrollView
-                        android:id="@+id/text_scrollview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fillViewport="true"
-                        android:nestedScrollingEnabled="true"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                        <include layout="@layout/main_d_profile_include_frame" />
-
-                    </ScrollView>
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
             </RelativeLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/profile_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_anchor="@+id/relativeLayout2"
+                app:layout_anchorGravity="center">
+
+
+                <ScrollView
+                    android:id="@+id/text_scrollview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:nestedScrollingEnabled="true"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <include layout="@layout/main_d_profile_include_frame" />
+
+                </ScrollView>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

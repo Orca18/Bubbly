@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 
+import java.util.regex.Pattern;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -46,7 +48,7 @@ public class LL_Register_B extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_registerB);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
-        // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
+        // 뒤로가기 버튼, 디폴트로 true 만 해도 백버튼이 생김
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         et_id = findViewById(R.id.et_id);
@@ -79,6 +81,11 @@ public class LL_Register_B extends AppCompatActivity {
                                 Log.e("희원가입 성공", response.body().toString());
                                 if(response.body().toString().equals("success")){
                                     Toast.makeText(getApplicationContext(), "희원가입 성공",Toast.LENGTH_SHORT).show();
+                                    //블록체인 계정생성 요청
+
+                                    //다이얼로그로 니모닉과 버튼표시 (지갑저장 / 버블리 저장소 저장(pw암호화) / copy)
+
+                                    //다이얼로그 닫기 후 액티비티 종료
                                     finish();
                                 }
                                 else{
@@ -120,8 +127,8 @@ public class LL_Register_B extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(et_id.length() > 0){
-                    ApiInterface selectIsExisingId_api = ApiClient.getApiClient().create(ApiInterface.class);
-                    Call<String> call = selectIsExisingId_api.selectIsExisingId(et_id.getText().toString());
+                    ApiInterface selectIsExistingId_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    Call<String> call = selectIsExistingId_api.selectIsExistingId(et_id.getText().toString());
                     call.enqueue(new Callback<String>()
                     {
                         @Override
@@ -171,7 +178,16 @@ public class LL_Register_B extends AppCompatActivity {
                 pw_check = 0;
             }
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                //비밀번호 정규식 확인
+                String pwRex = "^(?=.*[A-Za-z])(?=.*[$@$!%*#?&.])[A-Za-z$@$!%*#?&.]{8,16}$";
+                Pattern pattern = Pattern.compile(pwRex);
+                if(pattern.matcher(et_password.getText().toString()).matches()){
+                    et_password_check.setEnabled(true);
+                }else{
+                    Toast.makeText(getApplicationContext(), "비밀번호 규칮에 맞지 않습니다.",Toast.LENGTH_SHORT).show();
+                }
+            }
         });
 
         // pw 확인

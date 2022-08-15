@@ -23,6 +23,13 @@ public class user_Response {
     @Expose
     @SerializedName("profile_file_name") private String profile_file_name;
 
+    @Expose
+    @SerializedName("nick_name") private String user_nick;
+
+    @Expose
+    @SerializedName("self_info") private String self_info;
+
+
 
     public String getUser_id() {
         return user_id;
@@ -70,5 +77,21 @@ public class user_Response {
 
     public void setProfile_file_name(String profile_file_name) {
         this.profile_file_name = profile_file_name;
+    }
+
+    public String getUser_nick() {
+        return user_nick;
+    }
+
+    public void setUser_nick(String user_nick) {
+        this.user_nick = user_nick;
+    }
+
+    public String getSelf_info() {
+        return self_info;
+    }
+
+    public void setSelf_info(String self_info) {
+        this.self_info = self_info;
     }
 }
