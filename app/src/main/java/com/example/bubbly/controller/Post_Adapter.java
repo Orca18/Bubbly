@@ -1,4 +1,5 @@
 package com.example.bubbly.controller;
+
 import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -20,6 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +36,8 @@ import com.example.bubbly.SS_Profile;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
+import com.example.bubbly.utils.BottomSheetFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 
@@ -44,12 +51,12 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
     private Context context;
     private Context mContext;
     private ArrayList<post_Response> lists;
-//    private ItemClickListener itemClickListener;
+    //    private ItemClickListener itemClickListener;
     SharedPreferences preferences;
     String user_id;
 
-    public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext)
-    {
+
+    public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext) {
         this.context = context;
         this.lists = lists;
 //        this.itemClickListener = itemClickListener;
@@ -59,18 +66,16 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
     @NonNull
     @Override
-    public Post_Adapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
-    {
+    public Post_Adapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
         return new PostViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position)
-    {
+    public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
         post_Response post_response = lists.get(position);
-        preferences = context.getSharedPreferences("novarand",MODE_PRIVATE);
+        preferences = context.getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
         holder.tv_user_nick.setText(post_response.getNick_name());
@@ -90,46 +95,45 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 .into(holder.iv_user_image);
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getFile_save_names())
+                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
                 .into(holder.iv_media);
-
-
-
-
-
-
 
 
         // TODO 컨텍스트 메뉴 뜨는데, 클릭으로 변경하기 - 삭제하시겠습니까?
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final CharSequence[] oItems = {"하나", "둘", "셋", "넷", "다셋"};
+                AlertDialog.Builder oDialog = new AlertDialog.Builder(context, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+                oDialog.setTitle("색상을 선택하세요").setItems(oItems, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(context, oItems[which], Toast.LENGTH_LONG).show();
+                    }
+                }).setCancelable(false).show();
+
                 // if... 현재 사용자 ID = 게시글 사용자 ID
-                if(user_id.equals(post_response.getPost_writer_id())){
-                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(context, "동일한 사용자 => NFT 신청/수정/삭제",Toast.LENGTH_LONG).show();
-                            Log.i("ahah", "test: true");
-                        }
-                    };
-                } else {
-                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Toast.makeText(context, "다른 사용자 => 숨기기/신고 등...",Toast.LENGTH_LONG).show();
-                            Log.i("ahah", "test: false");
-                        }
-                    };
-                }
+//                if(user_id.equals(post_response.getPost_writer_id())){
+//                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            Toast.makeText(context, "동일한 사용자 => NFT 신청/수정/삭제",Toast.LENGTH_LONG).show();
+//                            Log.i("ahah", "test: true");
+//                        }
+//                    };
+//                } else {
+//                    DialogInterface.OnClickListener confirm = new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            Toast.makeText(context, "다른 사용자 => 숨기기/신고 등...",Toast.LENGTH_LONG).show();
+//                            Log.i("ahah", "test: false");
+//                        }
+//                    };
+//                }
+
+
             }
         });
-
-
-
-
-
-
 
 
         // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
@@ -193,8 +197,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 //        });
 
 
-
-        if(post_response.getLike_yn().equals("y")){ // 좋아요를 누른 상태 일 경우
+        if (post_response.getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
             holder.iv_like_icon.setImageResource(R.drawable.ic_baseline_favorite_24);
         }
 
@@ -202,7 +205,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SS_PostDetail.class);
-                intent.putExtra("post_id",post_response.getPost_id());
+                intent.putExtra("post_id", post_response.getPost_id());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -211,7 +214,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ImageView_FullScreen.class);
-                intent.putExtra("img_url","https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getFile_save_names());
+                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -221,7 +224,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, SS_Profile.class);
-                intent.putExtra("user_id",post_response.getPost_writer_id());
+                intent.putExtra("user_id", post_response.getPost_writer_id());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -232,33 +235,29 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             public void onClick(View v) {
 
                 Log.e("좋아요 표시 여부", String.valueOf(holder.like_check));
-                if(post_response.getLike_yn().equals("n")){
+                if (post_response.getLike_yn().equals("n")) {
                     // ↑ 피드 로드 됐을 때 기준, 좋아요 안눌렀어요
-                    if(holder.like_check.equals(false)){
+                    if (holder.like_check.equals(false)) {
                         // ↑ 기본 상태 (로드하고 누른적이 없어요)
                         // 그래서 좋아요 누르면 카운트 올려줄거에요
-                        int like_count = Integer.parseInt(post_response.getLike_count())+1;
-                        Log.i("정보태그", "변경 좋아요 수 : "+ like_count);
-                        holder.tv_like_count.setText(""+like_count);
+                        int like_count = Integer.parseInt(post_response.getLike_count()) + 1;
+                        Log.i("정보태그", "변경 좋아요 수 : " + like_count);
+                        holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
                         // TODO 좋아요 추가 api
                         ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
-                        call.enqueue(new Callback<String>()
-                        {
+                        call.enqueue(new Callback<String>() {
                             @Override
-                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                            {
-                                if (response.isSuccessful() && response.body() != null)
-                                {
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
                                     Log.e("좋아요 추가 데이터", response.body().toString());
                                     holder.iv_like_icon.setImageResource(R.drawable.ic_baseline_favorite_24);
                                 }
                             }
 
                             @Override
-                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                            {
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                 Log.e("좋아요 추가 에러", t.getMessage());
                             }
                         });
@@ -266,58 +265,50 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                     } else {
                         // 위 if 에서 좋아요 누른거 취소할게요
                         int like_count = Integer.parseInt(post_response.getLike_count());
-                        Log.i("정보태그", "변경 좋아요 수 : "+ like_count);
-                        holder.tv_like_count.setText(""+like_count);
+                        Log.i("정보태그", "변경 좋아요 수 : " + like_count);
+                        holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
                         // TODO 좋아요 감소 api
                         ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
-                        call.enqueue(new Callback<String>()
-                        {
+                        call.enqueue(new Callback<String>() {
                             @Override
-                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                            {
-                                if (response.isSuccessful() && response.body() != null)
-                                {
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
                                     Log.e("좋아요 추가 데이터", response.body().toString());
                                     holder.iv_like_icon.setImageResource(R.drawable.ic_outline_favorite_border_24);
                                 }
                             }
 
                             @Override
-                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                            {
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                 Log.e("좋아요 추가 에러", t.getMessage());
                             }
                         });
                     }
-                }else{
+                } else {
                     // ↑ 피드 로드 됐을 때 기준, 좋아요 눌렀었어요
-                    if(holder.like_check.equals(false)){
+                    if (holder.like_check.equals(false)) {
                         // ↑ 기본 상태 (로드하고 누른적이 없어요)
                         // 그래서 취소 시킬거에요
-                        int like_count = Integer.parseInt(post_response.getLike_count())-1;
-                        Log.i("정보태그", "변경 좋아요 수 : "+ like_count);
-                        holder.tv_like_count.setText(""+like_count);
+                        int like_count = Integer.parseInt(post_response.getLike_count()) - 1;
+                        Log.i("정보태그", "변경 좋아요 수 : " + like_count);
+                        holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
                         // TODO 좋아요 감소 api
                         ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
-                        call.enqueue(new Callback<String>()
-                        {
+                        call.enqueue(new Callback<String>() {
                             @Override
-                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                            {
-                                if (response.isSuccessful() && response.body() != null)
-                                {
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
                                     Log.e("좋아요 추가 데이터", response.body().toString());
                                     holder.iv_like_icon.setImageResource(R.drawable.ic_outline_favorite_border_24);
                                 }
                             }
 
                             @Override
-                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                            {
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                 Log.e("좋아요 추가 에러", t.getMessage());
                             }
                         });
@@ -326,27 +317,23 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                     } else {
                         // 위 if 에서 취소 해버렸어요. 근데 다시 좋아요 누를레요
                         int like_count = Integer.parseInt(post_response.getLike_count());
-                        Log.i("정보태그", "변경 좋아요 수 : "+ like_count);
-                        holder.tv_like_count.setText(""+like_count);
+                        Log.i("정보태그", "변경 좋아요 수 : " + like_count);
+                        holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
                         // TODO 좋아요 추가 api
                         ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
-                        call.enqueue(new Callback<String>()
-                        {
+                        call.enqueue(new Callback<String>() {
                             @Override
-                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                            {
-                                if (response.isSuccessful() && response.body() != null)
-                                {
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
                                     Log.e("좋아요 추가 데이터", response.body().toString());
                                     holder.iv_like_icon.setImageResource(R.drawable.ic_baseline_favorite_24);
                                 }
                             }
 
                             @Override
-                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                            {
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                 Log.e("좋아요 추가 에러", t.getMessage());
                             }
                         });
@@ -357,27 +344,25 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
-
     }
 
+
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return lists.size();
     }
 
-    public class PostViewHolder extends RecyclerView.ViewHolder
-    {
+    public class PostViewHolder extends RecyclerView.ViewHolder {
         Boolean like_check = false;
-        public LinearLayout ll_item_layout,layout_like;
+        public LinearLayout ll_item_layout, layout_like;
 //        ItemClickListener itemClickListener;
 
-        ImageView iv_media,iv_options,iv_like_icon,iv_reply_icon,iv_retweet_icon,iv_share_icon;
-        TextView tv_user_nick,tv_content,tv_like_count,tv_reply_count,tv_retweet_count,tv_time;
+        ImageView iv_media, iv_options, iv_like_icon, iv_reply_icon, iv_retweet_icon, iv_share_icon;
+        TextView tv_user_nick, tv_content, tv_like_count, tv_reply_count, tv_retweet_count, tv_time;
 
         CircleImageView iv_user_image;
-        public PostViewHolder(@NonNull View view)
-        {
+
+        public PostViewHolder(@NonNull View view) {
             super(view);
             ll_item_layout = view.findViewById(R.id.ll_item_layout);
             layout_like = view.findViewById(R.id.layout_like);

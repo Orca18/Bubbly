@@ -11,8 +11,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 public class Community_Create extends AppCompatActivity {
+    // 뒤로가기 시간
+    private long backKeyPressedTime = 0;
+    private Toast toast;
 
     Toolbar toolbar;
     LinearLayout done;
@@ -68,10 +72,34 @@ public class Community_Create extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
-                finish();
+                if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+                    backKeyPressedTime = System.currentTimeMillis();
+                    toast = Toast.makeText(this, "작성 중인거 있을 때, 질문", Toast.LENGTH_SHORT);
+                    toast.show();
+                } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+                    finish();
+                    toast.cancel();
+                }
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //뒤로가기 했을 때
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "작성 중인거 있을 때, 질문", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+            toast.cancel();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }

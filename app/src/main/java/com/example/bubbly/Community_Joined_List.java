@@ -51,6 +51,17 @@ public class Community_Joined_List extends AppCompatActivity {
         listeners();
     }
 
+
+
+
+
+
+
+
+
+
+
+
     private void listeners() {
         // 리사이클러뷰 새로고침 인식
         swipeRefreshLayout.setOnRefreshListener(

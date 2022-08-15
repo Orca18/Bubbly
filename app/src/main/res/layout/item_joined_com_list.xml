@@ -112,13 +112,12 @@
                 android:maxHeight="100dp"/>
 
             <Button
-                android:visibility="invisible"
                 android:id="@+id/joined_com_btn"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/blueblack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="원랜 가입버튼"/>
+                android:text="가입 신청"/>
 
 
 

@@ -28,6 +28,7 @@ import com.example.bubbly.model.Feed_Item;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
+import com.example.bubbly.utils.BottomSheetFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -83,7 +84,9 @@ public class MM_Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_a_home);
 
-
+        // 리사이클러뷰에 못넣어서.. 보관 (또는 삭제 예정)
+//        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(this);
+//        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
 
         // 리소스 ID 선언
         initiallize();
