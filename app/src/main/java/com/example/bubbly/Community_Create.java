@@ -154,19 +154,33 @@ public class Community_Create extends AppCompatActivity {
             file = prepareFilePart("image" + 0, imageList.get(0));
         }
 
+
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        Kim_ApiInterface createPost_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
-        Call<String> call = createPost_api.createCommunity(user_id, null, title.getText().toString(), null, "뭐야", file);
+        Kim_ApiInterface kim_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Call<String> call = kim_api.createCommunity(user_id, null, title.getText().toString(), null, "뭐야", file);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.e("게시글 생성", response.body().toString());
-//                    Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
-//                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                    startActivity(mIntent);
+
+                    // 성공 시, 참여 정보 또 저장 // TODO 생성한 커뮤니티 ID 가져와서 넣어야됨
+//                    Call<String> call2 = kim_api.createCommunityParicipant(user_id, "여기에!!!!!");
+//                    call2.enqueue(new Callback<String>() {
+//                        @Override
+//                        public void onResponse(Call<String> call, Response<String> response) {
+//
+//                            finish();
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<String> call, Throwable t) {
+//                            Toast.makeText(getApplicationContext(), "참여 정보 저장에 오류",Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+
                     finish();
-                    Toast.makeText(getApplicationContext(), "커뮤니티 생성 성공! 해당 커뮤 화면으로 이동", Toast.LENGTH_SHORT).show();
+
+//                    Toast.makeText(getApplicationContext(), "커뮤니티 생성 성공! TODO 해당 커뮤 화면으로 이동", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -175,8 +189,9 @@ public class Community_Create extends AppCompatActivity {
                 Log.e("게시글 생성 에러", t.getMessage());
             }
         });
-    }
 
+
+    }
 
 
     //파일 파트를 준비하는 매서드 (파트이름, 그리고 파일의 Uri)

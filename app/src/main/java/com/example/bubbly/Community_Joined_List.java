@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,10 +52,6 @@ public class Community_Joined_List extends AppCompatActivity {
     ImageView create_com;
 
 
-    TextView forTest;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +64,7 @@ public class Community_Joined_List extends AppCompatActivity {
         // 리스너
         listeners();
         // 리사이클러뷰 채우기
-        forTest();
+        getJoinedComList();
     }
 
 
@@ -116,7 +111,6 @@ public class Community_Joined_List extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.community_home_refresh);
         create_com = findViewById(R.id.create_com);
 
-        forTest = findViewById(R.id.forTest);
     }
 
 
@@ -170,7 +164,7 @@ public class Community_Joined_List extends AppCompatActivity {
 
 
     // TODO 커뮤니티 생성 완료 된건지 확인하고 삭제하기!
-    private void forTest() {
+    private void getJoinedComList() {
 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -186,8 +180,7 @@ public class Community_Joined_List extends AppCompatActivity {
 
 
         String user_id;
-//        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        user_id = "1"; // 로그인한 user_id값
+        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
         Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
         Call<List<Kim_JoinedCom_Response>> call = api.selectCommunityListUsingUserId(user_id);
         call.enqueue(new Callback<List<Kim_JoinedCom_Response>>()

@@ -64,7 +64,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
         
         holder.name.setText(response.getCommunity_name());
 //        holder.members.setText(response.getCommunity_membercount());
-        // TODO 멤버수 받아오기
+        // TODO 멤버수 받아오기 ↑
 //        holder.description.setText(response.getCommunity_desc());
 
 
@@ -77,7 +77,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(mContext, Community_Info.class);
-                mIntent.putExtra("comm_id","1");
+                mIntent.putExtra("comm_id",response.getCommunity_id());
                 mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
