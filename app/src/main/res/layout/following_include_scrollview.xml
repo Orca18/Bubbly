@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="60dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
     <!--   기존 탭 리사이클러뷰 안에 있던 것 이동함. -->
