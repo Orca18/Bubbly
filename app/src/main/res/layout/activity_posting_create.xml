@@ -40,13 +40,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <include layout="@layout/activity_posting_create_include"/>
+        <include layout="@layout/activity_posting_create_include" />
 
 
     </ScrollView>
-
-
-
 
     <View
         android:layout_width="match_parent"

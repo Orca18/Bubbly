@@ -19,12 +19,12 @@ import com.example.bubbly.model.MyCommunitiesList_Item;
 import java.util.List;
 
 
-public class MyCommunitiesList_Adapter extends RecyclerView.Adapter<MyCommunitiesList_Adapter.PostsViewHolder> {
+public class Unused_MyCommunitiesList_Adapter extends RecyclerView.Adapter<Unused_MyCommunitiesList_Adapter.PostsViewHolder> {
 
     Context mContext;
     List<MyCommunitiesList_Item> mData;
 
-    public MyCommunitiesList_Adapter(Context mContext, List<MyCommunitiesList_Item> mData) {
+    public Unused_MyCommunitiesList_Adapter(Context mContext, List<MyCommunitiesList_Item> mData) {
         this.mContext = mContext;
         this.mData = mData;
     }

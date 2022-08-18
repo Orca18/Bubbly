@@ -36,13 +36,21 @@
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/test_create_account.xml" value="0.11197916666666667" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/drawable/bg_circle.xml" value="0.235" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/drawable/bg_circle2.xml" value="0.235" />
-        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_community_info.xml" value="0.25" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/drawable/gradient_title.xml" value="0.212" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/drawable/ic_outline_feedback_24.xml" value="0.212" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/drawable/ic_outline_group_24.xml" value="0.212" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_community_info.xml" value="0.22" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_community_info2.xml" value="0.23697916666666666" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_community_info_include.xml" value="0.25" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_community_mainpage.xml" value="0.23697916666666666" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_community_mainpage_include.xml" value="0.23697916666666666" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_community_member.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_create_community.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_image_view_full_screen.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_posting_create.xml" value="0.2994791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/activity_posting_create_include.xml" value="0.2994791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/bottom_sheet_dialog_layout.xml" value="0.23697916666666666" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_com_member_list.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_communitylist.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_feed_basic.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/item_follower.xml" value="0.23324275362318841" />
@@ -54,15 +62,17 @@
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/main_d_profile_include.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/main_d_profile_include_frame.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/navi_header.xml" value="0.23324275362318841" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/partial_line.xml" value="0.23697916666666666" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/post_details.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/post_details_include.xml" value="0.22" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/setting_option.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_community_home.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_community_home2.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_coummunity_include_scrollview.xml" value="0.22083333333333333" />
-        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_coummunity_include_scrollview_2.xml" value="0.33" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/ss_coummunity_include_scrollview_2.xml" value="0.25" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/sub_profile.xml" value="0.33" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/sub_profile_include.xml" value="0.25" />
+        <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/layout/title_gradient.xml" value="0.3609375" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/feed_menu.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/follower_menu.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/luke0/Desktop/Bubbly/app/src/main/res/menu/main_liist_menu.xml" value="0.19895833333333332" />
@@ -215,7 +225,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
