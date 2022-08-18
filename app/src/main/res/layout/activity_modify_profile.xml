@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/top"
-        app:srcCompat="@drawable/profile" />
+        android:src="@drawable/profile" />
 
     <ImageButton
         android:id="@+id/bt_change_user_image"
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@+id/top" />
 
     <EditText
-        android:id="@+id/et_id_modify"
+        android:id="@+id/et_nick_modify"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginTop="30dp"
@@ -77,16 +77,15 @@
         app:layout_constraintTop_toBottomOf="@+id/iv_user_image" />
 
     <TextView
-        android:id="@+id/tv_id_error"
+        android:id="@+id/tv_nick_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="프로필 사진과 아이디을 입력해주세요."
+        android:text="닉네임"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_id_modify" />
-
+        app:layout_constraintTop_toBottomOf="@+id/et_nick_modify" />
 
     <EditText
         android:id="@+id/et_self_info_modify"
@@ -108,7 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="자기소개를 입력해주세요.(100자 이내)"
+        android:text="자기소개 (100자 이내)"
         android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +117,7 @@
         android:id="@+id/bt_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
         android:backgroundTint="@color/black"

@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_community_info.xml" value="0.3333333333333333" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_follower.xml" value="0.1" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_following.xml" value="0.22" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_main_ewallet.xml" value="0.11197916666666667" />
-        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_modify_profile.xml" value="0.1" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_modify_profile.xml" value="0.14666666666666667" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_posting_create.xml" value="0.1" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/activity_ss_search.xml" value="0.11197916666666667" />
-        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/follower_include.xml" value="0.10213675213675213" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/follower_include.xml" value="0.12" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/follower_include_scrollview.xml" value="0.10213675213675213" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/following_include.xml" value="0.16666666666666666" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/following_include_scrollview.xml" value="0.1" />
@@ -20,6 +22,10 @@
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/item_joined_com_list.xml" value="0.1" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/item_message_basic.xml" value="0.22" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/item_post.xml" value="0.16666666666666666" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ll_findid_a.xml" value="0.26253687315634217" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ll_findid_b.xml" value="0.22" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ll_findid_c.xml" value="0.22" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ll_findid_d.xml" value="0.2728613569321534" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/login.xml" value="0.22" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/main_d_profile.xml" value="0.2282051282051282" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/main_d_profile_include.xml" value="0.2282051282051282" />
@@ -31,6 +37,13 @@
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/register_a_privacy_policy.xml" value="0.22" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/register_a_terms_to_use.xml" value="0.1125" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/register_b.xml" value="0.22" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/register_c.xml" value="0.16666666666666666" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/setting_option.xml" value="0.22" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ss_community_home.xml" value="0.16666666666666666" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ss_setting_myaccount.xml" value="0.14666666666666667" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ss_setting_myaccount_accountinfo.xml" value="0.1" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ss_setting_myaccount_changeid.xml" value="0.22" />
+        <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/ss_setting_myaccount_confirmpw.xml" value="0.1" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/sub_profile.xml" value="0.22" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/sub_profile_include.xml" value="0.22" />
         <entry key="..\:/Projects/dapp/Bubbly/app/src/main/res/layout/test_create_account.xml" value="0.11197916666666667" />
@@ -215,7 +228,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

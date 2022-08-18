@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_registerB"
+        android:id="@+id/toolbar_findID_D"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundTint="@color/white">
@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/spoqa_bold"
-            android:text="아이디/비밀번호 설정"
+            android:text="비밀번호 변경"
             android:textColor="@color/black"
             android:textSize="20dp" />
 
@@ -32,54 +32,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="26dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:fontFamily="@font/spoqa_bold"
-            android:text="아이디"
-            android:textSize="18dp"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:textSize="12dp"
-            android:fontFamily="@font/spoqa_medium"
-            android:text="\u0040사용자 아이디는 고유한 나만의 아이디입니다.\n나중에 언제든 바꿀 수 있습니다"/>
-
-
-        <EditText
-            android:id="@+id/et_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/edittext_radius"
-            android:hint=" 아이디 (띄어쓰기 없는 영숫자 조합)"
-            android:inputType="text"
-            android:maxLength="16"
-            android:maxLines="1"
-            android:padding="10dp"
-            android:singleLine="true"
-            android:textCursorDrawable="@drawable/rss_et_cursor"
-            android:textSize="14dp" />
-
-
-        <TextView
-            android:id="@+id/tv_id_check"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:layout_marginHorizontal="50dp"
-            android:textSize="14dp"
-            android:text=""/>
 
 
         <View
@@ -98,11 +50,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginHorizontal="40dp">
 
             <EditText
-                android:id="@+id/et_password"
+                android:id="@+id/et_password_findID"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
@@ -118,31 +70,22 @@
                 android:textSize="14dp">
             </EditText>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginHorizontal="40dp">
-
             <EditText
-                android:id="@+id/et_password_check"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
+                android:id="@+id/et_password_check_findID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
                 android:background="@drawable/edittext_radius"
+                android:enabled="false"
                 android:hint=" 비밀번호 확인"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:enabled="false"
                 android:textCursorDrawable="@drawable/rss_et_cursor"
-                android:textSize="14dp">
-            </EditText>
+                android:textSize="14dp"></EditText>
 
         </LinearLayout>
 
@@ -153,18 +96,13 @@
             android:layout_marginHorizontal="50dp">
 
             <TextView
-                android:id="@+id/tv_pw_check"
+                android:id="@+id/tv_pw_check_findID"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:textSize="14dp"
-                android:text=""/>
-
+                android:textColor="#FF00"
+                android:textSize="14dp" />
         </LinearLayout>
-
-
-
-
 
     </LinearLayout>
 
@@ -172,14 +110,14 @@
 
 
     <LinearLayout
-        android:id="@+id/done"
+        android:id="@+id/bt_changePW_findID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:background="#eee">
 
         <TextView
-            android:id="@+id/tv_done"
+            android:id="@+id/tv_changePW_findID"
             android:layout_marginVertical="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
