@@ -135,7 +135,7 @@ public class MM_Message extends AppCompatActivity {
         // 리사이클러뷰 데이터 가져오기
         loadrecycler();
         // 채팅서비스와 연결한다.
-        //connectToService();
+        connectToService();
     }
 
 
