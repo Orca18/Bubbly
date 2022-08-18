@@ -118,7 +118,7 @@
                 android:backgroundTint="@color/blueblack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="가입 신청"/>
+                android:text="가입함"/>
 
 
 
