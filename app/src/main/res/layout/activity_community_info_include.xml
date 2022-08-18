@@ -6,89 +6,179 @@
     android:background="@color/gray"
     android:orientation="vertical">
 
-    <ImageView
+    <RelativeLayout
+        android:id="@+id/com_info_maintitle"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="#abc" />
+        android:layout_height="180dp">
 
-    <LinearLayout
-        android:padding="6dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:orientation="vertical">
 
-        <TextView
-            android:layout_marginHorizontal="4dp"
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/spoqa_bold"
-            android:paddingHorizontal="6dp"
-            android:text="팀노바 버블리"
-            android:textColor="@color/black"
-            android:textSize="24dp" />
-
-        <TextView
-            android:layout_marginHorizontal="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="6dp"
-            android:text="멤버? 소개? 상세보기 펼치기?" />
+            android:layout_height="180dp"
+            android:background="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:background="@color/white">
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/gradient_title"
+            android:orientation="vertical"
+            android:paddingVertical="6dp">
 
-            <Button
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginHorizontal="16dp"
-                android:layout_weight="1"
-                android:backgroundTint="#cce"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="@font/spoqa_bold"
-                android:text="가입함/가입가능" />
+                android:paddingHorizontal="6dp"
+                android:text="팀노바 버블리"
+                android:textColor="@color/white"
+                android:textSize="24dp" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginHorizontal="16dp"
-                android:layout_weight="1"
-                android:backgroundTint="#111"
-                android:fontFamily="@font/spoqa_bold"
-                android:text="NFTs"
-                android:textAllCaps="false"
-                android:textColor="@color/white" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:fontFamily="@font/spoqa_medium"
+                android:paddingHorizontal="6dp"
+                android:text="그룹 설정"
+                android:textColor="@color/white"
+                android:textSize="15dp" />
+
+
         </LinearLayout>
+
+        <ImageView
+            android:layout_marginBottom="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_chevron_right_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            app:tint="@color/white" />
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/com_info_join"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_check_24"/>
+
+            <TextView
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="가입함"/>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/com_info_member"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_outline_group_24"/>
+
+            <TextView
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="멤버"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/com_info_notice"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_outline_feedback_24"/>
+
+            <TextView
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="공지"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/com_info_nfts"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_outline_local_activity_24"/>
+
+            <TextView
+                android:layout_gravity="center"
+                android:fontFamily="@font/spoqa_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NFTs"/>
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
+
 <LinearLayout
+    android:id="@+id/community_info_posting"
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp">
+    android:layout_marginBottom="4dp"
+    android:paddingHorizontal="10dp">
 
 
-    <LinearLayout
-        android:id="@+id/community_info_posting"
-        android:background="?android:attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            app:civ_border_overlay="true"
+            android:src="@color/white"
             android:layout_width="46dp"
             android:layout_height="46dp"
             android:layout_marginVertical="10dp"
-            android:src="@drawable/google"
-            app:civ_border_color="#ddd"
-            app:civ_border_width="1dp" />
+            app:civ_border_color="@color/gray"
+            app:civ_border_width="0.6dp" />
 
         <View
             android:layout_width="10dp"
@@ -109,7 +199,6 @@
 
         </LinearLayout>
 
-    </LinearLayout>
 </LinearLayout>
 
 

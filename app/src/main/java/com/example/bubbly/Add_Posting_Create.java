@@ -93,6 +93,7 @@ public class Add_Posting_Create extends AppCompatActivity {
         category = intent.getStringExtra("com_id");
 
 
+
         if (post_content != null) {
             et_content.setText(post_content);
         }
@@ -240,6 +241,7 @@ public class Add_Posting_Create extends AppCompatActivity {
             }
         }
         RequestBody size = createPartFromString("" + parts.size());
+
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
         ApiInterface createPost_api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", "0", "1");
@@ -323,6 +325,7 @@ public class Add_Posting_Create extends AppCompatActivity {
                 }
             });
 
+    // 동영상 가져오기
     ActivityResultLauncher<Intent> launcher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -349,6 +352,7 @@ public class Add_Posting_Create extends AppCompatActivity {
                 }
             });
 
+    // 동영상 썸네일 제작
     public static Bitmap createThumbnail(Context activity, String path) {
         MediaMetadataRetriever mediaMetadataRetriever = null;
         Bitmap bitmap = null;
@@ -378,7 +382,7 @@ public class Add_Posting_Create extends AppCompatActivity {
     }
 
 
-    //파일 파트를 준비하는 매서드 (파트이름, 그리고 파일의 Uri)
+    // 파일 파트를 준비하는 매서드 (파트이름, 그리고 파일의 Uri)
     @NonNull
     private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
         // use the FileUtils to get the actual file by uri uri를 통해서 실제 파일을 받아온다.

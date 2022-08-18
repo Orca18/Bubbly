@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Community_Memberlist"
+            android:exported="false" />
+        <activity
             android:name=".Community_Create"
             android:exported="false" />
         <activity

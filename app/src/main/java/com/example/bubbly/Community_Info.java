@@ -3,10 +3,8 @@ package com.example.bubbly;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.retrofit.ApiClient;
@@ -45,8 +44,14 @@ public class Community_Info extends AppCompatActivity {
 
     private Parcelable recyclerViewState;
     
-    LinearLayout posting;
 
+
+    // 대문 이미지 => 정보 (소개+공지)
+    // LL : 가입 여부 표시 / 멤버 목록 액티비티 / 정보 - 소개 = 공지 / 게시글 작성 그룹 아이디 인텐트 / NFTs = nft 상점?
+    RelativeLayout rl_image;
+    LinearLayout ll_join, ll_member, ll_notice, ll_nfts;
+    // 게시글 생성
+    LinearLayout posting;
 
 
     @Override
@@ -58,12 +63,87 @@ public class Community_Info extends AppCompatActivity {
         com_id = intent.getStringExtra("com_id");
 
         initialize();
-        clickable();
+        listeners();
 
         selectPost_Followee_Communit();
     }
 
-    private void clickable() {
+
+    private void initialize() {
+        // 툴바
+        toolbar = findViewById(R.id.com_info_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // 게시글
+        recyclerView = findViewById(R.id.com_info_recyclerview);
+        // 나머지
+        rl_image = findViewById(R.id.com_info_maintitle);
+        ll_join = findViewById(R.id.com_info_join);
+        ll_member = findViewById(R.id.com_info_member);
+        ll_notice = findViewById(R.id.com_info_notice);
+        ll_nfts = findViewById(R.id.com_info_nfts);
+        posting = findViewById(R.id.community_info_posting);
+
+    }
+
+
+
+
+
+
+
+
+    private void listeners() {
+        
+        rl_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 커뮤니티 상세 정보 페이지
+//                Intent mIntent = new Intent(getApplicationContext(), Community_Memberlist.class);
+//                mIntent.putExtra("com_id","커뮤아이디");
+//                startActivity(mIntent);
+            }
+        });
+        
+        ll_member.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경
+            }
+        });
+
+        // 멤버 목록 보여주기
+        ll_member.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(getApplicationContext(), Community_Memberlist.class);
+                mIntent.putExtra("com_id","커뮤아이디");
+                startActivity(mIntent);
+            }
+        });
+
+        // 공지 보여주기
+        ll_notice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(getApplicationContext(), Community_Memberlist.class);
+                mIntent.putExtra("com_id","커뮤아이디");
+                startActivity(mIntent);
+            }
+        });
+        
+        // NFT 목록 보여주기
+        ll_nfts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경...
+                // 어떻게 해당 커뮤니티에 해당하는 nft를 가져올지 고민하기
+            }
+        });
+        
+        
+        // 현재 커뮤니티에 게시글 작성하기
         posting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,19 +154,7 @@ public class Community_Info extends AppCompatActivity {
         });
     }
 
-    private void initialize() {
-        // 툴바
-        toolbar = findViewById(R.id.com_info_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        posting = findViewById(R.id.community_info_posting);
-
-
-
-        recyclerView = findViewById(R.id.com_info_recyclerview);
-    }
 
 
     private void selectPost_Followee_Communit(){
