@@ -32,7 +32,7 @@ public interface Kim_ApiInterface {
             @Query("user_id") String user_id // 로그인한 user_id 값
     );
 
-    // 3. 커뮤니티 참여자 정보 저장 TODO 커뮤 생성 시, 커뮤 ID 다시 받아와서 만들어야되려나???
+    // 3. 커뮤니티 참여자 정보 저장 TODO 커뮤 생성 시, 커뮤 ID 다시 받아와서 만들어야되려나??? 다시
     @FormUrlEncoded
     @POST("community/createCommunityParicipant")
     Call<String> createCommunityParicipant(
