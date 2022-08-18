@@ -78,10 +78,6 @@ public class MM_Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_d_profile);
 
-        // 유저 아이디 uid 받음
-//        Bundle extras = getIntent().getExtras();
-//        uid = extras.getString("uid");
-
         // 리소스 ID 선언
         initialize();
         // 탭 레이아웃
@@ -93,9 +89,22 @@ public class MM_Profile extends AppCompatActivity {
         // 내비 터치
         NaviTouch();
 
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        System.out.println("스타트");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        System.out.println("리줌");
         //프로필 데이터 표시
         setProfileData();
-
     }
 
     private void tabInit() {
@@ -421,8 +430,8 @@ public class MM_Profile extends AppCompatActivity {
         tv_follower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent mIntent = new Intent(getApplicationContext(), Follower.class);
-//                startActivity(mIntent);
+                Intent mIntent = new Intent(getApplicationContext(), Follower.class);
+                startActivity(mIntent);
             }
         });
 
@@ -431,9 +440,9 @@ public class MM_Profile extends AppCompatActivity {
         bt_modify_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mIntent = new Intent(getApplicationContext(), ModifyProfile.class);
-                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(mIntent);
+//                Intent mIntent = new Intent(getApplicationContext(), ModifyProfile.class);
+//                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                startActivity(mIntent);
             }
         });
 

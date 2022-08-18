@@ -14,10 +14,15 @@ public class follower_Response {
     @Expose
     @SerializedName("profile_file_name") private String profile_file_name;
 
-    public follower_Response(String follower_id, String nick_name, String profile_file_name) {
+    @Expose
+    @SerializedName("login_id") private String login_id;
+
+
+    public follower_Response(String follower_id, String nick_name, String profile_file_name, String login_id) {
         this.follower_id = follower_id;
         this.nick_name = nick_name;
         this.profile_file_name = profile_file_name;
+        this.login_id = login_id;
     }
 
 
@@ -43,5 +48,13 @@ public class follower_Response {
 
     public void setProfile_file_name(String profile_file_name) {
         this.profile_file_name = profile_file_name;
+    }
+
+    public String getLogin_id() {
+        return login_id;
+    }
+
+    public void setLogin_id(String login_id) {
+        this.login_id = login_id;
     }
 }

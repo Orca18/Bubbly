@@ -36,7 +36,9 @@ import com.karumi.dexter.listener.single.PermissionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import io.swagger.annotations.Api;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -49,7 +51,7 @@ public class ModifyProfile extends AppCompatActivity {
 
     ImageButton bt_change_user_image;
     ImageView iv_back,iv_user_image;
-    EditText et_id_modify,et_self_info_modify;
+    EditText et_nick_modify, et_self_info_modify;
     Button bt_add;
 
 
@@ -66,7 +68,7 @@ public class ModifyProfile extends AppCompatActivity {
         iv_back = findViewById(R.id.iv_back);
         bt_change_user_image = findViewById(R.id.bt_change_user_image);
         iv_user_image = findViewById(R.id.iv_user_image);
-        et_id_modify = findViewById(R.id.et_id_modify);
+        et_nick_modify = findViewById(R.id.et_nick_modify);
         et_self_info_modify = findViewById(R.id.et_self_info_modify);
         bt_add = findViewById(R.id.bt_add);
 
@@ -99,54 +101,73 @@ public class ModifyProfile extends AppCompatActivity {
     } // onCreate 닫는곳
 
     public void updateUserInfo(){
-        List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
-        //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
-        if (imageList != null) {
-            for (int i = 0; i < imageList.size(); i++) {
-                //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
-                parts.add(prepareFilePart("image"+i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+        //login id 정규식 확인
+//        String idRex = "^([A-Za-z0-9]*)$";  //영숫자만 가능, 띄어쓰기 불가
+//        Pattern pattern = Pattern.compile(idRex);
+            //자기소개 100자 이내 확인
+        if(et_nick_modify.getText().toString().length()<=100){
+            List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
+            //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
+            if (imageList != null) {
+                for (int i = 0; i < imageList.size(); i++) {
+                    //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
+                    parts.add(prepareFilePart("image"+i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+                }
             }
-        }
-        RequestBody size = createPartFromString(""+parts.size());
-
+            RequestBody size = createPartFromString(""+parts.size());
 //        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
 //        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        String login_id = UserInfo.login_id;
-        String email_addr = UserInfo.email_addr;
-        String phone_num = UserInfo.phone_num;
-        String nick_name = UserInfo.user_nick;
-        String profile_file_name = UserInfo.profile_file_name;
-        String user_id = UserInfo.user_id;
-        String self_info = UserInfo.self_info;
+            //변경사항 static에 저장
+            UserInfo.user_nick = et_nick_modify.getText().toString();
+            UserInfo.self_info = et_self_info_modify.getText().toString();
 
-        ApiInterface updateUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call = updateUserInfo_api.updateUserInfo(login_id, email_addr, phone_num, nick_name, profile_file_name,parts, user_id, self_info);
-        call.enqueue(new Callback<String>()
-        {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+            //api 전송 변수 설정
+            String login_id = UserInfo.login_id;
+            String email_addr = UserInfo.email_addr;
+            String phone_num = UserInfo.phone_num;
+            String nick_name = UserInfo.user_nick;
+            String user_id = UserInfo.user_id;
+            String self_info = UserInfo.self_info;
+
+            ApiInterface updateUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
+            Call<String> call = updateUserInfo_api.updateUserInfo(login_id, email_addr, phone_num, nick_name, "test",parts, user_id, self_info);
+            call.enqueue(new Callback<String>()
             {
-                if (response.isSuccessful() && response.body() != null)
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
                 {
-                    Toast.makeText(getApplicationContext(), "회원 정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                    Intent mIntent = new Intent(getApplicationContext(), MM_Profile.class);
-                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(mIntent);
-                }
-            }
+                    if (response.isSuccessful() && response.body() != null)
+                    {
+                        System.out.println(response.body());
+                        if(response.body().equals("success")){
+                            callbackToUpdateUserInfo(updateUserInfo_api, user_id, new callback() {
+                                @Override
+                                public void updateUserInfo() {
+                                    Toast.makeText(getApplicationContext(), "회원 정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Intent mIntent = new Intent(getApplicationContext(), MM_Profile.class);
+                                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(mIntent);
+                                }
+                            });
+                        }else{
 
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-            {
-                Log.e("로그인 에러", t.getMessage());
-            }
-        });
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                {
+                    Log.e("로그인 에러", t.getMessage());
+                }
+            });
+        }else{
+            Toast.makeText(getApplicationContext(), "자기소개 100자 이내로 작성해 주세요.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     //사용자 프로필 정보 가져와서 표시하기
     public void selectUserInfo(){
-
         //이미지. 닉네임, id, 자기소개, 팔로잉, 팔로워
         if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
             Glide.with(ModifyProfile.this)
@@ -156,52 +177,16 @@ public class ModifyProfile extends AppCompatActivity {
         }else{
             //아무런 처리하지 않음. 레이아웃에 설정된 default 값 표시
         }
-
         if(UserInfo.user_nick!=null && !UserInfo.user_nick.equals("")){
-            et_id_modify.setText(UserInfo.user_nick);
+            et_nick_modify.setText(UserInfo.user_nick);
         }else{
-            et_id_modify.setText(UserInfo.login_id);
+            et_nick_modify.setText(UserInfo.login_id);
         }
-
-
         if(UserInfo.self_info!=null && !UserInfo.self_info.equals("")){
             et_self_info_modify.setText(UserInfo.self_info);
         }else{
             //아무런 처리하지 않음. 레이아웃에 설정된 default 값 표시
         }
-
-//        Log.e("dd","dddd");
-//        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
-//        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-//        ApiInterface selectUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
-//        Call<List<user_Response>> call = selectUserInfo_api.selectUserInfo(UserInfo.user_id);
-//        call.enqueue(new Callback<List<user_Response>>()
-//        {
-//            @Override
-//            public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response)
-//            {
-//                if (response.isSuccessful() && response.body() != null)
-//                {
-//                    List<user_Response> responseResult = response.body();
-//                    Log.e("dd",responseResult.get(0).getLogin_id());
-//                    et_id_modify.setText(responseResult.get(0).getLogin_id());
-//                    getEmail_addr = responseResult.get(0).getEmail_addr();
-//                    getLogin_id = responseResult.get(0).getLogin_id();
-//                    getPhone_num = responseResult.get(0).getPhone_num();
-//
-//                    Glide.with(ModifyProfile.this)
-//                            .load("https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(0).getProfile_file_name())
-//                            .circleCrop()
-//                            .into(iv_user_image);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
-//            {
-//                Log.e("에러", t.getMessage());
-//            }
-//        });
     }
 
     public void profileImage(){
@@ -241,27 +226,40 @@ public class ModifyProfile extends AppCompatActivity {
                                 .into(iv_user_image);
                         imageList.add(uri);
 
-                        //이미지 파일 객체 파트 생성
-                        MultipartBody.Part part = prepareFilePart("profile_file_name",uri);
-                        RequestBody user_id  = createPartFromString(UserInfo.user_id);
+
+                        List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
+                        //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
+                        if (imageList != null) {
+                            for (int i = 0; i < imageList.size(); i++) {
+                                //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
+                                parts.add(prepareFilePart("image"+i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+                                System.out.println(""+parts.get(i));
+                            }
+                        }
+
                         //updateUserProfile http 요청
                         ApiInterface selectUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
-                        Call<String> call = selectUserInfo_api.updateUserProfile(part,user_id,null);
+                        Call<String> call = selectUserInfo_api.updateUserProfile(parts,UserInfo.user_id);
                         call.enqueue(new Callback<String>()
                         {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
                             {
+                                System.out.println(response.body());
                                 if (response.isSuccessful() && response.body() != null)
                                 {
                                     if(response.body().equals("success")){
-                                        Toast.makeText(getApplicationContext(), "이미지가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                        callbackToUpdateUserInfo(selectUserInfo_api, UserInfo.user_id, new callback() {
+                                            @Override
+                                            public void updateUserInfo() {
+                                                Toast.makeText(getApplicationContext(), "이미지가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                                     }else{
                                         Toast.makeText(getApplicationContext(), "이미지 변경에 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
-
                             @Override
                             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
                             {
@@ -290,6 +288,45 @@ public class ModifyProfile extends AppCompatActivity {
     @NonNull
     private RequestBody createPartFromString(String descriptionString) {
         return RequestBody.create(MediaType.parse(FileUtils.MIME_TYPE_TEXT), descriptionString);
+    }
+
+    private void callbackToUpdateUserInfo(ApiInterface api, String user_id, callback callback){
+        Call<List<user_Response>> call_userInfo = api.selectUserInfo(user_id);
+        call_userInfo.enqueue(new Callback<List<user_Response>>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response)
+            {
+                System.out.println(response.body());
+                //수신한 회원정보를 스태틱으로 저장한다.
+                List<user_Response> responseResult = response.body();
+                UserInfo.user_id = responseResult.get(0).getUser_id();
+                UserInfo.login_id = responseResult.get(0).getLogin_id();
+                UserInfo.email_addr = responseResult.get(0).getEmail_addr();
+                UserInfo.novaland_account_addr = responseResult.get(0).getNovaland_account_addr();
+                UserInfo.phone_num = responseResult.get(0).getPhone_num();
+                UserInfo.user_nick = responseResult.get(0).getUser_nick();
+                UserInfo.self_info = responseResult.get(0).getSelf_info();
+                if(responseResult.get(0).getProfile_file_name()!=null && !responseResult.get(0).getProfile_file_name().equals("")){
+                    UserInfo.profile_file_name = "https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(0).getProfile_file_name();
+                }
+                callback.updateUserInfo();
+                //프로필 변경 페이지로 이동
+//                Toast.makeText(getApplicationContext(), "회원 정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
+//                Intent mIntent = new Intent(getApplicationContext(), MM_Profile.class);
+//                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                startActivity(mIntent);
+            }
+            @Override
+            public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
+            {
+                Log.e("에러", t.getMessage());
+            }
+        });
+    }
+
+    private interface callback{
+        void updateUserInfo();
     }
 
 }

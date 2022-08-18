@@ -2,6 +2,8 @@ package com.example.bubbly;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,6 +25,8 @@ import com.example.bubbly.retrofit.user_Response;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -32,7 +36,7 @@ import retrofit2.Response;
 public class LL_Login extends AppCompatActivity {
 
     LinearLayout bt_login;
-    TextView tv_register;
+    TextView tv_register, reset_password;
     EditText et_login_id,et_login_pw;
 
     SharedPreferences preferences;
@@ -50,6 +54,7 @@ public class LL_Login extends AppCompatActivity {
         tv_register = findViewById(R.id.tv_register); //회원가입 버튼
         et_login_id = findViewById(R.id.et_login_id);
         et_login_pw = findViewById(R.id.et_login_pw);
+        reset_password = findViewById(R.id.reset_password); //계정 찾기
 
         preferences = getSharedPreferences("novarand",MODE_PRIVATE);
         editor = preferences.edit();
@@ -90,6 +95,20 @@ public class LL_Login extends AppCompatActivity {
                                         AccessAndRefreshToken.accessToken = json.getString("accessToken");
                                         AccessAndRefreshToken.refreshToken = json.getString("refreshToken");
                                         int user_id = json.getInt("userId");
+
+                                        //암호화 쉐어드 프리퍼런스 복호화해 주소와 니모니 불러온다 (공동작업 위해 복호화 주석처리 이후 다시 주석 해제 예정)
+//                                        MasterKey masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+//                                                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+//                                                .build();
+//
+//                                        SharedPreferences sharedPreferences = EncryptedSharedPreferences
+//                                                .create(getApplicationContext(),
+//                                                        "account",
+//                                                        masterkey,
+//                                                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//                                                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+//                                        UserInfo.mnemonic = sharedPreferences.getString("mnemonic","");
+
                                         //회원정보를 요청한다.
                                         Call<List<user_Response>> call_userInfo = login_api.selectUserInfo(""+user_id);
                                         call_userInfo.enqueue(new Callback<List<user_Response>>()
@@ -121,6 +140,11 @@ public class LL_Login extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
+//                                    catch (GeneralSecurityException e) {
+//                                        e.printStackTrace();
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
 
                                     //기존에 남아있던 민규님 코드. 이제 static으로 변환했으므로 불필요하나, 최종 수정단계에서 한꺼번에 수정할 예정.
                                     String[] split = response.body().toString().split(":");
@@ -150,6 +174,13 @@ public class LL_Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LL_Login.this, LL_Register_A.class));
+            }
+        });
+
+        reset_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LL_Login.this, LL_FindID_A.class));
             }
         });
 

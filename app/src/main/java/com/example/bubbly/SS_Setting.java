@@ -1,5 +1,6 @@
 package com.example.bubbly;
 
+import android.content.Intent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -47,7 +48,9 @@ public class SS_Setting extends AppCompatActivity {
         myaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toasting();
+                Intent mIntent = new Intent(getApplicationContext(), SS_Setting_MyAccount.class);
+                startActivity(mIntent);
+
             }
         });
 

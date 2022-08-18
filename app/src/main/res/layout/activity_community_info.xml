@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,9 +11,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundTint="@color/white">
-
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/com_info_comname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ngbold"
+            android:text="팀노바 버블리"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
     </androidx.appcompat.widget.Toolbar>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ddd"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -26,7 +37,5 @@
 
 
     </androidx.core.widget.NestedScrollView>
-
-
 
 </LinearLayout>

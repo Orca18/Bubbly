@@ -45,6 +45,12 @@ public interface ApiInterface {
     @GET("userinfo/selectIsExistingId")
     Call<String> selectIsExistingId(@Query("login_id") String login_id);
 
+    // 아이디 변경
+    @FormUrlEncoded
+    @POST("userinfo/changeLoginId")
+    Call<String> changeLoginId(@Field("changing_login_id") String changing_login_id,
+                                @Field("user_id") String user_id);
+
     // 회원정보 저장 api
     @FormUrlEncoded
     @POST("userinfo/createUserInfo")
@@ -71,15 +77,36 @@ public interface ApiInterface {
     // 프로필 이미지 업데이트
     @Multipart
     @POST("userinfo/updateUserProfile")
-    Call<String> updateUserProfile(@Part MultipartBody.Part file,
-                                   @Part("user_id") RequestBody user_id,
-                                   @Part("profile_file_name") RequestBody profile_file_name);
+    Call<String> updateUserProfile(@Part List<MultipartBody.Part> files,
+                                   @Part("user_id") String user_id);
 
     // 회원정보 조회 api
     @GET("userinfo/selectUserInfo")
     Call<List<user_Response>> selectUserInfo(@Query("user_id") String user_id);
 
-    // todo 회원정보와 관련된 api (끝 지점)
+
+    //아이디 찾기를 위해 휴대폰 인증번호 전송
+    @FormUrlEncoded
+    @POST("userinfo/sendPhoneCertificationNumForFind")
+    Call<String> sendPhoneCertificationNumForFind(@Field("phone_num") String phone_num);
+
+    //아이디 찾기를 위한 휴대폰 인증번호 검증
+    @GET("userinfo/verifyPhoneNumAndGetLoginId")
+    Call<String> verifyPhoneNumAndGetLoginId(@Query("phone_num") String phone_num,
+                                             @Query("certification_num") String certification_num);
+
+    //비밀번호 변경
+    @FormUrlEncoded
+    @POST("userinfo/modifyPassword")
+    Call<String> modifyPassword(@Field("user_id") String user_id,
+                                @Field("modify_pw") String modify_pw);
+
+    //사용자 id로 블록체인 계정 정보 조회
+    @GET("userinfo/selectAddrUsingUserId")
+    Call<String> selectAddrUsingUserId(@Query("user_id") String user_id);
+
+
+    // todo 회정보와 관련된 api (끝 지점)
 
 
 

@@ -35,13 +35,19 @@
             android:name=".ChatMemberSelect"
             android:exported="false" />
         <activity
+            android:name=".Community_Info"
+            android:exported="false" />
+        <activity
+            android:name=".Community_Memberlist"
+            android:exported="false" />
+        <activity
             android:name=".Community_Create"
             android:exported="false" />
         <activity
             android:name=".ImageView_FullScreen"
             android:exported="false" />
         <activity
-            android:name=".Community_Info"
+            android:name=".Community_MainPage"
             android:exported="false" />
         <activity
             android:name=".ReplyModify"
@@ -54,6 +60,9 @@
             android:exported="false" />
         <activity
             android:name=".Following"
+            android:exported="false" />
+        <activity
+            android:name=".Follower"
             android:exported="false" />
         <activity
             android:name=".test_CreateAccount"
@@ -84,6 +93,21 @@
             android:name=".SS_Setting"
             android:exported="false" />
         <activity
+            android:name=".SS_Setting_MyAccount"
+            android:exported="false" />
+        <activity
+            android:name=".SS_Setting_MyAccount_AccountInfo"
+            android:exported="false" />
+        <activity
+            android:name=".SS_Setting_MyAccount_ConfirmPW"
+            android:exported="false" />
+        <activity
+            android:name=".SS_Setting_MyAccount_ChangeID"
+            android:exported="false" />
+        <activity
+            android:name=".SS_Setting_MyAccount_ChangePW"
+            android:exported="false" />
+        <activity
             android:name=".ChattingRoom"
             android:exported="false" />
         <activity
@@ -95,11 +119,30 @@
         <activity
             android:name=".Option_Notice_List"
             android:exported="false" />
+
         <activity
             android:name=".LL_Register_B"
+            android:exported="false">
+
+        </activity>
+
+        <activity
+            android:name=".LL_Register_C"
             android:exported="false" />
         <activity
             android:name=".LL_Login"
+            android:exported="false" />
+        <activity
+            android:name=".LL_FindID_A"
+            android:exported="false" />
+        <activity
+            android:name=".LL_FindID_B"
+            android:exported="false" />
+        <activity
+            android:name=".LL_FindID_C"
+            android:exported="false" />
+        <activity
+            android:name=".LL_FindID_D"
             android:exported="false" />
         <activity
             android:name=".LL_Splash"

@@ -55,11 +55,8 @@ public class MM_Home extends AppCompatActivity {
 
     ProgressBar progressBar;
 
-    private Feed_Adapter adapter;
-    private List<Feed_Item> postsList;
-    //////////////////////////////////////////////
     Post_Adapter post_adapter;
-//    Post_Adapter.ItemClickListener itemClickListener;
+    //    Post_Adapter.ItemClickListener itemClickListener;
     ArrayList<post_Response> postList;
     LinearLayoutManager linearLayoutManager;
 
@@ -115,7 +112,6 @@ public class MM_Home extends AppCompatActivity {
         selectPost_Followee_Communit(); // 나와 팔로위, 속한 커뮤니티의 게시물 조회 api
 
     }
-
 
 
     // ========================================================
@@ -216,7 +212,7 @@ public class MM_Home extends AppCompatActivity {
     }
 
 
-    private void selectPost_Followee_Communit(){
+    private void selectPost_Followee_Communit() {
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지
@@ -225,24 +221,22 @@ public class MM_Home extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         postList = new ArrayList<>();
-        post_adapter = new Post_Adapter(getApplicationContext(), this.postList,getApplicationContext());
+        post_adapter = new Post_Adapter(getApplicationContext(), this.postList, getApplicationContext());
         recyclerView.setAdapter(post_adapter);
         post_adapter.notifyDataSetChanged();
 
-        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
         ApiInterface selectPostMeAndFolloweeAndCommunity_api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<post_Response>> call = selectPostMeAndFolloweeAndCommunity_api.selectPostMeAndFolloweeAndCommunity(user_id);
-        call.enqueue(new Callback<List<post_Response>>()
-        {
+        call.enqueue(new Callback<List<post_Response>>() {
             @Override
-            public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
+            public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response) {
+                if (response.isSuccessful() && response.body() != null) {
 //                    progressBar.setVisibility(View.GONE);
                     List<post_Response> responseResult = response.body();
-                    for(int i=0; i<responseResult.size(); i++){;
+                    for (int i = 0; i < responseResult.size(); i++) {
+                        ;
                         postList.add(new post_Response(responseResult.get(i).getPost_id(),
                                 responseResult.get(i).getPost_writer_id(),
                                 responseResult.get(i).getWriter_name(),
@@ -262,61 +256,13 @@ public class MM_Home extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t) {
                 Log.e("게시물 아이디로 게시물 조회", t.getMessage());
             }
         });
     }
 
 
-
-
-
-
-
-
-
-    // 데이터 http 요청
-    private void loadrecycler() {
-        // 쓰레드 http 요청 & run 데이터 넣기
-        fillList();
-    }
-
-    // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
-    private void fillList() {
-        this.postsList = new ArrayList();
-
-        String 임시프사 = "https://s2.coinmarketcap.com/static/img/coins/200x200/4030.png";
-        String 임시미디어 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
-
-
-        for (int i = 0; i < 10; i++) {
-            // TODO 시간 계산 → String 으로 넣어주기
-            this.postsList.add(new Feed_Item(임시프사, "좋아요 안누른거" + i, "아이디" + i, "내용", "", 0, 2, 3, "", i + "h", false));
-            this.postsList.add(new Feed_Item(임시프사, "누른거" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h", true));
-
-        }
-
-        setUpRecyclerView();
-    }
-
-    private void setUpRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-        this.adapter = new Feed_Adapter(getApplicationContext(), this.postsList);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(this.adapter);
-
-        //위치 유지
-        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-
-        //위치 유지
-        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-        recyclerView.addOnScrollListener(onScrollListener);
-    }
 
     // 바닥에 도달했을 때...
     private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
@@ -497,20 +443,6 @@ public class MM_Home extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         overridePendingTransition(0, 0);
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case 121:
-                displayMessage("아이템 삭제");
-                return true;
-            case 122:
-                displayMessage("아이템 추가");
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
     }
 
     public void displayMessage(String message) {

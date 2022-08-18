@@ -32,7 +32,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-                <include layout="@layout/following_include_scrollview" />
+                <include layout="@layout/follower_include_scrollview" />
 
 
             </ScrollView>
