@@ -1,10 +1,15 @@
 package com.example.bubbly.retrofit;
 
+import com.example.bubbly.model.Chat_Room_Cre;
+import com.example.bubbly.model.OtherUserInfo;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -221,4 +226,12 @@ public interface ApiInterface {
     // todo 맨션 관련된 api (끝 지점)
 
 
+    // 채팅방만들기에서 사용자 검색
+    @GET("userinfo/selectSearchedUserList") //
+    Call<ArrayList<OtherUserInfo>> selectSearchedUserList(@Query("user_id") String user_id,
+                                                          @Query("search_text") String search_text);
+
+    // 채팅방 정보 저장
+    @POST("chat/createChatRoom")
+    Call<String> createChatRoom(@Body Chat_Room_Cre chatRoomCre);
 }
