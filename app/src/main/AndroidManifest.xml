@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Community_Info"
+            android:exported="false" />
+        <activity
             android:name=".Community_Memberlist"
             android:exported="false" />
         <activity
@@ -26,7 +29,7 @@
             android:name=".ImageView_FullScreen"
             android:exported="false" />
         <activity
-            android:name=".Community_Info"
+            android:name=".Community_MainPage"
             android:exported="false" />
         <activity
             android:name=".ReplyModify"

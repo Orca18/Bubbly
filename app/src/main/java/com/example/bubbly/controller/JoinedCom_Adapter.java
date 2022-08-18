@@ -16,16 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.bubbly.Community_Info;
+import com.example.bubbly.Community_MainPage;
 import com.example.bubbly.R;
-import com.example.bubbly.SS_Profile;
 import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
-import com.example.bubbly.model.Joined_Com_Item;
-import com.example.bubbly.retrofit.post_Response;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Joined_ViewHolder> {
 
@@ -65,7 +61,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
         holder.name.setText(response.getCommunity_name());
 //        holder.members.setText(response.getCommunity_membercount());
         // TODO 멤버수 받아오기 ↑
-//        holder.description.setText(response.getCommunity_desc());
+        holder.description.setText(response.getCommunity_desc());
 
 
         Glide.with(mContext)
@@ -76,7 +72,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mIntent = new Intent(mContext, Community_Info.class);
+                Intent mIntent = new Intent(mContext, Community_MainPage.class);
                 mIntent.putExtra("com_id",response.getCommunity_id());
                 mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }

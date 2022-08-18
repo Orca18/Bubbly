@@ -1,4 +1,6 @@
 package com.example.bubbly;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,10 +15,10 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.bubbly.controller.Post_Adapter;
-import com.example.bubbly.retrofit.ApiClient;
-import com.example.bubbly.retrofit.ApiInterface;
-import com.example.bubbly.retrofit.post_Response;
+import com.example.bubbly.controller.Memberlists_Adapter;
+import com.example.bubbly.kim_util_test.Kim_ApiClient;
+import com.example.bubbly.kim_util_test.Kim_ApiInterface;
+import com.example.bubbly.kim_util_test.Kim_Com_Members_Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +30,20 @@ import retrofit2.Response;
 public class Community_Memberlist extends AppCompatActivity {
 
     String com_id;
-    Post_Adapter post_adapter;
-    ArrayList<post_Response> postList;
+    Memberlists_Adapter adapter;
+    ArrayList<Kim_Com_Members_Response> list;
     LinearLayoutManager linearLayoutManager;
 
     SharedPreferences preferences;
-    String user_id;
+    String user_id, com_name;
 
     RecyclerView recyclerView;
 
     private Parcelable recyclerViewState;
 
     Toolbar toolbar;
+
+    TextView toolbar_title;
 
 
     @Override
@@ -49,9 +53,10 @@ public class Community_Memberlist extends AppCompatActivity {
 
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
+        com_name = intent.getStringExtra("com_name");
 
         initialize();
-        selectPost_Followee_Communit();
+        GetComMemberList();
     }
 
     private void initialize() {
@@ -61,10 +66,13 @@ public class Community_Memberlist extends AppCompatActivity {
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        toolbar_title = findViewById(R.id.com_member_comname);
+        toolbar_title.setText(com_name);
+
         recyclerView = findViewById(R.id.com_member_list);
     }
 
-    private void selectPost_Followee_Communit() {
+    private void GetComMemberList() {
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지
@@ -72,49 +80,40 @@ public class Community_Memberlist extends AppCompatActivity {
         //위치 유지
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
-        postList = new ArrayList<>();
-        post_adapter = new Post_Adapter(getApplicationContext(), this.postList, getApplicationContext());
-        recyclerView.setAdapter(post_adapter);
-        post_adapter.notifyDataSetChanged();
+        list = new ArrayList<>();
+        adapter = new Memberlists_Adapter(getApplicationContext(), this.list);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
         // 1. 레트로핏 빌드 & 인터페이스 지정?
-        ApiInterface take = ApiClient.getApiClient().create(ApiInterface.class);
+        Kim_ApiInterface take = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
         // 2. Response = 인터페이스내함수 // user_id 보내서 원하는 response 기다림
-        Call<List<post_Response>> call = take.selectPostMeAndFolloweeAndCommunity(user_id);
+        Call<List<Kim_Com_Members_Response>> call = take.selectCommunityParticipantList(com_id);
         // 3. 선언한 call 을 게시글용 DTO
-        call.enqueue(new Callback<List<post_Response>>() {
+        call.enqueue(new Callback<List<Kim_Com_Members_Response>>() {
             @Override
-            public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response) {
+            public void onResponse(@NonNull Call<List<Kim_Com_Members_Response>> call, @NonNull Response<List<Kim_Com_Members_Response>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // 리스트 새로 만들어서
-                    List<post_Response> responseResult = response.body();
+                    List<Kim_Com_Members_Response> responseResult = response.body();
                     for (int i = 0; i < responseResult.size(); i++) {
-                        // Response DTO
-                        postList.add(new post_Response(responseResult.get(i).getPost_id(),
-                                responseResult.get(i).getPost_writer_id(),
-                                responseResult.get(i).getWriter_name(),
-                                responseResult.get(i).getPost_contents(),
-                                responseResult.get(i).getFile_save_names(),
-                                responseResult.get(i).getLike_count(),
-                                responseResult.get(i).getLike_yn(),
-                                responseResult.get(i).getShare_post_yn(),
-                                responseResult.get(i).getNft_post_yn(),
+                        list.add(new Kim_Com_Members_Response(responseResult.get(i).getCommunity_id(),
+                                responseResult.get(i).getUser_id(),
                                 responseResult.get(i).getNick_name(),
-                                responseResult.get(i).getProfile_file_name(),
-                                responseResult.get(i).getCre_datetime(),
-                                responseResult.get(i).getMentioned_user_list()));
+                                responseResult.get(i).getProfile_file_name()));
                     }
-                    post_adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t) {
+            public void onFailure(Call<List<Kim_Com_Members_Response>> call, Throwable t) {
                 Log.e("게시물 아이디로 게시물 조회", t.getMessage());
             }
+
         });
     }
 

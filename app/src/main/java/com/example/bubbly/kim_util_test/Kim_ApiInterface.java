@@ -45,4 +45,32 @@ public interface Kim_ApiInterface {
     Call<List<Kim_Com_Info_Response>> selectCommunityUsingCommunityId(
             @Query("community_id") String community_id
     );
+    
+
+    // 4. 멤버 목록 불러오기
+    @GET("community/selectCommunityParticipantList")
+    Call<List<Kim_Com_Members_Response>> selectCommunityParticipantList(
+            @Query("community_id") String community_id
+    );
+
+
+    // 5. 공지사항 가져오기
+    
+    
+    
+    // 6. 커뮤니티에서 파생(?)된 NFT 목록
+    
+    
+    // 7. 커뮤니티 정보 수정
+    
+    
+    // 8. 특정 커뮤니티의 게시글 가져오기
+    
+    
+    
+    // 9. 커뮤니티 폐쇄
+    
+    
+    // 10 ~ : 게시글 작성 관련 수정 & 검색?
+    
 }

@@ -2,214 +2,212 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/gray"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:id="@+id/com_info_maintitle"
-        android:layout_width="match_parent"
-        android:layout_height="180dp">
-
-
-        <ImageView
-            android:id="@+id/com_info_titleimage"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:background="@color/white" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/gradient_title"
-            android:orientation="vertical"
-            android:paddingBottom="10dp">
-
-            <TextView
-                android:id="@+id/com_info_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:layout_marginTop="18dp"
-                android:fontFamily="@font/spoqa_bold"
-                android:paddingHorizontal="6dp"
-                android:text="팀노바 버블리"
-                android:textColor="@color/white"
-                android:textSize="24dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:fontFamily="@font/spoqa_medium"
-                android:paddingHorizontal="6dp"
-                android:text="그룹 설정"
-                android:textColor="@color/white"
-                android:textSize="15dp" />
-
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_marginRight="6dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_baseline_chevron_right_24"
-            app:tint="@color/white" />
-
-    </RelativeLayout>
-
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
 
     <LinearLayout
-        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="@color/white">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/com_info_join"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="대표"
+            android:textColor="@color/text_black"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/com_info_changeowner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_check_24"/>
-
-            <TextView
-                android:layout_gravity="center"
-                android:fontFamily="@font/spoqa_medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="가입함"/>
-        </LinearLayout>
-
-
-
-
-        <LinearLayout
-            android:id="@+id/com_info_member"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_outline_group_24"/>
-
-            <TextView
-                android:layout_gravity="center"
-                android:fontFamily="@font/spoqa_medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="멤버"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/com_info_notice"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_outline_feedback_24"/>
-
-            <TextView
-                android:layout_gravity="center"
-                android:fontFamily="@font/spoqa_medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="공지"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/com_info_nfts"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_outline_local_activity_24"/>
-
-            <TextView
-                android:layout_gravity="center"
-                android:fontFamily="@font/spoqa_medium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="NFTs"/>
-        </LinearLayout>
-
-
+            android:text="위임"
+            android:textColor="@color/red" />
 
     </LinearLayout>
 
 
-<LinearLayout
-    android:id="@+id/community_info_posting"
-    android:background="@color/white"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    android:paddingHorizontal="10dp">
-
-
+    <LinearLayout
+        android:id="@+id/item_com_member_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            app:civ_border_overlay="true"
+            android:id="@+id/item_com_member_profile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@color/white"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_marginVertical="10dp"
-            app:civ_border_color="@color/gray"
-            app:civ_border_width="0.6dp" />
-
-        <View
-            android:layout_width="10dp"
-            android:layout_height="0dp" />
+            app:civ_border_color="#ccc"
+            app:civ_border_overlay="true"
+            app:civ_border_width="1dp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="15dp"
-            android:background="@drawable/bg_circle3">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
+                android:id="@+id/item_com_member_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="14dp"
-                android:text="내용을 입력하세요..." />
+                android:fontFamily="@font/spoqa_bold"
+                android:text="이름"
+                android:textColor="@color/black"
+                android:textSize="20dp" />
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\u0040"
+                    android:textColor="@color/text_black"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/item_com_member_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="아이디"
+                    android:textColor="@color/text_black"
+                    android:textSize="16dp" />
+
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
-</LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="4dp"
+        android:background="#ddd" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/com_info_recyclerview"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="커뮤니티명"
+            android:textColor="@color/text_black"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/com_info_editname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="편집"
+            android:textColor="@color/blue" />
+
+
+    </LinearLayout>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white" />
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="팀노바 버블리"
+        android:textSize="17dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="14dp"
+        android:background="#ddd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="소개"
+            android:textColor="@color/text_black"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/com_info_editdesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="편집"
+            android:textColor="@color/blue" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="안녕못하세요?"
+        android:textSize="17dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="14dp"
+        android:background="#ddd" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="규칙"
+            android:textColor="@color/text_black"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/com_info_editrule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="편집"
+            android:textColor="@color/blue" />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/spoqa_medium"
+        android:text="굳이 페이스북처럼 만들 필요가 없긴한데\nsection 적용 알아보기"
+        android:textSize="17dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="14dp"
+        android:background="#ddd" />
 
 
 </LinearLayout>

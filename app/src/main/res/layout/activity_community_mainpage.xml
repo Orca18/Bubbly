@@ -1,25 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Community_Info"
+    tools:context=".Community_MainPage"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/com_info_toolbar"
+        android:id="@+id/com_main_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundTint="@color/white">
-        <TextView
-            android:layout_gravity="center"
-            android:id="@+id/com_info_comname"
+
+
+
+        <ImageView
+            android:layout_gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ngbold"
-            android:text="팀노바 버블리"
-            android:textColor="@color/black"
-            android:textSize="20dp" />
+            android:src="@drawable/ic_baseline_more_vert_24"/>
+
+        <ImageView
+            android:layout_gravity="right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_search_24"/>
+
+
     </androidx.appcompat.widget.Toolbar>
 
     <View
@@ -33,9 +41,11 @@
         android:layout_weight="1"
         android:fillViewport="true">
 
-        <include layout="@layout/activity_community_info_include" />
+        <include layout="@layout/activity_community_mainpage_include" />
 
 
     </androidx.core.widget.NestedScrollView>
+
+
 
 </LinearLayout>
