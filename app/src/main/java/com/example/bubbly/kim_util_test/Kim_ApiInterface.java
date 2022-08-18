@@ -39,4 +39,10 @@ public interface Kim_ApiInterface {
             @Part("user_id") String user_id,
             @Part("community_id") String community_id
             );
+
+    // 3. 커뮤니티 참여자 정보 저장 TODO 커뮤 생성 시, 커뮤 ID 다시 받아와서 만들어야되려나???
+    @GET("community/selectCommunityUsingCommunityId")
+    Call<List<Kim_Com_Info_Response>> selectCommunityUsingCommunityId(
+            @Query("community_id") String community_id
+    );
 }

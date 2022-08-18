@@ -230,6 +230,7 @@ public class Community_Create extends AppCompatActivity {
 
                         Glide.with(getApplicationContext())
                                 .load(uri)
+                                .centerCrop()
                                 .into(thumb);
 
                         imageList.add(uri);

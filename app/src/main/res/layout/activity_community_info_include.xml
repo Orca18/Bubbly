@@ -13,6 +13,7 @@
 
 
         <ImageView
+            android:id="@+id/com_info_titleimage"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:background="@color/white" />
@@ -23,13 +24,14 @@
             android:layout_alignParentBottom="true"
             android:background="@drawable/gradient_title"
             android:orientation="vertical"
-            android:paddingVertical="6dp">
+            android:paddingBottom="10dp">
 
             <TextView
+                android:id="@+id/com_info_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="18dp"
                 android:fontFamily="@font/spoqa_bold"
                 android:paddingHorizontal="6dp"
                 android:text="팀노바 버블리"
@@ -50,12 +52,13 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_marginBottom="4dp"
+            android:layout_marginRight="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_chevron_right_24"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_baseline_chevron_right_24"
             app:tint="@color/white" />
 
     </RelativeLayout>
