@@ -7,8 +7,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class ApiClient {
-    private static final String BASE_URL = "http://3.39.84.115:80/";
+
+public class ChatApiClient {
+
+    //private static final String BASE_URL = "https://bubbly-chat.tk:443";
+    // 채팅서버 주소
+   private static final String BASE_URL = "http://43.200.189.111:3000";
 
     private static Retrofit retrofit;
 
@@ -26,7 +30,6 @@ public class ApiClient {
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
-
 
         return retrofit;
     }

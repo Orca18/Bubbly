@@ -1,14 +1,13 @@
 package com.example.bubbly;
 
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.os.Parcelable;
 
 import com.example.bubbly.controller.Chat_Adapter;
 import com.example.bubbly.model.Chat_Item;
@@ -23,7 +22,7 @@ public class ChattingRoom extends AppCompatActivity {
     RecyclerView recyclerView;
 
     private Chat_Adapter adapter;
-    private List<Chat_Item> exampleList;
+    private List<Chat_Item> chatList;
     private Parcelable recyclerViewState;
 
     private int position = 0;
@@ -55,26 +54,25 @@ public class ChattingRoom extends AppCompatActivity {
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
     private void fillList() {
-        this.exampleList = new ArrayList();
+        this.chatList = new ArrayList();
 
         // TODO 시간 계산 → String 으로 넣어주기
         for (int i = 0; i < 10; i++) {
-            this.exampleList.add(new Chat_Item("안녕하세요요 " + i + "트"));
-            this.exampleList.add(new Chat_Item("안녕 못해요~~ " + i + "트"));
+            this.chatList.add(new Chat_Item("안녕하세요요 " + i + "트"));
+            this.chatList.add(new Chat_Item("안녕 못해요~~ " + i + "트"));
         }
-
-
+        
         setUpRecyclerView();
     }
 
     private void setUpRecyclerView() {
         recyclerView.setHasFixedSize(true);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        // 채팅방의 경우 데이터를 보여줄 때 가장 최신 데이터(밑에있는 데이터!)부터 보여줘야 하므로 해당 설정을 적용시켜준다.
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
 
-        this.adapter = new Chat_Adapter(getApplicationContext(), this.exampleList);
+        this.adapter = new Chat_Adapter(getApplicationContext(), this.chatList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(this.adapter);
 
@@ -88,7 +86,7 @@ public class ChattingRoom extends AppCompatActivity {
         recyclerView.addOnScrollListener(onScrollListener);
     }
 
-    // 바닥에 도달했을 때...
+    // 리사이클러뷰의 스크롤이 최상단에 도달했을 때 새로운 채팅 데이터를 가져오기 위함!
     private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -97,11 +95,9 @@ public class ChattingRoom extends AppCompatActivity {
             if (recyclerView.computeVerticalScrollOffset() == 0) {
                 // 최상단
                 Toast.makeText(getApplicationContext(), "상단 인식 테스트 TODO 페이징", Toast.LENGTH_SHORT).show();
-                position = position + (exampleList.size()-1);
+                position = position + (chatList.size()-1);
                 Toast.makeText(getApplicationContext(), "dd"+position, Toast.LENGTH_SHORT).show();
-
             }
-
 
         }
     };
