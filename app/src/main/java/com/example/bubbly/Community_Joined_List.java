@@ -2,33 +2,48 @@ package com.example.bubbly;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.controller.JoinedCom_Adapter;
-import com.example.bubbly.model.Joined_Com_Item;
+import com.example.bubbly.kim_util_test.Kim_ApiClient;
+import com.example.bubbly.kim_util_test.Kim_ApiInterface;
+import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Community_Joined_List extends AppCompatActivity {
 
     androidx.appcompat.widget.Toolbar toolbar;
 
+
+    SharedPreferences preferences;
+    String user_id;
+
     RecyclerView recyclerView;
     private JoinedCom_Adapter adapter;
-    private List<Joined_Com_Item> comList;
     private Parcelable recyclerViewState;
+
+    ArrayList<Kim_JoinedCom_Response> list;
+    LinearLayoutManager linearLayoutManager;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -36,30 +51,21 @@ public class Community_Joined_List extends AppCompatActivity {
 
     ImageView create_com;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ss_community_home2);
 
+        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
 
         // 리소스 ID 선언
         ini();
-        // 리사이클러뷰 리로드
-        loadrecycler();
-
         // 리스너
         listeners();
+        // 리사이클러뷰 채우기
+        getJoinedComList();
     }
-
-
-
-
-
-
-
-
-
-
 
 
     private void listeners() {
@@ -104,46 +110,10 @@ public class Community_Joined_List extends AppCompatActivity {
         recyclerView = findViewById(R.id.community_home_recyclerView2);
         swipeRefreshLayout = findViewById(R.id.community_home_refresh);
         create_com = findViewById(R.id.create_com);
+
     }
 
-    // 데이터 http 요청
-    private void loadrecycler() {
-        // 쓰레드 http 요청 & run 데이터 넣기
-        fillList();
-    }
 
-    // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
-    private void fillList() {
-        this.comList = new ArrayList();
-
-        String 임시프사 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
-
-
-        for (int i = 0; i < 10; i++) {
-            // TODO 시간 계산 → String 으로 넣어주기
-            this.comList.add(new Joined_Com_Item("","","","",""));
-
-        }
-
-        setUpRecyclerView();
-    }
-
-    private void setUpRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-        this.adapter = new JoinedCom_Adapter(getApplicationContext(), this.comList);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(this.adapter);
-
-        //위치 유지
-        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-
-        //위치 유지
-        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-        recyclerView.addOnScrollListener(onScrollListener);
-    }
 
     // 바닥에 도달했을 때...
     private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
@@ -177,5 +147,69 @@ public class Community_Joined_List extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         overridePendingTransition(0, 0);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // TODO 커뮤니티 생성 완료 된건지 확인하고 삭제하기!
+    private void getJoinedComList() {
+
+        linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //위치 유지
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+        //위치 유지
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
+        list = new ArrayList<>();
+        adapter = new JoinedCom_Adapter(getApplicationContext(), this.list);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+
+        String user_id;
+        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Call<List<Kim_JoinedCom_Response>> call = api.selectCommunityListUsingUserId(user_id);
+        call.enqueue(new Callback<List<Kim_JoinedCom_Response>>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Response<List<Kim_JoinedCom_Response>> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    List<Kim_JoinedCom_Response> responseResult = response.body();
+                    // 결과
+                    for(int i=0; i<responseResult.size(); i++){
+                        list.add(new Kim_JoinedCom_Response(responseResult.get(i).getCommunity_id(),
+                                responseResult.get(i).getCommunity_owner_id(),
+                                responseResult.get(i).getCommunity_name(),
+                                responseResult.get(i).getCommunity_desc(),
+                                responseResult.get(i).getProfile_file_name()));
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Throwable t)
+            {
+                Toast.makeText(getApplicationContext(), "응 다시해",Toast.LENGTH_SHORT).show();
+                Log.e("게시물 아이디로 게시물 조회", t.getMessage());
+            }
+        });
+
     }
 }
