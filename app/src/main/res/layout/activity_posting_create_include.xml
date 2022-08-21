@@ -6,13 +6,13 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingHorizontal="10dp"
-    tools:context=".Add_Posting_Create">
+    tools:context=".Post_Create">
 
 
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="50dp"
@@ -20,38 +20,38 @@
             android:src="@drawable/google" />
 
         <TextView
-            android:background="@drawable/bg_circle3"
-            android:id="@+id/posting_create_section"
+            android:id="@+id/posting_create_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_marginLeft="10dp"
+            android:background="@drawable/bg_circle3"
+            android:padding="10dp"
             android:text="피드 위치" />
 
     </LinearLayout>
 
     <EditText
         android:id="@+id/et_content"
-        android:paddingBottom="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="65dp"
         android:background="@null"
         android:fontFamily="@font/spoqa_medium"
         android:gravity="top"
         android:hint="일하기 싫나요? (140자 제한, 10줄)"
         android:maxLength="140"
         android:maxLines="10"
-        android:layout_marginLeft="65dp"
         android:paddingTop="5dp"
+        android:paddingBottom="6dp"
         android:textColor="@color/text_black" />
 
 
     <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/posting_create_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="55dp">
+        android:layout_marginLeft="55dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/posting_create_myimage"
@@ -63,19 +63,19 @@
             android:id="@+id/posting_create_myimage_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_delete_outline_24"
-            android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
             android:padding="5dp"
+            android:src="@drawable/ic_baseline_delete_outline_24"
             app:tint="@color/red" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="gone"
         android:id="@+id/posting_create_thumb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="55dp">
+        android:layout_marginLeft="55dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/posting_create_myvideoThumbnail"
@@ -104,7 +104,7 @@
             android:cropToPadding="true"
             android:padding="5dp"
             android:src="@drawable/ic_baseline_delete_outline_24"
-            app:tint="@color/red"/>
+            app:tint="@color/red" />
 
     </RelativeLayout>
 

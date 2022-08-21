@@ -1,14 +1,17 @@
 package com.example.bubbly;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,9 +23,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +37,10 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.controller.DialogRecyclerAdapter;
+import com.example.bubbly.kim_util_test.Kim_ApiClient;
+import com.example.bubbly.kim_util_test.Kim_ApiInterface;
+import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.FileUtils;
@@ -45,6 +53,7 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -54,7 +63,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Add_Posting_Create extends AppCompatActivity {
+public class Post_Create extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
 
@@ -73,8 +82,15 @@ public class Add_Posting_Create extends AppCompatActivity {
     RelativeLayout r_img, r_thumb;
 
     String post_id, post_content, post_file, post_mention;
-    TextView section;
-    String category;
+    public static TextView com;
+    public static String category_com_id;
+    public static String category_com_name;
+
+    private LinearLayout linearLayoutTopicPosting; // 클릭 이벤트 받는 곳
+    private RecyclerView dialogRecyclerView;
+    public static Dialog dialog; // 출력할 Dialog 객체
+    String[] text;
+    public static String[] ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +101,18 @@ public class Add_Posting_Create extends AppCompatActivity {
         touchEvent();
         imageList = new ArrayList<>();
 
+
         Intent intent = getIntent();
         post_id = intent.getStringExtra("post_id");
         post_content = intent.getStringExtra("post_content");
         post_file = intent.getStringExtra("post_file");
         // 커뮤니티 아이디가 있으면, 해당 커뮤니티를 기준으로 글을 올린다는 뜻
-        category = intent.getStringExtra("com_id");
+        category_com_id = intent.getStringExtra("com_id");
+        category_com_name = intent.getStringExtra("com_name");
 
+        com.setText(category_com_name);
+
+        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
 
         if (post_content != null) {
@@ -103,7 +124,7 @@ public class Add_Posting_Create extends AppCompatActivity {
             imageList.add(Uri.parse("https://d2gf68dbj51k8e.cloudfront.net/" + post_file));
             r_thumb.setVisibility(View.GONE);
             r_img.setVisibility(View.VISIBLE);
-            Glide.with(Add_Posting_Create.this)
+            Glide.with(Post_Create.this)
                     .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_file)
                     .into(my_image);
         }
@@ -137,13 +158,13 @@ public class Add_Posting_Create extends AppCompatActivity {
 
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
 
-        section = findViewById(R.id.posting_create_section);
+        com = findViewById(R.id.posting_create_category);
 
     }
 
     private void touchEvent() {
         add_image.setOnClickListener(v -> {
-            Dexter.withContext(Add_Posting_Create.this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
+            Dexter.withContext(Post_Create.this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
                 @Override
                 public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                     Intent mIntent = new Intent();
@@ -167,7 +188,7 @@ public class Add_Posting_Create extends AppCompatActivity {
 
         add_video.setOnClickListener(v -> {
 
-            Dexter.withContext(Add_Posting_Create.this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
+            Dexter.withContext(Post_Create.this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
                 @Override
                 public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                     Intent mIntent2 = new Intent();
@@ -193,7 +214,7 @@ public class Add_Posting_Create extends AppCompatActivity {
             if (post_id == null) {
                 createPost(); // 게시글 작성
             } else {
-                updatePost(); // 게시글 수정
+//                updatePost(); // 게시글 수정
             }
         });
 
@@ -216,18 +237,88 @@ public class Add_Posting_Create extends AppCompatActivity {
             r_thumb.setVisibility(View.GONE);
         });
 
-        section.setOnClickListener(v -> {
-            final CharSequence[] oItems = {"기본", "커뮤1", "커뮤2"};
-            AlertDialog.Builder oDialog = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
-            oDialog.setTitle("올릴 위치?").setItems(oItems, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(getApplicationContext(), oItems[which]+"... 업로드 시, 영역? 추가", Toast.LENGTH_LONG).show();
-                    section.setText(oItems[which]);
-                }
-            }).setCancelable(false).show();
+        com.setOnClickListener(v -> {
+            Log.d("디버그태그", "Categories Test 카테고리 가져오기");
+            GetJoinedComList();
         });
 
+    }
+
+    private void GetJoinedComList() {
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Call<List<Kim_JoinedCom_Response>> call = api.selectCommunityListUsingUserId(user_id);
+        call.enqueue(new Callback<List<Kim_JoinedCom_Response>>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Response<List<Kim_JoinedCom_Response>> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    List<Kim_JoinedCom_Response> responseResult = response.body();
+
+                    Log.d("디버그태그", "테스트 사이즈:"+responseResult.size());
+
+                    text = new String[responseResult.size()+1];
+                    ids = new String[responseResult.size()+1];
+                    text[0] = "내 피드";
+                    ids[0] = "0";
+                    for(int i=0; i<responseResult.size(); i++){
+                        text[i+1] = responseResult.get(i).getCommunity_name();
+                        ids[i+1] = responseResult.get(i).getCommunity_id();
+
+                        Log.d("디버그태그", "테스트 커뮤 아이디스:"+responseResult.get(i).getCommunity_id());
+                    }
+                }
+
+                showAlertDialogTopic();
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Throwable t)
+            {
+                Log.e("게시물 아이디로 게시물 조회", t.getMessage());
+            }
+        });
+
+    }
+
+    private void showAlertDialogTopic() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        dialog = new Dialog(this);
+
+        display.getRealSize(size);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+
+        LayoutInflater inf = getLayoutInflater();
+        View dialogView = inf.inflate(R.layout.dialog_layout, null);
+        // Dialog layout 선언
+
+        Log.d("디버그태그", "Categories Test : "+text);
+
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        int width = size.x;
+        lp.width = width * 80 / 100; // 사용자 화면의 80%
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT; // 높이는 내용 전체 높이만큼
+        dialog.setContentView(dialogView); // Dialog에 선언했던 layout 적용
+        dialog.setCanceledOnTouchOutside(true); // 외부 touch 시 Dialog 종료
+        dialog.getWindow().setAttributes(lp); // 지정한 너비, 높이 값 Dialog에 적용
+        ArrayList<String> arrayList = new ArrayList<>(); // recyclerView에 들어갈 Array
+        arrayList.addAll(Arrays.asList(text)); // Array에 사전에 정의한 Topic 넣기
+        /*
+        다음 4줄의 코드는 RecyclerView를 정의하기 위한 View, Adapter선언 코드이다.
+        1. RecyclerView id 등록
+        2. 수직방향으로 보여줄 예정이므로 LinearLayoutManager 등록
+           2차원이면 GridLayoutManager 등 다른 Layout을 선택
+        3. adapter에 topic Array 넘겨서 출력되게끔 전달
+        4. adapter 적용
+        */
+        dialogRecyclerView = (RecyclerView) dialogView.findViewById(R.id.dialogRecyclerView);
+        dialogRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        DialogRecyclerAdapter adapter = new DialogRecyclerAdapter(arrayList);
+        dialogRecyclerView.setAdapter(adapter);
+        dialog.show(); // Dialog 출력
     }
 
 
@@ -244,12 +335,12 @@ public class Add_Posting_Create extends AppCompatActivity {
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
         ApiInterface createPost_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", "0", "1");
+        Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", category_com_id, "1");
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Log.e("게시글 생성", response.body().toString());
+                    // 게시글 성공 후, 해당 카테고리의 커뮤니티 or 본인 프로필 화면으로 가기
                     Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
                     mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(mIntent);
@@ -311,7 +402,7 @@ public class Add_Posting_Create extends AppCompatActivity {
                         Intent intent = result.getData();
                         Uri uri = intent.getData();
 
-                        Glide.with(Add_Posting_Create.this)
+                        Glide.with(Post_Create.this)
                                 .load(uri)
                                 .into(my_image);
 
@@ -342,8 +433,8 @@ public class Add_Posting_Create extends AppCompatActivity {
                         });
                         r_thumb.setVisibility(View.VISIBLE);
                         r_img.setVisibility(View.GONE);
-                        Glide.with(Add_Posting_Create.this)
-                                .load(createThumbnail(Add_Posting_Create.this, uri.toString()))
+                        Glide.with(Post_Create.this)
+                                .load(createThumbnail(Post_Create.this, uri.toString()))
                                 .into(thumbnail);
 //                        thumbnail.setImageBitmap(createThumbnail(Add_Posting_Create.this, uri.toString()));
                         Log.i("my_image : ", "");

@@ -62,14 +62,32 @@ public interface Kim_ApiInterface {
     
     
     // 7. 커뮤니티 정보 수정
-    
+    @Multipart
+    @POST("community/updateCommunity")
+    Call<String> updateCommunity(
+            @Part("community_name") String community_name,
+            @Part("community_desc") String community_desc,
+            @Part("profile_file_name") String profile_file_name,
+            @Part("community_id") String community_id,
+            @Part MultipartBody.Part file
+    );
     
     // 8. 특정 커뮤니티의 게시글 가져오기
-    
-    
-    
+    @GET("post/selectCommunityPost")
+    Call<List<Kim_Com_post_Response>> selectCommunityPost(
+            @Query("user_id") String user_id,
+            @Query("community_id") String community_id
+    );
+
+
+    // 9. 내가 속한 모든 커뮤니티의 글
+    @GET("post/selectAllCommunityPost")
+    Call<List<Kim_Com_post_Response>> selectAllCommunityPost(
+            @Query("user_id") String user_id
+    );
+
     // 9. 커뮤니티 폐쇄
-    
+
     
     // 10 ~ : 게시글 작성 관련 수정 & 검색?
     

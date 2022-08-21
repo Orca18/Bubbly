@@ -7,13 +7,13 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/com_info_maintitle"
+        android:id="@+id/com_info_edit_rl"
         android:layout_width="match_parent"
         android:layout_height="190dp">
 
 
         <ImageView
-            android:id="@+id/com_info_titleimage"
+            android:id="@+id/com_main_titleimage"
             android:layout_width="match_parent"
             android:layout_height="190dp"
             android:background="@color/white" />
@@ -175,6 +175,7 @@
 
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/com_main_profile"
             app:civ_border_overlay="true"
             android:src="@color/white"
             android:layout_width="46dp"

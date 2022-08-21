@@ -1,4 +1,5 @@
 package com.example.bubbly.controller;
+
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
@@ -27,15 +28,14 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
 
     Context mContext;
     ArrayList<Kim_JoinedCom_Response> lists;
-    
+
     SharedPreferences preferences;
     String user_id;
-    
+
     public JoinedCom_Adapter(Context mContext, ArrayList<Kim_JoinedCom_Response> lists) {
         this.mContext = mContext;
         this.lists = lists;
     }
-
 
 
     @NonNull
@@ -57,29 +57,27 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
         Kim_JoinedCom_Response response = lists.get(position);
         preferences = mContext.getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        
+
         holder.name.setText(response.getCommunity_name());
 //        holder.members.setText(response.getCommunity_membercount());
         // TODO 멤버수 받아오기 ↑
-        holder.description.setText(response.getCommunity_desc());
+
+          holder.description.setText(response.getCommunity_desc());
 
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/" + response.getProfile_file_name())
                 .centerCrop()
                 .into(holder.profile);
-        
+
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(mContext, Community_MainPage.class);
-                mIntent.putExtra("com_id",response.getCommunity_id());
+                mIntent.putExtra("com_id", response.getCommunity_id());
                 mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
-
-
-
 
 
     }
@@ -91,7 +89,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
 
     public static class Joined_ViewHolder extends RecyclerView.ViewHolder {
 
-    	LinearLayout ll;
+        LinearLayout ll;
         ImageView profile;
         TextView name, members, description;
         Button btn;

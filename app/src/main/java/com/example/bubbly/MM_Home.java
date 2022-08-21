@@ -22,9 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.bubbly.controller.Feed_Adapter;
 import com.example.bubbly.controller.Post_Adapter;
-import com.example.bubbly.model.Feed_Item;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
@@ -277,12 +275,13 @@ public class MM_Home extends AppCompatActivity {
 
     // 클릭 이벤트 모음
     private void clickListeners() {
-
         // 작성
         creating.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent tocreating = new Intent(getApplicationContext(), Add_Posting_Create.class);
+                Intent tocreating = new Intent(getApplicationContext(), Post_Create.class);
+                tocreating.putExtra("com_id", "0");
+                tocreating.putExtra("com_name", "내 피드");
                 startActivity(tocreating);
             }
         });

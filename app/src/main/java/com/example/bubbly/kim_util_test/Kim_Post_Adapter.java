@@ -1,8 +1,4 @@
-package com.example.bubbly.controller;
-
-import android.view.Gravity;
-import android.widget.PopupMenu;
-import android.widget.Toast;
+package com.example.bubbly.kim_util_test;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -11,13 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,26 +28,26 @@ import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
-import com.example.bubbly.retrofit.post_Response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHolder> {
+public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.PostViewHolder> {
 
     private Context context;
     private Context mContext;
-    private ArrayList<post_Response> lists;
+    private ArrayList<Kim_Com_post_Response> lists;
     //    private ItemClickListener itemClickListener;
     SharedPreferences preferences;
     String user_id;
 
 
-    public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext) {
+    public Kim_Post_Adapter(Context context, ArrayList<Kim_Com_post_Response> lists, Context mContext) {
         this.context = context;
         this.lists = lists;
 //        this.itemClickListener = itemClickListener;
@@ -58,7 +57,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
     @NonNull
     @Override
-    public Post_Adapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Kim_Post_Adapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_post, parent, false);
         return new PostViewHolder(view);
     }
@@ -66,7 +65,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        post_Response post_response = lists.get(position);
+        Kim_Com_post_Response post_response = lists.get(position);
         preferences = context.getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
@@ -75,13 +74,26 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         holder.tv_like_count.setText(post_response.getLike_count());
         holder.tv_time.setText(post_response.getCre_datetime());
 
-
         // TODO 유저 login_id & 커뮤니티 이름 뜨게 만들기
         holder.tv_user_id.setText(post_response.getPost_writer_id());
-//        holder.tv_com_name.setText(post_response.getCommunity_id());
-        // TODO if Community 아이디가 0 일 경우, tv_com_name 상태 VIEW.Gone으로 바꾸기
+        holder.tv_com_name.setText(post_response.getCommunity_id());
 
 
+
+        // TODO 커뮤니티 이름 가져오긴 하는데, 성능 저하 문제는 나중에 고려
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Call<List<Kim_Com_Info_Response>> call = api.selectCommunityUsingCommunityId(post_response.getCommunity_id());
+        call.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
+            @Override
+            public void onResponse(Call<List<Kim_Com_Info_Response>> call, Response<List<Kim_Com_Info_Response>> response) {
+                holder.tv_com_name.setText(response.body().get(0).getCommunity_name());
+            }
+
+            @Override
+            public void onFailure(Call<List<Kim_Com_Info_Response>> call, Throwable t) {
+
+            }
+        });
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getProfile_file_name())
@@ -149,63 +161,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
-
-        // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
-//        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//            @Override
-//            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                MenuItem delete = menu.add(Menu.NONE, R.id.delete, 1, "게시글 삭제");
-//                MenuItem modify = menu.add(Menu.NONE, R.id.modify, 2, "게시글 수정");
-//                delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        switch (item.getItemId()) {
-//                            case R.id.delete:
-//                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
-//                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
-//                                call.enqueue(new Callback<String>()
-//                                {
-//                                    @Override
-//                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-//                                    {
-//                                        if (response.isSuccessful() && response.body() != null)
-//                                        {
-//                                            //Log.e("delete", String.valueOf(position));
-//                                            lists.remove(position);
-//                                            notifyItemRemoved(position);
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-//                                    {
-//                                        Log.e("에러", t.getMessage());
-//                                    }
-//                                });
-//                                return true;
-//                        }
-//                        return false;
-//                    }
-//                });
-                // 수정 관련
-//                modify.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        switch (item.getItemId()) {
-//                            case R.id.modify:
-//                                Intent intent = new Intent(context, Add_Posting_Create.class);
-//                                intent.putExtra("post_id",post_response.getPost_id());
-//                                intent.putExtra("post_content",post_response.getPost_contents());
-//                                intent.putExtra("post_file",post_response.getFile_save_names());
-//                                intent.putExtra("post_mention",post_response.getMentioned_user_list());
-//                                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-//                                return true;
-//                        }
-//                        return false;
-//                    }
-//                });
-//            }
-//        });
 
 
         if (post_response.getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
@@ -398,21 +353,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             tv_com_name = view.findViewById(R.id.tv_com_name);
 
 
-
-//            this.itemClickListener = itemClickListener;
-//            linearLayout.setOnClickListener(this);
         }
 
-//        @Override
-//        public void onClick(View view)
-//        {
-//            itemClickListener.onItemClick(view, getAdapterPosition());
-//        }
     }
 
-//    public interface ItemClickListener
-//    {
-//        void onItemClick(View view, int position);
-//    }
+
 
 }

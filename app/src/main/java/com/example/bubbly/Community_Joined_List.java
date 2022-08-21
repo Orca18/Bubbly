@@ -198,6 +198,9 @@ public class Community_Joined_List extends AppCompatActivity {
                                 responseResult.get(i).getCommunity_name(),
                                 responseResult.get(i).getCommunity_desc(),
                                 responseResult.get(i).getProfile_file_name()));
+                        Log.d("디버그태그", "무야::"+responseResult.get(i).getCommunity_id());
+                        Log.d("디버그태그", "무야::"+responseResult.size());
+                        Log.d("디버그태그", "무야::"+i);
                     }
                     adapter.notifyDataSetChanged();
                 }

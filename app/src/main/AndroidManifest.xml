@@ -17,6 +17,9 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Community_Info_Edit"
+            android:exported="false" />
+        <activity
             android:name=".Community_Info"
             android:exported="false" />
         <activity
@@ -35,7 +38,7 @@
             android:name=".ReplyModify"
             android:exported="false" />
         <activity
-            android:name=".Add_Posting_Modify"
+            android:name=".UnUsed_Add_Posting_Modify"
             android:exported="false" />
         <activity
             android:name=".ModifyProfile"
@@ -68,7 +71,7 @@
             android:name=".SS_PostDetail"
             android:exported="false" />
         <activity
-            android:name=".Add_Posting_Create"
+            android:name=".Post_Create"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -101,13 +104,9 @@
         <activity
             android:name=".Option_Notice_List"
             android:exported="false" />
-
         <activity
             android:name=".LL_Register_B"
-            android:exported="false">
-
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".LL_Register_C"
             android:exported="false" />

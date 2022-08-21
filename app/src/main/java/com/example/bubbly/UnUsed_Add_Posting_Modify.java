@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class Add_Posting_Modify extends AppCompatActivity {
+public class UnUsed_Add_Posting_Modify extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
