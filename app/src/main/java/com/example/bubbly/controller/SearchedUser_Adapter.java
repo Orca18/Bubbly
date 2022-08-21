@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
+import com.example.bubbly.model.SearchedUser_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -28,16 +29,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.FollowerViewHolder> {
+public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adapter.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<follower_Response> lists;
+    private ArrayList<SearchedUser_Item> lists;
 
     //SharedPreferences preferences;
     String user_id = UserInfo.user_id;
 
 
-    public Follower_Adapter(Context context, ArrayList<follower_Response> lists)
+    public SearchedUser_Adapter(ArrayList<SearchedUser_Item> lists,Context context)
     {
         this.lists = lists;
         this.mContext = context;
@@ -45,24 +46,24 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
 
     @NonNull
     @Override
-    public Follower_Adapter.FollowerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+    public SearchedUser_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_follower, parent, false);
-        return new FollowerViewHolder(view);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_search_result_user, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FollowerViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         //binding data
-        follower_Response follower_response = lists.get(position);
-        Log.e("나를 팔로잉 한사람 id", follower_response.getFollower_id());
-        holder.tv_user_nick.setText(follower_response.getNick_name());
+        SearchedUser_Item user_response = lists.get(position);
+        holder.tv_user_nick.setText(user_response.getNick_name());
+        holder.tv_user_intro.setText(user_response.getSelf_intro());
         //사용자 로그인 id 나타남
-        holder.tv_user_id.setText("@"+follower_response.getLogin_id());
-        if(follower_response.getProfile_file_name()!=null&&!follower_response.getProfile_file_name().equals("")){
+        holder.tv_user_id.setText("@"+user_response.getLogin_id());
+        if(user_response.getProfile_file_name()!=null&&!user_response.getProfile_file_name().equals("")){
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+follower_response.getProfile_file_name())
+                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+user_response.getProfile_file_name())
                     .circleCrop()
                     .into(holder.iv_user_image);
         }else{
@@ -79,12 +80,12 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
             {
                 if (response.isSuccessful() && response.body() != null)
                 {
-                    //내 팔로잉 목록에서 나를 팔로우한 사람이 존재하면 맞팔로우 버튼이 보이지 않게 한다.
+                    //내 팔로잉 목록에서 나를 팔로우한 사람이 존재하면 언팔로우 버튼이 보이고, 팔로우 버튼이 사라진다.
                     List<following_Response> responseResult = response.body();
                     boolean isAlreadyFollow = false;
                     for(int i=0; i<responseResult.size(); i++){
                         String element = responseResult.get(i).getFollowee_id();
-                        if (element.equals(follower_response.getFollower_id())) {
+                        if (element.equals(user_response.getUser_id())) {
                             isAlreadyFollow = true;
                             break;
                         } else {
@@ -93,8 +94,10 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
                     }
                     if(isAlreadyFollow){
                         holder.bt_follow.setVisibility(View.INVISIBLE);
+                        holder.bt_unfollow.setVisibility(View.VISIBLE);
                     }else{
                         holder.bt_follow.setVisibility(View.VISIBLE);
+                        holder.bt_unfollow.setVisibility(View.INVISIBLE);
                     }
                 }
             }
@@ -110,7 +113,7 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
             @Override
             public void onClick(View v) {
                 ApiInterface createFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = createFollowing_api.createFollowing(follower_response.getFollower_id(),user_id);
+                Call<String> call = createFollowing_api.createFollowing(user_response.getUser_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {
                     @Override
@@ -135,8 +138,8 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
         holder.bt_follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface createFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = createFollowing_api.createFollowing(follower_response.getFollower_id(),user_id);
+                ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                Call<String> call = deleteFollowing_api.deleteFollowing(user_response.getUser_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {
                     @Override
@@ -145,14 +148,14 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
                         if (response.isSuccessful() && response.body() != null)
                         {
                             notifyDataSetChanged();
-                            Log.e("팔로우 추가 성공", response.body().toString());
+                            Log.e("팔로우 삭제 성공", response.body().toString());
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
                     {
-                        Log.e("팔로우 추가 에러", t.getMessage());
+                        Log.e("팔로우 삭제 에러", t.getMessage());
                     }
                 });
             }
@@ -166,42 +169,24 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
         return lists.size();
     }
 
-    public class FollowerViewHolder extends RecyclerView.ViewHolder // implements View.OnCreateContextMenuListener
+    public class ViewHolder extends RecyclerView.ViewHolder // implements View.OnCreateContextMenuListener
     {
-        public ConstraintLayout cl_item_layout;
-        public TextView tv_user_nick,tv_user_id,tv_follow_check;
+        public TextView tv_user_nick,tv_user_id,tv_user_intro;
         public ImageView iv_user_image;
-        public Button bt_follow;
+        public Button bt_follow,bt_unfollow;
 
 
-        public FollowerViewHolder(@NonNull View view)
+        public ViewHolder(@NonNull View view)
         {
             super(view);
-            cl_item_layout = view.findViewById(R.id.cl_item_layout);
-            tv_user_nick = view.findViewById(R.id.tv_user_nick);
-            tv_user_id = view.findViewById(R.id.tv_user_id);
-            tv_follow_check = view.findViewById(R.id.tv_follow_check);
-            iv_user_image = view.findViewById(R.id.iv_user_image);
-            bt_follow = view.findViewById(R.id.bt_follow);
+            tv_user_nick = view.findViewById(R.id.tv_user_nick_searchResult);
+            tv_user_id = view.findViewById(R.id.tv_user_id_searchResult);
+            tv_user_intro = view.findViewById(R.id.tv_selfIntro_searchResult);
+            iv_user_image = view.findViewById(R.id.iv_user_image_searchResult);
+            bt_follow = view.findViewById(R.id.bt_following_searchResult);
+            bt_unfollow = view.findViewById(R.id.bt_unfollow_searchResult);
         }
 
-//        @Override
-//        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//            MenuItem delete = menu.add(Menu.NONE, R.id.action_delete, 1, "delete");
-//            delete.setOnMenuItemClickListener(onMenuItemClickListener);
-//        }
-//
-//        private final MenuItem.OnMenuItemClickListener onMenuItemClickListener = new MenuItem.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.action_delete:
-//                        Toast.makeText(mContext.getApplicationContext(), "삭제",Toast.LENGTH_SHORT).show();
-//                        return true;
-//                }
-//                return false;
-//            }
-//        };
     }
 
 }

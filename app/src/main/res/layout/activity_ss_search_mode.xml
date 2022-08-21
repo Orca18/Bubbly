@@ -25,32 +25,12 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/linear_layout"
+
+    <ListView
+        android:id="@+id/lv_recentlySearched"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_recently_searched_listview"/>
 
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spoqa_bold"
-            android:paddingLeft="10dp"
-            android:text="최근 검색어 / 에디텍 공백 아니면 연관 검색어 리스트뷰"
-            android:textSize="22dp" />
-
-        <TextView
-            android:layout_marginRight="20dp"
-            android:textColor="@color/red"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="삭제"/>
-
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchmode_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -53,12 +53,12 @@ public class SS_KeywordResult extends AppCompatActivity {
     }
 
     private void initiallize() {
-        toolbar = findViewById(R.id.toolbar_KeywordResult);
+//        toolbar = findViewById(R.id.toolbar_KeywordResult);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(""+keywork);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        option = findViewById(R.id.keywordresult_option);
+//        option = findViewById(R.id.keywordresult_option);
         recyclerView = findViewById(R.id.keyword_recyclerView);
         swipeRefreshLayout = findViewById(R.id.keyword_refresh);
     }

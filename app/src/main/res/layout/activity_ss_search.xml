@@ -73,7 +73,9 @@
             android:id="@+id/searchresult_pager2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/searchresult_tablayout" />
+            android:layout_below="@id/searchresult_tablayout" >
+
+        </androidx.viewpager2.widget.ViewPager2>
 
 
     </FrameLayout>

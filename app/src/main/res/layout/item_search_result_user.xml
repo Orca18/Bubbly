@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_user_image"
+            android:id="@+id/iv_user_image_searchResult"
             android:layout_width="63dp"
             android:layout_height="63dp"
             android:layout_marginLeft="20dp"
@@ -24,7 +24,7 @@
             android:src="@drawable/profile" />
 
         <TextView
-            android:id="@+id/tv_user_nick"
+            android:id="@+id/tv_user_nick_searchResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13dp"
@@ -33,46 +33,57 @@
             android:textColor="@color/black"
             android:textSize="19dp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/iv_user_image"
+            app:layout_constraintStart_toEndOf="@+id/iv_user_image_searchResult"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_user_id"
+            android:id="@+id/tv_user_id_searchResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:layout_marginLeft="15dp"
             android:text="\u0040나중에수정"
             android:textSize="17dp"
-            app:layout_constraintStart_toEndOf="@+id/iv_user_image"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_nick" />
-
+            app:layout_constraintStart_toEndOf="@+id/iv_user_image_searchResult"
+            app:layout_constraintTop_toBottomOf="@+id/tv_user_nick_searchResult" />
 
         <TextView
-            android:id="@+id/tv_follow_check"
+            android:id="@+id/tv_selfIntro_searchResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="1dp"
             android:layout_marginBottom="13dp"
             android:background="@drawable/corner"
-            android:text=" 나를 팔로우 합니다 "
+            android:text="  "
             android:textSize="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_user_image"
-            app:layout_constraintTop_toBottomOf="@+id/tv_user_id" />
+            app:layout_constraintStart_toEndOf="@+id/iv_user_image_searchResult"
+            app:layout_constraintTop_toBottomOf="@+id/tv_user_id_searchResult" />
 
         <Button
-            android:id="@+id/bt_follow"
+            android:id="@+id/bt_unfollow_searchResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:backgroundTint="@color/gray"
+            android:text="언팔로우"
+            android:padding="10dp"
+            android:textSize="15dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/bt_following_searchResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="20dp"
             android:backgroundTint="@color/black"
-            android:textColor="@color/white"
-            android:text="맞팔로우하기"
-            android:padding="10dp"
-            android:textSize="15dp"
-            android:visibility="invisible"
+            android:text="팔로우"
+            android:textColor="#FFFFFF"
+            android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
