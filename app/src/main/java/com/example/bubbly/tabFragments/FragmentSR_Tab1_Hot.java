@@ -94,7 +94,7 @@ public class FragmentSR_Tab1_Hot extends Fragment {
 
 
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<post_Response>> call = api.selectPostUsingPostContents(keyword, UserInfo.user_id);
+        Call<List<post_Response>> call = api.selectPostUsingPostContentsOrderBylike(UserInfo.user_id,keyword);
         call.enqueue(new Callback<List<post_Response>>()
         {
             @Override

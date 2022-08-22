@@ -23,7 +23,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.Add_Posting_Create;
 import com.example.bubbly.ImageView_FullScreen;
+import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
@@ -131,6 +133,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                                 return true;
 
                             case R.id.action_c:
+                                //nft신청
+                                Intent mIntent = new Intent(context.getApplicationContext(), Post_ApplyNFT_A.class);
+                                mIntent.putExtra("post_id",post_response.getPost_id());
+                                context.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
                                 return true;
 

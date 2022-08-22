@@ -1,5 +1,7 @@
 package com.example.bubbly.retrofit;
 
+import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -101,6 +103,11 @@ public interface ApiInterface {
     Call<String> selectAddrUsingUserId(@Query("user_id") String user_id);
 
 
+    @GET("userinfo/selectUserSearchResultList") // 사용자 검색 api
+    Call<String> selectUserSearchResultList(@Query("user_id") String user_id, //  user_id 값(auto_increment)
+                                            @Query("search_text") String search_text); // 검색어
+
+
     // todo 회정보와 관련된 api (끝 지점)
 
 
@@ -158,6 +165,12 @@ public interface ApiInterface {
     @GET("post/selectPostUsingPostContents") // 게시글 내용으로 검색
     Call<List<post_Response>> selectPostUsingPostContents(@Query("post_contents") String post_contents, //게시글 내용 = 검색어
                                              @Query("user_id") String user_id); //사용자 id
+
+
+    @GET("post/selectPostUsingPostContentsOrderBylike") // 게시글 내용으로 검색
+    Call<List<post_Response>> selectPostUsingPostContentsOrderBylike(@Query("user_id") String user_id, //사용자 id
+                                                                     @Query("search_text") String search_text); //검색어
+
     // todo 게시물과 관련된 api (끝 지점)
 
 
@@ -231,6 +244,8 @@ public interface ApiInterface {
 
     @GET("realtimetrend/selectRealTimeTrends") // 검색창 실시간 트랜드
     Call <String> selectRealTimeTrends(@Query("current_time") String current_time); // 현재시간
+
+
     // todo 검섹어 관련된 api (끝 지점)
 
     // todo 블록체인 관련된 api (끝 지점)
@@ -260,9 +275,9 @@ public interface ApiInterface {
     Call<String> nftCreation(@Part("mnemonic") String mnemonic,
                             @Part("assetName") String assetName,
                             @Part("description") String description,
-                            @Part List<MultipartBody.Part> files,
                             @Part("user_id") String user_id,
-                            @Part("post_id") String post_id);
+                            @Part("post_id") String post_id,
+                            @Part List<MultipartBody.Part> files);
 
     @FormUrlEncoded
     @POST("nft-sell") // nft 판매
@@ -305,4 +320,10 @@ public interface ApiInterface {
     // todo nft 관련된 api (끝 지점)
 
 
+    // todo community 관련 api (시작 지점)
+
+    @GET("community/selectCommunitySearchResultList") // 사용자 검색 api
+    Call<List<Kim_JoinedCom_Response>> selectCommunitySearchResultList(@Query("search_text") String search_text); // 검색어
+
+    // todo community 관련 api (끝 지점)
 }

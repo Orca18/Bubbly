@@ -38,6 +38,9 @@
             android:name=".Add_Posting_Modify"
             android:exported="false" />
         <activity
+            android:name=".Post_ApplyNFT_A"
+            android:exported="false" />
+        <activity
             android:name=".ModifyProfile"
             android:exported="false" />
         <activity
@@ -105,7 +108,11 @@
         <activity
             android:name=".LL_Register_B"
             android:exported="false">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity

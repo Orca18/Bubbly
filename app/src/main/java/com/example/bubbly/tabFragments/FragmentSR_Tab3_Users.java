@@ -96,7 +96,7 @@ public class FragmentSR_Tab3_Users extends Fragment {
 
 
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call = api.selectUserListForMention(UserInfo.user_id,keyword);
+        Call<String> call = api.selectUserSearchResultList(UserInfo.user_id,keyword);
         call.enqueue(new Callback<String>()
         {
             @Override
@@ -112,8 +112,8 @@ public class FragmentSR_Tab3_Users extends Fragment {
                             userList.add(new SearchedUser_Item(jsonObject.getString("user_id"),
                                     jsonObject.getString("nick_name"),
                                     jsonObject.getString("profile_file_name"),
-                                    "로그인 id api 대기",
-                                    "자기소개 api 대기"));
+                                    jsonObject.getString("login_id"),
+                                    jsonObject.getString("self_info")));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();

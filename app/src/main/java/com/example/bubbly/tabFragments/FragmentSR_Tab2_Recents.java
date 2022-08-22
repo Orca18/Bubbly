@@ -100,6 +100,7 @@ public class FragmentSR_Tab2_Recents extends Fragment {
             @Override
             public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response)
             {
+                System.out.println("recent"+response.body());
                 if (response.isSuccessful() && response.body() != null)
                 {
                     List<post_Response> responseResult = response.body();
