@@ -15,6 +15,7 @@
         android:layout_marginTop="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/posting_create_profile"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:src="@drawable/google" />
@@ -45,8 +46,7 @@
         android:fontFamily="@font/spoqa_medium"
         android:gravity="top"
         android:hint="어떤 소식이 있나요?"
-        android:maxLength="140"
-        android:maxLines="10"
+        android:maxLength="280"
         android:paddingTop="5dp"
         android:paddingBottom="6dp"
         android:textColor="@color/text_black" />

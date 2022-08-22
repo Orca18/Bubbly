@@ -9,15 +9,15 @@
 
 
     <TextView
-        android:layout_marginLeft="79dp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:textSize="14dp"
         android:id="@+id/tv_com_name"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="76dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/spoqa_regular"
+        android:maxLines="1"
         android:text="커뮤니티명"
-        android:fontFamily="@font/spoqa_medium"/>
+        android:textSize="14dp" />
 
     <LinearLayout
         android:id="@+id/ll_item_layout"
@@ -32,8 +32,8 @@
             app:civ_border_width="0.6dp"
             app:civ_border_overlay="true"
             android:id="@+id/iv_user_image"
-            android:layout_width="54dp"
-            android:layout_height="54dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="14dp"/>
 
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="Bubble Text - 버블 내용"
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="18dp" />
 
             <androidx.cardview.widget.CardView
                 app:cardCornerRadius="10dp"

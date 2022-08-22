@@ -40,7 +40,7 @@ public interface Kim_ApiInterface {
             @Part("community_id") String community_id
             );
 
-    // 3. 커뮤니티 참여자 정보 저장 TODO 커뮤 생성 시, 커뮤 ID 다시 받아와서 만들어야되려나???
+    // 3. 커뮤니티 아이디로 커뮤니티 정보 조회
     @GET("community/selectCommunityUsingCommunityId")
     Call<List<Kim_Com_Info_Response>> selectCommunityUsingCommunityId(
             @Query("community_id") String community_id
@@ -86,9 +86,23 @@ public interface Kim_ApiInterface {
             @Query("user_id") String user_id
     );
 
-    // 9. 커뮤니티 폐쇄
 
-    
+    // 10. 커뮤니티 나가기
+    @FormUrlEncoded
+    @POST("community/participate/deleteCommunityParticipant")
+    Call<String> deleteCommunityParticipant(
+            @Part("user_id") String user_id,
+            @Part("community_id") String community_id
+    );
+
+
+    // 9. 커뮤니티 폐쇄
+    @FormUrlEncoded
+    @POST("community/deleteCommunity")
+    Call<String> deleteCommunity(
+            @Part("community_id") String community_id
+    );
+
     // 10 ~ : 게시글 작성 관련 수정 & 검색?
     
 }

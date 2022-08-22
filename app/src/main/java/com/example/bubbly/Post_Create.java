@@ -41,6 +41,7 @@ import com.example.bubbly.controller.DialogRecyclerAdapter;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
+import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.FileUtils;
@@ -56,6 +57,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -92,6 +94,8 @@ public class Post_Create extends AppCompatActivity {
     String[] text;
     public static String[] ids;
 
+    CircleImageView cv_profile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,15 +123,18 @@ public class Post_Create extends AppCompatActivity {
             et_content.setText(post_content);
         }
 
-        System.out.println("post_file" + post_file);
-        if (post_file != null) {
-            imageList.add(Uri.parse("https://d2gf68dbj51k8e.cloudfront.net/" + post_file));
-            r_thumb.setVisibility(View.GONE);
-            r_img.setVisibility(View.VISIBLE);
-            Glide.with(Post_Create.this)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_file)
-                    .into(my_image);
-        }
+
+
+// 수정 할 때 사용
+//        System.out.println("post_file" + post_file);
+//        if (post_file != null) {
+//            imageList.add(Uri.parse("https://d2gf68dbj51k8e.cloudfront.net/" + post_file));
+//            r_thumb.setVisibility(View.GONE);
+//            r_img.setVisibility(View.VISIBLE);
+//            Glide.with(Post_Create.this)
+//                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_file)
+//                    .into(my_image);
+//        }
 
 
     }
@@ -160,6 +167,15 @@ public class Post_Create extends AppCompatActivity {
 
         com = findViewById(R.id.posting_create_category);
 
+        cv_profile = findViewById(R.id.posting_create_profile);
+
+        // 프로파일 이미지
+        if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")) {
+            Glide.with(getApplicationContext())
+                    .load(UserInfo.profile_file_name)
+                    .circleCrop()
+                    .into(cv_profile);
+        }
     }
 
     private void touchEvent() {
@@ -323,37 +339,48 @@ public class Post_Create extends AppCompatActivity {
 
 
     public void createPost() {
-        List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
-        //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
-        if (imageList != null) {
-            for (int i = 0; i < imageList.size(); i++) {
-                //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
-                parts.add(prepareFilePart("image" + i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
-            }
-        }
-        RequestBody size = createPartFromString("" + parts.size());
-
-        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        ApiInterface createPost_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", category_com_id, "1");
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    // 게시글 성공 후, 해당 카테고리의 커뮤니티 or 본인 프로필 화면으로 가기
-                    Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
-                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(mIntent);
-                    finish();
-                    Toast.makeText(getApplicationContext(), "게시글 등록 완료!", Toast.LENGTH_SHORT).show();
+        
+        
+        if(et_content.getText().equals("")){
+            Toast.makeText(getApplicationContext(), "내용을 입력해주세요",Toast.LENGTH_SHORT).show();
+        } else {
+            List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
+            //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
+            if (imageList != null) {
+                for (int i = 0; i < imageList.size(); i++) {
+                    //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
+                    parts.add(prepareFilePart("image" + i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
                 }
             }
+            RequestBody size = createPartFromString("" + parts.size());
 
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e("게시글 생성 에러", t.getMessage());
-            }
-        });
+            user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+            ApiInterface createPost_api = ApiClient.getApiClient().create(ApiInterface.class);
+            Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", category_com_id, "1");
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        // 게시글 성공 후, 해당 카테고리의 커뮤니티 or 본인 프로필 화면으로 가기
+                        Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
+                        mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                        startActivity(mIntent);
+                        finish();
+                        Toast.makeText(getApplicationContext(), "게시글 등록 완료!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    Log.e("게시글 생성 에러", t.getMessage());
+                }
+            });
+        }
+        
+        
+        
+        
+        
     }
 
 

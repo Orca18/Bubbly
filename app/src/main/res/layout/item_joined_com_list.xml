@@ -22,7 +22,7 @@
                 android:id="@+id/joined_com_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#333"/>
+                android:background="@color/gray"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -31,7 +31,7 @@
         <LinearLayout
             android:layout_marginLeft="8dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -67,6 +67,7 @@
 
 
             <TextView
+
                 android:id="@+id/joined_com_desc"
                 android:ellipsize="end"
                 android:maxLines="2"
@@ -74,6 +75,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+            <View
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
 
             <LinearLayout
                 android:layout_marginTop="4dp"
@@ -88,15 +93,21 @@
                     android:layout_marginRight="8dp"/>
 
                 <TextView
+                    android:text="600"
                     android:id="@+id/joined_com_members"
                     android:layout_marginTop="1dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6.7천명"
                     android:textColor="@color/black"
                     android:textSize="16dp" />
 
-
+                <TextView
+                    android:layout_marginTop="1dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="명"
+                    android:textColor="@color/black"
+                    android:textSize="16dp" />
 
 
 
@@ -112,12 +123,13 @@
                 android:maxHeight="100dp"/>
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/joined_com_btn"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/blueblack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="가입함"/>
+                android:text="참가중"/>
 
 
 

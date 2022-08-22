@@ -99,9 +99,7 @@ public class Community_Home_Feeds extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-//                        loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
-                        /* 업데이트가 끝났음을 알림 */
+                        GetJoinedComPosters();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });

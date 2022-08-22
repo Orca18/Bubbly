@@ -92,18 +92,7 @@ public class MM_Home extends AppCompatActivity {
         NaviTouch();
         // 리사이클러뷰 데이터 가져오기
 
-//        linearLayoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(linearLayoutManager);
-////        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), DividerItemDecoration.VERTICAL));
-//        //위치 유지
-//        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-//        //위치 유지
-//        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-//
-//        postList = new ArrayList<>();
-//        post_adapter = new Post_Adapter(MM_Home.this, postList,MM_Home.this);
-//        recyclerView.setAdapter(post_adapter);
-//        post_adapter.notifyDataSetChanged();
+
 
         //loadrecycler();
         selectPost_Followee_Communit(); // 나와 팔로위, 속한 커뮤니티의 게시물 조회 api
@@ -324,9 +313,7 @@ public class MM_Home extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-//                        loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
-                        /* 업데이트가 끝났음을 알림 */
+                        selectPost_Followee_Communit();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });

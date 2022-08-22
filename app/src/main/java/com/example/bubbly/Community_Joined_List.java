@@ -74,8 +74,7 @@ public class Community_Joined_List extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        //loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
+                        getJoinedComList();
                         /* 업데이트가 끝났음을 알림 */
                         swipeRefreshLayout.setRefreshing(false);
                     }

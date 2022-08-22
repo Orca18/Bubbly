@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
@@ -65,7 +66,6 @@ public class Community_MainPage extends AppCompatActivity {
 
     Kim_ApiInterface api;
 
-    String join_yn;
     ImageView iv_join_yn;
     TextView tv_join_yn;
 
@@ -78,7 +78,6 @@ public class Community_MainPage extends AppCompatActivity {
 
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
-        join_yn = intent.getStringExtra("y");
 
 
 
@@ -96,14 +95,18 @@ public class Community_MainPage extends AppCompatActivity {
     }
 
     private void GetUserStatus() {
-        // 가입 가능한 목록에서 왔을 경우에는, n 이기 때문에 '가입 신청' 버튼
-        if(join_yn.equals("y")){
-            tv_join_yn.setText("가입함");
-            iv_join_yn.setImageResource(R.drawable.ic_baseline_check_24);
-        } else {
-            tv_join_yn.setText("가입 신청");
-            iv_join_yn.setImageResource(R.drawable.ic_baseline_add_circle_24);
-        }
+
+//        ll_join.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(join_yn.equals("y")){
+//
+//                } else {
+//                    // 재가입 신청
+//
+//                }
+//            }
+//        });
     }
 
 
@@ -167,10 +170,7 @@ public class Community_MainPage extends AppCompatActivity {
         ll_notice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mIntent = new Intent(getApplicationContext(), Community_Memberlist.class);
-                mIntent.putExtra("com_id", com_id);
-                mIntent.putExtra("com_name", com_name);
-                startActivity(mIntent);
+                Toast.makeText(Community_MainPage.this, "변경 예정", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -180,6 +180,7 @@ public class Community_MainPage extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경...
                 // 어떻게 해당 커뮤니티에 해당하는 nft를 가져올지 고민하기
+                Toast.makeText(Community_MainPage.this, "준비 중...", Toast.LENGTH_SHORT).show();
             }
         });
 
