@@ -2,28 +2,45 @@ package com.example.bubbly.tabFragments;
 
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.MM_Profile;
 import com.example.bubbly.R;
+import com.example.bubbly.controller.JoinedCom_Adapter;
+import com.example.bubbly.controller.NFT_Adapter;
+import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
 import com.example.bubbly.model.Fragment_Tab1_Item;
+import com.example.bubbly.model.NFT_Item;
+import com.example.bubbly.model.UserInfo;
+import com.example.bubbly.retrofit.ApiClient;
+import com.example.bubbly.retrofit.ApiInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Fragment_Tab3_NFTs extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
     View v;
-    private RecyclerView myrecyclerview;
-    private List<Fragment_Tab1_Item> postsItem;
+    LinearLayoutManager linearLayoutManager;
+    RecyclerView recyclerView;
+    private Parcelable recyclerViewState;
+    private ArrayList<NFT_Item> list;
+    private NFT_Adapter adapter;
 
     String uid;
 
@@ -46,7 +63,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
         uid = ((MM_Profile)getActivity()).getUid();
 
-        postsItem = new ArrayList<>();
+
 //        fillList();
 
     }
@@ -59,117 +76,52 @@ public class Fragment_Tab3_NFTs extends Fragment {
         // Inflate the layout for this fragment
         // 레이아웃
         v = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
+        recyclerView = v.findViewById(R.id.tab_recyclerview);
 
-//        swipeRefreshLayout = v.findViewById(R.id.refresh_notice);
-//
-//        swipeRefreshLayout.setOnRefreshListener(
-//                new SwipeRefreshLayout.OnRefreshListener() {
-//                    @Override
-//                    public void onRefresh() {
-//                        fillList();
-//                        /* 업데이트가 끝났음을 알림 */
-//                        swipeRefreshLayout.setRefreshing(false);
-//                    }
-//                });
+        selectNFT();
+
         return v;
     }
 
+    private void selectNFT(){
 
+        list = new ArrayList<>();
+        adapter = new NFT_Adapter(getActivity().getApplicationContext(), this.list);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        //위치 유지
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+        //위치 유지
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
+        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<NFT_Item>> call = api.selectNftUsingHolderId(UserInfo.user_id);
+        call.enqueue(new Callback<List<NFT_Item>>() {
+            @Override
+            public void onResponse(Call<List<NFT_Item>> call, Response<List<NFT_Item>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    System.out.println("nft 보유 목록"+response.body());
+                    List<NFT_Item> responseResult = response.body();
+                    for(int i=0; i<responseResult.size(); i++){
+                        list.add(new NFT_Item(responseResult.get(i).getNft_id(),
+                                responseResult.get(i).getNft_des(),
+                                responseResult.get(i).getNft_name(),
+                                responseResult.get(i).getHolder_id(),
+                                responseResult.get(i).getFile_save_url()));
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<List<NFT_Item>> call, Throwable t) {
+                Log.e("nft 생성 실패", t.getMessage());
+            }
+        });
+    }
 
-
-
-//    private void fillList() {
-//
-//        // HttpUrlConnection
-//        Thread th = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    String page = "http://146.56.188.188/app/notice_list.php";
-//                    // URL 객체 생성
-//                    URL url = new URL(page);
-//                    // 연결 객체 생성
-//                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//
-//                    // Post 파라미터
-////                    String params = "ccode="+code+"&start="+start+"&list="+list;
-//                    String params = "";
-//                    // 결과값 저장 문자열
-//                    final StringBuilder sb = new StringBuilder();
-//
-//                    // 연결되면
-//                    if (conn != null) {
-//                        Log.i("tag", "conn 연결");
-//                        // 응답 타임아웃 설정
-//                        conn.setRequestProperty("Accept", "application/json");
-//                        conn.setConnectTimeout(10000);
-//                        // POST 요청방식
-//                        conn.setRequestMethod("POST");
-//                        // 포스트 파라미터 전달
-//                        conn.getOutputStream().write(params.getBytes("utf-8"));
-//
-//
-//                        // url에 접속 성공하면 (200)
-//                        if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-//
-//                            // 결과 값 읽어오는 부분
-//                            BufferedReader br = new BufferedReader(new InputStreamReader(
-//                                    conn.getInputStream(), "utf-8"
-//                            ));
-//                            String line;
-//                            while ((line = br.readLine()) != null) {
-//                                sb.append(line);
-//                            }
-//                            // 버퍼리더 종료
-//                            br.close();
-//                        }
-//                        // 연결 끊기
-//                        conn.disconnect();
-//                    }
-//
-//                    //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
-//                    // runOnUiThread(메인 스레드영역)
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            fillList2(sb.toString());
-//
-//                            Log.i("testt", "testt :" + sb.toString());
-//
-//                        }
-//                    });
-//                } catch (Exception e) {
-//                    Log.i("tag", "error :" + e);
-//                }
-//            }
-//        });
-//        th.start();
-//    }
-//
-//    private void fillList2(String memberinfo) {
-//        JsonParser Parser = new JsonParser();
-//        JsonObject jsonObj = (JsonObject) Parser.parse(memberinfo);
-//        JsonArray info = (JsonArray) jsonObj.get("result");
-//
-//        postsItem = new ArrayList<>();
-//
-//        for (int i = 0; i < info.size(); i++) {
-//            JsonObject object = (JsonObject) info.get(i);
-//            // String imgurl = "http://146.56.188.188/app/images/";
-//            postsItem.add(new Fragment_Tab1_Item("아아 테스트"));
-//        }
-//
-//        setUpRecyclerView();
-//    }
-
-//    private void setUpRecyclerView() {
-//        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
-//        Profile_Tab1_Adapter noticesAdapter = new Profile_Tab1_Adapter(getContext(), postsItem);
-//        myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        myrecyclerview.setAdapter(noticesAdapter);
-//    }
 
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.bubbly.retrofit;
 
 import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
+import com.example.bubbly.model.NFT_Item;
 
 import java.util.List;
 
@@ -272,11 +273,11 @@ public interface ApiInterface {
     // todo nft 관련된 api (끝 지점)
     @Multipart
     @POST("nft-creation") // nft 저장
-    Call<String> nftCreation(@Part("mnemonic") String mnemonic,
-                            @Part("assetName") String assetName,
-                            @Part("description") String description,
-                            @Part("user_id") String user_id,
-                            @Part("post_id") String post_id,
+    Call<String> nftCreation(@Part("mnemonic") RequestBody mnemonic,
+                            @Part("assetName") RequestBody assetName,
+                            @Part("description") RequestBody description,
+                            @Part("user_id") RequestBody user_id,
+                            @Part("post_id") RequestBody post_id,
                             @Part List<MultipartBody.Part> files);
 
     @FormUrlEncoded
@@ -308,7 +309,7 @@ public interface ApiInterface {
     Call<String> selectNftUsingNftId(@Query("nft_id") String nft_id);
 
     @GET("nft/selectNftUsingHolderId") //holder_id로 nft 조회
-    Call<String> selectNftUsingHolderId(@Query("holder_id") String holder_id);
+    Call<List<NFT_Item>> selectNftUsingHolderId(@Query("holder_id") String holder_id);
 
     @GET("nft/selectAllSelledNftList") // 모든 판매중인 nft리스트
     Call<String> selectAllSelledNftList();

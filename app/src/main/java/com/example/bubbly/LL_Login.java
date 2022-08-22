@@ -108,13 +108,14 @@ public class LL_Login extends AppCompatActivity {
                                                             masterkey,
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-                                            UserInfo.mnemonic = sharedPreferences.getString("mnemonic","");
+                                            System.out.println(sharedPreferences.getString("mnemonic",""));
+                                            String mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
+                                            UserInfo.mnemonic = mnemonic.replace("file title ","");
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-
 
 
                                         //회원정보를 요청한다.
