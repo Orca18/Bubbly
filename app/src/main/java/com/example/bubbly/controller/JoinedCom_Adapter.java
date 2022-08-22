@@ -75,6 +75,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
             public void onClick(View view) {
                 Intent mIntent = new Intent(mContext, Community_MainPage.class);
                 mIntent.putExtra("com_id", response.getCommunity_id());
+                mIntent.putExtra("join_yn", "y");
                 mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });

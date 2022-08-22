@@ -1,5 +1,4 @@
 package com.example.bubbly;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -66,6 +65,10 @@ public class Community_MainPage extends AppCompatActivity {
 
     Kim_ApiInterface api;
 
+    String join_yn;
+    ImageView iv_join_yn;
+    TextView tv_join_yn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,18 +78,32 @@ public class Community_MainPage extends AppCompatActivity {
 
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
-        Log.i("정보태그", "com_id = " + com_id);
+        join_yn = intent.getStringExtra("y");
+
+
 
         initialize();
         // 커뮤니티 정보 가져오기
         GetComInfo();
-
+        // 커뮤니티 내 본인 정보 가져오기
+        GetUserStatus();
         // 리사이클러뷰 위 쪽 클릭 리스너
         listeners();
 
         // 커뮤니티 게시글 가져오기 - 리사이클러뷰
         GetComPosters();
 
+    }
+
+    private void GetUserStatus() {
+        // 가입 가능한 목록에서 왔을 경우에는, n 이기 때문에 '가입 신청' 버튼
+        if(join_yn.equals("y")){
+            tv_join_yn.setText("가입함");
+            iv_join_yn.setImageResource(R.drawable.ic_baseline_check_24);
+        } else {
+            tv_join_yn.setText("가입 신청");
+            iv_join_yn.setImageResource(R.drawable.ic_baseline_add_circle_24);
+        }
     }
 
 
@@ -108,6 +125,9 @@ public class Community_MainPage extends AppCompatActivity {
         title_name = findViewById(R.id.com_main_name);
         title_image = findViewById(R.id.com_main_titleimage);
         cv_profile = findViewById(R.id.com_main_profile);
+
+        iv_join_yn = findViewById(R.id.com_main_join_checkiv);
+        tv_join_yn = findViewById(R.id.com_main_join_checktv);
         
     }
 

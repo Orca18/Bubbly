@@ -29,8 +29,12 @@ import com.example.bubbly.SS_Profile;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -62,6 +66,12 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         return new PostViewHolder(view);
     }
 
+    public static Date getDate(String from) throws ParseException {
+// "yyyy-MM-dd HH:mm:ss"
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(from);
+        return date;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
@@ -72,12 +82,20 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         holder.tv_user_nick.setText(post_response.getNick_name());
         holder.tv_content.setText(post_response.getPost_contents());
         holder.tv_like_count.setText(post_response.getLike_count());
-        holder.tv_time.setText(post_response.getCre_datetime());
+
+        String a = null;
+        try {
+            a = CommonUtil.beforeTime(getDate(post_response.getCre_datetime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // SNS 형식 시간
+        holder.tv_time.setText(a);
+
 
         // TODO 유저 login_id & 커뮤니티 이름 뜨게 만들기
         holder.tv_user_id.setText(post_response.getPost_writer_id());
         holder.tv_com_name.setText(post_response.getCommunity_id());
-
 
 
         // TODO 커뮤니티 이름 가져오긴 하는데, 성능 저하 문제는 나중에 고려
@@ -96,14 +114,12 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getProfile_file_name())
+                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getProfile_file_name())
                 .into(holder.iv_user_image);
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
                 .into(holder.iv_media);
-
-
 
 
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +130,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch(menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.action_a:
                                 Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
                                 return true;
@@ -122,13 +138,10 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                             case R.id.action_b:
                                 ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
                                 Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
-                                call.enqueue(new Callback<String>()
-                                {
+                                call.enqueue(new Callback<String>() {
                                     @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                                    {
-                                        if (response.isSuccessful() && response.body() != null)
-                                        {
+                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                        if (response.isSuccessful() && response.body() != null) {
                                             //Log.e("delete", String.valueOf(position));
                                             lists.remove(position);
                                             notifyItemRemoved(position);
@@ -136,8 +149,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                                     }
 
                                     @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                                    {
+                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                         Log.e("에러", t.getMessage());
                                     }
                                 });
@@ -154,13 +166,11 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                     }
                 });
                 popup.inflate(R.menu.main_liist_menu);
-                popup.setGravity(Gravity.RIGHT|Gravity.END);
+                popup.setGravity(Gravity.RIGHT | Gravity.END);
 
                 popup.show();
             }
         });
-
-
 
 
         if (post_response.getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
@@ -356,7 +366,6 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         }
 
     }
-
 
 
 }

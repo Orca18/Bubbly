@@ -28,6 +28,13 @@
                     android:background="@color/white"
                     app:layout_scrollFlags="scroll|enterAlways">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/spoqa_bold"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        android:text="커뮤니티"/>
 <!--                    <LinearLayout-->
 <!--                        android:gravity="center"-->
 <!--                        android:orientation="horizontal"-->

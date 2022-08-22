@@ -79,12 +79,14 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/com_main_join_checkiv"
                 android:layout_gravity="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_check_24"/>
 
             <TextView
+                android:id="@+id/com_main_join_checktv"
                 android:layout_gravity="center"
                 android:fontFamily="@font/spoqa_medium"
                 android:layout_width="wrap_content"

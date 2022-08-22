@@ -83,7 +83,7 @@ public class Community_Home_Feeds extends AppCompatActivity {
         // 툴바
         toolbar = findViewById(R.id.community_home_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("커뮤니티 피드");
+        getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toList = findViewById(R.id.community_toList);

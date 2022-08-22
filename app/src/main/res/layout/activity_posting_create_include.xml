@@ -15,18 +15,24 @@
         android:layout_marginTop="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/google" />
 
         <TextView
             android:id="@+id/posting_create_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="10dp"
             android:background="@drawable/bg_circle3"
-            android:padding="10dp"
-            android:text="피드 위치" />
+            android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="피드 위치 길게 작성"
+            android:textColor="@color/black"
+            android:textAlignment="center" />
 
     </LinearLayout>
 
@@ -38,7 +44,7 @@
         android:background="@null"
         android:fontFamily="@font/spoqa_medium"
         android:gravity="top"
-        android:hint="일하기 싫나요? (140자 제한, 10줄)"
+        android:hint="어떤 소식이 있나요?"
         android:maxLength="140"
         android:maxLines="10"
         android:paddingTop="5dp"

@@ -12,12 +12,21 @@
         android:layout_height="wrap_content"
         android:foregroundTint="@color/white">
         <TextView
+            android:maxLength="10"
             android:id="@+id/com_member_comname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_bold"
             android:textColor="@color/black"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:ellipsize="end"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_bold"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:text=" 멤버 목록"/>
     </androidx.appcompat.widget.Toolbar>
 
     <View

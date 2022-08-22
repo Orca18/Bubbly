@@ -27,11 +27,15 @@ import com.example.bubbly.ImageView_FullScreen;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.kim_util_test.CommonUtil;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -63,6 +67,12 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         return new PostViewHolder(view);
     }
 
+    public static Date getDate(String from) throws ParseException {
+// "yyyy-MM-dd HH:mm:ss"
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(from);
+        return date;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
@@ -91,6 +101,14 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
                 .into(holder.iv_media);
 
+        String a = null;
+        try {
+            a = CommonUtil.beforeTime(getDate(post_response.getCre_datetime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // SNS 형식 시간
+        holder.tv_time.setText(a);
 
 
 
@@ -99,52 +117,74 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(holder.iv_options.getContext(), holder.itemView);
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch(menuItem.getItemId()){
-                            case R.id.action_a:
-                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
-                                return true;
+                if(user_id.equals(post_response.getPost_writer_id())){
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch(menuItem.getItemId()){
+                                case R.id.action_a:
+                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+                                    return true;
 
-                            case R.id.action_b:
-                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
-                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
-                                call.enqueue(new Callback<String>()
-                                {
-                                    @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                                case R.id.action_b:
+                                    ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                    Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
+                                    call.enqueue(new Callback<String>()
                                     {
-                                        if (response.isSuccessful() && response.body() != null)
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
                                         {
-                                            //Log.e("delete", String.valueOf(position));
-                                            lists.remove(position);
-                                            notifyItemRemoved(position);
+                                            if (response.isSuccessful() && response.body() != null)
+                                            {
+                                                //Log.e("delete", String.valueOf(position));
+                                                lists.remove(position);
+                                                notifyItemRemoved(position);
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                                    {
-                                        Log.e("에러", t.getMessage());
-                                    }
-                                });
-                                return true;
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                                        {
+                                            Log.e("에러", t.getMessage());
+                                        }
+                                    });
+                                    return true;
 
-                            case R.id.action_c:
-                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
-                                return true;
+                                case R.id.action_c:
+                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+                                    return true;
 
-                            default:
-                                return false;
+                                default:
+                                    return false;
+                            }
+
                         }
+                    });
+                    popup.inflate(R.menu.main_liist_menu);
+                    popup.setGravity(Gravity.RIGHT|Gravity.END);
 
-                    }
-                });
-                popup.inflate(R.menu.main_liist_menu);
-                popup.setGravity(Gravity.RIGHT|Gravity.END);
+                    popup.show();
+                } else {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch(menuItem.getItemId()){
+                                case R.id.action_a2:
+                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
+                                    return true;
 
-                popup.show();
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                    popup.inflate(R.menu.main_liist_menu2);
+                    popup.setGravity(Gravity.RIGHT|Gravity.END);
+
+                    popup.show();
+                }
+
             }
         });
 
