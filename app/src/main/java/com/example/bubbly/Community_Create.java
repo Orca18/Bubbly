@@ -162,13 +162,17 @@ public class Community_Create extends AppCompatActivity {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
 
+                    Log.d("디버그태그", "Status2:"+response.body()); // 리턴 받은거
+
                     // 성공 시, 참여 정보 또 저장 // TODO 생성한 커뮤니티 ID 가져와서 넣어야됨
-//                    Call<String> call2 = kim_api.createCommunityParicipant(user_id, "여기에!!!!!");
+//                    Call<String> call2 = kim_api.createCommunityParicipant(user_id, response.body());
 //                    call2.enqueue(new Callback<String>() {
 //                        @Override
-//                        public void onResponse(Call<String> call, Response<String> response) {
+//                        public void onResponse(Call<String> call, Response<String> response2) {
 //
 //                            finish();
+//
+//
 //                        }
 //
 //                        @Override
@@ -178,8 +182,9 @@ public class Community_Create extends AppCompatActivity {
 //                    });
 
                     finish();
-
-//                    Toast.makeText(getApplicationContext(), "커뮤니티 생성 성공! TODO 해당 커뮤 화면으로 이동", Toast.LENGTH_SHORT).show();
+//                    Intent mIntent = new Intent(getApplicationContext(), Community_MainPage.class);
+//                    mIntent.putExtra("com_id", response.body());
+//                    startActivity(mIntent);
                 }
             }
 
@@ -244,17 +249,7 @@ public class Community_Create extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: {
-                if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-                    backKeyPressedTime = System.currentTimeMillis();
-                    toast = Toast.makeText(this, "작성 중인거 있을 때, 질문", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-                    finish();
-                    toast.cancel();
-                }
-                return true;
-            }
+            case android.R.id.home: onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -262,16 +257,10 @@ public class Community_Create extends AppCompatActivity {
     //뒤로가기 했을 때
     @Override
     public void onBackPressed() {
-        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-            backKeyPressedTime = System.currentTimeMillis();
-            toast = Toast.makeText(this, "작성 중인거 있을 때, 질문", Toast.LENGTH_SHORT);
-            toast.show();
-            return;
-        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+        if(title.getText().length() == 0 && imagefile == null){
             finish();
-            toast.cancel();
         } else {
-            super.onBackPressed();
+            Toast.makeText(getApplicationContext(), "작성 중인 데이터가 있습니다.\n다이얼로그 띄우기",Toast.LENGTH_SHORT).show();
         }
     }
 

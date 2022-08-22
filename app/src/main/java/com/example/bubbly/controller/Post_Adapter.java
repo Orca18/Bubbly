@@ -27,15 +27,17 @@ import com.example.bubbly.ImageView_FullScreen;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
-import com.example.bubbly.kim_util_test.CommonUtil;
+import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
+import com.example.bubbly.retrofit.reply_Response;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -91,6 +93,20 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 //        holder.tv_com_name.setText(post_response.getCommunity_id());
         // TODO if Community 아이디가 0 일 경우, tv_com_name 상태 VIEW.Gone으로 바꾸기
 
+        
+        holder.iv_retweet_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext,"리트윗 구현",Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        holder.iv_share_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext,"딥 링크 구현",Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
         Glide.with(mContext)
@@ -99,11 +115,12 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                .fitCenter()
                 .into(holder.iv_media);
 
         String a = null;
         try {
-            a = CommonUtil.beforeTime(getDate(post_response.getCre_datetime()));
+            a = Kim_DateUtil.beforeTime(getDate(post_response.getCre_datetime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -395,7 +412,28 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
+
+        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<reply_Response>> call = selectCommentUsingPostId_api.selectCommentUsingPostId(post_response.getPost_id());
+        call.enqueue(new Callback<List<reply_Response>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<reply_Response>> call, @NonNull Response<List<reply_Response>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<reply_Response> responseResult = response.body();
+                    holder.tv_reply_count.setText(String.valueOf(responseResult.size()));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<reply_Response>> call, @NonNull Throwable t) {
+                Log.e("게시물 아이디로 게시물 조회", t.getMessage());
+            }
+        });
     }
+
+
+
 
 
     @Override

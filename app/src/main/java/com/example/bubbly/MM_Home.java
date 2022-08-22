@@ -236,6 +236,9 @@ public class MM_Home extends AppCompatActivity {
                     }
                     post_adapter.notifyDataSetChanged();
                 }
+
+                Log.d("디버그태그", "Status:"+response);
+
             }
 
             @Override

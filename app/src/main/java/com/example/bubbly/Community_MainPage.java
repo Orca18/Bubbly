@@ -212,7 +212,6 @@ public class Community_MainPage extends AppCompatActivity {
                         .centerCrop()
                         .into(title_image);
 
-
             }
 
             @Override
@@ -230,6 +229,7 @@ public class Community_MainPage extends AppCompatActivity {
                     .circleCrop()
                     .into(cv_profile);
         }
+
 
 
 

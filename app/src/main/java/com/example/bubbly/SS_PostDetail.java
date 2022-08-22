@@ -1,6 +1,7 @@
 package com.example.bubbly;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -21,12 +23,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.bubbly.controller.Reply_Adapter;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
+import com.example.bubbly.kim_util_test.Kim_DateUtil_Cre;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
 import com.example.bubbly.retrofit.reply_Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -185,6 +193,7 @@ public class SS_PostDetail extends AppCompatActivity {
         ApiInterface selectPostUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<post_Response>> call = selectPostUsingPostId_api.selectPostUsingPostId(post_id, user_id);
         call.enqueue(new Callback<List<post_Response>>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -200,9 +209,13 @@ public class SS_PostDetail extends AppCompatActivity {
                     tv_user_nick.setText(responseResult.get(0).getNick_name());
                     tv_content.setText(responseResult.get(0).getPost_contents());
 //                    tv_like_count.setText(responseResult.get(0).getLike_count());
-                    tv_time.setText(responseResult.get(0).getCre_datetime());
 
 
+                    try {
+                        tv_time.setText(Kim_DateUtil_Cre.creTime(responseResult.get(0).getCre_datetime()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     Glide.with(SS_PostDetail.this)
                             .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names())
@@ -212,6 +225,8 @@ public class SS_PostDetail extends AppCompatActivity {
                             .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
                             .into(iv_user_image);
 
+                    SetDate(responseResult.get(0).getCre_datetime());
+
                 }
             }
 
@@ -220,6 +235,20 @@ public class SS_PostDetail extends AppCompatActivity {
                 Log.e("에러", t.getMessage());
             }
         });
+    }
+
+    private void SetDate(String dateStr) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date;
+        try {
+            date = formatter.parse(dateStr);
+            SimpleDateFormat transFormat = new SimpleDateFormat("yyyy년 MM월 dd일 ㆍ HH:mm");
+            String to = transFormat.format(date);
+            tv_time.setText(to);
+            Log.d("디버그태그", to+"뭐야");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 

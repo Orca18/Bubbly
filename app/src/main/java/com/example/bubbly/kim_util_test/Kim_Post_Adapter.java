@@ -35,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -86,7 +85,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
         String a = null;
         try {
-            a = CommonUtil.beforeTime(getDate(post_response.getCre_datetime()));
+            a = Kim_DateUtil.beforeTime(getDate(post_response.getCre_datetime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -131,6 +130,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                .fitCenter()
                 .into(holder.iv_media);
 
 

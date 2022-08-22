@@ -5,19 +5,18 @@
     android:layout_height="wrap_content"
     xmlns:card_view="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_marginVertical="4dp">
+    android:layout_marginTop="8dp">
 
 
     <TextView
         android:id="@+id/tv_com_name"
         android:layout_width="match_parent"
-        android:layout_height="18dp"
+        android:layout_height="19dp"
         android:layout_marginLeft="76dp"
         android:ellipsize="end"
-        android:fontFamily="@font/spoqa_regular"
         android:maxLines="1"
         android:text="커뮤니티명"
-        android:textSize="14dp" />
+        android:textSize="15dp" />
 
     <LinearLayout
         android:id="@+id/ll_item_layout"
@@ -29,8 +28,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:src="@color/white"
             app:civ_border_color="@color/gray"
-            app:civ_border_width="0.6dp"
-            app:civ_border_overlay="true"
+            app:civ_border_width="1dp"
             android:id="@+id/iv_user_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
@@ -58,14 +56,14 @@
                     android:textStyle="bold"
                     android:text="유저명"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="19dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:text="\u0040"
-                    android:textSize="15dp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:id="@+id/feed_basic_userID"
@@ -75,7 +73,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="사용자"
-                    android:textSize="15dp" />
+                    android:textSize="16dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -83,12 +81,15 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ㆍ"
                     android:textSize="15dp" />
 
                 <TextView
+                    android:layout_marginRight="3dp"
+                    android:layout_gravity="center"
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -96,6 +97,7 @@
                     android:textSize="15dp" />
 
                 <ImageView
+                    android:layout_gravity="center"
                     android:id="@+id/iv_options"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -146,8 +148,8 @@
 
                     <ImageView
                         android:id="@+id/iv_like_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
@@ -155,7 +157,7 @@
                         app:tint="@color/blueblack" />
 
                     <TextView
-                        android:textSize="13dp"
+                        android:textSize="15dp"
                         android:textColor="@color/blueblack"
                         android:id="@+id/tv_like_count"
                         android:layout_width="match_parent"
@@ -174,15 +176,15 @@
                     <ImageView
                         app:tint="@color/blueblack"
                         android:id="@+id/iv_reply_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
                         android:src="@drawable/ic_outline_chat_bubble_outline_24" />
 
                     <TextView
-                        android:textSize="13dp"
+                        android:textSize="15dp"
                         android:textColor="@color/blueblack"
                         android:id="@+id/tv_reply_count"
                         android:layout_width="match_parent"
@@ -202,8 +204,8 @@
                         android:transitionName="recycleimage"
                         app:tint="@color/blueblack"
                         android:id="@+id/iv_retweet_icon"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
@@ -211,7 +213,7 @@
 
 
                     <TextView
-                        android:textSize="13dp"
+                        android:textSize="15dp"
                         android:textColor="@color/blueblack"
                         android:id="@+id/tv_retweet_count"
                         android:layout_width="match_parent"
@@ -229,8 +231,8 @@
                     <ImageView
                         android:padding="3dp"
                         android:id="@+id/iv_share_icon"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:src="@drawable/ic_baseline_share_24"
@@ -244,7 +246,7 @@
     </LinearLayout>
 
     <View
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#eaeaea" />

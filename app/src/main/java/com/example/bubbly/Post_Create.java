@@ -341,7 +341,7 @@ public class Post_Create extends AppCompatActivity {
     public void createPost() {
         
         
-        if(et_content.getText().equals("")){
+        if(et_content.getText().length()==0){
             Toast.makeText(getApplicationContext(), "내용을 입력해주세요",Toast.LENGTH_SHORT).show();
         } else {
             List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다

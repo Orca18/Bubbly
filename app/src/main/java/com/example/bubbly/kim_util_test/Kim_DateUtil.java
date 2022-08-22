@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class CommonUtil {
+public class Kim_DateUtil {
 
     public static String beforeTime(Date date) {
 
