@@ -78,17 +78,17 @@
                 app:layout_anchorGravity="center">
 
 
-                <ScrollView
-                    android:id="@+id/text_scrollview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true"
-                    android:nestedScrollingEnabled="true"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<!--                <ScrollView-->
+<!--                    android:id="@+id/text_scrollview"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:fillViewport="true"-->
+<!--                    android:nestedScrollingEnabled="true"-->
+<!--                    app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
                     <include layout="@layout/main_d_profile_include_frame" />
 
-                </ScrollView>
+<!--                </ScrollView>-->
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

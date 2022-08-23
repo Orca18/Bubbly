@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
       <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tab_recyclerview"
+            android:id="@+id/tab_recyclerview_nft"
+            tools:listitem="@layout/item_nft"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

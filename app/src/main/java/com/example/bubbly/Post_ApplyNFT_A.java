@@ -184,16 +184,10 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                 //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
                 parts.add(prepareFilePart("image", uri)); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
                 System.out.println("니모닉"+UserInfo.mnemonic+et_assetName.getText().toString()+uri+post_id+parts.get(0).body());
-                RequestBody mnemonic = createPartFromString(UserInfo.mnemonic);
-                RequestBody name = createPartFromString("");
-                RequestBody des = createPartFromString("");
-                RequestBody userId = createPartFromString(UserInfo.user_id);
-                RequestBody postId = createPartFromString(post_id);
-
 
                 //파일 전송
                 ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = api.nftCreation(mnemonic,name,des,userId,postId,parts);
+                Call<String> call = api.nftCreation(UserInfo.mnemonic,et_assetName.getText().toString(),"",UserInfo.user_id,post_id,parts);
                 call.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
@@ -205,9 +199,6 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                                 Log.e("nft 생성 실패","response fail");
                             }
                             file.delete();
-                            Toast.makeText(getApplicationContext(), "NFT신청 완료. 몇초 뒤 NFT 목록을 확인하세요.",Toast.LENGTH_SHORT).show();
-                            Intent mIntent = new Intent(getApplicationContext(),MM_Profile.class);
-                            startActivity(mIntent);
                         }
                     }
                     @Override
@@ -217,6 +208,10 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
 
                     }
                 });
+                //블록체인 처리가 늦어 timeout되므로 결과와 무관하게 activity 이동
+                Toast.makeText(getApplicationContext(), "NFT신청 완료. 몇초 뒤 NFT 목록을 확인하세요.",Toast.LENGTH_SHORT).show();
+                Intent mIntent = new Intent(getApplicationContext(),MM_Profile.class);
+                startActivity(mIntent);
             }
         });
     }

@@ -40,6 +40,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
     RecyclerView recyclerView;
     private Parcelable recyclerViewState;
     private ArrayList<NFT_Item> list;
+    private ArrayList<NFT_Item> list_sell;
     private NFT_Adapter adapter;
 
     String uid;
@@ -75,8 +76,8 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
         // Inflate the layout for this fragment
         // 레이아웃
-        v = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
-        recyclerView = v.findViewById(R.id.tab_recyclerview);
+        v = inflater.inflate(R.layout.fragment_profile_tab3, container, false);
+        recyclerView = v.findViewById(R.id.tab_recyclerview_nft);
 
         selectNFT();
 
@@ -86,16 +87,13 @@ public class Fragment_Tab3_NFTs extends Fragment {
     private void selectNFT(){
 
         list = new ArrayList<>();
-        adapter = new NFT_Adapter(getActivity().getApplicationContext(), this.list);
+        adapter = new NFT_Adapter(getActivity().getApplicationContext(), this.list, getActivity());
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        //위치 유지
-        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-        //위치 유지
-        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        //전체 nft 목록 가져오기
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<NFT_Item>> call = api.selectNftUsingHolderId(UserInfo.user_id);
         call.enqueue(new Callback<List<NFT_Item>>() {

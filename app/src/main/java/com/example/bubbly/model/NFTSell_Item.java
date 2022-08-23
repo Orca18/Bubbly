@@ -3,13 +3,19 @@ package com.example.bubbly.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class NFT_Item {
+public class NFTSell_Item {
 
     @Expose
     @SerializedName("nft_id") private String nft_id;
 
     @Expose
-    @SerializedName("holder_id") private String holder_id;
+    @SerializedName("seller_id") private String seller_id;
+
+    @Expose
+    @SerializedName("sell_price") private String sell_price;
+
+    @Expose
+    @SerializedName("app_id") private String app_id;
 
     @Expose
     @SerializedName("nft_name") private String nft_name;
@@ -20,16 +26,13 @@ public class NFT_Item {
     @Expose
     @SerializedName("file_save_url") private String file_save_url;
 
-    private boolean isAlreadySell;
-    private String seller_id;
-    private String sell_price;
-    private String app_id;
-
-    public NFT_Item(String nft_id, String holder_id, String nft_des, String nft_name, String file_save_url){
+    public NFTSell_Item(String nft_id, String seller_id, String sell_price, String app_id, String nft_des, String nft_name, String file_save_url){
         this.nft_id = nft_id;
         this.nft_des = nft_des;
         this.nft_name = nft_name;
-        this.holder_id = holder_id;
+        this.seller_id = seller_id;
+        this.sell_price = sell_price;
+        this.app_id = app_id;
         this.file_save_url = file_save_url;
     }
 
@@ -39,14 +42,6 @@ public class NFT_Item {
 
     public void setNft_id(String nft_id) {
         this.nft_id = nft_id;
-    }
-
-    public String getHolder_id() {
-        return holder_id;
-    }
-
-    public void setHolder_id(String holder_id) {
-        this.holder_id = holder_id;
     }
 
     public String getNft_name() {
@@ -73,13 +68,6 @@ public class NFT_Item {
         this.file_save_url = file_save_url;
     }
 
-    public boolean isAlreadySell() {
-        return isAlreadySell;
-    }
-
-    public void setAlreadySell(boolean alreadySell) {
-        isAlreadySell = alreadySell;
-    }
 
     public String getSeller_id() {
         return seller_id;
@@ -89,19 +77,19 @@ public class NFT_Item {
         this.seller_id = seller_id;
     }
 
-    public String getSell_price() {
-        return sell_price;
-    }
-
-    public void setSell_price(String seller_price) {
-        this.sell_price = seller_price;
-    }
-
     public String getApp_id() {
         return app_id;
     }
 
     public void setApp_id(String app_id) {
         this.app_id = app_id;
+    }
+
+    public String getSell_price() {
+        return sell_price;
+    }
+
+    public void setSell_price(String sell_price) {
+        this.sell_price = sell_price;
     }
 }
