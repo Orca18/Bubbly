@@ -57,7 +57,7 @@ public class MM_Profile extends AppCompatActivity {
     // 새로고침, 프로그레스바
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
-    ScrollView scrollView;
+    NestedScrollView scrollView;
 
     // 탭 레이아웃
     TabLayout tabLayout;

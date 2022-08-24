@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.controller.Custom_Toast;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -194,7 +196,8 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                         if (response.isSuccessful() && response.body() != null) {
                             if(response.body().equals("success")){
                                 //임시 저장 파일 삭제
-
+                                ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
+                                new Custom_Toast().createToast(getApplicationContext(),view,"NFT가 생성되었습니다.");
                             }else{
                                 Log.e("nft 생성 실패","response fail");
                             }
@@ -205,6 +208,8 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                     public void onFailure(Call<String> call, Throwable t) {
                         Log.e("nft 생성 실패", t.getMessage());
                         file.delete();
+                        ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
+                        new Custom_Toast().createToast(getApplicationContext(),view,"NFT가 생성에 실패하었습니다.");
 
                     }
                 });

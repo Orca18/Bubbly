@@ -40,11 +40,13 @@ public class NFTSell_Adapter extends RecyclerView.Adapter<NFTSell_Adapter.ViewHo
     private Context context;
     private ArrayList<NFTSell_Item> lists;
     private Activity activity;
+    private ViewGroup v;
 
-    public NFTSell_Adapter(Context context, ArrayList<NFTSell_Item> lists, Activity activity) {
+    public NFTSell_Adapter(Context context, ArrayList<NFTSell_Item> lists, Activity activity, ViewGroup v) {
         this.context = context;
         this.lists = lists;
         this.activity = activity;
+        this.v = v;
     }
 
     @NonNull
@@ -72,13 +74,15 @@ public class NFTSell_Adapter extends RecyclerView.Adapter<NFTSell_Adapter.ViewHo
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    System.out.println("nft 구매 성공/실패"+response.body());
+                                    new Custom_Toast().createToast(context,v,"NFT 구매가 완료되었습니다.");
+
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
                                 Log.e("nft 구매 실패", t.getMessage());
+                                new Custom_Toast().createToast(context,v,"NFT 구매에 실패하였습니다.");
                             }
                         });
 

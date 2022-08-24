@@ -45,11 +45,14 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
     private Context context;
     private ArrayList<NFT_Item> lists;
     private Activity activity;
+    private Custom_Toast toast;
+    private ViewGroup v;
 
-    public NFT_Adapter(Context context, ArrayList<NFT_Item> lists, Activity activity) {
+    public NFT_Adapter(Context context, ArrayList<NFT_Item> lists, Activity activity, ViewGroup v) {
         this.context = context;
         this.lists = lists;
         this.activity = activity;
+        this.v = v;
     }
 
     @NonNull
@@ -63,7 +66,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         //이미 판매중인 nft목록 가져오기 (만약 판매중이라면 Cancel로 버튼 표시 변경 위함)
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-        String seller_id = "35";
+//        String seller_id = "35";
         Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId(UserInfo.user_id);
         call.enqueue(new Callback<List<NFTSell_Item>>() {
             @Override
@@ -115,13 +118,14 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    System.out.println("nft 판매 취소 성공"+response.body());
+                                    new Custom_Toast().createToast(context,v,"NFT 판매가 취소되었습니다.");
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
                                 Log.e("nft 판매 취소 실패", t.getMessage());
+                                new Custom_Toast().createToast(context,v,"NFT 판매 취소에 실패하였습니다.");
                             }
                         });
 
@@ -167,20 +171,19 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                         String amount = input.getText().toString();
                         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
                         System.out.println(UserInfo.mnemonic+"nftid"+lists.get(position).getNft_id()+amount+UserInfo.user_id);
-                        String seller_id = "35";
-                        String seller_mnemonic = "file title grocery bridge cream fly library theme confirm alter metal machine miss power view sort return foil cattle spider unhappy typical abandon abstract distance";
                         Call<String> call = api.nftSell(UserInfo.mnemonic,lists.get(position).getNft_id(),amount,UserInfo.user_id,"");
                         call.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    System.out.println("nft 성공/실패"+response.body());
+                                    new Custom_Toast().createToast(context,v,"NFT 판매가 등록되었습니다.");
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
                                 Log.e("nft 판매 실패", t.getMessage());
+                                new Custom_Toast().createToast(context,v,"NFT 판매 등록에 실패했습니다.");
                             }
                         });
 
