@@ -64,9 +64,6 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
         uid = ((MM_Profile)getActivity()).getUid();
 
-
-//        fillList();
-
     }
 
 
@@ -76,8 +73,8 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
         // Inflate the layout for this fragment
         // 레이아웃
-        v = inflater.inflate(R.layout.fragment_profile_tab3, container, false);
-        recyclerView = v.findViewById(R.id.tab_recyclerview_nft);
+        v = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
+        recyclerView = v.findViewById(R.id.tab_recyclerview);
 
         selectNFT();
 
@@ -100,9 +97,9 @@ public class Fragment_Tab3_NFTs extends Fragment {
             @Override
             public void onResponse(Call<List<NFT_Item>> call, Response<List<NFT_Item>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    System.out.println("nft 보유 목록"+response.body());
                     List<NFT_Item> responseResult = response.body();
                     for(int i=0; i<responseResult.size(); i++){
+                        System.out.println("nft 보유 목록"+responseResult.get(i).getNft_id());
                         list.add(new NFT_Item(responseResult.get(i).getNft_id(),
                                 responseResult.get(i).getNft_des(),
                                 responseResult.get(i).getNft_name(),

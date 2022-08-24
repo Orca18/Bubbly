@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,6 +79,7 @@ public class SS_SearchMode extends AppCompatActivity {
                 String recentlySearchedItem = jsonArray.getString(i);
                 recentlySearchedList.add(recentlySearchedItem);
             }
+            Collections.reverse(recentlySearchedList);
             adapter.notifyDataSetChanged();
         } catch (JSONException e) {
             e.printStackTrace();

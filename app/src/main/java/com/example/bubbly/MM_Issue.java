@@ -83,6 +83,8 @@ public class MM_Issue extends AppCompatActivity {
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
+        // 내비 터치
+        NaviTouch();
     }
 
 

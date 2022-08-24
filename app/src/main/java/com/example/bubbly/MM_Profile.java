@@ -444,9 +444,9 @@ public class MM_Profile extends AppCompatActivity {
         bt_modify_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent mIntent = new Intent(getApplicationContext(), ModifyProfile.class);
-//                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                startActivity(mIntent);
+                Intent mIntent = new Intent(getApplicationContext(), ModifyProfile.class);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(mIntent);
             }
         });
 

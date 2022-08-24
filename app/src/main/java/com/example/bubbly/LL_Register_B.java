@@ -47,10 +47,10 @@ public class LL_Register_B extends AppCompatActivity {
     LinearLayout done;
     androidx.appcompat.widget.Toolbar toolbar;
 
-    EditText et_id, et_password, et_password_check;
+    EditText et_id, et_password, et_password_check, et_nick;
     TextView tv_id_check, tv_pw_check, tv_done;
 
-    int id_check, pw_check;
+    int id_check, pw_check, nick_check;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,7 @@ public class LL_Register_B extends AppCompatActivity {
         et_password = findViewById(R.id.et_password);
         et_password_check = findViewById(R.id.et_password_check);
         tv_pw_check = findViewById(R.id.tv_pw_check);
+        et_nick = findViewById(R.id.et_nick);
         done = findViewById(R.id.done);
         tv_done = findViewById(R.id.tv_done);
 
@@ -82,7 +83,7 @@ public class LL_Register_B extends AppCompatActivity {
             public void onClick(View v) {
                 if(tv_id_check.getText().toString().equals("사용가능한 아이디입니다.") && tv_pw_check.getText().toString().equals("비밀번호가 일치합니다.")){
                     ApiInterface createUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
-                    Call<String> call = createUserInfo_api.createUserInfo(et_id.getText().toString(), et_password.getText().toString(), user_email, user_phone, "");
+                    Call<String> call = createUserInfo_api.createUserInfo(et_id.getText().toString(), et_password.getText().toString(), user_email, user_phone, et_nick.getText().toString());
                     call.enqueue(new Callback<String>()
                     {
                         @Override
@@ -233,6 +234,10 @@ public class LL_Register_B extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                tv_done.setTextColor(Color.parseColor("#737373"));
+                done.setEnabled(false);
+                done.setBackgroundColor(Color.parseColor("#eeeeee"));
+
                 if(et_id.length() > 0){
                     //정규식 확인(영문 대소문자/숫자만 가능)
                     String idRex = "^([A-Za-z0-9]*)$";  //영숫자만 가능, 띄어쓰기 불가
@@ -257,7 +262,7 @@ public class LL_Register_B extends AppCompatActivity {
                                         id_check = 1;
                                         tv_id_check.setText("사용가능한 아이디입니다.");
                                         tv_id_check.setTextColor(Color.parseColor("#002AFF"));
-                                        if(id_check == 1 && pw_check == 1){
+                                        if(id_check == 1 && pw_check == 1 && nick_check == 1){
                                             InputMethodManager keyboard = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                                             keyboard.hideSoftInputFromWindow(et_id.getWindowToken(), 0);
                                             tv_done.setTextColor(Color.parseColor("#FFFFFF")); // 아이디,비밀번호 정상 입력시 다음 텍스트 색상 흰색
@@ -315,11 +320,15 @@ public class LL_Register_B extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
+                tv_done.setTextColor(Color.parseColor("#737373"));
+                done.setEnabled(false);
+                done.setBackgroundColor(Color.parseColor("#eeeeee"));
+
                 if(et_password.getText().toString().equals(et_password_check.getText().toString())){
                     tv_pw_check.setText("비밀번호가 일치합니다.");
                     tv_pw_check.setTextColor(Color.parseColor("#002AFF"));
                     pw_check = 1;
-                    if(id_check == 1 && pw_check == 1){
+                    if(id_check == 1 && pw_check == 1 && nick_check ==1){
                         InputMethodManager keyboard = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                         keyboard.hideSoftInputFromWindow(et_password_check.getWindowToken(), 0);
                         tv_done.setTextColor(Color.parseColor("#FFFFFF")); // 아이디,비밀번호 정상 입력시 다음 텍스트 색상 흰색
@@ -331,6 +340,33 @@ public class LL_Register_B extends AppCompatActivity {
                     pw_check = 0;
                     tv_pw_check.setText("비밀번호가 일치하지 않습니다.");
                     tv_pw_check.setTextColor(Color.parseColor("#FF0000"));
+                }
+            }
+        });
+
+
+        // nick
+        et_nick.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nick_check = 0;
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                tv_done.setTextColor(Color.parseColor("#737373"));
+                done.setEnabled(false);
+                done.setBackgroundColor(Color.parseColor("#eeeeee"));
+                if(et_nick.getText().toString()!=null&&!et_nick.getText().toString().equals("")){
+                    nick_check = 1;
+                }
+                if(id_check == 1 && pw_check == 1 && nick_check ==1){
+                    InputMethodManager keyboard = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    keyboard.hideSoftInputFromWindow(et_nick.getWindowToken(), 0);
+                    tv_done.setTextColor(Color.parseColor("#FFFFFF")); // 아이디,비밀번호 정상 입력시 다음 텍스트 색상 흰색
+                    done.setEnabled(true); // 인증완료 시 다음 버튼 활성화
+                    done.setBackgroundColor(Color.parseColor("#FF000000")); // 아이디,비밀번호 정상 시 다음 버튼 색상 검정색
                 }
             }
         });

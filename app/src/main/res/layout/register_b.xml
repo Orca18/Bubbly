@@ -162,30 +162,56 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="26dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="44dp"
+            android:fontFamily="@font/spoqa_bold"
+            android:text="닉네임"
+            android:textSize="18dp"
+            android:textColor="@color/black" />
+
+
+        <EditText
+            android:id="@+id/et_nick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="40dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edittext_radius"
+            android:hint=" 자유롭게 입력하세요 (중복 가능) "
+            android:inputType="text"
+            android:maxLength="16"
+            android:maxLines="1"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/rss_et_cursor"
+            android:textSize="14dp" />
 
 
 
     </LinearLayout>
 
 
-
-
     <LinearLayout
         android:id="@+id/done"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:background="#eee">
+        android:background="#eee"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tv_done"
-            android:layout_marginVertical="14dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="14dp"
             android:fontFamily="@font/spoqa_bold"
             android:text="완료"
-            android:textSize="18dp"/>
+            android:textSize="18dp" />
 
     </LinearLayout>
 

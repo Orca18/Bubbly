@@ -43,7 +43,7 @@ import retrofit2.Response;
 public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<NFT_Item> lists; //이미지 url 리스트
+    private ArrayList<NFT_Item> lists;
     private Activity activity;
 
     public NFT_Adapter(Context context, ArrayList<NFT_Item> lists, Activity activity) {
@@ -63,15 +63,16 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         //이미 판매중인 nft목록 가져오기 (만약 판매중이라면 Cancel로 버튼 표시 변경 위함)
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId("35");
+        String seller_id = "35";
+        Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId(UserInfo.user_id);
         call.enqueue(new Callback<List<NFTSell_Item>>() {
             @Override
             public void onResponse(Call<List<NFTSell_Item>> call, Response<List<NFTSell_Item>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    System.out.println("nft 판매 목록"+response.body());
                     List<NFTSell_Item> responseResult = response.body();
                     for(int i=0; i<responseResult.size(); i++){
                         String element = responseResult.get(i).getNft_id();
+                        System.out.println("nft 판매 목록"+element);
                         if (element.equals(lists.get(position).getNft_id())) {
                             lists.get(position).setAlreadySell(true);
                             lists.get(position).setApp_id(responseResult.get(i).getApp_id());
@@ -166,8 +167,9 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                         String amount = input.getText().toString();
                         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
                         System.out.println(UserInfo.mnemonic+"nftid"+lists.get(position).getNft_id()+amount+UserInfo.user_id);
-
-                        Call<String> call = api.nftSell(UserInfo.mnemonic,lists.get(position).getNft_id(),amount,"35","");
+                        String seller_id = "35";
+                        String seller_mnemonic = "file title grocery bridge cream fly library theme confirm alter metal machine miss power view sort return foil cattle spider unhappy typical abandon abstract distance";
+                        Call<String> call = api.nftSell(UserInfo.mnemonic,lists.get(position).getNft_id(),amount,UserInfo.user_id,"");
                         call.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {

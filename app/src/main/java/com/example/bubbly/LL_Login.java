@@ -110,7 +110,6 @@ public class LL_Login extends AppCompatActivity {
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
                                             System.out.println(sharedPreferences.getString("mnemonic",""));
                                             UserInfo.mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
-                                            //UserInfo.mnemonic = mnemonic.replace("file title ","");
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
