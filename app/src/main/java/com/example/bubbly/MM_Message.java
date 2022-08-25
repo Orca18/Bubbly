@@ -237,21 +237,21 @@ public class MM_Message extends AppCompatActivity {
         setContentView(R.layout.main_c_message);
 
         // 채팅서비스와 연결한다.
-        connectToService();
+        //connectToService();
 
         // 리소스 ID 선언
         initiallize();
         // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
-        clickListeners();
+        //clickListeners();
         // 내비 터치
-        NaviTouch();
+        //NaviTouch();
         // 뷰모델 생성
-        chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
+        //chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
 
         // 뷰모델 변경 시 리사이클러뷰에 변경된 데이터 세팅
-        observe();
+        //observe();
     }
 
 
