@@ -74,8 +74,7 @@ public class Community_Joined_List extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        //loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
+                        getJoinedComList();
                         /* 업데이트가 끝났음을 알림 */
                         swipeRefreshLayout.setRefreshing(false);
                     }
@@ -198,6 +197,9 @@ public class Community_Joined_List extends AppCompatActivity {
                                 responseResult.get(i).getCommunity_name(),
                                 responseResult.get(i).getCommunity_desc(),
                                 responseResult.get(i).getProfile_file_name()));
+                        Log.d("디버그태그", "무야::"+responseResult.get(i).getCommunity_id());
+                        Log.d("디버그태그", "무야::"+responseResult.size());
+                        Log.d("디버그태그", "무야::"+i);
                     }
                     adapter.notifyDataSetChanged();
                 }
@@ -211,5 +213,12 @@ public class Community_Joined_List extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        getJoinedComList();
     }
 }

@@ -8,69 +8,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/sheet_main"
+        android:id="@+id/sheet_no"
         android:background="?android:attr/selectableItemBackground"
         android:padding="8dp">
 
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_push_pin_24"
+            android:src="@drawable/ic_baseline_announcement_24"
             android:layout_margin="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="내 대표 게시글 지정"
+            android:text="신고하기"
             android:layout_gravity="center_vertical"
             android:padding="8dp"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/sheet_delete"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="8dp">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_delete_24"
-            android:layout_margin="8dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="삭제하기"
-            android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/sheet_nft"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="8dp">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_info_24"
-            android:layout_margin="8dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NFT 신청하기"
-            android:layout_gravity="center_vertical"
-            android:padding="8dp"/>
-
-    </LinearLayout>
 
 
 </LinearLayout>
