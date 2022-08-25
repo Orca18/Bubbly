@@ -40,8 +40,32 @@ public class ApiClient {
                     .client(okHttpClient)
                     .build();
         }
+        return retrofit;
+    }
 
+    public static Retrofit getApiClientWithUrlInput(String url)
+    {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+
+        // timeout setting 해주기
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
+                .build();
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(okHttpClient)
+                .build();
 
         return retrofit;
     }
+
+
 }

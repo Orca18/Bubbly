@@ -40,7 +40,6 @@ public class Fragment_Tab3_NFTs extends Fragment {
     RecyclerView recyclerView;
     private Parcelable recyclerViewState;
     private ArrayList<NFT_Item> list;
-    private ArrayList<NFT_Item> list_sell;
     private NFT_Adapter adapter;
 
     String uid;
