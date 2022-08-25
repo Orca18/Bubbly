@@ -1,6 +1,7 @@
 package com.example.bubbly.retrofit;
 
-import com.example.bubbly.model.Chat_Room_Cre;
+import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
+import com.example.bubbly.model.Chat_Room_Info;
 import com.example.bubbly.model.OtherUserInfo;
 
 import java.util.ArrayList;
@@ -283,7 +284,30 @@ public interface ApiInterface {
 
     // 채팅방 정보 저장
     @POST("chat/createChatRoom")
-    Call<String> createChatRoom(@Body Chat_Room_Cre chatRoomCre);
+    Call<String> createChatRoom(@Body Chat_Room_Cre_Or_Del chatRoomCre);
+
+    // 채팅방 멤버리스트 조회
+    @GET("chat/selectChatParticipantUsingChatRoomId") //
+    Call<ArrayList<OtherUserInfo>> selectChatParticipantUsingChatRoomId(@Query("chat_room_id") String chatRoomId);
+
+    // 채팅방 아이디로 채팅방정보 조회
+    @GET("chat/selectChatRoomInfo") //
+    Call<ArrayList<Chat_Room_Info>> selectChatRoomInfo(@Query("chat_room_id") String chatRoomId);
+
+    // 사용자 아이디로 채팅방 리스트 조회
+    @GET("chat/selectChatRoomListUsingUserId") //
+    Call<ArrayList<Chat_Room_Info>> selectChatRoomListUsingUserId(@Query("user_id") String userId);
+
+    // 채팅방 정보 삭제
+    @FormUrlEncoded
+    @POST("chat/deleteChatRoom")
+    Call<String> deleteChatRoom(@Field("chat_room_id") String chatRoomId);
+
+    // 채팅방 멤버 삭제
+    @FormUrlEncoded
+    @POST("chat/deleteChatParticipant")
+    Call<String> deleteChatParticipant(@Field("user_id") String userId, @Field("chat_room_id") String chatRoomId);
+
     // todo nft 관련된 api (끝 지점)
     @Multipart
     @POST("nft-creation") // nft 저장

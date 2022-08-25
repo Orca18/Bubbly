@@ -139,9 +139,9 @@ public class MM_Home extends AppCompatActivity {
         btwallet = findViewById(R.id.home_towallet);
 
         // FCM토큰 refresh
-        /*preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", "");
-        FCMService.refreshToken(user_id);*/
+        //FCMService.refreshToken(user_id);
     }
 
     // 바텀 메뉴 클릭
@@ -440,5 +440,4 @@ public class MM_Home extends AppCompatActivity {
     public void displayMessage(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
-
 }

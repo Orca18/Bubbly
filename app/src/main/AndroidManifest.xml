@@ -4,7 +4,7 @@
 
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/ic_baseline_send_24" />
+        android:resource="@drawable/skeleton" />
     <!--
  메시지 기본 색상 Set color used with incoming notification messages. This is used when no color is set for the incoming
          notification message. See README(https://goo.gl/6BKBk7) for more.

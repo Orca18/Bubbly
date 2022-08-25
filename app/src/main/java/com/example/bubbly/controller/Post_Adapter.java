@@ -130,8 +130,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         // SNS 형식 시간
         holder.tv_time.setText(a);
 
-
-
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

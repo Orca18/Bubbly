@@ -6,6 +6,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,21 +22,16 @@ import com.example.bubbly.chatting.service.ChatService;
 import com.example.bubbly.chatting.util.ChatUtil;
 import com.example.bubbly.controller.Chat_Clicked_User_Adapter;
 import com.example.bubbly.controller.Chat_Searched_User_Adapter;
-import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.model.Chat_Member_FCM_Sub;
-import com.example.bubbly.model.Chat_Room_Cre;
+import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
 import com.example.bubbly.model.OtherUserInfo;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.ChatApiClient;
 import com.example.bubbly.retrofit.ChatApiInterface;
-import com.example.bubbly.retrofit.post_Response;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -203,7 +200,7 @@ public class ChatMemberSelect extends AppCompatActivity {
                      * 채팅방 정보 저장
                      * */
                     // 채팅방 정보 저장할 객체
-                    Chat_Room_Cre chatRoomCre = new Chat_Room_Cre();
+                    Chat_Room_Cre_Or_Del chatRoomCre = new Chat_Room_Cre_Or_Del();
 
                     // 0. 단체 채팅 여부 - 2명 이상이면 true
                     isGroupChat = (chatMemberList.size() > 1);
@@ -223,7 +220,7 @@ public class ChatMemberSelect extends AppCompatActivity {
                         // 2-2. 다른사람 채팅방 프로필 - 프로필 사진 조회위해 필요
                         chatRoomCre.setChatOtherId(other.getUser_id());
 
-                        // 3. 참여자들 user_id 리스트 만들기
+                        // 3. 채팅 참여자들 user_id 리스트 만들기
                         ArrayList<String> list = new ArrayList<>();
                         list.add(UserInfo.user_id);
                         list.add(other.getUser_id());
@@ -257,6 +254,7 @@ public class ChatMemberSelect extends AppCompatActivity {
                         chatRoomCre.setChatRoomMemberList(list);
                     }
                     Log.d("ChatRoomCre데이터 확인: ", chatRoomCre.toString());
+
                     // 4. 서버로 전송
                     ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
                     Call<String> call = apiClient.createChatRoom(chatRoomCre);
@@ -274,9 +272,11 @@ public class ChatMemberSelect extends AppCompatActivity {
 
                                 // chatRoomCre에 채팅방 아이디 저장
                                 chatRoomCre.setChatRoomId(chatRoomId);
+                                // 채팅방 생성 메시지: 0
+                                chatRoomCre.setMsgType(0);
 
                                 // 브로커에게 채팅방 정보 publish
-                                new ChatUtil().publishChatCreMsg(chatRoomCre, ChatService.mqttClient);
+                                new ChatUtil().publishChatCreOrDelMsg(chatRoomCre, ChatService.mqttClient);
 
                                 // FCM서버에게 구독요청
                                 // fcm_token list
@@ -287,9 +287,9 @@ public class ChatMemberSelect extends AppCompatActivity {
                                 }
 
                                 // 토큰 정보 찍어보기
-                                /*for(int i = 0; i < tokenList.size(); i++){
+                                for(int i = 0; i < tokenList.size(); i++){
                                     System.out.println("토큰" + i + ": " + tokenList.get(i)); ;
-                                }*/
+                                }
 
                                 // FCM 서버에게 구독요청을 하기 위한 데이터
                                 Chat_Member_FCM_Sub chatMemberFcmSub = new Chat_Member_FCM_Sub();
@@ -303,21 +303,64 @@ public class ChatMemberSelect extends AppCompatActivity {
                                     @Override
                                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
                                     {
-                                        if (response.isSuccessful() && response.body() != null)
-                                        {
+                                        if (response.isSuccessful() && response.body().equals("success")){
                                             //
                                             String responseResult = response.body();
                                             Log.d("채팅멤버 FCM 구독 완료",responseResult);
-                                        } else {
-                                            Log.d("채팅멤버 FCM 구독 완료","지만 데이터 없음!");
 
+                                            // 생성자정보 생성
+                                            OtherUserInfo creator = new OtherUserInfo(UserInfo.user_id, UserInfo.login_id,
+                                                    UserInfo.email_addr, UserInfo.phone_num, UserInfo.novaland_account_addr,
+                                                    UserInfo.profile_file_name, UserInfo.user_nick, UserInfo.self_info, UserInfo.token);
+
+                                            // 생성자 정보를 채팅멤버리스트의 첫번째에 넣는다.
+                                            chatMemberList.add(0,creator);
+
+                                            // 채팅방 액티비티로 이동
+                                            Intent mIntent = new Intent(getApplicationContext(), ChattingRoom.class);
+                                            mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                                            // 채팅방 아이디
+                                            mIntent.putExtra("chatRoomId",chatRoomId);
+                                            Log.d("chatRoomId",chatRoomId);
+
+                                            // 채팅방 명
+                                            mIntent.putExtra("chatRoomName",chatRoomCre.getChatRoomNameCreator());
+                                            Log.d("chatRoomName",chatRoomCre.getChatRoomNameCreator());
+
+                                            // 새로 생성된 채팅방
+                                            mIntent.putExtra("isNew",true);
+                                            Log.d("chatRoomId","" + true);
+
+                                            // 메시지 전송여부 - 메시지가 전송되지 않고 채팅방이 제거되면 MQTT와 FCM 구독을 해지해야 함
+                                            mIntent.putExtra("isMsgTransfered",false);
+                                            Log.d("isMsgTransfered","" + false);
+
+                                            // 채팅멤버 리스트
+                                            mIntent.putExtra("chatMemberList", chatMemberList);
+                                            Log.d("chatMemberList","" + chatMemberList.size());
+
+                                            // FCM 토큰리스트
+                                            mIntent.putExtra("chatMemberFcmTokenList", chatMemberFcmSub);
+                                            Log.d("chatMemberFcmTokenList", chatMemberFcmSub.toString());
+
+                                            // 채팅방 생성 혹은 파괴 객체정보
+                                            mIntent.putExtra("chatRoomCreOrDel", chatRoomCre);
+                                            Log.d("chatRoomCreOrDel",chatRoomCre.toString());
+
+                                            // MM_Message화면으로 돌아감
+                                            setResult(Activity.RESULT_OK, mIntent);
+
+                                            finish();
+                                        } else {
+                                            Log.d("채팅멤버 FCM 구독 완료 결과: ", response.body());
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
                                     {
-                                        Log.e("게시물 아이디로 게시물 조회", t.getMessage());
+                                        Log.e("채팅방 멤버 FCM 등록 실패", t.getMessage());
                                     }
                                 });
                             } else {

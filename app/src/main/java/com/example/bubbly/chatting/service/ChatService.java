@@ -1,7 +1,9 @@
 package com.example.bubbly.chatting.service;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -10,10 +12,15 @@ import android.os.Messenger;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.bubbly.chatting.util.ChatUtil;
+import com.example.bubbly.chatting.util.GetDate;
 import com.example.bubbly.model.Chat_Item;
-import com.example.bubbly.model.Chat_Room_Cre;
+import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
 import com.example.bubbly.model.UserInfo;
+import com.example.bubbly.retrofit.ChatApiClient;
+import com.example.bubbly.retrofit.ChatApiInterface;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -23,10 +30,13 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import java.io.ByteArrayInputStream;
-import java.io.EOFException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
 * 애플리케이션 시작 시 실행되는 서비스
@@ -71,14 +81,20 @@ public class ChatService extends Service {
     // 직접 처리하는 것은 Incoming Handler이며 액티비티와 핸들어의 연결을 위해 사용한다.
     private Messenger mServiceMessenger;
 
-    // ChatAct의 활성화 여부 => 채팅방이 열려있는지!
-    private boolean isChatActivityActive = false;
+    // ChattingRoom의 활성화 여부 => 채팅방이 열려있는지!
+    private boolean isChattingRoomivityActive = false;
 
     // 바인딩된 액티비티들과 통신하기위해 필요한 메신저들을 저장하는 리스트
     private ArrayList<Messenger> mActivityMessengerList = new ArrayList<>();
 
     // 사용자 아이디
     private String userId;
+
+    // Chat_Item <-> String으로 변경시 사용할 구분값
+    private String divisionVal = "@@@@@";
+
+    // int형의 변수가 사용할 기본값
+    private int defaultInt = 9999999;
 
     // 액티비티 -> 서비스에 데이터를 전송할 때 이것을 처리하는 핸들러
     // 액티비티에서 메시지 종류에 따라 msg.what 값에 따라 다른 처리를 할 수 있다.
@@ -91,10 +107,10 @@ public class ChatService extends Service {
                     // 서버에 사용자가 나갔음을 알려라!
                     String exitMsg = userId + "님이 나갔습니다.";
 
-                    Chat_Item exitMsgInfo = new Chat_Item(chatRoomId,userId,exitMsg,null,"");
+                    Chat_Item exitMsgInfo = new Chat_Item(chatRoomId,userId,exitMsg,null, GetDate.getDateWithYMDAndWeekDay(),GetDate.getAmPmTime(),"",0);
 
                     // 서버에 publish
-                    chatUtil.publishChatMsg(exitMsgInfo, mqttClient);
+                    //chatUtil.publishChatMsg(exitMsgInfo, mqttClient);
 
                     // 해당 채팅방 구독 해제
                     try {
@@ -106,11 +122,48 @@ public class ChatService extends Service {
                     break;
                 // 문자열 전송
                 case SEND_TEXT:
-                    Chat_Item sendMsg = (Chat_Item) msg.getData().getSerializable("sendMsg");
-                    Log.e("텍스트 메시지 송신", "3. 서비스로 메시지 전송 -> " + "서비스에서 서버로 메시지 전송: " + "1. 수신한 메시지: " + sendMsg);
+                    Chat_Item chatItem = (Chat_Item) msg.getData().getSerializable("sendMsg");
+
+                    String chatItemRoomId = chatItem.getChatRoomId();
+                    String chatItemStr = chatUtil.chatItemToString(chatItem);
+
+                    chatUtil.publishChatMsg(chatItemStr, chatItemRoomId, mqttClient);
 
                     // 서버에 publish
-                    chatUtil.publishChatMsg(sendMsg, mqttClient);
+                    /*new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                chatUtil.publishChatMsg(chatItemStr, chatItemRoomId, mqttClient);
+                            }
+                            catch (Exception e) {
+
+                            }
+                        }
+                    }).start();*/
+
+                    // FCM 서버에게 알림메시지 전송 요청
+                    /*ChatApiInterface chatApiInterface= ChatApiClient.getApiClient().create(ChatApiInterface.class);
+                    Call<String> call = chatApiInterface.broadcastFCMMessage(sendMsg);
+                    call.enqueue(new retrofit2.Callback<String>()
+                    {
+                        @Override
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                        {
+                            if (response.isSuccessful() && response.body() != null)
+                            {
+                                Log.e("fcm notificaion 완료!", response.body());
+                            }else {
+                                Log.e("fcm notificaion 완료!", "지만 메시지 없음");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                        {
+                            Log.e("fcm notificaion 실패", t.getMessage());
+                        }
+                    });*/
                     break;
                 // 정적파일 전송
                 case SEND_IMAGE:
@@ -153,44 +206,80 @@ public class ChatService extends Service {
                         public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
                             Log.d("MQTTService", "Message Arrived : " + mqttMessage.toString());
 
-                            ByteArrayInputStream bis = new ByteArrayInputStream(mqttMessage.getPayload());
-                            ObjectInput in = new ObjectInputStream(bis);
-                            Object obj = in.readObject();
-
                             // 채팅 메시지
-                            if(obj instanceof Chat_Item){
-                                Chat_Item chat_item = (Chat_Item)obj;
+                            if(mqttMessage.toString().contains(divisionVal)){
+                                String chatItemStr = mqttMessage.toString();
+                                Log.d("채팅메시지", chatItemStr);
 
-                                Message msg = Message.obtain(null, ChatService.MSG_RECEIVE_FROM_SERVER);
-                                Bundle bundle = msg.getData();
-                                bundle.putSerializable("message",chat_item);
+                                Chat_Item chatItem = chatUtil.stringToChatItem(chatItemStr);
 
-                                // 채팅 액티비티가 활성화 되어있고 활성화된 채팅방에 메시지가 도착했다면
-                                if(isChatActivityActive && chat_item.getChatRoomId().equals(chatRoomId)){
-                                    Log.e("액티비티로 메시지 전송: ", " 6. 채팅방이 활성화되어있고 동일한 채팅방에서 메시지 전송 시 ChatAct로 전송 시작");
+                                Log.d("채팅메시지 문자열 chatItem으로 변황", chatItem.toString());
+
+                                // 서버에서 받은 메시지 중 id가 기본값이 아닌것만 즉, db에 저장된 메시지만 사용자에게 보낸다!
+                                if(chatItem.getChatId() != defaultInt){
+                                    Message msg = Message.obtain(null, ChatService.MSG_RECEIVE_FROM_SERVER);
+                                    Bundle bundle = msg.getData();
+                                    bundle.putSerializable("message",chatItem);
+
+                                    Log.d("메시지 아이디가 있는 메시지", chatItem.toString());
+
+                                    // 채팅방리스트엔 무조건 메시지 전송
                                     Message tempMsg = new Message();
                                     tempMsg.copyFrom(msg);
-                                    mActivityMessengerList.get(1).send(tempMsg);
-                                } else { // 채팅 액티비티가 비활성화라면 채팅리스트로 메시지 전송
-                                    Message tempMsg = new Message();
-                                    tempMsg.copyFrom(msg);
+
+                                    // 내가 작성한 메시지가 아니라면
+                                    Log.d("리스트로 채팅 메시지 전달","111");
                                     mActivityMessengerList.get(0).send(tempMsg);
+
+                                    // 채팅방이 활성화 되어있고 메시지가 해당 채팅방의 메시지라면
+                                    if(isChattingRoomivityActive && chatItem.getChatRoomId().equals(chatRoomId)){
+                                        // 활성화돼있는 채팅방에서 채팅, 이미지, 동영상 메시지 받았을 때 SP의 마지막 메시지아이디를 업데이트 해준다.
+                                        if(chatItem.getChatType() < 3){ // 0: 텍스트, 1: 이미지, 2: 동영상
+                                            saveLatestChatIdToSharedPreference(chatItem);
+                                        }
+
+                                        // 안읽은 메시지를 업데이트 해야하거나 내가 보낸 메시지가 아니라면 채팅방으로 전송
+                                        if(!chatItem.getChatUserId().equals(userId)){
+                                            Log.e("액티비티로 메시지 전송: ", " 6. 채팅방이 활성화되어있고 동일한 채팅방에서 메시지 전송 시 ChattingRoom로 전송 시작");
+                                            Message tempMsg2 = new Message();
+                                            tempMsg2.copyFrom(msg);
+                                            mActivityMessengerList.get(1).send(tempMsg2);
+                                        }
+                                    }
+                                } else if(chatItem.getChatType() == 3 ) { // 안읽은 메시지수 업데이트하기 위해 채팅방에 포함된 모두에게 메시지 전송!
+                                    // 채팅방이 활성화돼있고 해당 채팅방의 메시지라면!
+                                    if (isChattingRoomivityActive && chatItem.getChatRoomId().equals(chatRoomId)) {
+                                        Message tempMsg3 = new Message();
+                                        tempMsg3.copyFrom(msg);
+                                        mActivityMessengerList.get(1).send(tempMsg3);
+                                    }
                                 }
-                            } else if(obj instanceof Chat_Room_Cre){
-                                Chat_Room_Cre chatRoomCre = (Chat_Room_Cre)obj;
-                                Log.d("채팅방 생성 메시지 받음: ", chatRoomCre.toString());
+                            } else  { // 채팅방 생성 혹은 파괴 메시지
+                                ByteArrayInputStream bis = new ByteArrayInputStream(mqttMessage.getPayload());
+                                ObjectInput in = new ObjectInputStream(bis);
+                                Object obj = in.readObject();
+
+                                Chat_Room_Cre_Or_Del chatRoomCreOrDel = (Chat_Room_Cre_Or_Del)obj;
+                                Log.d("채팅방 생성 혹은 파괴메시지 받음: ", chatRoomCreOrDel.toString());
+
+                                // chatRoomId가 -1줄어들어서 온다 왜지?
+                                chatRoomCreOrDel.setChatRoomId(chatRoomCreOrDel.getChatRoomId());
 
                                 // 내가 채팅방리스트에 포함되어 있다면 채팅방 구독
-                                ArrayList<String> chatMemberList = chatRoomCre.getChatRoomMemberList();
+                                ArrayList<String> chatMemberList = chatRoomCreOrDel.getChatRoomMemberList();
                                 for(String userId : chatMemberList){
                                     // 내가 채팅방에 포함되어있다면 브로커에게 구독 요청!
+
                                     if(userId.equals(UserInfo.user_id)){
-                                        mqttClient.subscribe("/topics/" + chatRoomCre.getChatRoomId(),2);
+                                        if(chatRoomCreOrDel.getMsgType() == 0){ // 채팅방 구독
+                                            mqttClient.subscribe("/topics/" + chatRoomCreOrDel.getChatRoomId(),2);
+                                        } else { // 채팅방 구독 해지
+                                            mqttClient.unsubscribe("/topics/" + chatRoomCreOrDel.getChatRoomId());
+                                        }
                                         break;
                                     }
                                 }
                             }
-
                         }
 
                         @Override
@@ -219,22 +308,22 @@ public class ChatService extends Service {
                 case CONNECT_CHAT_ACT:
                     // 액티비티와 연결된 경우 그것과 통신할 수 있는 메신저를 저장한다.
                     mActivityMessengerList.add(msg.replyTo);
-                    Log.e("ChatAct와 소켓 연결 12. 메신저리스트에 새로운 메신저 추가 ","" + mActivityMessengerList.size());
+                    Log.e("ChattingRoom과 연결 메신저리스트에 새로운 메신저 추가 ","" + mActivityMessengerList.size());
 
-                    isChatActivityActive = true;
+                    isChattingRoomivityActive = true;
 
                     chatRoomId = msg.getData().getString("chatRoomId");
                     userId = msg.getData().getString("userId");
 
                     // 채팅방 클릭 시 구독
-                    chatUtil.enterChatRoom(mqttClient, chatRoomId);
+                    //chatUtil.enterChatRoom(mqttClient, chatRoomId);
 
                     break;
                 // 채팅 액티비티 - 서버 연결 해제
                 case DISCONNECTED_CHAT_ACT:
                     // 채팅 액티비티의 활성화여부 = false 를 넣어줌
-                    isChatActivityActive = false;
-                    Log.e("채팅방 나갈 때 서비스와의 연결 제거 4-1. isChatActivityActive false로 변경", "" + isChatActivityActive);
+                    isChattingRoomivityActive = false;
+                    Log.e("채팅방 나갈 때 서비스와의 연결 제거 4-1. isChattingRoomivityActive false로 변경", "" + isChattingRoomivityActive);
 
                     String chatRoomId = msg.getData().getString("chatRoomId");
                     Log.e("채팅방 나갈 때 서비스와의 연결 제거 4-2. chatRoomId", "" + chatRoomId);
@@ -250,6 +339,20 @@ public class ChatService extends Service {
 
     public ChatService() {
     }
+
+    /** 메시지 수신 시 SharedPreference에 메시지 정보 저장*/
+    public void saveLatestChatIdToSharedPreference(Chat_Item chatItem){
+        SharedPreferences sp = getSharedPreferences("chat", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        // 해당 채팅방 id로 메시지 인덱스를 저장해준다
+        editor.putInt(chatItem.getChatRoomId(), chatItem.getChatId());
+
+        editor.commit();
+        Log.e("수신한 메시지 쉐어드에 저장: ", "" + sp.getInt(chatItem.getChatRoomId(),999999));
+    }
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
