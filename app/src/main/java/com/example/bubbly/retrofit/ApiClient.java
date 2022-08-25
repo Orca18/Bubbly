@@ -14,6 +14,7 @@ public class ApiClient {
     private static final String BASE_URL = "http://3.39.84.115:80/";
 
     private static Retrofit retrofit;
+    private static Retrofit retrofit_pure_stake;
 
     public static Retrofit getApiClient()
     {
@@ -55,15 +56,15 @@ public class ApiClient {
                 .readTimeout(40, TimeUnit.SECONDS)
                 .writeTimeout(40, TimeUnit.SECONDS)
                 .build();
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(okHttpClient)
-                .build();
-
-        return retrofit;
+        if (retrofit_pure_stake == null) {
+            retrofit_pure_stake = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClient)
+                    .build();
+        }
+        return retrofit_pure_stake;
     }
 
 
