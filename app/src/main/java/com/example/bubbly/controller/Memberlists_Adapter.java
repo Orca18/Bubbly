@@ -1,4 +1,5 @@
 package com.example.bubbly.controller;
+import android.content.Intent;
 import android.widget.Toast;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
+import com.example.bubbly.SS_Profile;
 import com.example.bubbly.kim_util_test.Kim_Com_Members_Response;
 
 import java.util.List;
@@ -58,7 +60,9 @@ public class Memberlists_Adapter extends RecyclerView.Adapter<Memberlists_Adapte
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext.getApplicationContext(),"해당 유저의 프로필로 이동",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext.getApplicationContext(),"해당 유저의 프로필로 이동\nSS 프로필 user_id 번들",Toast.LENGTH_SHORT).show();
+                Intent mIntent = new Intent(mContext, SS_Profile.class);
+                mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 

@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.bubbly.model.Chat_Item;
-import com.example.bubbly.model.Chat_Room_Cre;
+import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
 import com.example.bubbly.retrofit.ChatApiClient;
 import com.example.bubbly.retrofit.ChatApiInterface;
 import com.example.bubbly.retrofit.chat.SyncGetMqttId;
@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 import retrofit2.Call;
@@ -35,6 +36,12 @@ import retrofit2.Response;
 * 채팅 관련 기능을 제공하는 유틸 클래스
 * */
 public class ChatUtil {
+    // Chat_Item <-> String으로 변경시 사용할 구분값
+    private String divisionVal = "@@@@@";
+    
+    // int형의 변수가 사용할 기본값
+    private int defaultInt = 9999999;
+    
     /**
     * MQTT 클라이언트 연결 => 앱이 새로 시작될 때마다 실행되야 한다.
     * */
@@ -207,30 +214,23 @@ public class ChatUtil {
     /**
      * 메시지 서버에게 전송(publish)
      * */
-    public void publishChatMsg(Chat_Item chatMsg, MqttClient mqttClient){
+    public void publishChatMsg(String chatItemStr, String chatRoomId, MqttClient mqttClient){
         try {
-            // 메시지 전송 시 클라이언트 아이디도 함께 보내야 한다 - 그래야 채팅방에서 내가 보낸 메시지는 받지 않을 수 있음
-            // 클라아이디:메시지와 같은 형태로 보내면 될듯
-            ByteArrayOutputStream boas = new ByteArrayOutputStream();
-            ObjectOutputStream ois = null;
-            try {
-                ois = new ObjectOutputStream(boas);
-                ois.writeObject(chatMsg);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            byte[] chatItemStrByteArr = chatItemStr.getBytes(StandardCharsets.UTF_8);
+            Log.d("ChatUtil/publishChatMsg - 브로커에게 메시지 전송전","0000000");
 
-            // 서버에 메시지 전송(채팅방 아이디가 토픽이 된다!)
-            mqttClient.publish("/topics/" + chatMsg.getChatRoomId(), boas.toByteArray(), 2, false);
+            mqttClient.publish("/topics/" +chatRoomId, chatItemStrByteArr, 0, false);
+            Log.d("ChatUtil/publishChatMsg - 브로커에게 메시지 전송","`111");
         } catch (MqttException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * 메시지 서버에게 채팅방 생성 메시지 전송(publish)
+     * 메시지 서버에게 채팅방 생성 or 파괴 메시지 전송(publish)
+     * msgType: 0이면 생성, 1이면 파괴이다.
      * */
-    public void publishChatCreMsg(Chat_Room_Cre chatRoomCreMsg, MqttClient mqttClient){
+    public void publishChatCreOrDelMsg(Chat_Room_Cre_Or_Del chatRoomCreMsg, MqttClient mqttClient){
         try {
             // 메시지 전송 시 클라이언트 아이디도 함께 보내야 한다 - 그래야 채팅방에서 내가 보낸 메시지는 받지 않을 수 있음
             // 클라아이디:메시지와 같은 형태로 보내면 될듯
@@ -243,6 +243,9 @@ public class ChatUtil {
                 e.printStackTrace();
             }
 
+            Log.d("채팅방 생성 혹은 삭제", "msgType 0이면 생성 1이면 삭제: " + chatRoomCreMsg.getMsgType());
+            Log.d("채팅방 아이디 확인", "" + chatRoomCreMsg.getChatRoomId());
+
             // 서버에 메시지 전송(채팅방 아이디가 토픽이 된다!)
             mqttClient.publish("/charRoomCreAndDel", boas.toByteArray(), 2, false);
         } catch (MqttException e) {
@@ -250,8 +253,73 @@ public class ChatUtil {
         }
     }
 
+    // ChattingRoom에서 전송한 Chat_Item을 String으로 변경한다.
+    public String chatItemToString(Chat_Item chatItem){
+        String profileImageURL = chatItem.getProfileImageURL();
+        String chatRoomId = chatItem.getChatRoomId();
+        String chatUserId = chatItem.getChatUserId();
+        String chatText = chatItem.getChatText();
+        String chatFileUrl = chatItem.getChatFileUrl();
+        String chatDate = chatItem.getChatDate();
+        String chatTime = chatItem.getChatTime();
+        String chatUserNickName = chatItem.getChatUserNickName();
+        // 서버에서 값 측정
+        int chatId = defaultInt;
+        int chatType = chatItem.getChatType();
+        // 서버에서 값 측정
+        int notReadUserCount = defaultInt;
+        
+        String chatItemStr = profileImageURL + divisionVal
+                           + chatRoomId + divisionVal
+                           + chatUserId + divisionVal
+                           + chatText + divisionVal
+                           + chatFileUrl + divisionVal
+                           + chatDate + divisionVal
+                           + chatTime + divisionVal
+                           + chatUserNickName + divisionVal
+                           + chatId + divisionVal
+                           + chatType + divisionVal
+                           + notReadUserCount;
+        Log.d("Chat_Item을 문자열로 변경한 값", chatItemStr);
+        
+        return chatItemStr;
+    }
+
+    // 서버에서 전송한 String을 Chat_Item을 Chat_Item으로 변경한다.
+    public Chat_Item stringToChatItem(String chatItemStr){
+        String[] chatItemValueArr = chatItemStr.split("@@@@@");
+
+        String profileImageURL = chatItemValueArr[0];
+        String chatRoomId = chatItemValueArr[1];
+        String chatUserId = chatItemValueArr[2];
+        String chatText = chatItemValueArr[3];
+        String chatFileUrl = chatItemValueArr[4];
+        String chatDate = chatItemValueArr[5];
+        String chatTime = chatItemValueArr[6];
+        String chatUserNickName = chatItemValueArr[7];
+        int chatId = Integer.parseInt(chatItemValueArr[8]);
+        int chatType = Integer.parseInt(chatItemValueArr[9]);
+        int notReadUserCount = Integer.parseInt(chatItemValueArr[10]);
+
+        Chat_Item chatItem = new Chat_Item(profileImageURL
+                                          , chatRoomId
+                                          , chatUserId
+                                          , chatText
+                                          , chatFileUrl
+                                          , chatDate
+                                          , chatTime
+                                          , chatUserNickName
+                                          , chatId
+                                          , chatType
+                                          , notReadUserCount
+        );
+        Log.d("문자열을 Chat_Item으로 변경한 값", chatItem.toString());
+
+        return chatItem;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Chat_Item toChatItem(String chatString){
+    public Chat_Item toChatItem(int chatId, String chatString){
         Log.d("chatData", chatString);
 
         byte[] chatByteArr = Base64.getDecoder().decode(chatString);
@@ -266,7 +334,8 @@ public class ChatUtil {
             in = new ObjectInputStream(bis);
             try {
                 chatItem = (Chat_Item) in.readObject();
-
+                // 채팅 아이디 세팅!!!!
+                chatItem.setChatId(chatId);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -274,5 +343,34 @@ public class ChatUtil {
             e.printStackTrace();
         }
         return chatItem;
+    }
+
+    // 서버의 사용자수맵 업데이트
+    public void updateUserCountMap(String chatRoomId, int updateDiv, int allUserCount){
+        ChatApiInterface chatApiClient = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+        Call<String> call2 = chatApiClient.updateUserCountMap(chatRoomId, updateDiv, allUserCount);
+        call2.enqueue(new Callback<String>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    //
+                    String responseResult = response.body();
+                    Log.d("채팅방 사용자수 맵 업데이트 완료",responseResult);
+
+                } else {
+                    Log.d("채팅방 사용자수 맵 업데이트 완료","지만 데이터 없음!");
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+            {
+                Log.e("채팅방 사용자수 맵 업데이트 실패", t.getMessage());
+            }
+        });
     }
 }

@@ -118,7 +118,9 @@ public class Fragment_Tab1_AllPosts_ss extends Fragment {
                                 responseResult.get(i).getNick_name(),
                                 responseResult.get(i).getProfile_file_name(),
                                 responseResult.get(i).getCre_datetime(),
-                                responseResult.get(i).getMentioned_user_list()));
+                                responseResult.get(i).getMentioned_user_list(),
+                                responseResult.get(i).getCommunity_id(),
+                                responseResult.get(i).getLogin_id()));
                     }
                     post_adapter.notifyDataSetChanged();
                 }

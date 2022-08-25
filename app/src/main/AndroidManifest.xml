@@ -4,7 +4,7 @@
 
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
-        android:resource="@drawable/ic_baseline_send_24" />
+        android:resource="@drawable/skeleton" />
     <!--
  메시지 기본 색상 Set color used with incoming notification messages. This is used when no color is set for the incoming
          notification message. See README(https://goo.gl/6BKBk7) for more.
@@ -31,6 +31,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".Community_Info_Edit"
+            android:exported="false" />
         <activity
             android:name=".ChatMemberSelect"
             android:exported="false" />
@@ -42,18 +46,32 @@
             android:exported="false" />
         <activity
             android:name=".Community_Create"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".ImageView_FullScreen"
             android:exported="false" />
         <activity
             android:name=".Community_MainPage"
-            android:exported="false" />
+            android:exported="true">
+
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="bubbly2" android:host="3.39.84.115"/>
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ReplyModify"
             android:exported="false" />
         <activity
-            android:name=".Add_Posting_Modify"
+            android:name=".UnUsed_Add_Posting_Modify"
+            android:exported="false" />
+        <activity
+            android:name=".Post_ApplyNFT_A"
             android:exported="false" />
         <activity
             android:name=".ModifyProfile"
@@ -84,9 +102,21 @@
             android:exported="false" />
         <activity
             android:name=".SS_PostDetail"
-            android:exported="false" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="bubbly1" android:host="3.39.84.115"/>
+            </intent-filter>
+
+        </activity>
+
+
         <activity
-            android:name=".Add_Posting_Create"
+            android:name=".Post_Create"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
@@ -122,16 +152,14 @@
 
         <activity
             android:name=".LL_Register_B"
-            android:exported="false">
-
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".LL_Register_C"
             android:exported="false" />
         <activity
             android:name=".LL_Login"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".LL_FindID_A"
             android:exported="false" />

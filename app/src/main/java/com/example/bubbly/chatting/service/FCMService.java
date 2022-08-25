@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ChatApiClient;
 import com.example.bubbly.retrofit.ChatApiInterface;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -108,6 +109,13 @@ public class FCMService extends FirebaseMessagingService{
                                 if (response.isSuccessful() && response.body() != null)
                                 {
                                     Log.e("토큰 갱신 완료!", response.body());
+
+                                    // 토큰을 새로 저장했다면!
+                                    if(!response.body().equals("success") && !response.body().equals("fail")){
+                                        UserInfo.token = response.body();
+                                        Log.e("새로운 토큰 저장완료!", response.body());
+
+                                    }
                                 }
                             }
 

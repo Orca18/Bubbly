@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -55,6 +57,7 @@ public class MM_Profile extends AppCompatActivity {
     // 새로고침, 프로그레스바
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
+//    NestedScrollView scrollView;
 
     // 탭 레이아웃
     TabLayout tabLayout;
@@ -161,6 +164,7 @@ public class MM_Profile extends AppCompatActivity {
         navigationView = findViewById(R.id.profile_navigation_view);
         sidemenu = findViewById(R.id.profile_sidemenu);
         swipeRefreshLayout = findViewById(R.id.profile_refresh);
+//        scrollView = findViewById(R.id.text_scrollview);
 
         // 내비 안 메뉴
         view = navigationView.getHeaderView(0);
@@ -440,9 +444,9 @@ public class MM_Profile extends AppCompatActivity {
         bt_modify_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent mIntent = new Intent(getApplicationContext(), ModifyProfile.class);
-//                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                startActivity(mIntent);
+                Intent mIntent = new Intent(getApplicationContext(), ModifyProfile.class);
+                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(mIntent);
             }
         });
 

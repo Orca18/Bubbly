@@ -97,17 +97,25 @@ public class LL_Login extends AppCompatActivity {
                                         int user_id = json.getInt("userId");
 
                                         //암호화 쉐어드 프리퍼런스 복호화해 주소와 니모니 불러온다 (공동작업 위해 복호화 주석처리 이후 다시 주석 해제 예정)
-//                                        MasterKey masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-//                                                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-//                                                .build();
-//
-//                                        SharedPreferences sharedPreferences = EncryptedSharedPreferences
-//                                                .create(getApplicationContext(),
-//                                                        "account",
-//                                                        masterkey,
-//                                                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-//                                                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-//                                        UserInfo.mnemonic = sharedPreferences.getString("mnemonic","");
+                                        MasterKey masterkey = null;
+                                        try {
+                                            masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                                                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                                                    .build();
+                                            SharedPreferences sharedPreferences = EncryptedSharedPreferences
+                                                    .create(getApplicationContext(),
+                                                            "account",
+                                                            masterkey,
+                                                            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                                                            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+                                            System.out.println(sharedPreferences.getString("mnemonic",""));
+                                            UserInfo.mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
+                                        } catch (GeneralSecurityException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
 
                                         //회원정보를 요청한다.
                                         Call<List<user_Response>> call_userInfo = login_api.selectUserInfo(""+user_id);

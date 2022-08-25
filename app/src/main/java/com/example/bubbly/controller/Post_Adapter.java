@@ -23,15 +23,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.Post_Create;
 import com.example.bubbly.ImageView_FullScreen;
+import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.kim_util_test.Kim_ApiClient;
+import com.example.bubbly.kim_util_test.Kim_ApiInterface;
+import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
+import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
+import com.example.bubbly.retrofit.reply_Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -63,6 +74,12 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         return new PostViewHolder(view);
     }
 
+    public static Date getDate(String from) throws ParseException {
+// "yyyy-MM-dd HH:mm:ss"
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(from);
+        return date;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
@@ -76,77 +93,122 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         holder.tv_time.setText(post_response.getCre_datetime());
 
 
-//        Log.e("getPost_id", post_response.getPost_id());
-//        Log.e("getNick_name", post_response.getNick_name());
-//        Log.e("getLike_yn()", post_response.getLike_yn());
-//        Log.e("getLike_count()", post_response.getLike_count());
-//        Log.e("getMentioned_user_list()", Arrays.toString(post_response.getMentioned_user_list()));
+        holder.tv_user_id.setText(post_response.getLogin_id());
+//        holder.tv_com_name.setText(post_response.getCommunity_id());
+
+
+        holder.iv_retweet_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext,"리트윗 구현",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.iv_share_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext,"딥 링크 구현",Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
+                .load("https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getProfile_file_name())
                 .into(holder.iv_user_image);
 
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                .fitCenter()
                 .into(holder.iv_media);
 
-
-
+        String a = null;
+        try {
+            a = Kim_DateUtil.beforeTime(getDate(post_response.getCre_datetime()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // SNS 형식 시간
+        holder.tv_time.setText(a);
 
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(holder.iv_options.getContext(), holder.itemView);
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch(menuItem.getItemId()){
-                            case R.id.action_a:
-                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
-                                return true;
+                if(user_id.equals(post_response.getPost_writer_id())){
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch(menuItem.getItemId()){
+                                case R.id.action_a:
+                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+                                    return true;
 
-                            case R.id.action_b:
-                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
-                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
-                                call.enqueue(new Callback<String>()
-                                {
-                                    @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                                case R.id.action_b:
+                                    ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                    Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
+                                    call.enqueue(new Callback<String>()
                                     {
-                                        if (response.isSuccessful() && response.body() != null)
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
                                         {
-                                            //Log.e("delete", String.valueOf(position));
-                                            lists.remove(position);
-                                            notifyItemRemoved(position);
+                                            if (response.isSuccessful() && response.body() != null)
+                                            {
+                                                //Log.e("delete", String.valueOf(position));
+                                                lists.remove(position);
+                                                notifyItemRemoved(position);
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                                    {
-                                        Log.e("에러", t.getMessage());
-                                    }
-                                });
-                                return true;
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                                        {
+                                            Log.e("에러", t.getMessage());
+                                        }
+                                    });
+                                    return true;
 
                             case R.id.action_c:
+                                //nft신청
+                                Intent mIntent = new Intent(context.getApplicationContext(), Post_ApplyNFT_A.class);
+                                mIntent.putExtra("post_id",post_response.getPost_id());
+                                context.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                                 Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
                                 return true;
 
-                            default:
-                                return false;
+                                default:
+                                    return false;
+                            }
+
                         }
+                    });
+                    popup.inflate(R.menu.main_liist_menu);
+                    popup.setGravity(Gravity.RIGHT|Gravity.END);
 
-                    }
-                });
-                popup.inflate(R.menu.main_liist_menu);
-                popup.setGravity(Gravity.RIGHT|Gravity.END);
+                    popup.show();
+                } else {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch(menuItem.getItemId()){
+                                case R.id.action_a2:
+                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
+                                    return true;
 
-                popup.show();
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                    popup.inflate(R.menu.main_liist_menu2);
+                    popup.setGravity(Gravity.RIGHT|Gravity.END);
+
+                    popup.show();
+                }
+
             }
         });
-
 
 
         // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
@@ -216,6 +278,8 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             public void onClick(View v) {
                 Intent intent = new Intent(context, SS_PostDetail.class);
                 intent.putExtra("post_id", post_response.getPost_id());
+                intent.putExtra("login_id", post_response.getLogin_id());
+                Log.d("디버그태그", "Login_+id: "+post_response.getLogin_id());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -238,6 +302,9 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+
+
+
 
 
         holder.layout_like.setOnClickListener(new View.OnClickListener() {
@@ -354,7 +421,51 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
+
+        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<reply_Response>> call = selectCommentUsingPostId_api.selectCommentUsingPostId(post_response.getPost_id());
+        call.enqueue(new Callback<List<reply_Response>>() {
+            @Override
+            public void onResponse(@NonNull Call<List<reply_Response>> call, @NonNull Response<List<reply_Response>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<reply_Response> responseResult = response.body();
+                    holder.tv_reply_count.setText(String.valueOf(responseResult.size()));
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<List<reply_Response>> call, @NonNull Throwable t) {
+                Log.e("게시물 아이디로 게시물 조회", t.getMessage());
+            }
+        });
+
+
+
+        // TODO 커뮤니티 이름 가져오긴 하는데, 성능 저하 문제는 나중에 고려
+        Kim_ApiInterface api2 = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Call<List<Kim_Com_Info_Response>> call2 = api2.selectCommunityUsingCommunityId(post_response.getCommunity_id());
+        call2.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
+            @Override
+            public void onResponse(Call<List<Kim_Com_Info_Response>> call2, Response<List<Kim_Com_Info_Response>> response) {
+
+                if(post_response.getCommunity_id().equals("0")){
+                   holder.tv_com_name.setVisibility(View.GONE);
+                } else {
+                    holder.tv_com_name.setVisibility(View.VISIBLE);
+                    holder.tv_com_name.setText(response.body().get(0).getCommunity_name());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Kim_Com_Info_Response>> call, Throwable t) {
+
+            }
+        });
     }
+
+
+
 
 
     @Override
@@ -365,10 +476,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
     public class PostViewHolder extends RecyclerView.ViewHolder {
         Boolean like_check = false;
         public LinearLayout ll_item_layout, layout_like;
-//        ItemClickListener itemClickListener;
 
         ImageView iv_media, iv_options, iv_like_icon, iv_reply_icon, iv_retweet_icon, iv_share_icon;
         TextView tv_user_nick, tv_content, tv_like_count, tv_reply_count, tv_retweet_count, tv_time;
+        TextView tv_user_id, tv_com_name;
 
         CircleImageView iv_user_image;
 
@@ -392,6 +503,8 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             tv_retweet_count = view.findViewById(R.id.tv_retweet_count);
             tv_time = view.findViewById(R.id.tv_time);
 
+            tv_user_id = view.findViewById(R.id.feed_basic_userID);
+            tv_com_name = view.findViewById(R.id.tv_com_name);
 
 
 

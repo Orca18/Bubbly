@@ -44,7 +44,15 @@ public class post_Response {
     @Expose
     @SerializedName("mentioned_user_list") private String[] mentioned_user_list;
 
-    public post_Response(String post_id, String post_writer_id, String writer_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String nick_name, String profile_file_name, String cre_datetime, String[] mentioned_user_list) {
+
+    @Expose
+    @SerializedName("login_id") private String login_id;
+
+    @Expose
+    @SerializedName("community_id") private String community_id;
+
+
+    public post_Response(String post_id, String post_writer_id, String writer_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String nick_name, String profile_file_name, String cre_datetime, String[] mentioned_user_list, String community_id, String login_id) {
         this.post_id = post_id;
         this.post_writer_id = post_writer_id;
         this.writer_name = writer_name;
@@ -58,8 +66,17 @@ public class post_Response {
         this.profile_file_name = profile_file_name;
         this.cre_datetime = cre_datetime;
         this.mentioned_user_list = mentioned_user_list;
+        this.community_id = community_id;
+        this.login_id = login_id;
     }
 
+    public String getCommunity_id() {
+        return community_id;
+    }
+
+    public void setCommunity_id(String community_id) {
+        this.community_id = community_id;
+    }
 
     public String getPost_id() {
         return post_id;
@@ -101,6 +118,13 @@ public class post_Response {
         this.file_save_names = file_save_names;
     }
 
+    public String getLogin_id() {
+        return login_id;
+    }
+
+    public void setLogin_id(String login_id) {
+        this.login_id = login_id;
+    }
     public String getLike_count() {
         return like_count;
     }
@@ -164,4 +188,5 @@ public class post_Response {
     public void setMentioned_user_list(String[] mentioned_user_list) {
         this.mentioned_user_list = mentioned_user_list;
     }
+
 }

@@ -1,9 +1,14 @@
 package com.example.bubbly.retrofit;
 
-import com.example.bubbly.model.Chat_Room_Cre;
+import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
+import com.example.bubbly.model.Chat_Room_Info;
 import com.example.bubbly.model.OtherUserInfo;
 
 import java.util.ArrayList;
+import com.example.bubbly.kim_util_test.Kim_JoinedCom_Response;
+import com.example.bubbly.model.NFTSell_Item;
+import com.example.bubbly.model.NFT_Item;
+
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -106,6 +111,11 @@ public interface ApiInterface {
     Call<String> selectAddrUsingUserId(@Query("user_id") String user_id);
 
 
+    @GET("userinfo/selectUserSearchResultList") // 사용자 검색 api
+    Call<String> selectUserSearchResultList(@Query("user_id") String user_id, //  user_id 값(auto_increment)
+                                            @Query("search_text") String search_text); // 검색어
+
+
     // todo 회정보와 관련된 api (끝 지점)
 
 
@@ -158,6 +168,16 @@ public interface ApiInterface {
 
     @GET("post/selectPostMeAndFolloweeAndCommunity") // 나와 팔로위, 속한 커뮤니티의 게시물 조회  api
     Call<List<post_Response>> selectPostMeAndFolloweeAndCommunity(@Query("user_id") String user_id); // 로그인한 user_id 값(auto_increment)
+
+
+    @GET("post/selectPostUsingPostContents") // 게시글 내용으로 검색
+    Call<List<post_Response>> selectPostUsingPostContents(@Query("post_contents") String post_contents, //게시글 내용 = 검색어
+                                             @Query("user_id") String user_id); //사용자 id
+
+
+    @GET("post/selectPostUsingPostContentsOrderBylike") // 게시글 내용으로 검색
+    Call<List<post_Response>> selectPostUsingPostContentsOrderBylike(@Query("user_id") String user_id, //사용자 id
+                                                                     @Query("search_text") String search_text); //검색어
 
     // todo 게시물과 관련된 api (끝 지점)
 
@@ -230,6 +250,10 @@ public interface ApiInterface {
     Call<String> createSerarchText(@Field("searcher_id") String searcher_id, //  user_id 값(auto_increment)
                                  @Field("search_text") String search_text); // 검색어
 
+    @GET("realtimetrend/selectRealTimeTrends") // 검색창 실시간 트랜드
+    Call <String> selectRealTimeTrends(@Query("current_time") String current_time); // 현재시간
+
+
     // todo 검섹어 관련된 api (끝 지점)
 
     // todo 블록체인 관련된 api (끝 지점)
@@ -260,5 +284,85 @@ public interface ApiInterface {
 
     // 채팅방 정보 저장
     @POST("chat/createChatRoom")
-    Call<String> createChatRoom(@Body Chat_Room_Cre chatRoomCre);
+    Call<String> createChatRoom(@Body Chat_Room_Cre_Or_Del chatRoomCre);
+
+    // 채팅방 멤버리스트 조회
+    @GET("chat/selectChatParticipantUsingChatRoomId") //
+    Call<ArrayList<OtherUserInfo>> selectChatParticipantUsingChatRoomId(@Query("chat_room_id") String chatRoomId);
+
+    // 채팅방 아이디로 채팅방정보 조회
+    @GET("chat/selectChatRoomInfo") //
+    Call<ArrayList<Chat_Room_Info>> selectChatRoomInfo(@Query("chat_room_id") String chatRoomId);
+
+    // 사용자 아이디로 채팅방 리스트 조회
+    @GET("chat/selectChatRoomListUsingUserId") //
+    Call<ArrayList<Chat_Room_Info>> selectChatRoomListUsingUserId(@Query("user_id") String userId);
+
+    // 채팅방 정보 삭제
+    @FormUrlEncoded
+    @POST("chat/deleteChatRoom")
+    Call<String> deleteChatRoom(@Field("chat_room_id") String chatRoomId);
+
+    // 채팅방 멤버 삭제
+    @FormUrlEncoded
+    @POST("chat/deleteChatParticipant")
+    Call<String> deleteChatParticipant(@Field("user_id") String userId, @Field("chat_room_id") String chatRoomId);
+
+    // todo nft 관련된 api (끝 지점)
+    @Multipart
+    @POST("nft-creation") // nft 저장
+    Call<String> nftCreation(@Part("mnemonic") String mnemonic,
+                            @Part("assetName") String assetName,
+                            @Part("description") String description,
+                            @Part("user_id") String user_id,
+                            @Part("post_id") String post_id,
+                            @Part List<MultipartBody.Part> files);
+
+    @FormUrlEncoded
+    @POST("nft-sell") // nft 판매
+    Call<String> nftSell(@Field("mnemonic") String mnemonic,
+                         @Field("nft_id") String nft_id,
+                         @Field("sell_price") String sell_price,
+                         @Field("seller_id") String seller_id,
+                         @Field("nft_desc") String nft_desc);
+
+    @FormUrlEncoded
+    @POST("nft-stop-sell") // nft 판매 취소
+    Call<String> nftStopSell(@Field("mnemonic") String mnemonic,
+                        @Field("nft_id") String nft_id,
+                        @Field("app_id") String app_id,
+                        @Field("sell_price") String sell_price);
+
+
+    @FormUrlEncoded
+    @POST("nft-buy") // nft 구매
+    Call<String> nftBuy(@Field("nft_owner_address") String nft_owner_address,
+                         @Field("buyer_mnemonic") String buyer_mnemonic,
+                         @Field("nftID") String nftID,
+                         @Field("appID") String appID,
+                         @Field("buyPrice") String buyPrice,
+                         @Field("buyer_id") String buyer_id);
+
+    @GET("nft/selectNftUsingNftId") // nft id로 정보 조회
+    Call<String> selectNftUsingNftId(@Query("nft_id") String nft_id);
+
+    @GET("nft/selectNftUsingHolderId") //holder_id로 nft 조회
+    Call<List<NFT_Item>> selectNftUsingHolderId(@Query("holder_id") String holder_id);
+
+    @GET("nft/selectAllSelledNftList") // 모든 판매중인 nft리스트
+    Call<String> selectAllSelledNftList();
+
+    @GET("nft/selectSelledNftListUsingSellerId") // 특정 사용자가 판매중인 NFT리스트
+    Call<List<NFTSell_Item>> selectSelledNftListUsingSellerId(@Query("seller_id") String seller_id);
+
+
+    // todo nft 관련된 api (끝 지점)
+
+
+    // todo community 관련 api (시작 지점)
+
+    @GET("community/selectCommunitySearchResultList") // 사용자 검색 api
+    Call<List<Kim_JoinedCom_Response>> selectCommunitySearchResultList(@Query("search_text") String search_text); // 검색어
+
+    // todo community 관련 api (끝 지점)
 }
