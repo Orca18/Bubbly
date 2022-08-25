@@ -57,7 +57,7 @@ public class MM_Profile extends AppCompatActivity {
     // 새로고침, 프로그레스바
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
-    NestedScrollView scrollView;
+//    NestedScrollView scrollView;
 
     // 탭 레이아웃
     TabLayout tabLayout;
@@ -164,7 +164,7 @@ public class MM_Profile extends AppCompatActivity {
         navigationView = findViewById(R.id.profile_navigation_view);
         sidemenu = findViewById(R.id.profile_sidemenu);
         swipeRefreshLayout = findViewById(R.id.profile_refresh);
-        scrollView = findViewById(R.id.text_scrollview);
+//        scrollView = findViewById(R.id.text_scrollview);
 
         // 내비 안 메뉴
         view = navigationView.getHeaderView(0);

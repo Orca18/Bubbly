@@ -46,7 +46,7 @@ public class MM_Wallet extends AppCompatActivity {
 
     // 새로고침, 프로그레스바
     ProgressBar progressBar;
-    ScrollView scrollView;
+//    NestedScrollView scrollView;
 
     // 탭 레이아웃
     TabLayout tabLayout;
@@ -109,7 +109,7 @@ public class MM_Wallet extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.wallet_navigation_view);
         sidemenu = findViewById(R.id.wallet_sidemenu);
-        scrollView = findViewById(R.id.text_scrollview);
+//        scrollView = findViewById(R.id.text_scrollview);
 
         // 내비 안 메뉴
         view = navigationView.getHeaderView(0);

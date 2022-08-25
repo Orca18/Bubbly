@@ -75,18 +75,24 @@ public class Fragment_Tab3_NFTs extends Fragment {
         // 레이아웃
         v = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
         recyclerView = v.findViewById(R.id.tab_recyclerview);
-
         selectNFT();
 
         return v;
     }
 
     private void selectNFT(){
+        //nft결과값 customer toast로 띄우기 위해 adapter로 viewgroup 넘겨줌
         ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
-        list = new ArrayList<>();
-        adapter = new NFT_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
+
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+        //위치 유지
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+        //위치 유지
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
+        list = new ArrayList<>();
+        adapter = new NFT_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -112,7 +118,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
             @Override
             public void onFailure(Call<List<NFT_Item>> call, Throwable t) {
-                Log.e("nft 생성 실패", t.getMessage());
+                Log.e("nft 보유목록 가져오기 실패", t.getMessage());
             }
         });
     }
