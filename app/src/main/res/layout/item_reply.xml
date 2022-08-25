@@ -21,8 +21,7 @@
             android:id="@+id/iv_user_image"
             android:layout_width="54dp"
             android:layout_height="54dp"
-            android:layout_marginRight="14dp"
-            android:src="@drawable/google" />
+            android:layout_marginRight="14dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,6 +83,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/spoqa_medium"
                     android:text="1h"
+                    android:maxLength="10"
                     android:textSize="15dp" />
 
                 <ImageView
@@ -112,6 +112,7 @@
                 android:maxHeight="100dp"/>
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp">

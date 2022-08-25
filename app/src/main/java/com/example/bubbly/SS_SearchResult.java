@@ -120,5 +120,8 @@ public class SS_SearchResult extends AppCompatActivity {
     public String getUid() {
         return uid;
     }
+    public String getKeyword(){
+        return keyword;
+    }
 
 }

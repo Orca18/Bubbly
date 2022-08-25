@@ -6,8 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/main_d_profile_include"/>
+<!--    <androidx.core.widget.NestedScrollView-->
+<!--        android:id="@+id/text_scrollview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+<!--        android:fillViewport="true">-->
 
+
+    <include layout="@layout/main_d_profile_include" />
+<!--    </androidx.core.widget.NestedScrollView>-->
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/profile_navigation_view"

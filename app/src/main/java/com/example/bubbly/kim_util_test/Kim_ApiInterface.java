@@ -4,10 +4,12 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
@@ -32,15 +34,15 @@ public interface Kim_ApiInterface {
             @Query("user_id") String user_id // 로그인한 user_id 값
     );
 
-    // 3. 커뮤니티 참여자 정보 저장 TODO 커뮤 생성 시, 커뮤 ID 다시 받아와서 만들어야되려나???
+    // 3. 커뮤니티 참여자 정보 저장
     @FormUrlEncoded
-    @POST("community/createCommunityParicipant")
-    Call<String> createCommunityParicipant(
-            @Part("user_id") String user_id,
-            @Part("community_id") String community_id
+    @POST("community/participate/createCommunityParticipant")
+    Call<String> createCommunityParticipant(
+            @Field("user_id") String user_id,
+            @Field("community_id") String community_id
             );
 
-    // 3. 커뮤니티 참여자 정보 저장 TODO 커뮤 생성 시, 커뮤 ID 다시 받아와서 만들어야되려나???
+    // 3. 커뮤니티 아이디로 커뮤니티 정보 조회
     @GET("community/selectCommunityUsingCommunityId")
     Call<List<Kim_Com_Info_Response>> selectCommunityUsingCommunityId(
             @Query("community_id") String community_id
@@ -62,15 +64,49 @@ public interface Kim_ApiInterface {
     
     
     // 7. 커뮤니티 정보 수정
-    
+    @Multipart
+    @POST("community/updateCommunity")
+    Call<String> updateCommunity(
+            @Part("community_name") String community_name,
+            @Part("community_desc") String community_desc,
+            @Part("profile_file_name") String profile_file_name,
+            @Part("community_id") String community_id,
+            @Part MultipartBody.Part file,
+            @Part("rule") String rule
+
+    );
     
     // 8. 특정 커뮤니티의 게시글 가져오기
-    
-    
-    
+    @GET("post/selectCommunityPost")
+    Call<List<Kim_Com_post_Response>> selectCommunityPost(
+            @Query("user_id") String user_id,
+            @Query("community_id") String community_id
+    );
+
+
+    // 9. 내가 속한 모든 커뮤니티의 글
+    @GET("post/selectAllCommunityPost")
+    Call<List<Kim_Com_post_Response>> selectAllCommunityPost(
+            @Query("user_id") String user_id
+    );
+
+
+    // 10. 커뮤니티 나가기
+    @FormUrlEncoded
+    @POST("community/participate/deleteCommunityParticipant")
+    Call<String> deleteCommunityParticipant(
+            @Part("user_id") String user_id,
+            @Part("community_id") String community_id
+    );
+
+
     // 9. 커뮤니티 폐쇄
-    
-    
+    @FormUrlEncoded
+    @POST("community/deleteCommunity")
+    Call<String> deleteCommunity(
+            @Part("community_id") String community_id
+    );
+
     // 10 ~ : 게시글 작성 관련 수정 & 검색?
     
 }

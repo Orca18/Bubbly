@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 
 import android.Manifest;
 import android.content.Intent;
@@ -19,7 +20,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -52,6 +53,7 @@ public class Community_Create extends AppCompatActivity {
     Toolbar toolbar;
     LinearLayout done;
     ImageView thumb;
+    TextView tv_thumb;
     EditText title, desc;
 
 
@@ -61,18 +63,21 @@ public class Community_Create extends AppCompatActivity {
     String user_id;
     private ArrayList<Uri> imageList;
     File imagefile;
+    Boolean thumb_yn;
 
-    // 이미지 관련
-    RelativeLayout r_img;
+    String com_id;
 
-
+    Kim_ApiInterface kim_api;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_community);
 
-        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         imageList = new ArrayList<>();
+
+
+        kim_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
 
         initialize();
         linsteners();
@@ -91,8 +96,15 @@ public class Community_Create extends AppCompatActivity {
                 //community_name,
                 //community_desc,
                 //profile_file)"
-                createCom();
-                finish();
+
+
+                if (title.getText().length() == 0 || thumb_yn == false) {
+                    Toast.makeText(getApplicationContext(), "커뮤니티 대문 이미지 또는 이름을 작성해주세요.", Toast.LENGTH_SHORT).show();
+                } else {
+                    createCom();
+                }
+
+
             }
         });
 
@@ -122,7 +134,6 @@ public class Community_Create extends AppCompatActivity {
     }
 
 
-
     private void initialize() {
 
         toolbar = findViewById(R.id.community_create_toolbar);
@@ -135,13 +146,9 @@ public class Community_Create extends AppCompatActivity {
         thumb = findViewById(R.id.community_create_image);
         title = findViewById(R.id.community_create_title);
         desc = findViewById(R.id.community_create_desc);
+        tv_thumb = findViewById(R.id.community_create_image_tv);
+        thumb_yn = false;
     }
-
-
-
-
-
-
 
 
     private void createCom() {
@@ -156,34 +163,36 @@ public class Community_Create extends AppCompatActivity {
 
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        Kim_ApiInterface kim_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
-        Call<String> call = kim_api.createCommunity(user_id, null, title.getText().toString(), null, "뭐야", file);
+        Call<String> call = kim_api.createCommunity(user_id, null, title.getText().toString(), desc.getText().toString(), "뭐야", file);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    com_id = response.body();
 
-                    // 성공 시, 참여 정보 또 저장 // TODO 생성한 커뮤니티 ID 가져와서 넣어야됨
-//                    Call<String> call2 = kim_api.createCommunityParicipant(user_id, "여기에!!!!!");
-//                    call2.enqueue(new Callback<String>() {
-//                        @Override
-//                        public void onResponse(Call<String> call, Response<String> response) {
-//
-//                            finish();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<String> call, Throwable t) {
-//                            Toast.makeText(getApplicationContext(), "참여 정보 저장에 오류",Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
+                    Log.d("디버그태그", "user_id"+user_id);
+                    Log.d("디버그태그", "com_id"+com_id);
+                    Call<String> call2 = kim_api.createCommunityParticipant(user_id,com_id);
+                    call2.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response2) {
+                            Log.d("디버그태그", "reponse2 : "+ response2.body());
+                            Log.d("디버그태그", "reponse2 : "+ response2.isSuccessful());
+                            Log.d("디버그태그", "reponse2 : "+ response2.message());
+                            Intent mIntent = new Intent(getApplicationContext(), Community_MainPage.class);
+                            mIntent.putExtra("com_id", com_id);
+                            startActivity(mIntent);
+                            finish();
+                        }
 
-                    finish();
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "참여 정보 저장에 오류", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-//                    Toast.makeText(getApplicationContext(), "커뮤니티 생성 성공! TODO 해당 커뮤 화면으로 이동", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 Log.e("게시글 생성 에러", t.getMessage());
@@ -191,7 +200,10 @@ public class Community_Create extends AppCompatActivity {
         });
 
 
+
+
     }
+
 
 
     //파일 파트를 준비하는 매서드 (파트이름, 그리고 파일의 Uri)
@@ -214,10 +226,6 @@ public class Community_Create extends AppCompatActivity {
     }
 
 
-
-
-
-
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
                 @Override
@@ -233,6 +241,8 @@ public class Community_Create extends AppCompatActivity {
                                 .centerCrop()
                                 .into(thumb);
 
+                        thumb_yn = true;
+
                         imageList.add(uri);
 
                     }
@@ -240,22 +250,11 @@ public class Community_Create extends AppCompatActivity {
             });
 
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: {
-                if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-                    backKeyPressedTime = System.currentTimeMillis();
-                    toast = Toast.makeText(this, "작성 중인거 있을 때, 질문", Toast.LENGTH_SHORT);
-                    toast.show();
-                } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
-                    finish();
-                    toast.cancel();
-                }
-                return true;
-            }
+            case android.R.id.home:
+                onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -263,17 +262,27 @@ public class Community_Create extends AppCompatActivity {
     //뒤로가기 했을 때
     @Override
     public void onBackPressed() {
-        if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
-            backKeyPressedTime = System.currentTimeMillis();
-            toast = Toast.makeText(this, "작성 중인거 있을 때, 질문", Toast.LENGTH_SHORT);
-            toast.show();
-            return;
-        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+        if (title.getText().length() == 0 && imagefile == null) {
             finish();
-            toast.cancel();
         } else {
-            super.onBackPressed();
+            Toast.makeText(getApplicationContext(), "작성 중인 데이터가 있습니다.\n다이얼로그 띄우기", Toast.LENGTH_SHORT).show();
+            finish();
         }
+
+
+//        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+//            drawerLayout.closeDrawer(GravityCompat.START);
+//        } else if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+//            backKeyPressedTime = System.currentTimeMillis();
+//            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+//            toast.show();
+//            return;
+//        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+//            finish();
+//            toast.cancel();
+//        } else {
+//            super.onBackPressed();
+//        }
     }
 
 }

@@ -113,7 +113,9 @@ public class Fragment_Tab2_Replies_ss extends Fragment {
                                 responseResult.get(i).getComment_contents(),
                                 responseResult.get(i).getNick_name(),
                                 responseResult.get(i).getProfile_file_name(),
-                                responseResult.get(i).getMentioned_user_list()));
+                                responseResult.get(i).getMentioned_user_list(),
+                                responseResult.get(i).getCre_datetime_comment(),
+                                responseResult.get(i).getComment_id()));
                     }
                     reply_adapter.notifyDataSetChanged();
                 }
