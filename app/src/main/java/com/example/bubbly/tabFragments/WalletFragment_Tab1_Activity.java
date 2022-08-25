@@ -1,31 +1,59 @@
 package com.example.bubbly.tabFragments;
 
 
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.MM_Wallet;
 import com.example.bubbly.R;
+import com.example.bubbly.controller.NFT_Adapter;
+import com.example.bubbly.controller.TransactionHistory_Adapter;
+import com.example.bubbly.controller.WalletFragment_Adapter_Callback;
 import com.example.bubbly.model.Fragment_Tab1_Item;
+import com.example.bubbly.model.NFT_Item;
+import com.example.bubbly.model.TransactionHistory_Item;
+import com.example.bubbly.model.UserInfo;
+import com.example.bubbly.retrofit.ApiClient;
+import com.example.bubbly.retrofit.ApiInterface;
+import com.example.bubbly.retrofit.ApiInterfaceTransactionHistory;
+import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class WalletFragment_Tab1_Activity extends Fragment {
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
     View v;
-    private RecyclerView myrecyclerview;
-    private List<Fragment_Tab1_Item> postsItem;
-
+    LinearLayoutManager linearLayoutManager;
+    private RecyclerView recyclerView;
+    private ArrayList<TransactionHistory_Item> list = new ArrayList<>();
+    private TransactionHistory_Adapter adapter;
     String uid;
+    private String nextToken = ""; //api에 20개씩 나누어서 요청하는 토큰
+    private String address;
 
     public WalletFragment_Tab1_Activity() {
         // Required empty public constructor
@@ -46,9 +74,6 @@ public class WalletFragment_Tab1_Activity extends Fragment {
 
         uid = ((MM_Wallet)getActivity()).getUid();
 
-        postsItem = new ArrayList<>();
-//        fillList();
-
     }
 
 
@@ -59,79 +84,132 @@ public class WalletFragment_Tab1_Activity extends Fragment {
         // Inflate the layout for this fragment
         // 레이아웃
         v = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
+        recyclerView = v.findViewById(R.id.tab_recyclerview);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new TransactionHistory_Adapter(getActivity().getApplicationContext(), this.list);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
-//        swipeRefreshLayout = v.findViewById(R.id.refresh_notice);
-//
-//        swipeRefreshLayout.setOnRefreshListener(
-//                new SwipeRefreshLayout.OnRefreshListener() {
-//                    @Override
-//                    public void onRefresh() {
-//                        fillList();
-//                        /* 업데이트가 끝났음을 알림 */
-//                        swipeRefreshLayout.setRefreshing(false);
-//                    }
-//                });
+        clickListeners();
+
+//        selectHistory();
+
         return v;
     }
 
+    private void selectHistory(){
+        String base_url = "https://testnet-algorand.api.purestake.io/idx2/";
+        String token = "4LS0jVPkU61EBPpW2Ml3A2iaEcEfXK92aCDSzXXr";
+        ApiInterfaceTransactionHistory api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterfaceTransactionHistory.class);
+        Call<String> call = api.transactionHistory(token,address,20,nextToken);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                System.out.println("거래기록"+response.message()+response.errorBody()+response.code());
+                System.out.println(response.headers()+""+response.raw());
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body());
+                        nextToken = jsonObject.getString("next-token");
+                        JSONArray jsonArray = new JSONArray("transactions");
+                        for(int i = 0; i<jsonArray.length(); i++){
+                         JSONObject tx = jsonArray.getJSONObject(i);
+                         String txId = tx.getString("id");
+                         String sender = tx.getString("sender");
+                         long roundTime = tx.getLong("round-time");
+                         //epoch time to date
+                         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+                         Date date = new Date();
+                         date.setTime(roundTime);
+                         String roundTimeToDate = sdf.format(date);
+                         int fee = tx.getInt("fee");
+                         String txnTypeToString = "";
+                         String txType = tx.getString("tx-type");
+                         switch (txType){
+                             case "pay":
+                                 txnTypeToString = "Payment";
+                                 break;
+                             case "keyreg":
+                                 txnTypeToString = "Key Registration";
+                                 break;
+                             case "acfg":
+                                 txnTypeToString = "Asset Configuration";
+                                 break;
+                             case "axfer":
+                                 txnTypeToString = "Asset Transfer";
+                                 break;
+                             case "afrz":
+                                 txnTypeToString = "Asset Freeze";
+                                 break;
+                             case "appl":
+                                 txnTypeToString = "Application Call";
+                                 break;
+                         }
+                         int amount;
+                         String receiver = null;
+                         int assetId;
+                         if(txType.equals("pay")){
+                             JSONObject txn = tx.getJSONObject("payment-transaction");
+                             amount = txn.getInt("amount");
+                             receiver = txn.getString("receiver");
+                             assetId = 0;
+                         }else if(txType.equals("axfer")){
+                             JSONObject axtx = tx.getJSONObject("asset-transfer-transaction");
+                             amount = axtx.getInt("amount");
+                             receiver = axtx.getString("receiver");
+                             assetId = axtx.getInt("asset-id");
+                         }else{
+                             amount = 0;
+                             receiver = "";
+                             assetId = 0;
+                         }
+                         list.add(new TransactionHistory_Item(
+                                 txnTypeToString,
+                                 txId,
+                                 sender,
+                                 roundTimeToDate,
+                                 ""+fee,
+                                 ""+amount,
+                                 receiver,
+                                 ""+assetId));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("거래기록 가져오기 실패", t.getMessage());
+            }
+        });
+    }
 
 
+    private void clickListeners() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
 
-//    private void fillList() {
-//
-//        // HttpUrlConnection
-//        Thread th = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    //백그라운드 스레드에서는 메인화면을 변경 할 수 없음
-//                    // runOnUiThread(메인 스레드영역)
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//                            postsItem.add(new Fragment_Tab1_Item("테스트용입니다."));
-//
-//                            fill();
-//
-//                        }
-//                    });
-//                } catch (Exception e) {
-//                    Log.i("tag", "error :" + e);
-//                }
-//            }
-//        });
-//        th.start();
-//
-//
-//    }
+                if (!recyclerView.canScrollVertically(1)) {
+                    selectHistory();
+                }
+            }
+        });
 
-//    private void fill() {
-//        myrecyclerview = v.findViewById(R.id.fragment_profile_tab1_recyclerview);
-//
-//        Profile_Tab1_Adapter tab1_adapter = new Profile_Tab1_Adapter(getContext(), postsItem);
-//        myrecyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        myrecyclerview.setAdapter(tab1_adapter);
-//    }
+    }
+
 
 
     @Override
     public void onResume() {
         super.onResume();
-//        fillList();
     }
+
+
 }

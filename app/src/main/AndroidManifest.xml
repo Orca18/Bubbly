@@ -71,6 +71,9 @@
             android:name=".UnUsed_Add_Posting_Modify"
             android:exported="false" />
         <activity
+            android:name=".Post_ApplyNFT_A"
+            android:exported="false" />
+        <activity
             android:name=".ModifyProfile"
             android:exported="false" />
         <activity
@@ -146,6 +149,7 @@
         <activity
             android:name=".Option_Notice_List"
             android:exported="false" />
+
         <activity
             android:name=".LL_Register_B"
             android:exported="false" />

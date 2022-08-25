@@ -13,44 +13,49 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white">
 
-        <EditText
-            android:id="@+id/searchmode_edittext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:textSize="18dp"
-            android:inputType="text"
-            android:maxLines="1"
-            android:imeOptions="actionSearch"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/searchresult_toSearching"
+            android:layout_width="220dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:background="@drawable/edittext_radius"
+            android:hint="검색버튼"
+            android:textColor="@color/black"
+            android:textSize="20dp">
 
-    </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/linear_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/searchmode_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:background="@null"
+                android:textSize="18dp"
+                android:inputType="text"
+                android:maxLines="1"
+                android:imeOptions="actionSearch"/>
 
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spoqa_bold"
-            android:paddingLeft="10dp"
-            android:text="최근 검색어 / 에디텍 공백 아니면 연관 검색어 리스트뷰"
-            android:textSize="22dp" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_marginRight="20dp"
-            android:textColor="@color/red"
+
+        <ImageView
+            android:id="@+id/home_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="삭제"/>
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_outline_settings_24"
+            app:tint="#222" />
+    </androidx.appcompat.widget.Toolbar>
 
-    </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchmode_recyclerview"
+    <ListView
+        android:id="@+id/lv_recentlySearched"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:listitem="@layout/item_recently_searched_listview"/>
+
 
 </LinearLayout>

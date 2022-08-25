@@ -51,8 +51,9 @@ public class SS_Profile extends AppCompatActivity {
         setContentView(R.layout.sub_profile);
 
         // 유저 아이디 uid 받음
-//        Bundle extras = getIntent().getExtras();
-//        uid = extras.getString("uid");
+        Bundle extras = getIntent().getExtras();
+        uid = extras.getString("user_id");
+        System.out.println("user_id in post"+uid);
 
         // (기본) 리소스 ID 선언
         initiallize();
@@ -159,7 +160,7 @@ public class SS_Profile extends AppCompatActivity {
     }
 
     // 프래그먼트 어답터에서 Uid 받기 위해서 필요
-    public String getUid(){
+    public String getUid() {
         return uid;
     }
 

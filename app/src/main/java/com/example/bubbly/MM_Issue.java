@@ -1,6 +1,8 @@
 package com.example.bubbly;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -21,11 +23,21 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.controller.Ranking_Adapter;
 import com.example.bubbly.model.Ranking_Item;
+import com.example.bubbly.retrofit.ApiClient;
+import com.example.bubbly.retrofit.ApiInterface;
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MM_Issue extends AppCompatActivity {
 
@@ -71,9 +83,8 @@ public class MM_Issue extends AppCompatActivity {
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
-        // 리스트뷰
-        RankingList();
-
+        // 내비 터치
+        NaviTouch();
     }
 
 
@@ -350,6 +361,12 @@ public class MM_Issue extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        RankingList();
+    }
+
     // 액티비티 종료 시, 애니메이션 효과 없애기
     @Override
     protected void onPause() {
@@ -361,15 +378,47 @@ public class MM_Issue extends AppCompatActivity {
     // 랭킹 리스트 채우기
     private void RankingList() {
         rankingList = new ArrayList<Ranking_Item>();
-        for (int i = 0; i < 10; i++) {
-            rankingList.add(new Ranking_Item(i + 1, "테스트", 108));
-            Log.i("dd", "RankingList: " + i);
-        }
-
         // 리스트뷰 어답터 - 리스트뷰 연결
         final Ranking_Adapter adapter = new Ranking_Adapter(this, rankingList);
         listView.setAdapter(adapter);
 
+        //실시간 트랜드 데이터 가져오기
+        //현재시간
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date now = new Date();
+        String strNow = sdfDate.format(now);
+        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<String> call = api.selectRealTimeTrends(strNow);
+        call.enqueue(new Callback<String>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+            {
+                if(response.body()!=null){
+                    try {
+                        JSONArray jsonArray = new JSONArray(response.body());
+                        for(int i = 0; i<jsonArray.length(); i++){
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            int rank = i+1;
+                            String keyword = jsonObject.getString("name");
+                            int count = jsonObject.getInt("cnt");
+                            Ranking_Item ri = new Ranking_Item(rank,keyword,count);
+                            rankingList.add(ri);
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+            {
+                Log.e("실시간 검색어 트랜드 에러", t.getMessage());
+            }
+        });
 
     }
 

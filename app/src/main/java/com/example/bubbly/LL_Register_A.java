@@ -242,7 +242,7 @@ public class LL_Register_A extends AppCompatActivity {
         ck_agree_all.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ck_agree_all.isChecked()){
+                if(!ck_agree_all.isChecked()){
                     ck_agree_privatePolicy.setChecked(false);
                     ck_agree_termsToUse.setChecked(false);
                     authentication_check-=2;
@@ -296,7 +296,7 @@ public class LL_Register_A extends AppCompatActivity {
         tv_privacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayTermsWithWebView("개인정보보호정책","http://www.google.com");
+                displayTermsWithWebView("개인정보처리방침","http://www.google.com");
 //                wv_privacyPolicy.loadUrl("http://www.google.com");
 //                wv_privacyPolicy.setVisibility(View.VISIBLE);
             }
