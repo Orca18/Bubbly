@@ -1,38 +1,16 @@
-package com.example.bubbly.retrofit;
+package com.example.bubbly.model;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-public class user_Response {
-
-    @Expose
-    @SerializedName("user_id") private String user_id;
-
-    @Expose
-    @SerializedName("login_id") private String login_id;
-
-    @Expose
-    @SerializedName("email_addr") private String email_addr;
-
-    @Expose
-    @SerializedName("phone_num") private String phone_num;
-
-    @Expose
-    @SerializedName("novaland_account_addr") private String novaland_account_addr;
-
-    @Expose
-    @SerializedName("profile_file_name") private String profile_file_name;
-
-    @Expose
-    @SerializedName("nick_name") private String user_nick;
-
-    @Expose
-    @SerializedName("self_info") private String self_info;
-
-    @Expose
-    @SerializedName("token") private String token;
-
-
+public class OtherUserInfo {
+    private String user_id = "";
+    private String login_id = "";
+    private String email_addr = "";
+    private String phone_num = "";
+    private String novaland_account_addr = "";
+    private String profile_file_name = "";
+    private String nick_name = "";
+    private String self_info = "";
+    private String token;
+    private boolean isChecked = false;
 
     public String getUser_id() {
         return user_id;
@@ -83,11 +61,11 @@ public class user_Response {
     }
 
     public String getUser_nick() {
-        return user_nick;
+        return nick_name;
     }
 
     public void setUser_nick(String user_nick) {
-        this.user_nick = user_nick;
+        this.nick_name = user_nick;
     }
 
     public String getSelf_info() {
@@ -96,6 +74,14 @@ public class user_Response {
 
     public void setSelf_info(String self_info) {
         this.self_info = self_info;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public String getToken() {

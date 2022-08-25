@@ -126,6 +126,7 @@ public class LL_Login extends AppCompatActivity {
                                                 UserInfo.phone_num = responseResult.get(0).getPhone_num();
                                                 UserInfo.user_nick = responseResult.get(0).getUser_nick();
                                                 UserInfo.self_info = responseResult.get(0).getSelf_info();
+                                                UserInfo.token = responseResult.get(0).getToken();
                                                 if(responseResult.get(0).getProfile_file_name()!=null && !responseResult.get(0).getProfile_file_name().equals("")){
                                                     UserInfo.profile_file_name = "https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(0).getProfile_file_name();
                                                 }

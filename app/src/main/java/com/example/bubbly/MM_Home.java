@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bubbly.chatting.service.FCMService;
+import com.example.bubbly.controller.Feed_Adapter;
 import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -136,7 +138,10 @@ public class MM_Home extends AppCompatActivity {
         btprofile = findViewById(R.id.home_toprofile);
         btwallet = findViewById(R.id.home_towallet);
 
-
+        // FCM토큰 refresh
+        /*preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        user_id = preferences.getString("user_id", "");
+        FCMService.refreshToken(user_id);*/
     }
 
     // 바텀 메뉴 클릭

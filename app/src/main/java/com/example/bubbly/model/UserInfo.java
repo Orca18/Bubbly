@@ -9,6 +9,7 @@ public class UserInfo {
     public static String profile_file_name = "";
     public static String user_nick = "";
     public static String self_info = "";
+    public static String token = "";
     public static String user_addr = "";
     public static String mnemonic = "";
 }
