@@ -209,7 +209,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                         Log.e("nft 생성 실패", t.getMessage());
                         file.delete();
                         ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
-                        new Custom_Toast().createToast(getApplicationContext(),view,"NFT가 생성에 실패하었습니다.");
+                        new Custom_Toast().createToast(getApplicationContext(),view,"NFT 생성에 실패하었습니다.");
 
                     }
                 });

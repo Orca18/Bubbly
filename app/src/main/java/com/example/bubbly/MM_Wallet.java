@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.icu.text.SimpleDateFormat;
+import android.icu.util.TimeZone;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -507,11 +508,11 @@ public class MM_Wallet extends AppCompatActivity {
                             long roundTime = tx.getLong("round-time");
                             System.out.println(roundTime);
                             //system time to date
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                            Date date = new Date(roundTime);
-                            System.out.println(""+date);
+                            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+                            Date date = new Date();
+                            date.setTime(roundTime * 1000); //epoch seconds to ms
+                            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                             String roundTimeToDate = sdf.format(date);
-                            System.out.println(roundTimeToDate);
                             int fee = tx.getInt("fee");
                             String txnTypeToString = "";
                             String txType = tx.getString("tx-type");

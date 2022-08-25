@@ -56,7 +56,7 @@
                     android:fontFamily="@font/spoqa_medium"
                     android:maxLines="1"
                     android:text="yyyy-mm-dd hh:mm:ss"
-                    android:textSize="14dp" />
+                    android:textSize="10dp" />
 
 
             </LinearLayout>
@@ -72,7 +72,7 @@
                     android:layout_marginTop="1dp"
                     android:text="거래 ID"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
 
                 <TextView
                     android:id="@+id/tv_txId_txHistory"
@@ -81,10 +81,11 @@
                     android:layout_marginTop="1dp"
                     android:text="tx id"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_assetId_txHistory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -94,7 +95,7 @@
                     android:layout_marginTop="1dp"
                     android:text="자산 ID"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
                 <TextView
                     android:id="@+id/tv_assetID_txHistory"
                     android:layout_width="match_parent"
@@ -102,7 +103,7 @@
                     android:layout_marginTop="1dp"
                     android:text="자산 id"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -115,7 +116,7 @@
                     android:layout_marginTop="1dp"
                     android:text="보낸사람"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
                 <TextView
                     android:id="@+id/tv_txSender_txHistory"
                     android:layout_width="match_parent"
@@ -123,10 +124,11 @@
                     android:layout_marginTop="1dp"
                     android:text="보낸사람"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_receiver_txHistory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -136,7 +138,7 @@
                     android:layout_marginTop="1dp"
                     android:text="받는사람"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
                 <TextView
                     android:id="@+id/tv_txRec_txHistory"
                     android:layout_width="match_parent"
@@ -144,10 +146,11 @@
                     android:layout_marginTop="1dp"
                     android:text="받는사람"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_amount_txHistory"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
@@ -157,7 +160,7 @@
                     android:layout_marginTop="1dp"
                     android:text="수량"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
                 <TextView
                     android:id="@+id/tv_amount_txHistory"
                     android:layout_width="match_parent"
@@ -165,7 +168,7 @@
                     android:layout_marginTop="1dp"
                     android:text="금액"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -178,7 +181,7 @@
                     android:layout_marginTop="1dp"
                     android:text="수수료"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
                 <TextView
                     android:id="@+id/tv_fee_txHistory"
                     android:layout_width="match_parent"
@@ -186,7 +189,7 @@
                     android:layout_marginTop="1dp"
                     android:text="수수료"
                     android:textColor="@color/black"
-                    android:textSize="16dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
 
