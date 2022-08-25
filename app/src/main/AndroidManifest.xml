@@ -42,7 +42,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="bubbly_community" android:host="3.39.84.115"/>
+                <data android:scheme="bubbly2" android:host="3.39.84.115"/>
             </intent-filter>
 
         </activity>

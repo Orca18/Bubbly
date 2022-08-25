@@ -87,7 +87,7 @@ public class Community_MainPage extends AppCompatActivity {
 
         // TODO 인텐트로 온 경우, 예외처리하기
         if(intent.getData() != null){
-            com_id = intent.getDataString().replace("bubbly_community://3.39.84.115/community/","");
+            com_id = intent.getDataString().replace("bubbly2://3.39.84.115/","");
         }
 
 
