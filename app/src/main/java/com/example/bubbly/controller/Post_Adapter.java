@@ -91,8 +91,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 .into(holder.iv_media);
 
 
-
-
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,6 +1,8 @@
 package com.example.bubbly.model;
 
-public class OtherUserInfo {
+import java.io.Serializable;
+
+public class OtherUserInfo implements Serializable {
     private String user_id = "";
     private String login_id = "";
     private String email_addr = "";
@@ -11,6 +13,20 @@ public class OtherUserInfo {
     private String self_info = "";
     private String token;
     private boolean isChecked = false;
+
+    public OtherUserInfo(){}
+
+    public OtherUserInfo(String user_id, String login_id, String email_addr, String phone_num, String novaland_account_addr, String profile_file_name, String nick_name, String self_info, String token) {
+        this.user_id = user_id;
+        this.login_id = login_id;
+        this.email_addr = email_addr;
+        this.phone_num = phone_num;
+        this.novaland_account_addr = novaland_account_addr;
+        this.profile_file_name = profile_file_name;
+        this.nick_name = nick_name;
+        this.self_info = self_info;
+        this.token = token;
+    }
 
     public String getUser_id() {
         return user_id;

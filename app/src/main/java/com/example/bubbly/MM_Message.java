@@ -1,10 +1,12 @@
 package com.example.bubbly;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -21,25 +23,53 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.chatting.service.ChatService;
 import com.example.bubbly.chatting.util.ChatUtil;
+import com.example.bubbly.chatting.util.GetDate;
+import com.example.bubbly.chatting.viewmodel.ChattingRoomViewModel;
 import com.example.bubbly.controller.Messages_Adapter;
 import com.example.bubbly.model.Chat_Item;
+import com.example.bubbly.model.Chat_Member_FCM_Sub;
+import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
+import com.example.bubbly.model.Chat_Room_Info;
 import com.example.bubbly.model.Messages_Item;
+import com.example.bubbly.model.OtherUserInfo;
+import com.example.bubbly.model.UserInfo;
+import com.example.bubbly.retrofit.ApiClient;
+import com.example.bubbly.retrofit.ApiInterface;
+import com.example.bubbly.retrofit.ChatApiClient;
+import com.example.bubbly.retrofit.ChatApiInterface;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MM_Message extends AppCompatActivity {
 
@@ -65,7 +95,7 @@ public class MM_Message extends AppCompatActivity {
 
     // 리사이클러 뷰
     private Messages_Adapter adapter;
-    private List<Messages_Item> chatRoomList;
+    private List<Chat_Room_Info> chatRoomList;
     RecyclerView recyclerView;
 
     private Parcelable recyclerViewState;
@@ -77,6 +107,20 @@ public class MM_Message extends AppCompatActivity {
 
     SharedPreferences preferences;
     String userId;
+
+    // 채팅방리스트를 관리할 뷰모델
+    private ChattingRoomViewModel chattingRoomViewModel;
+    
+    // 해당 사용자가 참여하고 있는 채팅방의 아이디와 사용자수를 관리하는 맵(메시지 수신 시 해당하는 채팅방이 있는지 여부를 쉽게 관리하기 위한 맵)
+    private HashMap<String, Integer> chatRoomIdMap;
+
+    // ChatMemberSelect화면으로 이동해서 채팅방 생성 시 다 시돌아와 채팅방을 생성하기 위한 객체
+    private ActivityResultLauncher<Intent> startActResultForChatMemberSelect;
+
+    // 채팅방 멤버 선택화면에서 다시 이 액트로 돌아온 후 채팅방 화면을 생성하기 위한 객체
+    private ActivityResultLauncher<Intent> startActResultForChattingRoom;
+
+    private String divisionVal = "@@@@@";
 
     /**
      * 채팅서비스 연결 로직
@@ -108,8 +152,73 @@ public class MM_Message extends AppCompatActivity {
                     Bundle bundle = msg.getData();
                     Chat_Item read = (Chat_Item)bundle.getSerializable("message");
 
+                    String chatRoomId = read.getChatRoomId();
+
+                    Log.d("브로커에게 메시지 수신 시 ChatService에서 MM_Message로 메시지 전달", read.toString());
+
+                    /**
+                     * 서비스로부터 받은 메시지 처리
+                     * */
+                    // 1. 해당 메시지의 chatRoomId에 해당하는 채팅방 정보가 있는지 확인
+                    Integer latestMsgId = chatRoomIdMap.get(chatRoomId);
+                    
+                    Log.d("MM_Message에서 관리하고 있는 채팅방인지 여부 null이면 없는 채팅방!: ", latestMsgId != null ? latestMsgId.toString() : "null");
+                    
+                    // 이 메시지와 동일한 채팅방 아이디를 가지는 채팅방이 없음 => 새로 생성!
+                    if(latestMsgId == null) {
+                        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                        Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomInfo(chatRoomId);
+                        call.enqueue(new retrofit2.Callback<ArrayList<Chat_Room_Info>>() {
+                            @Override
+                            public void onResponse(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Response<ArrayList<Chat_Room_Info>> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    // 채팅방 정보 조회 완료
+                                    ArrayList<Chat_Room_Info> chatRoomInfoList = response.body();
+                                    Chat_Room_Info chatRoomInfo = chatRoomInfoList.get(0);
+
+                                    // viewModel에 채팅방 정보를 업데이트 해준다!
+                                    // 기존의 채팅방정보 리스트
+                                    ArrayList<Chat_Room_Info> chatRoomList = chattingRoomViewModel.getChatRoomList().getValue();
+                                    chatRoomList.add(0,chatRoomInfo);
+
+                                    chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
+
+                                    // 채팅방아이디를 관리하는 맵에도 데이터를 넣어준다!
+                                    chatRoomIdMap.put(chatRoomId, chatRoomInfo.getLatestMsgId());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Throwable t) {
+                                Log.e("게시글 생성 에러", t.getMessage());
+                            }
+                        });
+                    } else { // 해당 메시지의 채팅방 아이디와 동일한 채팅방 아이디를 가지는 채팅방 객체가 이미 존재!
+                        ArrayList<Chat_Room_Info> chatRoomList = chattingRoomViewModel.getChatRoomList().getValue();
+
+                        for(int i = 0; i < chatRoomList.size(); i++){
+                            Chat_Room_Info chatRoomInfo = chatRoomList.get(i);
+
+                            if(chatRoomInfo.getChatRoomId().equals(chatRoomId)){
+                                chatRoomInfo.setLatestMsg(read.getChatText());
+                                chatRoomInfo.setLatestMsgId(read.getChatId());
+                                // 브로커로부터 받은 메시지의 시간은 yyyy년 mm월 dd일 (요일) 오전/오후 hh:mm의 형태로 보여짐
+                                // db에서 조회할 땐 yyyy.MM.dd hh:mm의 형태로 될 것임 => 둘을 맞춰줘야 함!!
+                                chatRoomInfo.setLatestMsgTime(read.getChatDate() + " " + read.getChatTime());
+                                // 해당 위치의 아이템 삭제
+                                chatRoomList.remove(i);
+                                // 가장 최근에 메시지를 받았으므로 0번쨰 인덱스로 이동!
+                                chatRoomList.add(0,chatRoomInfo);
+
+                                // 뷰모델 갱신!
+                                chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
+                                break;
+                            }
+                        }
+                    }
+
                     // 메시지 출력
-                    Log.e("ChattingRoomActivity - 서버로부터 메시지 수신", "1-1. 수신한 메시지 => " + read.getChatText());
+                    Log.e("MM_Message - 서버로부터 메시지 수신", "1-1. 수신한 메시지 => " + read.getChatText());
 
                     break;
                 default:
@@ -121,8 +230,14 @@ public class MM_Message extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 결과값을 가지고 있는 인텐트 설정
+        setUpStartActForResult();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_c_message);
+
+        // 채팅서비스와 연결한다.
+        connectToService();
 
         // 리소스 ID 선언
         initiallize();
@@ -132,10 +247,11 @@ public class MM_Message extends AppCompatActivity {
         clickListeners();
         // 내비 터치
         NaviTouch();
-        // 리사이클러뷰 데이터 가져오기
-        loadrecycler();
-        // 채팅서비스와 연결한다.
-        connectToService();
+        // 뷰모델 생성
+        chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
+
+        // 뷰모델 변경 시 리사이클러뷰에 변경된 데이터 세팅
+        observe();
     }
 
 
@@ -174,6 +290,9 @@ public class MM_Message extends AppCompatActivity {
         info = view.findViewById(R.id.navi_header_info);
         // 로그아웃
         logout = view.findViewById(R.id.navi_header_logout);
+
+        // 채팅방 리스트
+        this.chatRoomList = new ArrayList();
 
         // 바텀 메뉴
         bthome = findViewById(R.id.message_tohome);
@@ -346,7 +465,8 @@ public class MM_Message extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent toChatMemberSelect = new Intent(getApplicationContext(), ChatMemberSelect.class);
-                startActivity(toChatMemberSelect);
+
+                startActResultForChatMemberSelect.launch(toChatMemberSelect);
             }
         });
     }
@@ -383,6 +503,9 @@ public class MM_Message extends AppCompatActivity {
                     // 서비스에 연결됐다는 메시지를 전송한다.
                     mServiceMessenger.send(msg);
                     Log.e("채팅서비스와 연결 - 서비스에 메시지 전송", "" + msg);
+
+                    // 리사이클러뷰 데이터 가져오기
+                    loadrecycler();
 
                 } catch (RemoteException e) {
                     e.printStackTrace();
@@ -449,26 +572,68 @@ public class MM_Message extends AppCompatActivity {
 
     // 데이터 http 요청
     private void loadrecycler() {
-        // 쓰레드 http 요청 & run 데이터 넣기
+        // 채팅방 리스트 데이터 가져오기
         fillList();
+
+        // 리사이클러뷰 초기세팅(아답터는 데이터 가져올 때마다 할 것이므로 여기서 해주지 않음)
+        setUpRecyclerView();
     }
 
-    // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
+    // 서버에서 채팅방 리스트 정보 가져오기
     private void fillList() {
-        this.chatRoomList = new ArrayList();
+        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomListUsingUserId(userId);
+        call.enqueue(new Callback<ArrayList<Chat_Room_Info>>()
+        {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onResponse(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Response<ArrayList<Chat_Room_Info>> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    // 채팅방 리스트 - latestMsg에 들어있는 문자열은 마지막 채팅 메시지를 바이너리 형태로 저장한 것이다. 따라서 이것을 Chat_Item 형태로 변경해줘야 한다.
+                    ArrayList<Chat_Room_Info> chatRoomList = response.body();
+                    Log.e("채팅방 리스트 조회 성공: ", "1111");
 
-        String 임시이미지1 = "https://cdn.econovill.com/news/photo/202204/573467_495356_727.png";
-        String 임시이미지2 = "https://img-lb.inews24.com/image_gisa/202107/1626418981_1779.jpg";
-        String 임시이미지3 = "https://w.namu.la/s/faadee31d521afd584990cb798403ae1d9a5affbef213ae894026604566bbf1f00de845e734b94678f1ed7280f3729755e39422db14d905ee5a9798d568487e0f6b9dbdc235301185c0aa03aab341dbc";
-        String 임시이미지4 = "data:image/jpeg;base64,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";
+                    //
+                    for(int i = 0; i < chatRoomList.size(); i++) {
+                        // 채팅방 정보
+                        Chat_Room_Info chatRoomInfo = chatRoomList.get(i);
 
+                        // 최신 메시지
+                        String latestMsg = chatRoomInfo.getLatestMsg();
+                        
+                        // 채팅 메시지세팅
+                        chatRoomList.get(i).setLatestMsg(latestMsg);
+                        Log.e("채팅 텍스트로 latestMsg 세팅(chatRoomId - " + chatRoomInfo.getChatRoomId() + "): ", latestMsg);
 
-        this.chatRoomList.add(new Messages_Item(임시이미지1, "도지", "?????", "22:00"));
-        this.chatRoomList.add(new Messages_Item(임시이미지2, "이더리움", "2.0 발표!", "18:18"));
-        this.chatRoomList.add(new Messages_Item(임시이미지3, "솔라나", "역사증명", "12:34"));
-        this.chatRoomList.add(new Messages_Item(임시이미지4, "김동현", "...", "10:08"));
+                        try {
+                            ChatService.mqttClient.subscribe("/topics/" + chatRoomInfo.getChatRoomId(),2);
+                        } catch (MqttException e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-        setUpRecyclerView();
+                    // 뷰모델에 채팅방 데이터리스트 넘겨주기(채팅방 리스트는 얘가 관리)
+                    chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
+
+                    chatRoomIdMap = new HashMap<>();
+                    
+                    // chatRoomIdMap에 모든 채팅방 아이디와 마지막 메시지 아이디 넣어서 관리 => 채팅방 아이디, 마지막 메시지 아이디
+                    for(Chat_Room_Info chatRoomInfo : chatRoomList){
+                        chatRoomIdMap.put(chatRoomInfo.getChatRoomId(), chatRoomInfo.getLatestMsgId());
+                    }
+                } else {
+                    Log.e("채팅방 리스트 조회 성공 했지만 데이터 없음: ", "1111");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Throwable t)
+            {
+                Log.e("채팅방 리스트 조회 실패: ", "1111");
+            }
+        });
     }
 
     private void setUpRecyclerView() {
@@ -479,32 +644,192 @@ public class MM_Message extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
-        this.adapter = new Messages_Adapter(getApplicationContext(), this.chatRoomList);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(this.adapter);
 
         // 리사이클러뷰의 위치를 저장하기 위한 값 => 화면전환 등의 상황에서 리사이클러뷰 스크롤의 위치를 저장해야 할 경우 사용할 수 있음!
         recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
 
         //위치 유지
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-        // 리사이클러뷰의 스크롤이 바닥에 도달했을 때 특정 기능을 수행하기 위한 리스너를 등록한다.
-        recyclerView.addOnScrollListener(onScrollListener);
     }
 
-    // 바닥에 도달했을 때...
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-            if (lastVisibleItemPosition == itemTotalCount) {
-                //TODO 바닥 작업
-//                progressBar.setVisibility(View.VISIBLE);
-//                loadMoreData();
-            }
+    // 결과값을 가지고 돌아오는 액티비티를 설정하기 휘한 함수
+    public void setUpStartActForResult(){
+        // 채팅방 만들기
+        startActResultForChattingRoom = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override public void onActivityResult(ActivityResult result) {
+                        Log.d("df","11");
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // 채팅 참여자 리스트
+                            Chat_Room_Info chatRoomInfo = (Chat_Room_Info) result.getData().getSerializableExtra("chatRoomInfo");
+
+                            // viewModel에 채팅방 정보를 업데이트 해준다!
+                            // 기존의 채팅방정보 리스트
+                            ArrayList<Chat_Room_Info> chatRoomList = chattingRoomViewModel.getChatRoomList().getValue();
+                            chatRoomList.add(0,chatRoomInfo);
+
+                            chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
+
+                            // 채팅방아이디를 관리하는 맵에도 데이터를 넣어준다!
+                            chatRoomIdMap.put(chatRoomInfo.getChatRoomId(), chatRoomInfo.getLatestMsgId());
+                        }
+                    }
+                });
+
+        // 채팅방 멤버 선택 화면
+        startActResultForChatMemberSelect = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            // 새로운 채팅방 여부 - 채팅방 리스트 화면에서 넘어온 경우 값이 없으므로 false로 세팅
+                            boolean isNew = result.getData().getBooleanExtra("isNew", false);
+
+                            // 메시지 전송됐는지 여부 - 채팅방 리스트 화면에서 넘어온 경우 값이 없으므로 true로 세팅
+                            boolean isMsgTransfered = result.getData().getBooleanExtra("isMsgTransfered", true);
+
+                            // 채팅 참여자 리스트
+                            ArrayList<OtherUserInfo> chatMemberList = (ArrayList<OtherUserInfo>) result.getData().getSerializableExtra("chatMemberList");
+
+                            // chatRoomId 가져오기
+                            String chatRoomId = result.getData().getStringExtra("chatRoomId");
+
+                            // 채팅참여자 FCM 토큰리스트
+                            Chat_Member_FCM_Sub chatMemberFcmSub = (Chat_Member_FCM_Sub) result.getData().getSerializableExtra("chatMemberFcmTokenList");
+
+                            // 채팅방 생성 혹은 파괴 시 사용하는 객체
+                            Chat_Room_Cre_Or_Del chatRoomCreOrDel = (Chat_Room_Cre_Or_Del) result.getData().getSerializableExtra("chatRoomCreOrDel");
+
+                            // 채팅방 액티비티로 이동
+                            Intent mIntent = new Intent(getApplicationContext(), ChattingRoom.class);
+                            mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+                            // 채팅방 아이디
+                            mIntent.putExtra("chatRoomId",chatRoomId);
+                            Log.d("chatRoomId",chatRoomId);
+
+                            // 채팅방 명
+                            mIntent.putExtra("chatRoomName",chatRoomCreOrDel.getChatRoomNameCreator());
+                            Log.d("chatRoomName",chatRoomCreOrDel.getChatRoomNameCreator());
+
+                            // 새로 생성된 채팅방
+                            mIntent.putExtra("isNew",isNew);
+                            Log.d("chatRoomId","" + isNew);
+
+                            // 메시지 전송여부 - 메시지가 전송되지 않고 채팅방이 제거되면 MQTT와 FCM 구독을 해지해야 함
+                            mIntent.putExtra("isMsgTransfered",isMsgTransfered);
+                            Log.d("isMsgTransfered","" + isMsgTransfered);
+
+                            // 채팅멤버 리스트
+                            mIntent.putExtra("chatMemberList", chatMemberList);
+                            Log.d("chatMemberList","" + chatMemberList.size());
+
+                            // FCM 토큰리스트
+                            mIntent.putExtra("chatMemberFcmTokenList", chatMemberFcmSub);
+                            Log.d("chatMemberFcmTokenList", chatMemberFcmSub.toString());
+
+                            // 채팅방 생성 혹은 파괴 객체정보
+                            mIntent.putExtra("chatRoomCreOrDel", chatRoomCreOrDel);
+                            Log.d("chatRoomCreOrDel",chatRoomCreOrDel.toString());
+
+                            // 채팅방 화면으로 이동!
+                            startActResultForChattingRoom.launch(mIntent);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        int position = -1;
+        Chat_Room_Info chatRoomInfo;
+
+        try {
+            position = adapter.getPosition();
+            chatRoomInfo = adapter.getItem(position);
+        } catch (Exception e) {
+            Log.d("에러", e.getLocalizedMessage(), e);
+            return super.onContextItemSelected(item);
         }
-    };
+        switch (item.getItemId()) {
+            case R.id.action_chat_room_delete:
+                // 기존의 채팅방정보 리스트
+                ArrayList<Chat_Room_Info> chatRoomList = chattingRoomViewModel.getChatRoomList().getValue();
+                chatRoomList.remove(position);
+
+                chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
+
+                // 채팅방아이디를 관리하는 맵도 삭제!
+                chatRoomIdMap.remove(chatRoomInfo.getChatRoomId());
+
+                String chatRoomId = chatRoomInfo.getChatRoomId();
+
+                // 채팅방 나가기
+                ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                Call<String> call = apiClient.deleteChatParticipant(UserInfo.user_id, chatRoomId);
+                call.enqueue(new Callback<String>()
+                {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            // 채팅방 아이디
+                            String msg = response.body();
+
+                            Log.e("채팅방 정보 삭제 성공  ", chatRoomId);
+
+                            // 채팅방 unsubscribe
+                            Chat_Item chat_item = new Chat_Item(chatRoomId, userId, ("!!!!!!" + UserInfo.user_nick + "님이 나갔습니다."),null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 0);
+
+                            try {
+                                String exitMsg = chatUtil.chatItemToString(chat_item);
+                                chatUtil.publishChatMsg(exitMsg,chatRoomId,ChatService.mqttClient);
+                                ChatService.mqttClient.unsubscribe("/topics/" + chatRoomId);
+                            } catch (MqttException e) {
+                                e.printStackTrace();
+                            }
+
+                            // FCM서버에게 구독 해지요청
+                            FirebaseMessaging.getInstance().unsubscribeFromTopic("/topics/" + chatRoomId)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            String msg = "UnSubscribed";
+                                            if (!task.isSuccessful()) {
+                                                msg = "UnSubscribe failed";
+                                            }
+                                            Log.d("FCM에게 구독해지 요청!", msg);
+                                        }
+                                    });
+
+                            // 채팅방 사용자수 맵 업데이트
+                            chatUtil.updateUserCountMap(chatRoomId,2, 0);
+                        } else {
+                            Log.e("채팅멤버 FCM 구독 해지 완료 데이터 없음: ", "1111");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                    {
+                        Log.e("채팅멤버 FCM 구독 해지 실패", t.getMessage());
+                    }
+                });
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+    
+    // 뷰모델 observe
+    public void observe(){
+        // 가져온 채팅방리스트정보 observe
+        chattingRoomViewModel.getChatRoomList().observe(this, chatRoomList -> { 
+            adapter = new Messages_Adapter(this, chatRoomList);
+            
+            recyclerView.setAdapter(adapter);
+        });
+    }
 }

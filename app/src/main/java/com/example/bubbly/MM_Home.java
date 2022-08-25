@@ -448,5 +448,4 @@ public class MM_Home extends AppCompatActivity {
     public void displayMessage(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
-
 }

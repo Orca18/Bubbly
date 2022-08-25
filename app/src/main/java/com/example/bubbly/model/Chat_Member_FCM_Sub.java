@@ -1,8 +1,9 @@
 package com.example.bubbly.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Chat_Member_FCM_Sub {
+public class Chat_Member_FCM_Sub implements Serializable {
     private String topic;
     private ArrayList<String> tokenList;
 
