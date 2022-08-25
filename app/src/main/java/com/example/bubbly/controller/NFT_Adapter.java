@@ -77,7 +77,6 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
 
         //이미 판매중인 nft목록 가져오기 (만약 판매중이라면 Cancel로 버튼 표시 변경 위함)
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-//        String seller_id = "35";
         Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId(UserInfo.user_id);
         call.enqueue(new Callback<List<NFTSell_Item>>() {
             @Override

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="#F6F0F0"
             android:layout_weight="1"
-            android:src="@drawable/no_img" />
+            android:src="@drawable/no_img_box" />
 
         <Button
             android:id="@+id/bt_sell_itemNFT"
