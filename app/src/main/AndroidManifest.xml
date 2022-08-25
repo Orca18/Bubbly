@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
+
         <activity
             android:name=".Community_Info_Edit"
             android:exported="false" />
@@ -27,13 +28,24 @@
             android:exported="false" />
         <activity
             android:name=".Community_Create"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".ImageView_FullScreen"
             android:exported="false" />
         <activity
             android:name=".Community_MainPage"
-            android:exported="false" />
+            android:exported="true">
+
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="bubbly_community" android:host="3.39.84.115"/>
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".ReplyModify"
             android:exported="false" />
@@ -69,7 +81,19 @@
             android:exported="false" />
         <activity
             android:name=".SS_PostDetail"
-            android:exported="false" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan">
+
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="bubbly1" android:host="3.39.84.115"/>
+            </intent-filter>
+
+        </activity>
+
+
         <activity
             android:name=".Post_Create"
             android:exported="false"
@@ -112,7 +136,8 @@
             android:exported="false" />
         <activity
             android:name=".LL_Login"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".LL_FindID_A"
             android:exported="false" />

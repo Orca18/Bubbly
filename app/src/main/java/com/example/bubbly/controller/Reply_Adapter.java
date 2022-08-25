@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,11 +25,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
 import com.example.bubbly.ReplyModify;
+import com.example.bubbly.SS_Profile;
+import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.reply_Response;
+import com.example.bubbly.retrofit.user_Response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -68,20 +75,124 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         preferences = context.getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        holder.tv_user_id.setText(reply_response.getComment_writer_id());
+        ApiInterface select_api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<user_Response>> call_userInfo = select_api.selectUserInfo(user_id);
+        call_userInfo.enqueue(new Callback<List<user_Response>>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response)
+            {
+                System.out.println(response.body());
+                //수신한 회원정보를 스태틱으로 저장한다.
+                List<user_Response> responseResult = response.body();
+
+                holder.tv_user_id.setText(responseResult.get(0).getLogin_id());
+            }
+            @Override
+            public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
+            {
+                Log.e("에러", t.getMessage());
+            }
+        });
+
+
+
+
         holder.tv_user_nick.setText(reply_response.getNick_name());
         holder.tv_content.setText(reply_response.getComment_contents());
+        holder.tv_time.setText(reply_response.getCre_datetime_comment());
+        Log.d("디버그태그", "Cre_datetime: "+reply_response.getCre_datetime_comment());
 
 
-//        Glide.with(mContext)
-//                .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
-//                .circleCrop()
-//                .into(holder.iv_user_image);
+        Glide.with(mContext)
+                .load("https://d2gf68dbj51k8e.cloudfront.net/"+reply_response.getProfile_file_name())
+                .circleCrop()
+                .into(holder.iv_user_image);
+
+        holder.iv_user_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SS_Profile.class);
+                intent.putExtra("user_id", reply_response.getComment_writer_id());
+                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
 
         if(user_id.equals(reply_response.getComment_writer_id())){
             holder.iv_option.setVisibility(View.VISIBLE);
+        } else {
+            holder.iv_option.setVisibility(View.GONE);
         }
 
+        Log.d("디버그태그", "user_id"+user_id+"/"+reply_response.getComment_writer_id());
+
+        holder.iv_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(holder.iv_option.getContext(), holder.itemView);
+
+                if(user_id.equals(reply_response.getComment_writer_id())){
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch(menuItem.getItemId()){
+                                case R.id.menu_reply_delete:
+                                    ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                    // 코멘트 아이디를 통해서 삭제
+                                    Call<String> call = deletePost_api.deleteComment(reply_response.getComment_id());
+                                    call.enqueue(new Callback<String>()
+                                    {
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                                        {
+                                            if (response.isSuccessful() && response.body() != null)
+                                            {
+                                                lists.remove(position);
+                                                notifyItemRemoved(position);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                                        {
+                                            Log.e("에러", t.getMessage());
+                                        }
+                                    });
+                                    return true;
+
+
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                    popup.inflate(R.menu.reply_list_menu);
+                    popup.setGravity(Gravity.RIGHT|Gravity.END);
+
+                    popup.show();
+                } else {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch(menuItem.getItemId()){
+                                case R.id.menu_reply2_report:
+                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
+                                    return true;
+
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                    popup.inflate(R.menu.main_liist_menu2);
+                    popup.setGravity(Gravity.RIGHT|Gravity.END);
+
+                    popup.show();
+                }
+            }
+        });
 
         holder.iv_option.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override

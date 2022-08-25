@@ -56,7 +56,8 @@ public class Community_Info_Edit extends AppCompatActivity {
     Button edit_done;
 
     SharedPreferences preferences;
-    String com_id, com_desc, com_name, com_owner, user_id;
+    String com_id, com_desc, com_rule, com_name, com_owner, user_id;
+
 
     private ArrayList<Uri> imageList;
 
@@ -67,6 +68,7 @@ public class Community_Info_Edit extends AppCompatActivity {
 
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
+
 
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
@@ -144,7 +146,7 @@ public class Community_Info_Edit extends AppCompatActivity {
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
         Kim_ApiInterface kim_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
-        Call<String> call = kim_api.updateCommunity(et_com_title.getText().toString(), et_com_desc.getText().toString(),null, com_id, file);
+        Call<String> call = kim_api.updateCommunity(et_com_title.getText().toString(), et_com_desc.getText().toString(),null, com_id, file, et_com_rule.getText().toString());
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -225,10 +227,11 @@ public class Community_Info_Edit extends AppCompatActivity {
                 com_name = response.body().get(0).getCommunity_name();
                 com_owner = response.body().get(0).getCommunity_owner_id();
                 com_desc = response.body().get(0).getCommunity_desc();
+                com_rule = response.body().get(0).getRule();
 
                 et_com_title.setText(com_name);
                 et_com_desc.setText(com_desc);
-//                et_com_rule.setText(com_rule);
+                et_com_rule.setText(com_rule);
 
                 Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
                         .load("https://d2gf68dbj51k8e.cloudfront.net/"+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로

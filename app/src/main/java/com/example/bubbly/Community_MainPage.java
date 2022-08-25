@@ -1,4 +1,6 @@
 package com.example.bubbly;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 
 import com.bumptech.glide.Glide;
 
@@ -57,7 +59,7 @@ public class Community_MainPage extends AppCompatActivity {
     // 대문 이미지 => 정보 (소개+공지)
     // LL : 가입 여부 표시 / 멤버 목록 액티비티 / 정보 - 소개 = 공지 / 게시글 작성 그룹 아이디 인텐트 / NFTs = nft 상점?
     RelativeLayout rl_title;
-    LinearLayout ll_join, ll_member, ll_notice, ll_nfts;
+    LinearLayout ll_join, ll_member, ll_invite, ll_nfts;
     TextView title_name;
     ImageView title_image;
     // 게시글 생성
@@ -69,6 +71,10 @@ public class Community_MainPage extends AppCompatActivity {
     ImageView iv_join_yn;
     TextView tv_join_yn;
 
+    SwipeRefreshLayout swipeRefreshLayout;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,12 +85,16 @@ public class Community_MainPage extends AppCompatActivity {
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
 
+        // TODO 인텐트로 온 경우, 예외처리하기
+        if(intent.getData() != null){
+            com_id = intent.getDataString().replace("bubbly_community://3.39.84.115/community/","");
+        }
 
 
         initialize();
         // 커뮤니티 정보 가져오기
         GetComInfo();
-        // 커뮤니티 내 본인 정보 가져오기
+        // 커뮤니티 내 본인 정보 가져오기 (가입 상태)
         GetUserStatus();
         // 리사이클러뷰 위 쪽 클릭 리스너
         listeners();
@@ -122,7 +132,7 @@ public class Community_MainPage extends AppCompatActivity {
         rl_title = findViewById(R.id.com_info_edit_rl);
         ll_join = findViewById(R.id.com_main_join);
         ll_member = findViewById(R.id.com_main_member);
-        ll_notice = findViewById(R.id.com_main_notice);
+        ll_invite = findViewById(R.id.com_main_invite);
         ll_nfts = findViewById(R.id.com_main_nfts);
         posting = findViewById(R.id.community_info_posting);
         title_name = findViewById(R.id.com_main_name);
@@ -131,6 +141,18 @@ public class Community_MainPage extends AppCompatActivity {
 
         iv_join_yn = findViewById(R.id.com_main_join_checkiv);
         tv_join_yn = findViewById(R.id.com_main_join_checktv);
+
+        swipeRefreshLayout = findViewById(R.id.com_main_refresh);
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        GetComPosters();
+                        GetComInfo();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
         
     }
 
@@ -167,10 +189,18 @@ public class Community_MainPage extends AppCompatActivity {
         });
 
         // 공지 보여주기
-        ll_notice.setOnClickListener(new View.OnClickListener() {
+        ll_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Community_MainPage.this, "변경 예정", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+
+                // tODO 링크 넣기 String으로 받아서 넣기
+                String sendMessage = "http://3.38.84.115/share/deep_post.php?id="+com_id;
+                intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
+
+                Intent shareIntent = Intent.createChooser(intent, "share");
+                startActivity(shareIntent);
             }
         });
 

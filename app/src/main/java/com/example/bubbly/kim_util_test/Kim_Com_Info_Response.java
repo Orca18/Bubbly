@@ -19,7 +19,10 @@ public class Kim_Com_Info_Response {
     @Expose
     @SerializedName("profile_file_name") private String profile_file_name;
 
-    public Kim_Com_Info_Response(String community_id, String community_owner_id, String community_name, String community_desc, String profile_file_name) {
+    @Expose
+    @SerializedName("rule") private String rule;
+
+    public Kim_Com_Info_Response(String community_id, String community_owner_id, String community_name, String community_desc, String profile_file_name, String rule) {
         this.community_id = community_id;
         this.community_owner_id = community_owner_id;
         this.community_name = community_name;
@@ -65,5 +68,13 @@ public class Kim_Com_Info_Response {
 
     public void setProfile_file_name(String profile_file_name) {
         this.profile_file_name = profile_file_name;
+    }
+
+    public String getRule() {
+        return rule;
+    }
+
+    public void setRule(String rule) {
+        this.rule = rule;
     }
 }

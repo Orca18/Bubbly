@@ -361,12 +361,7 @@ public class Post_Create extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        // 게시글 성공 후, 해당 카테고리의 커뮤니티 or 본인 프로필 화면으로 가기
-                        Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
-                        mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent);
                         finish();
-                        Toast.makeText(getApplicationContext(), "게시글 등록 완료!", Toast.LENGTH_SHORT).show();
                     }
                 }
 

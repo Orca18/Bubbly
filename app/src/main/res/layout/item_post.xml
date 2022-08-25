@@ -88,12 +88,13 @@
                     android:textSize="15dp" />
 
                 <TextView
+                    android:gravity="center"
                     android:layout_marginRight="3dp"
                     android:layout_gravity="center"
                     android:id="@+id/tv_time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="28dp"
                     android:layout_height="wrap_content"
-                    android:text="1D"
+                    android:text="11h"
                     android:textSize="15dp" />
 
                 <ImageView
@@ -119,7 +120,7 @@
                 android:background="@drawable/bg_circle4"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp">
+                android:layout_marginTop="8dp">
 
                 <ImageView
                     android:adjustViewBounds="true"
@@ -194,6 +195,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/layout_retweet"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

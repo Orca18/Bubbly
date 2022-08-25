@@ -27,6 +27,9 @@ import com.example.bubbly.ImageView_FullScreen;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.kim_util_test.Kim_ApiClient;
+import com.example.bubbly.kim_util_test.Kim_ApiInterface;
+import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
 import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -88,10 +91,8 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         holder.tv_time.setText(post_response.getCre_datetime());
 
 
-        // TODO 유저 login_id & 커뮤니티 이름 뜨게 만들기
-        holder.tv_user_id.setText(post_response.getPost_writer_id());
+        holder.tv_user_id.setText(post_response.getLogin_id());
 //        holder.tv_com_name.setText(post_response.getCommunity_id());
-        // TODO if Community 아이디가 0 일 경우, tv_com_name 상태 VIEW.Gone으로 바꾸기
 
         
         holder.iv_retweet_icon.setOnClickListener(new View.OnClickListener() {
@@ -207,63 +208,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
 
 
-        // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
-//        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//            @Override
-//            public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                MenuItem delete = menu.add(Menu.NONE, R.id.delete, 1, "게시글 삭제");
-//                MenuItem modify = menu.add(Menu.NONE, R.id.modify, 2, "게시글 수정");
-//                delete.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        switch (item.getItemId()) {
-//                            case R.id.delete:
-//                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
-//                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
-//                                call.enqueue(new Callback<String>()
-//                                {
-//                                    @Override
-//                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-//                                    {
-//                                        if (response.isSuccessful() && response.body() != null)
-//                                        {
-//                                            //Log.e("delete", String.valueOf(position));
-//                                            lists.remove(position);
-//                                            notifyItemRemoved(position);
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-//                                    {
-//                                        Log.e("에러", t.getMessage());
-//                                    }
-//                                });
-//                                return true;
-//                        }
-//                        return false;
-//                    }
-//                });
-                // 수정 관련
-//                modify.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        switch (item.getItemId()) {
-//                            case R.id.modify:
-//                                Intent intent = new Intent(context, Add_Posting_Create.class);
-//                                intent.putExtra("post_id",post_response.getPost_id());
-//                                intent.putExtra("post_content",post_response.getPost_contents());
-//                                intent.putExtra("post_file",post_response.getFile_save_names());
-//                                intent.putExtra("post_mention",post_response.getMentioned_user_list());
-//                                context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-//                                return true;
-//                        }
-//                        return false;
-//                    }
-//                });
-//            }
-//        });
-
 
         if (post_response.getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
             holder.iv_like_icon.setImageResource(R.drawable.ic_baseline_favorite_24);
@@ -274,6 +218,8 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             public void onClick(View v) {
                 Intent intent = new Intent(context, SS_PostDetail.class);
                 intent.putExtra("post_id", post_response.getPost_id());
+                intent.putExtra("login_id", post_response.getLogin_id());
+                Log.d("디버그태그", "Login_+id: "+post_response.getLogin_id());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -296,6 +242,9 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+
+
+
 
 
         holder.layout_like.setOnClickListener(new View.OnClickListener() {
@@ -430,6 +379,29 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 Log.e("게시물 아이디로 게시물 조회", t.getMessage());
             }
         });
+
+
+
+        // TODO 커뮤니티 이름 가져오긴 하는데, 성능 저하 문제는 나중에 고려
+        Kim_ApiInterface api2 = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Call<List<Kim_Com_Info_Response>> call2 = api2.selectCommunityUsingCommunityId(post_response.getCommunity_id());
+        call2.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
+            @Override
+            public void onResponse(Call<List<Kim_Com_Info_Response>> call2, Response<List<Kim_Com_Info_Response>> response) {
+
+                if(post_response.getCommunity_id().equals("0")){
+                   holder.tv_com_name.setVisibility(View.GONE);
+                } else {
+                    holder.tv_com_name.setVisibility(View.VISIBLE);
+                    holder.tv_com_name.setText(response.body().get(0).getCommunity_name());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Kim_Com_Info_Response>> call, Throwable t) {
+
+            }
+        });
     }
 
 
@@ -444,7 +416,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
     public class PostViewHolder extends RecyclerView.ViewHolder {
         Boolean like_check = false;
         public LinearLayout ll_item_layout, layout_like;
-//        ItemClickListener itemClickListener;
 
         ImageView iv_media, iv_options, iv_like_icon, iv_reply_icon, iv_retweet_icon, iv_share_icon;
         TextView tv_user_nick, tv_content, tv_like_count, tv_reply_count, tv_retweet_count, tv_time;

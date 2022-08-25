@@ -111,6 +111,8 @@ public class Community_Info extends AppCompatActivity {
                 com_name = response.body().get(0).getCommunity_name();
                 com_owner = response.body().get(0).getCommunity_owner_id();
                 com_desc = response.body().get(0).getCommunity_desc();
+
+                tv_rule.setText(response.body().get(0).getRule());
                 tv_desc.setText(com_desc);
                 tv_name.setText(com_name);
                 Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력

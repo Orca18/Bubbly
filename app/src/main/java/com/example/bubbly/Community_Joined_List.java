@@ -214,4 +214,11 @@ public class Community_Joined_List extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        getJoinedComList();
+    }
 }

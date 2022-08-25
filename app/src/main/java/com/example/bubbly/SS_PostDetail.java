@@ -7,6 +7,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -15,14 +18,17 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.controller.Reply_Adapter;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
+import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
 import com.example.bubbly.kim_util_test.Kim_DateUtil_Cre;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -31,8 +37,6 @@ import com.example.bubbly.retrofit.reply_Response;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,13 +49,13 @@ import retrofit2.Response;
 public class SS_PostDetail extends AppCompatActivity {
 
     SharedPreferences preferences;
-    String user_id, post_id;
+    public static String user_id, post_id;
 
     ImageView iv_media, iv_options;
     CircleImageView iv_user_image;
     TextView tv_user_nick, tv_user_id, tv_content, tv_time, tv_like_count, tv_reply_count, tv_retweet_count;
     EditText et_reply;
-    Button bt_reply_add;
+    LinearLayout bt_reply_add;
     Toolbar toolbar;
 
     RecyclerView recyclerView;
@@ -60,19 +64,37 @@ public class SS_PostDetail extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     private Parcelable recyclerViewState;
 
+    String owner_id;
+    String media_link;
+
+    ImageView iv_like, iv_reply, iv_retweet, iv_share;
+    String like_yn;
+    Boolean like_check;
+
+    InputMethodManager imm;
+    String login_id;
+
+    public static Context mContext;
+    public static Activity mActivity;
+
+    String deep_parm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_details);
 
+
+
         initialize();
 
-        listeners();
+        mContext = getApplicationContext();
 
 
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+        like_check = false;
+        like_yn = "n";
 
         bt_reply_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +106,105 @@ public class SS_PostDetail extends AppCompatActivity {
         selectCommentUsingPostId(); // 게시글 아이디로 댓글 조회
         selectPostUsingPostId(); // 게시글 아이디로 조회
 
+        listeners();
+        listenerLike();
+
     } // onCreate 닫는곳
+
+    private void listenerLike() {
+        iv_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (like_yn.equals("n")) {
+                    // ↑ 피드 로드 됐을 때 기준, 좋아요 안눌렀어요
+                    if (like_check.equals(false)) {
+                        like_check = true;
+                        // TODO 좋아요 추가 api
+                        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        Call<String> call = like_api.like(post_id, user_id);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Log.e("좋아요 추가 데이터1", response.body().toString());
+                                    iv_like.setImageResource(R.drawable.ic_baseline_favorite_24);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Log.e("좋아요 추가 에러", t.getMessage());
+                            }
+                        });
+
+                    } else {
+                        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        Call<String> call = dislike_api.dislike(post_id, user_id);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Log.e("좋아요 추가 데이터2", response.body().toString());
+                                    iv_like.setImageResource(R.drawable.ic_outline_favorite_border_24);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Log.e("좋아요 추가 에러3", t.getMessage());
+                            }
+                        });
+                    }
+                } else {
+                    if (like_check.equals(false)) {
+                        like_check = true;
+                        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        Call<String> call = dislike_api.dislike(post_id, user_id);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Log.e("좋아요 추가 데이터", response.body().toString());
+                                    iv_like.setImageResource(R.drawable.ic_outline_favorite_border_24);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Log.e("좋아요 추가 에러", t.getMessage());
+                            }
+                        });
+
+
+                    } else {
+                        // 위 if 에서 취소 해버렸어요. 근데 다시 좋아요 누를레요
+                        int like_count = Integer.parseInt(post_id);
+                        like_check = false;
+                        // TODO 좋아요 추가 api
+                        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        Call<String> call = like_api.like(post_id, user_id);
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Log.e("좋아요 추가 데이터", response.body().toString());
+                                    iv_like.setImageResource(R.drawable.ic_baseline_favorite_24);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Log.e("좋아요 추가 에러", t.getMessage());
+                            }
+                        });
+                    }
+                }
+
+            }
+        });
+
+    }
 
     private void initialize() {
         toolbar = findViewById(R.id.post_details_toolbar);
@@ -95,6 +215,11 @@ public class SS_PostDetail extends AppCompatActivity {
 
         Intent intent = getIntent();
         post_id = intent.getStringExtra("post_id");
+        login_id = intent.getStringExtra("login_id");
+
+        if(intent.getData() != null){
+            post_id = intent.getDataString().replace("bubbly://3.39.84.115/post/","");
+        }
 
         iv_user_image = findViewById(R.id.iv_user_image);
         iv_media = findViewById(R.id.iv_media);
@@ -114,16 +239,50 @@ public class SS_PostDetail extends AppCompatActivity {
 
         iv_options = findViewById(R.id.post_details_options);
 
+        iv_like = findViewById(R.id.iv_like_icon);
+        iv_reply = findViewById(R.id.iv_reply_icon);
+        iv_retweet = findViewById(R.id.iv_retweet_icon);
+        iv_share = findViewById(R.id.iv_share_icon);
+
+        imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
     }
 
     private void listeners() {
         final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
+        final BottomSheetFragment_owner bottomSheetFragment_owner = new BottomSheetFragment_owner(getApplicationContext());
 
         iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 활용하고 싶으면 onClick 에 오른쪽 코드 =>
-                bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+
+
+
+
+
+
+                if (user_id.equals(owner_id)) {
+                    bottomSheetFragment_owner.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                } else {
+                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                }
+            }
+        });
+
+        iv_media.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ImageView_FullScreen.class);
+                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + media_link);
+                startActivity(intent);
+            }
+        });
+
+        tv_content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ClipboardManager cm = (ClipboardManager)getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                cm.setText(tv_content.getText());
+                Toast.makeText(getApplicationContext(), "복사", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -150,16 +309,18 @@ public class SS_PostDetail extends AppCompatActivity {
 //                    progressBar.setVisibility(View.GONE);
                     List<reply_Response> responseResult = response.body();
                     for (int i = 0; i < responseResult.size(); i++) {
-                        ;
                         replyList.add(new reply_Response(responseResult.get(i).getPost_id(),
                                 responseResult.get(i).getComment_writer_id(),
                                 responseResult.get(i).getComment_depth(),
                                 responseResult.get(i).getComment_contents(),
                                 responseResult.get(i).getNick_name(),
                                 responseResult.get(i).getProfile_file_name(),
-                                responseResult.get(i).getMentioned_user_list()));
+                                responseResult.get(i).getMentioned_user_list(),
+                                responseResult.get(i).getCre_datetime_comment(),
+                                responseResult.get(i).getComment_id()));
                     }
                     reply_adapter.notifyDataSetChanged();
+
                 }
             }
 
@@ -179,6 +340,9 @@ public class SS_PostDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.e("createComment 성공", response.body().toString());
                     selectCommentUsingPostId();
+                    et_reply.setText("");
+
+                    imm.hideSoftInputFromWindow(et_reply.getWindowToken(), 0);
                 }
             }
 
@@ -199,17 +363,18 @@ public class SS_PostDetail extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     List<post_Response> responseResult = response.body();
 
-//                    Log.e("데이터", "하하하"+responseResult.get(0).getPost_writer_id() + "/\n"
-//                            + responseResult.get(0).getNick_name() + "/\n"
-//                            + responseResult.get(0).getPost_contents() + "/\n"
-//                            + responseResult.get(0).getLike_count() + "/\n"
-//                            + responseResult.get(0).getCre_datetime() + "/");
 
-                    tv_user_id.setText(responseResult.get(0).getPost_writer_id());
+                    owner_id = responseResult.get(0).getPost_writer_id();
+                    tv_user_id.setText(login_id);
                     tv_user_nick.setText(responseResult.get(0).getNick_name());
                     tv_content.setText(responseResult.get(0).getPost_contents());
 //                    tv_like_count.setText(responseResult.get(0).getLike_count());
 
+                    if (responseResult.get(0).getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
+                        iv_like.setImageResource(R.drawable.ic_baseline_favorite_24);
+                        like_check = true;
+                        like_yn = "y";
+                    }
 
                     try {
                         tv_time.setText(Kim_DateUtil_Cre.creTime(responseResult.get(0).getCre_datetime()));
@@ -222,11 +387,12 @@ public class SS_PostDetail extends AppCompatActivity {
                             .into(iv_media);
 
                     Glide.with(SS_PostDetail.this)
-                            .load("https://d2gf68dbj51k8e.cloudfront.net/e3b15554f15354b5bc31e3e535a59d70.jpeg")
+                            .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getProfile_file_name())
                             .into(iv_user_image);
 
                     SetDate(responseResult.get(0).getCre_datetime());
 
+                    media_link = responseResult.get(0).getProfile_file_name();
                 }
             }
 
@@ -237,6 +403,7 @@ public class SS_PostDetail extends AppCompatActivity {
         });
     }
 
+
     private void SetDate(String dateStr) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date;
@@ -245,11 +412,16 @@ public class SS_PostDetail extends AppCompatActivity {
             SimpleDateFormat transFormat = new SimpleDateFormat("yyyy년 MM월 dd일 ㆍ HH:mm");
             String to = transFormat.format(date);
             tv_time.setText(to);
-            Log.d("디버그태그", to+"뭐야");
+            Log.d("디버그태그", to + "뭐야");
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
+
+
+
+
+    // TODO 멘션
 
 
     ////////////////////////////////////////////////////
@@ -265,4 +437,7 @@ public class SS_PostDetail extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }

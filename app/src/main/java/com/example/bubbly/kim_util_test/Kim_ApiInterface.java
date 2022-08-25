@@ -4,10 +4,12 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
@@ -32,12 +34,12 @@ public interface Kim_ApiInterface {
             @Query("user_id") String user_id // 로그인한 user_id 값
     );
 
-    // 3. 커뮤니티 참여자 정보 저장 TODO 커뮤 생성 시, 커뮤 ID 다시 받아와서 만들어야되려나???
+    // 3. 커뮤니티 참여자 정보 저장
     @FormUrlEncoded
-    @POST("community/createCommunityParicipant")
-    Call<String> createCommunityParicipant(
-            @Part("user_id") String user_id,
-            @Part("community_id") String community_id
+    @POST("community/participate/createCommunityParticipant")
+    Call<String> createCommunityParticipant(
+            @Field("user_id") String user_id,
+            @Field("community_id") String community_id
             );
 
     // 3. 커뮤니티 아이디로 커뮤니티 정보 조회
@@ -69,7 +71,9 @@ public interface Kim_ApiInterface {
             @Part("community_desc") String community_desc,
             @Part("profile_file_name") String profile_file_name,
             @Part("community_id") String community_id,
-            @Part MultipartBody.Part file
+            @Part MultipartBody.Part file,
+            @Part("rule") String rule
+
     );
     
     // 8. 특정 커뮤니티의 게시글 가져오기

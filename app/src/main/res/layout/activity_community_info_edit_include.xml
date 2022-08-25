@@ -71,10 +71,9 @@
         android:background="@drawable/bg_circle4"
         android:fontFamily="@font/spoqa_regular"
         android:hint="커뮤니티명 지정"
-        android:maxLength="20"
+        android:maxLength="100"
         android:padding="10dp"
         android:paddingHorizontal="6dp"
-        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="20dp" />
 
@@ -152,12 +151,15 @@
         android:layout_marginTop="6dp"
         android:background="@drawable/bg_circle4"
         android:fontFamily="@font/spoqa_regular"
-        android:hint=""
-        android:maxLength="20"
+        android:hint="커뮤니티 활동 규칙"
+        android:maxLength="400"
+        android:maxLines="20"
         android:padding="10dp"
         android:paddingHorizontal="6dp"
+        android:singleLine="true"
         android:textColor="@color/black"
         android:textSize="20dp" />
+
 
     <View
         android:layout_width="match_parent"
