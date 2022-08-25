@@ -26,7 +26,13 @@ public class reply_Response {
     @Expose
     @SerializedName("mentioned_user_list") private String[] mentioned_user_list;
 
-    public reply_Response(String post_id, String comment_writer_id, String comment_depth, String comment_contents, String nick_name, String profile_file_name, String[] mentioned_user_list) {
+    @Expose
+    @SerializedName("cre_datetime_comment") private String cre_datetime_comment;
+
+    @Expose
+    @SerializedName("comment_id") private String comment_id;
+
+    public reply_Response(String post_id, String comment_writer_id, String comment_depth, String comment_contents, String nick_name, String profile_file_name, String[] mentioned_user_list, String cre_datetime_comment, String comment_id) {
         this.post_id = post_id;
         this.comment_writer_id = comment_writer_id;
         this.comment_depth = comment_depth;
@@ -34,8 +40,25 @@ public class reply_Response {
         this.nick_name = nick_name;
         this.profile_file_name = profile_file_name;
         this.mentioned_user_list = mentioned_user_list;
+        this.cre_datetime_comment = cre_datetime_comment;
+        this.comment_id = comment_id;
     }
 
+    public String getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(String comment_id) {
+        this.comment_id = comment_id;
+    }
+
+    public String getCre_datetime_comment() {
+        return cre_datetime_comment;
+    }
+
+    public void setCre_datetime_comment(String cre_datetimee_comment) {
+        this.cre_datetime_comment = cre_datetimee_comment;
+    }
 
     public String getPost_id() {
         return post_id;

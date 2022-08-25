@@ -96,4 +96,7 @@ dependencies {
     //쉐어드프리퍼런스 암호화
     implementation "androidx.security:security-crypto-ktx:1.1.0-alpha03"
 
+    // 태그, 멘션
+    implementation 'com.otaliastudios:autocomplete:1.1.0'
+
 }

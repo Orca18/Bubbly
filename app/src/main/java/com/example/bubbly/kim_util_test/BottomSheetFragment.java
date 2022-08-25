@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 //                 final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
 // 활용하고 싶으면 onClick 에 오른쪽 코드=>                 bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     Context context;
 
@@ -31,7 +32,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
         View view = inflater.inflate(R.layout.bottom_sheet_dialog_layout, container, false);
 
-        LinearLayout main = view.findViewById(R.id.sheet_main);
+        LinearLayout main = view.findViewById(R.id.sheet_no);
         main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,24 +41,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
             }
         });
 
-        LinearLayout delete = view.findViewById(R.id.sheet_delete);
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "2", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }
-        });
-
-
-        LinearLayout nft = view.findViewById(R.id.sheet_nft);
-        nft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "3", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }
-        });
 
         return view;
     }

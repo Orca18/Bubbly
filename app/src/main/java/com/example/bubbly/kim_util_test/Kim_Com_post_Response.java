@@ -1,9 +1,9 @@
-package com.example.bubbly.retrofit;
+package com.example.bubbly.kim_util_test;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class post_Response {
+public class Kim_Com_post_Response {
 
     @Expose
     @SerializedName("post_id") private String post_id;
@@ -12,7 +12,7 @@ public class post_Response {
     @SerializedName("post_writer_id") private String post_writer_id;
 
     @Expose
-    @SerializedName("writer_name") private String writer_name;
+    @SerializedName("nick_name") private String nick_name;
 
     @Expose
     @SerializedName("post_contents") private String post_contents;
@@ -32,8 +32,6 @@ public class post_Response {
     @Expose
     @SerializedName("nft_post_yn") private String nft_post_yn;
 
-    @Expose
-    @SerializedName("nick_name") private String nick_name;
 
     @Expose
     @SerializedName("profile_file_name") private String profile_file_name;
@@ -42,40 +40,25 @@ public class post_Response {
     @SerializedName("cre_datetime") private String cre_datetime;
 
     @Expose
-    @SerializedName("mentioned_user_list") private String[] mentioned_user_list;
-
-
-    @Expose
-    @SerializedName("login_id") private String login_id;
-
-    @Expose
     @SerializedName("community_id") private String community_id;
 
+    @Expose
+    @SerializedName("mentioned_user_list") private String[] mentioned_user_list;
 
-    public post_Response(String post_id, String post_writer_id, String writer_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String nick_name, String profile_file_name, String cre_datetime, String[] mentioned_user_list, String community_id, String login_id) {
+    public Kim_Com_post_Response(String post_id, String post_writer_id, String nick_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String profile_file_name, String cre_datetime, String community_id, String[] mentioned_user_list) {
         this.post_id = post_id;
         this.post_writer_id = post_writer_id;
-        this.writer_name = writer_name;
+        this.nick_name = nick_name;
         this.post_contents = post_contents;
         this.file_save_names = file_save_names;
         this.like_count = like_count;
         this.like_yn = like_yn;
         this.share_post_yn = share_post_yn;
         this.nft_post_yn = nft_post_yn;
-        this.nick_name = nick_name;
         this.profile_file_name = profile_file_name;
         this.cre_datetime = cre_datetime;
+        this.community_id = community_id;
         this.mentioned_user_list = mentioned_user_list;
-        this.community_id = community_id;
-        this.login_id = login_id;
-    }
-
-    public String getCommunity_id() {
-        return community_id;
-    }
-
-    public void setCommunity_id(String community_id) {
-        this.community_id = community_id;
     }
 
     public String getPost_id() {
@@ -94,12 +77,12 @@ public class post_Response {
         this.post_writer_id = post_writer_id;
     }
 
-    public String getWriter_name() {
-        return writer_name;
+    public String getNick_name() {
+        return nick_name;
     }
 
-    public void setWriter_name(String writer_name) {
-        this.writer_name = writer_name;
+    public void setNick_name(String nick_name) {
+        this.nick_name = nick_name;
     }
 
     public String getPost_contents() {
@@ -118,13 +101,6 @@ public class post_Response {
         this.file_save_names = file_save_names;
     }
 
-    public String getLogin_id() {
-        return login_id;
-    }
-
-    public void setLogin_id(String login_id) {
-        this.login_id = login_id;
-    }
     public String getLike_count() {
         return like_count;
     }
@@ -157,14 +133,6 @@ public class post_Response {
         this.nft_post_yn = nft_post_yn;
     }
 
-    public String getNick_name() {
-        return nick_name;
-    }
-
-    public void setNick_name(String nick_name) {
-        this.nick_name = nick_name;
-    }
-
     public String getProfile_file_name() {
         return profile_file_name;
     }
@@ -181,6 +149,14 @@ public class post_Response {
         this.cre_datetime = cre_datetime;
     }
 
+    public String getCommunity_id() {
+        return community_id;
+    }
+
+    public void setCommunity_id(String community_id) {
+        this.community_id = community_id;
+    }
+
     public String[] getMentioned_user_list() {
         return mentioned_user_list;
     }
@@ -188,5 +164,4 @@ public class post_Response {
     public void setMentioned_user_list(String[] mentioned_user_list) {
         this.mentioned_user_list = mentioned_user_list;
     }
-
 }
