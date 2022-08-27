@@ -71,7 +71,6 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
         v = inflater.inflate(R.layout.fragment_ss_search_result, container, false);
         recyclerView = v.findViewById(R.id.rv_searchResult);
 
-        selectNFTPost();
         return v;
     }
 
@@ -87,7 +86,6 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
         post_adapter = new Post_Adapter(getActivity().getApplicationContext() , postList,getActivity().getApplicationContext() );
         recyclerView.setAdapter(post_adapter);
         post_adapter.notifyDataSetChanged();
-
 
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<post_Response>> call = api.selectPostUsingPostContents(keyword, UserInfo.user_id);
@@ -133,6 +131,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        selectNFTPost();
     }
 
 }

@@ -87,6 +87,31 @@ public class LL_Login extends AppCompatActivity {
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+
+                                    //자동로그인 : 쉐어드프리퍼런스에 저장한다.
+                                    String mnemonic = response.body().toString();
+                                    MasterKey masterKey = null;
+                                    try {
+                                        masterKey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                                                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                                                .build(); //암호화 키 생성
+                                        SharedPreferences sharedPreferences = EncryptedSharedPreferences
+                                                .create(getApplicationContext(),
+                                                        "account",
+                                                        masterKey,
+                                                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, //key(name, 이경우 mnemonic) 암호화 방식
+                                                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM); //value 암호화 방식 선택
+
+                                        SharedPreferences.Editor spfEditor = sharedPreferences.edit();
+                                        spfEditor.putString("id", et_login_id.getText().toString());
+                                        spfEditor.putString("pw", et_login_pw.getText().toString());
+                                        spfEditor.commit();
+                                    } catch (GeneralSecurityException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
                                     //수신한 데이터를 json으로 파싱한다.
                                     JSONObject json = null;
                                     try {

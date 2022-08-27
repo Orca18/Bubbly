@@ -18,9 +18,11 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -365,4 +367,17 @@ public interface ApiInterface {
     Call<List<Kim_JoinedCom_Response>> selectCommunitySearchResultList(@Query("search_text") String search_text); // 검색어
 
     // todo community 관련 api (끝 지점)
+
+    //todo wallet 관련 api
+    @FormUrlEncoded
+    @POST("wallet/exchange")
+    Call<String> exchange(@Field("sender_addr") String sender_addr,
+                          @Field("sender_mnemonic") String sender_mnemonic,
+                          @Field("token_amount") String token_amount);
+
+    // todo 블록체인에서 거래기록 가져오기
+    @GET("v2/accounts/{address}/transactions")
+    Call<String> transactionHistory(@Header("x-api-key") String token,
+                                    @Path(value = "address", encoded = true) String address,
+                                    @Query("limit") int limit, @Query("next") String nextToken);
 }

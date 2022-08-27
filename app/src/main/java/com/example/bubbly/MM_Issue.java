@@ -419,7 +419,9 @@ public class MM_Issue extends AppCompatActivity {
                 Log.e("실시간 검색어 트랜드 에러", t.getMessage());
             }
         });
-
     }
+
+
+
 
 }
