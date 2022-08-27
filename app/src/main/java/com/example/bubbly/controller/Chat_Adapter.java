@@ -1,8 +1,18 @@
 package com.example.bubbly.controller;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
@@ -17,10 +28,18 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.ImageView_FullScreen;
+import com.example.bubbly.ImageView_FullScreen_With_Save;
+import com.example.bubbly.Post_Create;
 import com.example.bubbly.R;
+import com.example.bubbly.Video_Play;
 import com.example.bubbly.model.Chat_Item;
 import com.example.bubbly.model.UserInfo;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,9 +75,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public MyMsgViewHolder(View itemView) {
             super(itemView);
-            layout_my_chatBox = itemView.findViewById(R.id.layout_my_chatBox);
 
-            textView_my_nickName = itemView.findViewById(R.id.textView_my_nickName);
             editText_MyMsg = itemView.findViewById(R.id.editText_MyMsg);
             textViewMyTime = itemView.findViewById(R.id.textViewMyTime);
             user_profile = itemView.findViewById(R.id.user_profile);
@@ -80,7 +97,6 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
 
             layout_opponent_chatBox = itemView.findViewById(R.id.layout_opponent_chatBox);
-
             textView_oppo_nickName = itemView.findViewById(R.id.textView_oppo_nickName);
             editText_OpponentMsg = itemView.findViewById(R.id.editText_OpponentMsg);
             textView_oppo_time = itemView.findViewById(R.id.textView_oppo_time);
@@ -101,10 +117,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public MyMsgViewHolderWithDay(View itemView) {
             super(itemView);
-            layout_my_chatBox = itemView.findViewById(R.id.layout_my_chatBox);
 
             textView_date = itemView.findViewById(R.id.textView_date);
-            textView_my_nickName = itemView.findViewById(R.id.textView_my_nickName);
             editText_MyMsg = itemView.findViewById(R.id.editText_MyMsg);
             textViewMyTime = itemView.findViewById(R.id.textViewMyTime);
             user_profile = itemView.findViewById(R.id.user_profile);
@@ -128,7 +142,6 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
 
             layout_opponent_chatBox = itemView.findViewById(R.id.layout_opponent_chatBox);
-
             textView_date = itemView.findViewById(R.id.textView_date);
             textView_oppo_nickName = itemView.findViewById(R.id.textView_oppo_nickName);
             editText_OpponentMsg = itemView.findViewById(R.id.editText_OpponentMsg);
@@ -151,8 +164,6 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public MyMsgViewHolderWithPhoto(View itemView) {
             super(itemView);
             //layout_opponent_chatBox = itemView.findViewById(R.id.layout_opponent_chatBox);
-            layout_my_chatBox = itemView.findViewById(R.id.layout_my_chatBox);
-            textView_my_nickName = itemView.findViewById(R.id.textView_my_nickName);
             img_myMsg = itemView.findViewById(R.id.img_MyMsg);
             textViewMyTime = itemView.findViewById(R.id.textViewMyTime);
             user_profile = itemView.findViewById(R.id.user_profile);
@@ -194,10 +205,9 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         public MyMsgViewHolderWithDayAndPhoto(View itemView) {
             super(itemView);
-            layout_my_chatBox = itemView.findViewById(R.id.layout_my_chatBox);
+            ;
 
             textView_date = itemView.findViewById(R.id.textView_date);
-            textView_my_nickName = itemView.findViewById(R.id.textView_my_nickName);
             img_myMsg = itemView.findViewById(R.id.img_MyMsg);
             textViewMyTime = itemView.findViewById(R.id.textViewMyTime);
             user_profile = itemView.findViewById(R.id.user_profile);
@@ -240,16 +250,20 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView textViewMyTime;
         CircleImageView user_profile;
         TextView not_read_user_count;
+        ImageView thumbnail;
+        ImageView playBtn;
 
         public MyMsgViewHolderWithVideo(View itemView) {
             super(itemView);
             //layout_opponent_chatBox = itemView.findViewById(R.id.layout_opponent_chatBox);
-            layout_my_chatBox = itemView.findViewById(R.id.layout_my_chatBox);
-            textView_my_nickName = itemView.findViewById(R.id.textView_my_nickName);
+            ;
+            
             video_myMsg = itemView.findViewById(R.id.video_MyMsg);
             textViewMyTime = itemView.findViewById(R.id.textViewMyTime);
             user_profile = itemView.findViewById(R.id.user_profile);
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
+            thumbnail = itemView.findViewById(R.id.thumbnail);
+            playBtn = itemView.findViewById(R.id.play_btn);
         }
     }
 
@@ -262,6 +276,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView textView_oppo_time;
         CircleImageView user_profile;
         TextView not_read_user_count;
+        ImageView thumbnail;
 
         public OpponentMsgViewHolderViewHolderWithVideo(View itemView) {
             super(itemView);
@@ -272,6 +287,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             textView_oppo_time = itemView.findViewById(R.id.textView_oppo_time);
             user_profile = itemView.findViewById(R.id.user_profile);
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
+            thumbnail = itemView.findViewById(R.id.thumbnail);
         }
     }
 
@@ -284,17 +300,18 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView textViewMyTime;
         CircleImageView user_profile;
         TextView not_read_user_count;
+        ImageView thumbnail;
 
         public MyMsgViewHolderWithDayAndVideo(View itemView) {
             super(itemView);
-            layout_my_chatBox = itemView.findViewById(R.id.layout_my_chatBox);
+            ;
 
             textView_date = itemView.findViewById(R.id.textView_date);
-            textView_my_nickName = itemView.findViewById(R.id.textView_my_nickName);
             video_myMsg = itemView.findViewById(R.id.video_MyMsg);
             textViewMyTime = itemView.findViewById(R.id.textViewMyTime);
             user_profile = itemView.findViewById(R.id.user_profile);
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
+            thumbnail = itemView.findViewById(R.id.thumbnail);
         }
     }
 
@@ -309,6 +326,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView textView_oppo_time;
         CircleImageView user_profile;
         TextView not_read_user_count;
+        ImageView thumbnail;
 
         public OpponentMsgViewHolderViewHolderWithDayAndVideo(View itemView) {
             super(itemView);
@@ -321,6 +339,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             textView_oppo_time = itemView.findViewById(R.id.textView_oppo_time);
             user_profile = itemView.findViewById(R.id.user_profile);
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
+            thumbnail = itemView.findViewById(R.id.thumbnail);
         }
     }
 
@@ -426,9 +445,6 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((MyMsgViewHolder)holder).not_read_user_count.setVisibility(View.GONE);
 
-            // 사용자 프로필 보이지 않게!
-            ((MyMsgViewHolder)holder).user_profile.setVisibility(View.GONE);
-
             // 읽지 않은 사용자 설정
             if(currentItem.getNotReadUserCount() <= 0){
                 ((MyMsgViewHolder)holder).not_read_user_count.setVisibility(View.GONE);
@@ -466,9 +482,6 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((MyMsgViewHolderWithDay)holder).textView_date.setText(currentItem.getChatDate());
 
             ((MyMsgViewHolderWithDay)holder).not_read_user_count.setVisibility(View.GONE);
-
-            // 사용자 프로필 보이지 않게!
-            ((MyMsgViewHolderWithDay)holder).user_profile.setVisibility(View.GONE);
             
             // 읽지 않은 사용자 설정
             if(currentItem.getNotReadUserCount() <= 0){
@@ -501,17 +514,13 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         } if(holder instanceof MyMsgViewHolderWithPhoto){ // 내가 작성한 이미지인 경우
             // 내가 전송한 이미지를 출력하는 경우 비트맵에 있는 데이터를 가져온다.
-            Glide.with(mContext).load(currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithPhoto)holder).img_myMsg);
+            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithPhoto)holder).img_myMsg);
 
             ((MyMsgViewHolderWithPhoto)holder).textViewMyTime.setText(currentItem.getChatTime());
 
             // 리사이클러뷰는 뷰홀더를 재활용하기 때문에 처음에 무조건 GONE을 해주고 데이터가 있는경우에만 VISIBLE을 해줘야 한다.
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((MyMsgViewHolderWithPhoto)holder).not_read_user_count.setVisibility(View.GONE);
-
-            // 사용자 프로필 보이지 않게!
-            ((MyMsgViewHolderWithPhoto)holder).user_profile.setVisibility(View.GONE);
-
 
             // 읽지 않은 사용자 설정
             if(currentItem.getNotReadUserCount() <= 0){
@@ -522,6 +531,18 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithPhoto)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
+            ((MyMsgViewHolderWithPhoto)holder).img_myMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("클릭","11");
+
+                    Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
+                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    
+                }
+            });
+
             /*
             // 클릭 시 다운로드 화면으로 이동
             ((MyMsgViewHolderWithPhoto)holder).img_myMsg.setOnClickListener(new View.OnClickListener() {
@@ -529,8 +550,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, GlideLoaderActivity.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl();
-                    mContext.startActivity(intent);
+                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl();
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
             */
@@ -542,7 +563,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
-            Glide.with(mContext).load(currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg);
+            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg);
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).textView_oppo_time.setText(currentItem.getChatTime());
 
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).not_read_user_count.setVisibility(View.GONE);
@@ -556,26 +577,34 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((OpponentMsgViewHolderViewHolderWithPhoto)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
+            ((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("클릭","22");
+
+                    Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
+                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            });
+
             /*// 클릭 시 다운로드 화면으로 이동
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, GlideLoaderActivity.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl());
-                    mContext.startActivity(intent);
+                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });*/
         } else if(holder instanceof MyMsgViewHolderWithDayAndPhoto){ //내가 작성한 이미지이고 날짜를 보여줘야 하는 경우
-            Glide.with(mContext).load(currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithDayAndPhoto)holder).img_myMsg);
+            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithDayAndPhoto)holder).img_myMsg);
 
             ((MyMsgViewHolderWithDayAndPhoto)holder).textViewMyTime.setText(currentItem.getChatTime());
             ((MyMsgViewHolderWithDayAndPhoto)holder).textView_date.setText(currentItem.getChatDate());
 
             ((MyMsgViewHolderWithDayAndPhoto)holder).not_read_user_count.setVisibility(View.GONE);
-
-            // 사용자 프로필 보이지 않게!
-            ((MyMsgViewHolderWithDayAndPhoto)holder).user_profile.setVisibility(View.GONE);
 
             // 읽지 않은 사용자 설정
             if(currentItem.getNotReadUserCount() <= 0){
@@ -586,14 +615,25 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithDayAndPhoto)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
+            ((MyMsgViewHolderWithDayAndPhoto)holder).img_myMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("클릭","33");
+
+                    Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
+                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            });
+
             /*// 클릭 시 다운로드 화면으로 이동
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, GlideLoaderActivity.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl());
-                    mContext.startActivity(intent);
+                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });*/
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDayAndPhoto){ //상대방이 작성한 이미지이고 날짜를 보여줘야 하는 경우
@@ -603,7 +643,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).user_profile);
             }
             ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
-            Glide.with(mContext).load(currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).img_OpponentMsg);
+            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).img_OpponentMsg);
             ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).textView_oppo_time.setText(currentItem.getChatTime());
             ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).textView_date.setText(currentItem.getChatDate());
 
@@ -618,37 +658,46 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
+            ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("클릭","44");
+
+                    Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
+                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                }
+            });
+
             /*// 클릭 시 다운로드 화면으로 이동
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, GlideLoaderActivity.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl());
-                    mContext.startActivity(intent);
+                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });*/
         } if(holder instanceof MyMsgViewHolderWithVideo){ // 내가 작성한 동영상인 경우
-            // VideoView에 동여상 uri 세팅
-            ((MyMsgViewHolderWithVideo)holder).video_myMsg.setMediaController(new MediaController(mContext));
+            String[] fileNames = currentItem.getChatFileUrl().split(",");
 
-            Uri videoUri= Uri.parse(currentItem.getChatFileUrl());
+            // 썸네일 파일명
+            String thumbnailFileName = fileNames[0];
 
-            //VideoView가 보여줄 동영상의 경로 주소(Uri) 설정하기
-            ((MyMsgViewHolderWithVideo)holder).video_myMsg.setVideoURI(videoUri);
+            // 비디오 파일명
+            String videoFileName = fileNames[1];
 
-            // 사용자 프로필 보이지 않게!
-            ((MyMsgViewHolderWithVideo)holder).user_profile.setVisibility(View.GONE);
+            String url = cloudFrontAddr + videoFileName;
 
-            //동영상을 읽어오는데 시간이 걸리므로..
-            ((MyMsgViewHolderWithVideo)holder).video_myMsg.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    //비디오 시작
-                    ((MyMsgViewHolderWithVideo)holder).video_myMsg.start();
-                }
-            });
-            
+            Log.d("thumbnailFileName: " , thumbnailFileName);
+
+            // 썸네일 넣기
+            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((MyMsgViewHolderWithVideo)holder).thumbnail);
+
+            //((MyMsgViewHolderWithVideo)holder).playBtn.setImageDrawable(mContext.getDrawable(R.drawable.ic_baseline_play_circle_outline_48));
+
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
 
@@ -661,18 +710,19 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
-            /*
-            // 클릭 시 재생 및 화면으로 이동
-            ((MyMsgViewHolderWithVideo)holder).video_myMsg.setOnClickListener(new View.OnClickListener() {
+
+            // 썸네일 클릭 시 재생화면으로 이동
+            ((MyMsgViewHolderWithVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
+                    Intent intent = new Intent(mContext, Video_Play.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl());
-                    mContext.startActivity(intent);
+                    intent.putExtra("videoUrl", url);
+                    // FLAG_ACTIVITY_NEW_TASK
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
-            */
+
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithVideo){ //상대방이 작성한 동영상인 경우
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolderWithVideo)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
@@ -680,22 +730,21 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).user_profile);
             }
 
-            // VideoView에 동여상 uri 세팅
-            ((OpponentMsgViewHolderViewHolderWithVideo)holder).video_OpponentMsg.setMediaController(new MediaController(mContext));
+            String[] fileNames = currentItem.getChatFileUrl().split(",");
 
-            Uri videoUri= Uri.parse(currentItem.getChatFileUrl());
+            // 썸네일 파일명
+            String thumbnailFileName = fileNames[0];
 
-            //VideoView가 보여줄 동영상의 경로 주소(Uri) 설정하기
-            ((OpponentMsgViewHolderViewHolderWithVideo)holder).video_OpponentMsg.setVideoURI(videoUri);
+            // 비디오 파일명
+            String videoFileName = fileNames[1];
 
-            //동영상을 읽어오는데 시간이 걸리므로..
-            ((OpponentMsgViewHolderViewHolderWithVideo)holder).video_OpponentMsg.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    //비디오 시작
-                    ((OpponentMsgViewHolderViewHolderWithVideo)holder).video_OpponentMsg.start();
-                }
-            });
+            String url = cloudFrontAddr + videoFileName;
+
+            Log.d("thumbnailFileName: " , thumbnailFileName);
+
+            // 썸네일 넣기
+            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((MyMsgViewHolderWithVideo)holder).thumbnail);
+
 
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
@@ -709,42 +758,34 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
-            /*
             // 클릭 시 재생 및 화면으로 이동
             ((OpponentMsgViewHolderViewHolderWithVideo)holder).video_OpponentMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
+                    Intent intent = new Intent(mContext, Video_Play.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl());
-                    mContext.startActivity(intent);
+                    intent.putExtra("videoUrl", url);
+                    // FLAG_ACTIVITY_NEW_TASK
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
-            */
         } else if(holder instanceof MyMsgViewHolderWithDayAndVideo){ //내가 작성한 동영상이고 날짜를 보여줘야 하는 경우
-            // VideoView에 동여상 uri 세팅
-            ((MyMsgViewHolderWithDayAndVideo)holder).video_myMsg.setMediaController(new MediaController(mContext));
-            ((MyMsgViewHolderWithDayAndVideo)holder).textView_date.setText(currentItem.getChatDate());
+            String[] fileNames = currentItem.getChatFileUrl().split(",");
 
-            Uri videoUri= Uri.parse(currentItem.getChatFileUrl());
+            // 썸네일 파일명
+            String thumbnailFileName = fileNames[0];
 
-            //VideoView가 보여줄 동영상의 경로 주소(Uri) 설정하기
-            ((MyMsgViewHolderWithDayAndVideo)holder).video_myMsg.setVideoURI(videoUri);
+            // 비디오 파일명
+            String videoFileName = fileNames[1];
 
-            //동영상을 읽어오는데 시간이 걸리므로..
-            ((MyMsgViewHolderWithDayAndVideo)holder).video_myMsg.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    //비디오 시작
-                    ((MyMsgViewHolderWithDayAndVideo)holder).video_myMsg.start();
-                }
-            });
+            String url = cloudFrontAddr + videoFileName;
+
+            // 썸네일 넣기
+            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail);
 
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
 
-            // 사용자 프로필 보이지 않게!
-            ((MyMsgViewHolderWithDayAndVideo)holder).user_profile.setVisibility(View.GONE);
 
             // 읽지 않은 사용자 설정
             if(currentItem.getNotReadUserCount() <= 0){
@@ -755,18 +796,17 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
-            /*
             // 클릭 시 재생 및 화면으로 이동
             ((MyMsgViewHolderWithDayAndVideo)holder).video_myMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
+                    Intent intent = new Intent(mContext, Video_Play.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl());
-                    mContext.startActivity(intent);
+                    intent.putExtra("videoUrl", url);
+                    // FLAG_ACTIVITY_NEW_TASK
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
-            */
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDayAndVideo){ //상대방이 작성한 동영상이고 날짜를 보여줘야 하는 경우
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
@@ -774,22 +814,18 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).user_profile);
             }
 
-            // VideoView에 동여상 uri 세팅
-            ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).video_OpponentMsg.setMediaController(new MediaController(mContext));
+            String[] fileNames = currentItem.getChatFileUrl().split(",");
 
-            Uri videoUri= Uri.parse(currentItem.getChatFileUrl());
+            // 썸네일 파일명
+            String thumbnailFileName = fileNames[0];
 
-            //VideoView가 보여줄 동영상의 경로 주소(Uri) 설정하기
-            ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).video_OpponentMsg.setVideoURI(videoUri);
+            // 비디오 파일명
+            String videoFileName = fileNames[1];
 
-            //동영상을 읽어오는데 시간이 걸리므로..
-            ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).video_OpponentMsg.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    //비디오 시작
-                    ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).video_OpponentMsg.start();
-                }
-            });
+            String url = cloudFrontAddr + videoFileName;
+
+            // 썸네일 넣기
+            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail);
 
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
@@ -803,18 +839,17 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
-            /*
             // 클릭 시 재생 및 화면으로 이동
             ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).video_OpponentMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
+                    Intent intent = new Intent(mContext, Video_Play.class);
 
-                    intent.putExtra("url", currentItem.getChatFileUrl());
-                    mContext.startActivity(intent);
+                    intent.putExtra("videoUrl", url);
+                    // FLAG_ACTIVITY_NEW_TASK
+                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
-            */
         } else if(holder instanceof EnterAndExitViewHolder){ //나가거나 들어온 경우
             ((EnterAndExitViewHolder)holder).textView_enter_or_exit.setText(currentItem.getChatText());
         }
@@ -898,23 +933,50 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return pageNo;
     }
 
-    // 안읽은 사용자수를 업데이트 한다!
+    // 새로 채팅방에 들어왔을 때 안읽은 사용자수를 업데이트 한다!
     public void updateNotReadUserCount(int lastIdx){
         int position = 0;
 
-        // 역순으로 저장하므로 뒤에서부터 체크한다!!
-        for(int i = chatItemList.size() - 1; i >= 0; i--){
-            if(chatItemList.get(i).getChatId() == lastIdx){
-                position = i;
+        // 현재 리사이클러뷰의 마지막 메시지 아이디보다 입장한 사용자의 마지막으로 읽은 메시지 아이디가 작다면 리사이클러뷰의 모든 안읽은 사용자 --
+        // ex) 리사이클러뷰 메시지 아이디가 [70,69,...61]이라고 가정(10개씩 페이징) 마지막으로 읽은 메시지아이디가 50이라면 어차피 61-70번의 메시지의 읽지 않은 사용자수는 전부 --해야 함!!
+        if(chatItemList.get(chatItemList.size() - 1).getChatId() > lastIdx){
+            for(int j = 0; j < chatItemList.size(); j ++) {
+                chatItemList.get(j).setNotReadUserCount(chatItemList.get(j).getNotReadUserCount() - 1);
+            }
+        } else {
+            // 역순으로 저장하므로 뒤에서부터 체크한다!!
+            for(int i = chatItemList.size() - 1; i >= 0; i--){
+                if(chatItemList.get(i).getChatId() == lastIdx){
+                    position = i;
+                    break;
+                }
+            }
+
+            for(int j = 0; j < position; j ++) {
+                chatItemList.get(j).setNotReadUserCount(chatItemList.get(j).getNotReadUserCount() - 1);
+            }
+        }
+
+
+        notifyDataSetChanged();
+    }
+
+    // 내가 전송한 메시지의 안읽은 사용자수를 업데이트 한다!
+    public void updateNotReadUserCountOne(Chat_Item chatItem){
+        for(int j = 0; j < chatItemList.size(); j ++) {
+            // 내가 작성한 메시지고 내용이 동일하다면
+            if(chatItemList.get(j).getChatText().equals(chatItem.getChatText()) && chatItemList.get(j).getChatUserId().equals(chatItem.getChatUserId())){
+                chatItemList.get(j).setNotReadUserCount(chatItem.getNotReadUserCount());
+                chatItemList.get(j).setChatId(chatItem.getChatId());
+                notifyItemChanged(j);
                 break;
             }
         }
 
-        for(int j = 0; j < position; j ++) {
-            chatItemList.get(j).setNotReadUserCount(chatItemList.get(j).getNotReadUserCount() - 1);
-        }
+    }
 
-        notifyDataSetChanged();
+    public List<Chat_Item> getChatItemList() {
+        return chatItemList;
     }
 
     public void setPageNo(int pageNo) {

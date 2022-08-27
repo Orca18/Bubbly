@@ -1,54 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:id="@+id/layout_my_chatBox"
-android:layout_width="match_parent"
-android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="6dp" >
 
-    <TextView
-        android:id="@+id/textView_my_nickName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_weight="5"></View>
 
-    <TextView
-        android:id="@+id/not_read_user_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="5dp"
-        android:layout_weight="1"
-        android:textSize="15sp"
-        android:text="1"
-        android:textColor="@color/yellow"
-        app:layout_constraintEnd_toStartOf="@+id/textViewMyTime"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:layout_marginLeft="5dp">
 
-    <ImageView
-        android:id="@+id/img_MyMsg"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="30dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/profile"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+            <TextView
+                android:id="@+id/textView_my_nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#818181"
+                android:textSize="15sp"
+                android:text="ddd"
+                android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/textViewMyTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="5dp"
-        android:layout_weight="1"
-        android:textSize="12sp"
-        android:text="dfdfdf"
-        app:layout_constraintBottom_toBottomOf="@+id/img_MyMsg"
-        app:layout_constraintEnd_toStartOf="@+id/img_MyMsg"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="bottom">
+                    <TextView
+                        android:id="@+id/not_read_user_count"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:lineSpacingExtra="2dp"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        android:text="1"
+                        android:textColor="@color/yellow"
+                        android:textSize="13sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/textViewMyTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:gravity="right|bottom"
+                        android:text="오후 08:15"
+                        android:textColor="#ff58616d"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/img_MyMsg"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="225dp"
+                    android:scaleType="fitXY"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/profile"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/user_profile"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/profile"
+            android:clickable="true"
+            android:visibility="gone">
+        </de.hdodenhof.circleimageview.CircleImageView>
+    </LinearLayout>
+</LinearLayout>

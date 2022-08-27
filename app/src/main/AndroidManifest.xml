@@ -139,7 +139,8 @@
             android:exported="false" />
         <activity
             android:name=".ChattingRoom"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".LL_Register_A"
             android:exported="false" />
@@ -199,6 +200,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>-->
         </activity>
+        <activity
+            android:name=".ImageView_FullScreen_With_Save"
+            android:exported="false" />
+        <activity
+            android:name=".Video_Play"
+            android:exported="false" />
         <activity
             android:name=".MM_Wallet"
             android:exported="false" /> <!-- FCM 서비스 -->

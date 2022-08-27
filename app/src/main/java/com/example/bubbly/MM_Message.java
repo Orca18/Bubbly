@@ -235,6 +235,8 @@ public class MM_Message extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_c_message);
+        // 채팅서비스와 연결한다.
+        connectToService();
 
         // 리소스 ID 선언
         initiallize();
@@ -244,10 +246,7 @@ public class MM_Message extends AppCompatActivity {
         clickListeners();
         // 내비 터치
         NaviTouch();
-        // 리사이클러뷰 데이터 가져오기
-        loadrecycler();
-        // 채팅서비스와 연결한다.
-        connectToService();
+
         // 뷰모델 생성
         chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
 

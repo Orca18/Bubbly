@@ -365,4 +365,12 @@ public interface ApiInterface {
     Call<List<Kim_JoinedCom_Response>> selectCommunitySearchResultList(@Query("search_text") String search_text); // 검색어
 
     // todo community 관련 api (끝 지점)
+
+    // todo 채팅 관련 api (시작 지점)
+
+    @Multipart
+    @POST("chat/saveChatFiles") // nft 저장
+    Call<String> saveChatFiles(@Part List<MultipartBody.Part> files); // 검색어
+
+    // todo 채팅 관련api (끝 지점)
 }

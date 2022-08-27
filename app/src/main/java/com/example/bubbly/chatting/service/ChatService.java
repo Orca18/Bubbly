@@ -238,19 +238,27 @@ public class ChatService extends Service {
                                             saveLatestChatIdToSharedPreference(chatItem);
                                         }
 
-                                        // 안읽은 메시지를 업데이트 해야하거나 내가 보낸 메시지가 아니라면 채팅방으로 전송
-                                        if(!chatItem.getChatUserId().equals(userId)){
-                                            Log.e("액티비티로 메시지 전송: ", " 6. 채팅방이 활성화되어있고 동일한 채팅방에서 메시지 전송 시 ChattingRoom로 전송 시작");
-                                            Message tempMsg2 = new Message();
-                                            tempMsg2.copyFrom(msg);
-                                            mActivityMessengerList.get(1).send(tempMsg2);
-                                        }
+                                        Log.e("액티비티로 메시지 전송: ", " 6. 채팅방이 활성화되어있고 동일한 채팅방에서 메시지 전송 시 ChattingRoom로 전송 시작");
+                                        Message tempMsg2 = new Message();
+                                        tempMsg2.copyFrom(msg);
+                                        mActivityMessengerList.get(1).send(tempMsg2);
                                     }
                                 } else if(chatItem.getChatType() == 3 ) { // 안읽은 메시지수 업데이트하기 위해 채팅방에 포함된 모두에게 메시지 전송!
+                                    Message msg2 = Message.obtain(null, ChatService.MSG_RECEIVE_FROM_SERVER);
+                                    Bundle bundle = msg2.getData();
+                                    bundle.putSerializable("message",chatItem);
+
+                                    Log.e("액티비티로 메시지 전송 - 안읽은 사람수 ", chatItem.toString());
+
                                     // 채팅방이 활성화돼있고 해당 채팅방의 메시지라면!
+                                    Log.d("isChattingRoomivityActive: " , "" + isChattingRoomivityActive);
+                                    Log.d("chatItem.getChatRoomId(): " + "" , chatItem.getChatRoomId());
+                                    Log.d("chatRoomId: " + "" , chatRoomId);
+
                                     if (isChattingRoomivityActive && chatItem.getChatRoomId().equals(chatRoomId)) {
+                                        Log.e("액티비티로 메시지 전송 완료!!", chatItem.toString());
                                         Message tempMsg3 = new Message();
-                                        tempMsg3.copyFrom(msg);
+                                        tempMsg3.copyFrom(msg2);
                                         mActivityMessengerList.get(1).send(tempMsg3);
                                     }
                                 }
@@ -314,9 +322,21 @@ public class ChatService extends Service {
 
                     chatRoomId = msg.getData().getString("chatRoomId");
                     userId = msg.getData().getString("userId");
+                    boolean isNew = msg.getData().getBoolean("isNew");
+                    int lastReadMsgId = msg.getData().getInt("lastReadMsgId");
 
-                    // 채팅방 클릭 시 구독
-                    //chatUtil.enterChatRoom(mqttClient, chatRoomId);
+                    // 마지막으로 읽은 메시지id가 있다면
+                    if(lastReadMsgId != 99999999){
+                        // 브로커에게 마지막으로 읽은 메시지의 id를 전달한다 => 이 메시지 다음 id부터 안읽은 사용자수 -1 을 해주기 위해서
+                        sendLastReadIdToBroker(lastReadMsgId);
+                    } else {
+                        // 마디막으로 읽은 메시지가 없다면 채팅방을 새로 만들거나 기존에 만들어진 채팅방에 처음 들어올 때이다.
+                        // 채팅방 생성시는 업데이트할 필요가 없고 기존에 있던 채팅방에 처음들어왔을 때만 업데이트 해주면 된다.
+                        if(!isNew) {
+                            // 모든 메시지 업데이트 (서버에서 lastIdx + 1부터 업데이트 하기 때문에 -1을 보낸다!)
+                            sendLastReadIdToBroker(-1);
+                        }
+                    }
 
                     break;
                 // 채팅 액티비티 - 서버 연결 해제
@@ -352,6 +372,24 @@ public class ChatService extends Service {
         Log.e("수신한 메시지 쉐어드에 저장: ", "" + sp.getInt(chatItem.getChatRoomId(),999999));
     }
 
+    /** 채팅방에 입장했을 때 다른 채팅방의 안읽은사용자수 -- 해주기위해 브로커에게 채팅방 id와 마지막 인덱스를 보내준다.
+     */
+    public void sendLastReadIdToBroker(int lastIdx){
+        Chat_Item chatItem = new Chat_Item(chatRoomId, userId, "" + lastIdx,null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 3);
+        String chatItemStr = chatUtil.chatItemToString(chatItem);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    chatUtil.publishChatMsg(chatItemStr, chatRoomId, ChatService.mqttClient);
+                }
+                catch (Exception e) {
+
+                }
+            }
+        }).start();
+    }
 
 
     @Override

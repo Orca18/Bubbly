@@ -3,6 +3,7 @@ package com.example.bubbly;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -15,6 +16,7 @@ public class ImageView_FullScreen extends AppCompatActivity {
     PhotoView img;
     PhotoViewAttacher photoViewAttacher;
     androidx.appcompat.widget.Toolbar toolbar;
+    Bitmap imgBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public class ImageView_FullScreen extends AppCompatActivity {
                 .load(url)
                 .into(img);
         photoViewAttacher = new PhotoViewAttacher(img);
+
 
     }
 

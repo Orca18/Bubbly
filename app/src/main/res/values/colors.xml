@@ -24,5 +24,7 @@
     <color name="yellow">#FFD400</color>
 
     <color name="grey">#BDBDBD</color>
+    <color name="light_grey">#EDEDED</color>
+    <color name="light_grey2">#C9C9C9</color>
 
 </resources>
