@@ -196,6 +196,7 @@ public class MM_Profile extends AppCompatActivity {
 
     //프로필데이터 가져와서 디스플레이하기
     private void setProfileData(){
+        System.out.println(UserInfo.login_id);
         //이미지. 닉네임, id, 자기소개, 팔로잉, 팔로워
         if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
             Glide.with(MM_Profile.this)
@@ -263,11 +264,6 @@ public class MM_Profile extends AppCompatActivity {
                 Log.e("에러", t.getMessage());
             }
         });
-
-
-
-
-
     }
 
     private void NaviTouch() {
@@ -412,9 +408,7 @@ public class MM_Profile extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-//                        loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
-                        /* 업데이트가 끝났음을 알림 */
+                        setProfileData();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });

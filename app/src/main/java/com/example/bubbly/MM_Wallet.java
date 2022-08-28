@@ -28,6 +28,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.bubbly.controller.TransactionHistory_Adapter;
@@ -487,6 +488,16 @@ public class MM_Wallet extends AppCompatActivity {
         });
 
 
+        // 리사이클러뷰 새로고침 인식
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.wallet_refresh);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        selectWalletInfo();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }});
+
 
     }
 
@@ -527,7 +538,6 @@ public class MM_Wallet extends AppCompatActivity {
         super.onPause();
         overridePendingTransition(0, 0);
     }
-
 
 
 
@@ -628,6 +638,7 @@ public class MM_Wallet extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        selectWalletInfo();
     }
 
 

@@ -62,6 +62,7 @@ public class FragmentSR_Tab1_Hot extends Fragment {
 //        uid = ((SS_SearchResult) getActivity()).getUid();
         keyword = ((SS_SearchResult) getActivity()).getKeyword();
 
+
     }
 
 
@@ -72,6 +73,18 @@ public class FragmentSR_Tab1_Hot extends Fragment {
         // 레이아웃
         v = inflater.inflate(R.layout.fragment_ss_search_result, container, false);
         recyclerView = v.findViewById(R.id.rv_searchResult);
+
+
+        //스와이프 리스너
+        // 리사이클러뷰 새로고침 인식
+        SwipeRefreshLayout swipeRefreshLayout = v.findViewById(R.id.refresh_searchResult);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        selectRecentPost();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }});
 
         return v;
     }

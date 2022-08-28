@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +42,8 @@ public class Community_MainPage extends AppCompatActivity {
 
     String com_id;
     Toolbar toolbar;
+    LinearLayout searching; //서치바
+    EditText editText;
     //////////////////////////////////////////////
     Kim_Post_Adapter post_adapter;
     ArrayList<Kim_Com_post_Response> postList;
@@ -126,6 +129,14 @@ public class Community_MainPage extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // 툴바 안 검색 버튼
+        searching = findViewById(R.id.searchresult_com);
+        searching.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);
+            mIntent.putExtra("keyword", "");
+            startActivity(mIntent);
+        });
+
         // 게시글
         recyclerView = findViewById(R.id.com_main_recyclerview);
         // 나머지

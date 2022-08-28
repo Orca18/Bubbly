@@ -15,11 +15,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.R;
 import com.example.bubbly.SS_SearchResult;
+import com.example.bubbly.controller.NFT_Adapter;
 import com.example.bubbly.controller.Post_Adapter;
+import com.example.bubbly.model.NFT_Item;
+import com.example.bubbly.model.SearchedUser_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +41,9 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
 
     View v;
 
-    Post_Adapter post_adapter;
-    ArrayList<post_Response> postList;
+    private NFT_Adapter adapter;
+    private ArrayList<NFT_Item> list;
+    private ArrayList<SearchedUser_Item> userList;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
     private Parcelable recyclerViewState;
@@ -82,50 +90,71 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
         //위치 유지
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
-        postList = new ArrayList<>();
-        post_adapter = new Post_Adapter(getActivity().getApplicationContext() , postList,getActivity().getApplicationContext() );
-        recyclerView.setAdapter(post_adapter);
-        post_adapter.notifyDataSetChanged();
+        ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
+        list = new ArrayList<>();
+        userList = new ArrayList<>();
+        adapter = new NFT_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<post_Response>> call = api.selectPostUsingPostContents(keyword, UserInfo.user_id);
-        call.enqueue(new Callback<List<post_Response>>()
+        Call<String> call = api.selectUserSearchResultList(UserInfo.user_id,keyword);
+        call.enqueue(new Callback<String>()
         {
             @Override
-            public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response)
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
             {
                 if (response.isSuccessful() && response.body() != null)
                 {
-                    List<post_Response> responseResult = response.body();
-                    for(int i=0; i<responseResult.size(); i++){;
-                        if(responseResult.get(i).getNft_post_yn()!=null){//nft가 빈칸이 아니면=nft데이터만 표시한다
-                            postList.add(new post_Response(responseResult.get(i).getPost_id(),
-                                    responseResult.get(i).getPost_writer_id(),
-                                    responseResult.get(i).getWriter_name(),
-                                    responseResult.get(i).getPost_contents(),
-                                    responseResult.get(i).getFile_save_names(),
-                                    responseResult.get(i).getLike_count(),
-                                    responseResult.get(i).getLike_yn(),
-                                    responseResult.get(i).getShare_post_yn(),
-                                    responseResult.get(i).getNft_post_yn(),
-                                    responseResult.get(i).getNick_name(),
-                                    responseResult.get(i).getProfile_file_name(),
-                                    responseResult.get(i).getCre_datetime(),
-                                    responseResult.get(i).getMentioned_user_list(),
-                                    responseResult.get(i).getCommunity_id(),
-                                    responseResult.get(i).getLogin_id()));
+                    try {
+                        JSONArray jsonArray = new JSONArray(response.body().toString());
+                        for(int i=0; i<jsonArray.length(); i++){
+                            String jsonString = jsonArray.getString(i);
+                            JSONObject jsonObject = new JSONObject(jsonString);
+                            userList.add(new SearchedUser_Item(jsonObject.getString("user_id"),
+                                    jsonObject.getString("nick_name"),
+                                    jsonObject.getString("profile_file_name"),
+                                    jsonObject.getString("login_id"),
+                                    jsonObject.getString("self_info")));
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    post_adapter.notifyDataSetChanged();
+
+                    for(int i = 0; i<userList.size(); i++){
+                        Call<List<NFT_Item>> call_nft = api.selectNftUsingHolderId(userList.get(i).getUser_id());
+                        call_nft.enqueue(new Callback<List<NFT_Item>>() {
+                            @Override
+                            public void onResponse(Call<List<NFT_Item>> call, Response<List<NFT_Item>> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    List<NFT_Item> responseResult = response.body();
+                                    for(int j=0; j<responseResult.size(); j++){
+                                        System.out.println("nft 보유 목록"+responseResult.get(j).getNft_id());
+                                        list.add(new NFT_Item(responseResult.get(j).getNft_id(),
+                                                responseResult.get(j).getNft_des(),
+                                                responseResult.get(j).getNft_name(),
+                                                responseResult.get(j).getHolder_id(),
+                                                responseResult.get(j).getFile_save_url()));
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<List<NFT_Item>> call, Throwable t) {
+                                Log.e("nft 보유목록 가져오기 실패", t.getMessage());
+                            }
+                        });
+                    }
+                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t)
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
             {
                 Log.e("게시물 아이디로 게시물 조회", t.getMessage());
             }
         });
+
     }
 
     @Override

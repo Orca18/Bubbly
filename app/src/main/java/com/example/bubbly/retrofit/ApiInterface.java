@@ -310,7 +310,7 @@ public interface ApiInterface {
     @POST("chat/deleteChatParticipant")
     Call<String> deleteChatParticipant(@Field("user_id") String userId, @Field("chat_room_id") String chatRoomId);
 
-    // todo nft 관련된 api (끝 지점)
+    // todo nft 관련된 api (시작 지점)
     @Multipart
     @POST("nft-creation") // nft 저장
     Call<String> nftCreation(@Part("mnemonic") String mnemonic,
@@ -352,7 +352,7 @@ public interface ApiInterface {
     Call<List<NFT_Item>> selectNftUsingHolderId(@Query("holder_id") String holder_id);
 
     @GET("nft/selectAllSelledNftList") // 모든 판매중인 nft리스트
-    Call<String> selectAllSelledNftList();
+    Call<List<NFTSell_Item>> selectAllSelledNftList();
 
     @GET("nft/selectSelledNftListUsingSellerId") // 특정 사용자가 판매중인 NFT리스트
     Call<List<NFTSell_Item>> selectSelledNftListUsingSellerId(@Query("seller_id") String seller_id);

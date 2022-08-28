@@ -125,6 +125,7 @@ public class Following_Adapter extends RecyclerView.Adapter<Following_Adapter.Fo
                 });
             }
         });
+
     }
 
     @Override
