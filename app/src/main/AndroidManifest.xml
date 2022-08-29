@@ -152,10 +152,10 @@
 
         <activity
             android:name=".LL_Register_B"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".LL_Register_C"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".LL_Login"
             android:exported="false"
