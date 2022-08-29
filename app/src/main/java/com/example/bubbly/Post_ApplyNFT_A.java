@@ -3,7 +3,6 @@ package com.example.bubbly;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.controller.Custom_Toast;
+import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -38,6 +38,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -98,35 +99,43 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                         if(responseResult.get(i).getNick_name()!=null&&!responseResult.get(i).getNick_name().equals("")){
                             tv_usernick.setText(responseResult.get(i).getNick_name());
                         }else{
-                            tv_usernick.setText("login_id");
+                            tv_usernick.setText(responseResult.get(i).getLogin_id());
                         }
-                        tv_userid.setText("@log_id");
+                        tv_userid.setText(responseResult.get(i).getLogin_id());
                         //작성일로부터 현재시간까지 차이
+//                        try {
+//                            //현재시간
+//                            Date currentTime = new Date();
+//                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//                            Date createdTime = sdf.parse(responseResult.get(i).getCre_datetime());
+//                            long diff = currentTime.getTime() - createdTime.getTime();
+//                            String timeDiff;
+//                            int hours = (int)(diff/(60*60*1000));
+//                            timeDiff = hours+"H";
+//                            if(hours>24){
+//                                int days = (int)(hours/24);
+//                                timeDiff = days+"D";
+//                                if(days>30){
+//                                    int months = (int)(days/30);
+//                                    timeDiff = months+"M";
+//                                    if(months>12){
+//                                        int years = (int)(months/12);
+//                                        timeDiff = years+"Y";
+//                                    }
+//                                }
+//                            }
+//                            tv_time.setText(timeDiff);
+//                        } catch (ParseException e) {
+//                            e.printStackTrace();
+//                        }
+                        String a = null;
                         try {
-                            //현재시간
-                            Date currentTime = new Date();
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                            Date createdTime = sdf.parse(responseResult.get(i).getCre_datetime());
-                            long diff = currentTime.getTime() - createdTime.getTime();
-                            String timeDiff;
-                            int hours = (int)(diff/(60*60*1000));
-                            timeDiff = hours+"H";
-                            if(hours>24){
-                                int days = (int)(hours/24);
-                                timeDiff = days+"D";
-                                if(days>30){
-                                    int months = (int)(days/30);
-                                    timeDiff = months+"M";
-                                    if(months>12){
-                                        int years = (int)(months/12);
-                                        timeDiff = years+"Y";
-                                    }
-                                }
-                            }
-                            tv_time.setText(timeDiff);
+                            a = Kim_DateUtil.beforeTime(getDate(responseResult.get(i).getCre_datetime()));
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
+                        // SNS 형식 시간
+                        tv_time.setText(a);
                         tv_contents.setText(responseResult.get(i).getPost_contents());
                         if(responseResult.get(i).getFile_save_names()!=null&&!responseResult.get(i).getFile_save_names().equals("")){
                             Glide.with(getApplicationContext())
@@ -268,6 +277,12 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
     @NonNull
     private RequestBody createPartFromString(String descriptionString) {
         return RequestBody.create(MediaType.parse(FileUtils.MIME_TYPE_TEXT), descriptionString);
+    }
+
+    public static Date getDate(String from) throws ParseException {
+// "yyyy-MM-dd HH:mm:ss"
+        Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(from);
+        return date;
     }
 
     @Override

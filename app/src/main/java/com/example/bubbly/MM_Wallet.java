@@ -1,47 +1,41 @@
 package com.example.bubbly;
 
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.icu.text.DecimalFormat;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.algorand.algosdk.v2.client.common.AlgodClient;
-import com.example.bubbly.algoseverless.service.AlgoService;
 import com.example.bubbly.controller.TransactionHistory_Adapter;
-import com.example.bubbly.controller.WalletFragmentAdapter;
-import com.example.bubbly.controller.WalletFragment_Adapter_Callback;
 import com.example.bubbly.model.TransactionHistory_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
-import com.example.bubbly.retrofit.ApiInterfaceTransactionHistory;
-import com.example.bubbly.tabFragments.WalletFragment_Tab1_Activity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -390,7 +384,6 @@ public class MM_Wallet extends AppCompatActivity {
     // 클릭 이벤트 모음
     private void clickListeners() {
         //카피버튼
-
         bt_copy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -402,7 +395,60 @@ public class MM_Wallet extends AppCompatActivity {
         });
 
         //환전버튼
+        bt_exchange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MM_Wallet.this).setTitle("Bubble-Nova 환전");
+                EditText input = new EditText(MM_Wallet.this);
+                input.setPaddingRelative(100,100,100,100);
+                input.setBackground(null);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                input.setSingleLine();
+                input.setHint("몇 버블을 환전하시겠습니까?\n (1Bubble = 1mNova)");
+                builder.setView(input);
+                builder.setCancelable(false);
 
+                builder.setPositiveButton("환전", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ApiInterface api = ApiClient.getApiClientTest("http://10.0.2.2:3000/").create(ApiInterface.class);
+                        Call<String> call = api.exchange(address,UserInfo.mnemonic,input.getText().toString());
+                        call.enqueue(new Callback<String>()
+                        {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                            {
+                                if (response.isSuccessful() && response.body() != null)
+                                {
+                                    if(response.body().equals("success")){
+                                        Toast.makeText(getApplicationContext(), "환전이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        Toast.makeText(getApplicationContext(), "환전에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                            {
+                                Log.e("환전 에러", t.getMessage());
+                            }
+                        });
+                        Toast.makeText(getApplicationContext(), "환전 요청이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
+                alert.getButton(alert.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.black));
+                alert.getButton(alert.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+            }
+        });
 
 
         //리사이클러뷰 last 인식 => 추가 요청
@@ -441,6 +487,16 @@ public class MM_Wallet extends AppCompatActivity {
             }
         });
 
+
+        // 리사이클러뷰 새로고침 인식
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.wallet_refresh);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        selectWalletInfo();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }});
 
 
     }
@@ -485,11 +541,10 @@ public class MM_Wallet extends AppCompatActivity {
 
 
 
-
     private void selectHistory(){
         String base_url = "https://testnet-algorand.api.purestake.io/idx2/";
         String token = "4LS0jVPkU61EBPpW2Ml3A2iaEcEfXK92aCDSzXXr";
-        ApiInterfaceTransactionHistory api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterfaceTransactionHistory.class);
+        ApiInterface api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterface.class);
         Call<String> call = api.transactionHistory(token,address,20,nextToken);
         call.enqueue(new Callback<String>() {
             @Override
@@ -583,6 +638,7 @@ public class MM_Wallet extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        selectWalletInfo();
     }
 
 

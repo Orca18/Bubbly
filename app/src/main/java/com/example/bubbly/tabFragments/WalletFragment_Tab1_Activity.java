@@ -5,12 +5,9 @@ import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,17 +15,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.MM_Wallet;
 import com.example.bubbly.R;
-import com.example.bubbly.controller.NFT_Adapter;
 import com.example.bubbly.controller.TransactionHistory_Adapter;
-import com.example.bubbly.controller.WalletFragment_Adapter_Callback;
-import com.example.bubbly.model.Fragment_Tab1_Item;
-import com.example.bubbly.model.NFT_Item;
 import com.example.bubbly.model.TransactionHistory_Item;
-import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
-import com.example.bubbly.retrofit.ApiInterfaceTransactionHistory;
-import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +26,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -101,7 +90,7 @@ public class WalletFragment_Tab1_Activity extends Fragment {
     private void selectHistory(){
         String base_url = "https://testnet-algorand.api.purestake.io/idx2/";
         String token = "4LS0jVPkU61EBPpW2Ml3A2iaEcEfXK92aCDSzXXr";
-        ApiInterfaceTransactionHistory api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterfaceTransactionHistory.class);
+        ApiInterface api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterface.class);
         Call<String> call = api.transactionHistory(token,address,20,nextToken);
         call.enqueue(new Callback<String>() {
             @Override

@@ -116,6 +116,11 @@ public class SS_SearchResult extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     // 프래그먼트 어답터에서 Uid 받기 위해서 필요
     public String getUid() {
         return uid;

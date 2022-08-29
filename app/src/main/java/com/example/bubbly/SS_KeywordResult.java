@@ -1,5 +1,6 @@
 package com.example.bubbly;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,25 +9,40 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.bubbly.controller.Feed_Adapter;
+import com.example.bubbly.controller.NFTSell_Adapter;
 import com.example.bubbly.model.Feed_Item;
+import com.example.bubbly.model.NFTSell_Item;
+import com.example.bubbly.model.Ranking_Item;
+import com.example.bubbly.retrofit.ApiClient;
+import com.example.bubbly.retrofit.ApiInterface;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SS_KeywordResult extends AppCompatActivity {
 
     Toolbar toolbar;
     ImageView option;
 
-    String keywork = "기본";
+    String keyword = "기본";
 
-    private Feed_Adapter adapter;
-    private List<Feed_Item> postsList;
+    private ArrayList<NFTSell_Item> list;
+    private NFTSell_Adapter adapter;
 
     RecyclerView recyclerView;
 
@@ -41,7 +57,7 @@ public class SS_KeywordResult extends AppCompatActivity {
 
         // 어떤 카테고리를 들어온건지 (어떤 카테고리의 글들을 불러올 것인지)
         Bundle extras = getIntent().getExtras();
-        keywork = extras.getString("keyword");
+        keyword = extras.getString("keyword");
 
 
         // 리소스 ID 선언
@@ -53,9 +69,9 @@ public class SS_KeywordResult extends AppCompatActivity {
     }
 
     private void initiallize() {
-//        toolbar = findViewById(R.id.toolbar_KeywordResult);
+        toolbar = findViewById(R.id.toolbar_KeywordResult);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(""+keywork);
+        getSupportActionBar().setTitle(""+keyword);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        option = findViewById(R.id.keywordresult_option);
@@ -65,43 +81,84 @@ public class SS_KeywordResult extends AppCompatActivity {
 
 
     // 데이터 http 요청
-    private void loadrecycler() {
-        // 쓰레드 http 요청 & run 데이터 넣기
-        fillList();
-    }
+//    private void loadrecycler() {
+//        // 쓰레드 http 요청 & run 데이터 넣기
+//        fillList();
+//    }
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
-    private void fillList() {
-        this.postsList = new ArrayList();
+//    private void fillList() {
+//        this.postsList = new ArrayList();
+//
+//        String 임시프사 = "https://s2.coinmarketcap.com/static/img/coins/200x200/4030.png";
+//        String 임시미디어 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
+//
+//
+//        for (int i = 0; i < 20; i++) {
+//            // TODO 시간 계산 → String 으로 넣어주기
+//            this.postsList.add(new Feed_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h",  false));
+//
+//        }
+//
+//        setUpRecyclerView();
+//    }
 
-        String 임시프사 = "https://s2.coinmarketcap.com/static/img/coins/200x200/4030.png";
-        String 임시미디어 = "https://image.shutterstock.com/image-vector/example-sign-paper-origami-speech-260nw-1164503347.jpg";
+    private void selectAllNFTs() {
+        list = new ArrayList<>();
+        ViewGroup view = (ViewGroup) findViewById(android.R.id.content);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        adapter = new NFTSell_Adapter(getApplicationContext(),list,this,view);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        //위치 유지
+        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+        //위치 유지
+        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        recyclerView.addOnScrollListener(onScrollListener);
+        //판매중인 nft 목록 가져오기
+        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<NFTSell_Item>> call = api.selectAllSelledNftList();
+        call.enqueue(new Callback<List<NFTSell_Item>>() {
+            @Override
+            public void onResponse(Call<List<NFTSell_Item>> call, Response<List<NFTSell_Item>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<NFTSell_Item> responseResult = response.body();
+                    for (int i = 0; i < responseResult.size(); i++) {
+                        System.out.println("nft 판매 목록"+responseResult.get(i).getNft_id());
+                        list.add(new NFTSell_Item(responseResult.get(i).getNft_id(),
+                                responseResult.get(i).getSeller_id(),
+                                responseResult.get(i).getSell_price(),
+                                responseResult.get(i).getApp_id(),
+                                responseResult.get(i).getNft_des(),
+                                responseResult.get(i).getNft_name(),
+                                responseResult.get(i).getFile_save_url(),
+                                responseResult.get(i).getNovaland_account_addr()));
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<NFTSell_Item>> call, Throwable t) {
+                Log.e("nft 생성 실패", t.getMessage());
+            }
+        });
 
 
-        for (int i = 0; i < 20; i++) {
-            // TODO 시간 계산 → String 으로 넣어주기
-            this.postsList.add(new Feed_Item(임시프사, "이름" + i, "아이디" + i, "내용", "", 1, 2, 3, "", i + "h",  false));
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(keyword.equals("NFT")){
+            selectAllNFTs();
+        }else if(keyword.equals("커뮤니티")){
+
+        }else if(keyword.equals("종합")){
 
         }
 
-        setUpRecyclerView();
-    }
-
-    private void setUpRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-        this.adapter = new Feed_Adapter(getApplicationContext(), this.postsList);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(this.adapter);
-
-        //위치 유지
-        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
-
-        //위치 유지
-        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-
-        recyclerView.addOnScrollListener(onScrollListener);
     }
 
     // 바닥에 도달했을 때...

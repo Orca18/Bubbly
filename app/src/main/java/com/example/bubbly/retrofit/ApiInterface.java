@@ -18,9 +18,11 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -309,7 +311,7 @@ public interface ApiInterface {
     @POST("chat/deleteChatParticipant")
     Call<String> deleteChatParticipant(@Field("user_id") String userId, @Field("chat_room_id") String chatRoomId);
 
-    // todo nft 관련된 api (끝 지점)
+    // todo nft 관련된 api (시작 지점)
     @Multipart
     @POST("nft-creation") // nft 저장
     Call<String> nftCreation(@Part("mnemonic") String mnemonic,
@@ -351,7 +353,7 @@ public interface ApiInterface {
     Call<List<NFT_Item>> selectNftUsingHolderId(@Query("holder_id") String holder_id);
 
     @GET("nft/selectAllSelledNftList") // 모든 판매중인 nft리스트
-    Call<String> selectAllSelledNftList();
+    Call<List<NFTSell_Item>> selectAllSelledNftList();
 
     @GET("nft/selectSelledNftListUsingSellerId") // 특정 사용자가 판매중인 NFT리스트
     Call<List<NFTSell_Item>> selectSelledNftListUsingSellerId(@Query("seller_id") String seller_id);
@@ -366,4 +368,17 @@ public interface ApiInterface {
     Call<List<Kim_JoinedCom_Response>> selectCommunitySearchResultList(@Query("search_text") String search_text); // 검색어
 
     // todo community 관련 api (끝 지점)
+
+    //todo wallet 관련 api
+    @FormUrlEncoded
+    @POST("wallet/exchange")
+    Call<String> exchange(@Field("sender_addr") String sender_addr,
+                          @Field("sender_mnemonic") String sender_mnemonic,
+                          @Field("token_amount") String token_amount);
+
+    // todo 블록체인에서 거래기록 가져오기
+    @GET("v2/accounts/{address}/transactions")
+    Call<String> transactionHistory(@Header("x-api-key") String token,
+                                    @Path(value = "address", encoded = true) String address,
+                                    @Query("limit") int limit, @Query("next") String nextToken);
 }

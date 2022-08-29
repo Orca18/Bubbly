@@ -1,7 +1,4 @@
 package com.example.bubbly;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
@@ -12,7 +9,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -77,7 +73,7 @@ public class Community_MainPage extends AppCompatActivity {
 
     SwipeRefreshLayout swipeRefreshLayout;
 
-    String 가입상태;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,15 +86,15 @@ public class Community_MainPage extends AppCompatActivity {
         com_id = intent.getStringExtra("com_id");
 
         // TODO 인텐트로 온 경우, 예외처리하기
-        if (intent.getData() != null) {
-            com_id = intent.getDataString().replace("bubbly2://3.39.84.115/", "");
+        if(intent.getData() != null){
+            com_id = intent.getDataString().replace("bubbly2://3.39.84.115/","");
         }
 
 
         initialize();
         // 커뮤니티 정보 가져오기
         GetComInfo();
-        // 커뮤니티 내 본인 정보 가져오기 (가입 여부)
+        // 커뮤니티 내 본인 정보 가져오기 (가입 상태)
         GetUserStatus();
         // 리사이클러뷰 위 쪽 클릭 리스너
         listeners();
@@ -109,113 +105,18 @@ public class Community_MainPage extends AppCompatActivity {
     }
 
     private void GetUserStatus() {
-        // TODO 이 주석 위치에 '가입 여부 y/n' 확인하는 메소드 추가하기
-        CheckJoinStatus();
-        if (가입상태.equals("n")) {        // 아직 회원이 아니라면, 가입 신청 버튼 띄우기
-            tv_join_yn.setText("가입 신청"); // 적당한 아이콘 찾아보기
-        } // 가입 상태면 탈퇴 신청 (y/n) 다이얼로그 띄우기 ==> 어차피 처음에는 가입함으로 뜸
 
-
-        ll_join.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (가입상태.equals("n")) {
-                    JoinComRequest(); // 가입 신청
-                } else { // 가입중이라, 탈퇴
-//                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            switch (which) {
-//                                case DialogInterface.BUTTON_POSITIVE:
-//                                    //Yes 버튼을 클릭했을때 처리 == 탈퇴하고, 가입 상태 n으로 변경
-                                    ExitCom(); // 탈퇴
-                                    가입상태 = "n";
-//                                    break;
+//        ll_join.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(join_yn.equals("y")){
 //
-//                                case DialogInterface.BUTTON_NEGATIVE:
-//                                    //No 버튼을 클릭했을때 처리
-//                                    break;
-//                            }
-//                        }
-//                    };
+//                } else {
+//                    // 재가입 신청
 //
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-//                    builder.setMessage("탈퇴하시겠습니까?").setPositiveButton("예", dialogClickListener)
-//                            .setNegativeButton("아니요", dialogClickListener).show();
-
-
-                }
-
-            }
-        });
-
-
-    }
-
-    private void CheckJoinStatus() {
-        가입상태 = "n";
-    }
-
-
-    private void JoinComRequest() {
-        Log.e("오류태그", "user_id, com_id: " + user_id + com_id);
-        Call<String> call = api.createCommunityParticipationReq(user_id, com_id);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(getApplicationContext(), "가입 신청 보냄", Toast.LENGTH_SHORT).show();
-
-                    JoinComReqestAuto();// 일단은 자동 승인
-
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e("게시글 생성 에러", t.getMessage());
-            }
-        });
-    }
-
-
-    private void ExitCom() {
-        Call<String> call = api.deleteCommunityParticipant(user_id, com_id);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(getApplicationContext(), "탈퇴 완료", Toast.LENGTH_SHORT).show();
-                    tv_join_yn.setText("가입 신청");
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e("게시글 생성 에러", t.getMessage());
-            }
-        });
-    }
-
-
-    private void JoinComReqestAuto() {
-        Call<String> call = api.approveCommunityParticipation(user_id, com_id);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(getApplicationContext(), "가입 승인", Toast.LENGTH_SHORT).show();
-                    tv_join_yn.setText("가입됨");
-                    가입상태 = "y";
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e("게시글 생성 에러", t.getMessage());
-            }
-        });
+//                }
+//            }
+//        });
     }
 
 
@@ -252,7 +153,7 @@ public class Community_MainPage extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
-
+        
     }
 
 
@@ -262,13 +163,19 @@ public class Community_MainPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(getApplicationContext(), Community_Info.class);
-                mIntent.putExtra("com_id", com_id);
-                mIntent.putExtra("com_name", com_name);
-                mIntent.putExtra("com_owner", com_owner);
+                mIntent.putExtra("com_id",com_id);
+                mIntent.putExtra("com_name",com_name);
+                mIntent.putExtra("com_owner",com_owner);
                 startActivity(mIntent);
             }
         });
 
+        ll_join.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경
+            }
+        });
 
         // 멤버 목록 보여주기
         ll_member.setOnClickListener(new View.OnClickListener() {
@@ -289,7 +196,7 @@ public class Community_MainPage extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_post.php?id=" + com_id;
+                String sendMessage = "http://3.38.84.115/share/deep_post.php?id="+com_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
                 Intent shareIntent = Intent.createChooser(intent, "share");
@@ -304,7 +211,6 @@ public class Community_MainPage extends AppCompatActivity {
                 // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경...
                 // 어떻게 해당 커뮤니티에 해당하는 nft를 가져올지 고민하기
                 Toast.makeText(Community_MainPage.this, "준비 중...", Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -332,7 +238,7 @@ public class Community_MainPage extends AppCompatActivity {
                 com_owner = response.body().get(0).getCommunity_owner_id();
                 title_name.setText(com_name);
                 Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/" + response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
+                        .load("https://d2gf68dbj51k8e.cloudfront.net/"+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
                         .centerCrop()
                         .into(title_image);
 
@@ -345,13 +251,16 @@ public class Community_MainPage extends AppCompatActivity {
         });
 
 
+
         // 프로파일 이미지
-        if (UserInfo.profile_file_name != null && !UserInfo.profile_file_name.equals("")) {
+        if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
             Glide.with(getApplicationContext())
                     .load(UserInfo.profile_file_name)
                     .circleCrop()
                     .into(cv_profile);
         }
+
+
 
 
     }
@@ -396,7 +305,7 @@ public class Community_MainPage extends AppCompatActivity {
                                 responseResult.get(i).getCre_datetime(),
                                 responseResult.get(i).getCommunity_id(),
                                 responseResult.get(i).getMentioned_user_list()
-                        ));
+                                ));
                     }
                     post_adapter.notifyDataSetChanged();
                 }

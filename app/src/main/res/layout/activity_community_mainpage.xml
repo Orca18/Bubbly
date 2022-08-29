@@ -14,15 +14,25 @@
         android:foregroundTint="@color/white">
 
 
-
-        <ImageView
-            android:layout_gravity="right"
+        <TextView
+            android:id="@+id/tv_title_com"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_more_vert_24"/>
+            android:fontFamily="@font/spoqa_bold"
+            android:text="커뮤니티 정보"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+<!--        <ImageView-->
+<!--            android:layout_gravity="right"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_baseline_more_vert_24"/>-->
 
         <ImageView
+            android:id="@+id/bt_search_com"
             android:layout_gravity="right"
+            android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_search_24"/>

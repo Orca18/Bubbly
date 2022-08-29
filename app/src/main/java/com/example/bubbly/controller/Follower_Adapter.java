@@ -132,32 +132,6 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
             }
         });
 
-        holder.bt_follow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ApiInterface createFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = createFollowing_api.createFollowing(follower_response.getFollower_id(),user_id);
-                call.enqueue(new Callback<String>()
-                {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                    {
-                        if (response.isSuccessful() && response.body() != null)
-                        {
-                            notifyDataSetChanged();
-                            Log.e("팔로우 추가 성공", response.body().toString());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                    {
-                        Log.e("팔로우 추가 에러", t.getMessage());
-                    }
-                });
-            }
-        });
-
     }
 
     @Override

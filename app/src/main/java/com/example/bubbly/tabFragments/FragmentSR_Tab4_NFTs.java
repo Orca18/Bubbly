@@ -115,8 +115,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
                                     responseResult.get(i).getCre_datetime(),
                                     responseResult.get(i).getMentioned_user_list(),
                                     responseResult.get(i).getCommunity_id(),
-                                    responseResult.get(i).getLogin_id(),
-                                    responseResult.get(i).getPost_type()));
+                                    responseResult.get(i).getLogin_id()));
                         }
                     }
                     post_adapter.notifyDataSetChanged();
