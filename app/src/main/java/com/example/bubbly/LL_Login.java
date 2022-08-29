@@ -134,6 +134,7 @@ public class LL_Login extends AppCompatActivity {
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
                                             System.out.println(sharedPreferences.getString("mnemonic",""));
+                                            UserInfo.user_addr = sharedPreferences.getString("address","");
                                             UserInfo.mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
