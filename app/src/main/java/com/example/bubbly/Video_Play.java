@@ -6,8 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +20,7 @@ import com.example.bubbly.chatting.util.GetDate;
 public class Video_Play extends AppCompatActivity {
     VideoView vv;
     Button download;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,11 @@ public class Video_Play extends AppCompatActivity {
 
         vv= findViewById(R.id.vv);
         download = findViewById(R.id.download);
+
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.progressbar);
+        progressBar.startAnimation(anim);
 
         //비디오뷰의 재생, 일시정지 등을 할 수 있는 '컨트롤바'를 붙여주는 작업
         vv.setMediaController(new MediaController(this));
@@ -45,7 +54,16 @@ public class Video_Play extends AppCompatActivity {
             }
         });
 
-        download.setOnClickListener(new View.OnClickListener() {
+        vv.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+                    progressBar.setVisibility(View.GONE);
+                }      return false;
+            }
+        });
+
+        /*download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = GetDate.getTodayDateWithTime().replace(":","-").replace(" ","") + ".mp4";
@@ -60,7 +78,7 @@ public class Video_Play extends AppCompatActivity {
                 req.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
             }
-        });
+        });*/
 
     }//onCreate ..
 

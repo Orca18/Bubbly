@@ -279,7 +279,7 @@ public class ChattingRoom extends AppCompatActivity {
             updateDiv = 3;
         }
         // 서버에 사용자수 업데이트!
-        chatUtil.updateUserCountMap(chatRoomId,updateDiv,chatMemberList.size());
+        chatUtil.updateUserCountMap(chatRoomId,updateDiv,chatMemberList.size(), userId);
     }
 
     // 데이터 http 요청
@@ -768,7 +768,7 @@ public class ChattingRoom extends AppCompatActivity {
         }
 
         // 채팅방 나가기
-        chatUtil.updateUserCountMap(chatRoomId,1,chatMemberList.size());
+        chatUtil.updateUserCountMap(chatRoomId,1,chatMemberList.size(), userId);
 
         super.onDestroy();
     }

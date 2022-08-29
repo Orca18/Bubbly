@@ -194,11 +194,11 @@
         <activity
             android:name=".MM_Message"
             android:exported="true" >
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="FCM_NOTI_ACTIVITY" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ImageView_FullScreen_With_Save"

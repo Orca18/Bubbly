@@ -174,6 +174,10 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
                             // 채팅멤버 리스트
                             intent.putExtra("chatMemberList", chatMemberList);
 
+                            // 안읽은 메시지 0으로 변경하기
+                            holder.notReadMsgCount.setText("0");
+                            holder.notReadMsgCount.setVisibility(View.GONE);
+
                             //어답터에서 클릭 이용할 때, 아래 해줘야됨!
                             mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                             

@@ -1,5 +1,6 @@
 package com.example.bubbly.chatting.service;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -146,5 +147,10 @@ public class FCMService extends FirebaseMessagingService{
                         Log.w("가져온 토큰", token);
                     }
                 });
+    }
+
+    @Override
+    public void handleIntent(Intent intent) {
+        super.handleIntent(intent);
     }
 }

@@ -50,7 +50,7 @@ public interface ChatApiInterface {
     // 사용자수 맵 업데이트
     @FormUrlEncoded
     @POST("/updateUserCountMap") //
-    Call<String> updateUserCountMap(@Field("chat_room_id") String chatRoomId, @Field("update_div") int updateDiv, @Field("all_userCount") int allUserCount);
+    Call<String> updateUserCountMap(@Field("chat_room_id") String chatRoomId, @Field("update_div") int updateDiv, @Field("all_userCount") int allUserCount, @Field("user_id") String userId);
 
 
 }

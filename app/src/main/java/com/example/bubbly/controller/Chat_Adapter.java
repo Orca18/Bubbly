@@ -743,7 +743,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Log.d("thumbnailFileName: " , thumbnailFileName);
 
             // 썸네일 넣기
-            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((MyMsgViewHolderWithVideo)holder).thumbnail);
+            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail);
 
 
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
@@ -758,8 +758,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
-            // 클릭 시 재생 및 화면으로 이동
-            ((OpponentMsgViewHolderViewHolderWithVideo)holder).video_OpponentMsg.setOnClickListener(new View.OnClickListener() {
+            // 썸네일 클릭 시 재생화면으로 이동
+            ((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, Video_Play.class);
@@ -781,7 +781,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             String url = cloudFrontAddr + videoFileName;
 
             // 썸네일 넣기
-            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail);
+            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((MyMsgViewHolderWithDayAndVideo)holder).thumbnail);
 
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
@@ -796,8 +796,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
-            // 클릭 시 재생 및 화면으로 이동
-            ((MyMsgViewHolderWithDayAndVideo)holder).video_myMsg.setOnClickListener(new View.OnClickListener() {
+            // 썸네일 클릭 시 재생화면으로 이동
+            ((MyMsgViewHolderWithDayAndVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, Video_Play.class);
@@ -825,7 +825,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             String url = cloudFrontAddr + videoFileName;
 
             // 썸네일 넣기
-            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail);
+            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).thumbnail);
 
             // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
             ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
@@ -839,8 +839,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
 
-            // 클릭 시 재생 및 화면으로 이동
-            ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).video_OpponentMsg.setOnClickListener(new View.OnClickListener() {
+            // 썸네일 클릭 시 재생화면으로 이동
+            ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(mContext, Video_Play.class);

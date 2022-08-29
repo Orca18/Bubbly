@@ -235,6 +235,10 @@ public class MM_Message extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_c_message);
+
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
+        userId = preferences.getString("user_id", ""); // 로그인한 user_id값
+
         // 채팅서비스와 연결한다.
         connectToService();
 
@@ -303,9 +307,6 @@ public class MM_Message extends AppCompatActivity {
 
         // 채팅방 추가 버튼
         btnChatRoomAdd = findViewById(R.id.message_chat_room_add);
-
-        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
-        userId = preferences.getString("user_id", ""); // 로그인한 user_id값
     }
 
     // 바텀 메뉴 클릭
@@ -806,7 +807,7 @@ public class MM_Message extends AppCompatActivity {
                                     });
 
                             // 채팅방 사용자수 맵 업데이트
-                            chatUtil.updateUserCountMap(chatRoomId,2, 0);
+                            chatUtil.updateUserCountMap(chatRoomId,2, 0,userId);
                         } else {
                             Log.e("채팅멤버 FCM 구독 해지 완료 데이터 없음: ", "1111");
                         }
