@@ -15,8 +15,10 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.R;
 import com.example.bubbly.SS_SearchResult;
+import com.example.bubbly.controller.NFTSell_Adapter;
 import com.example.bubbly.controller.NFT_Adapter;
 import com.example.bubbly.controller.Post_Adapter;
+import com.example.bubbly.model.NFTSell_Item;
 import com.example.bubbly.model.NFT_Item;
 import com.example.bubbly.model.SearchedUser_Item;
 import com.example.bubbly.model.UserInfo;
@@ -41,8 +43,8 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
 
     View v;
 
-    private NFT_Adapter adapter;
-    private ArrayList<NFT_Item> list;
+    private NFTSell_Adapter adapter;
+    private ArrayList<NFTSell_Item> list;
     private ArrayList<SearchedUser_Item> userList;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
@@ -93,7 +95,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
         ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
         list = new ArrayList<>();
         userList = new ArrayList<>();
-        adapter = new NFT_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
+        adapter = new NFTSell_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -122,29 +124,33 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
                     }
 
                     for(int i = 0; i<userList.size(); i++){
-                        Call<List<NFT_Item>> call_nft = api.selectNftUsingHolderId(userList.get(i).getUser_id());
-                        call_nft.enqueue(new Callback<List<NFT_Item>>() {
+                        Call<List<NFTSell_Item>> call_nft = api.selectSelledNftListUsingSellerId(userList.get(i).getUser_id());
+                        call_nft.enqueue(new Callback<List<NFTSell_Item>>() {
                             @Override
-                            public void onResponse(Call<List<NFT_Item>> call, Response<List<NFT_Item>> response) {
+                            public void onResponse(Call<List<NFTSell_Item>> call, Response<List<NFTSell_Item>> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    List<NFT_Item> responseResult = response.body();
+                                    List<NFTSell_Item> responseResult = response.body();
                                     for(int j=0; j<responseResult.size(); j++){
                                         System.out.println("nft 보유 목록"+responseResult.get(j).getNft_id());
-                                        list.add(new NFT_Item(responseResult.get(j).getNft_id(),
+                                        list.add(new NFTSell_Item(responseResult.get(j).getNft_id(),
+                                                responseResult.get(j).getSeller_id(),
+                                                responseResult.get(j).getSell_price(),
+                                                responseResult.get(j).getApp_id(),
                                                 responseResult.get(j).getNft_des(),
                                                 responseResult.get(j).getNft_name(),
-                                                responseResult.get(j).getHolder_id(),
-                                                responseResult.get(j).getFile_save_url()));
+                                                responseResult.get(j).getFile_save_url(),
+                                                responseResult.get(j).getNovaland_account_addr()));
                                     }
+                                    adapter.notifyDataSetChanged();
                                 }
                             }
                             @Override
-                            public void onFailure(Call<List<NFT_Item>> call, Throwable t) {
+                            public void onFailure(Call<List<NFTSell_Item>> call, Throwable t) {
                                 Log.e("nft 보유목록 가져오기 실패", t.getMessage());
                             }
                         });
                     }
-                    adapter.notifyDataSetChanged();
+
                 }
             }
 

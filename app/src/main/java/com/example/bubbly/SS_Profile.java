@@ -1,5 +1,6 @@
 package com.example.bubbly;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -46,6 +47,8 @@ public class SS_Profile extends AppCompatActivity {
 
     // 툴바, 사이드 메뉴
     androidx.appcompat.widget.Toolbar toolbar;
+    TextView tv_title;
+    ImageView bt_search;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     ImageView sidemenu;
@@ -133,6 +136,8 @@ public class SS_Profile extends AppCompatActivity {
                 } else {
                     tv_user_intro.setText("");
                 }
+                //툴바 타이틀
+                tv_title.setText(user_nick);
 
                 //팔로워리스트 가져오기
                 ApiInterface selectFollowerList_api = ApiClient.getApiClient().create(ApiInterface.class);
@@ -142,6 +147,15 @@ public class SS_Profile extends AppCompatActivity {
                     public void onResponse(@NonNull Call<List<follower_Response>> call, @NonNull Response<List<follower_Response>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             List<follower_Response> responseResult = response.body();
+                            //만약 그 사람을 팔로잉하는 사람 중에 내가 있으면 팔로우 버튼을 언팔로우로 바꾼다.
+                            for(int i = 0; i<responseResult.size(); i++){
+                                System.out.println(responseResult.get(i).getFollower_id());
+                                if(UserInfo.user_id.equals(responseResult.get(i).getFollower_id())){
+                                    bt_following.setVisibility(View.GONE);
+                                    bt_unfollowing.setVisibility(View.VISIBLE);
+                                    break;
+                                }
+                            }
                             tv_follower.setText("" + responseResult.size());
                         }
                     }
@@ -160,13 +174,6 @@ public class SS_Profile extends AppCompatActivity {
                     public void onResponse(@NonNull Call<List<following_Response>> call, @NonNull Response<List<following_Response>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             List<following_Response> responseResult = response.body();
-                            //만약 그 사람을 팔로잉하는 사람 중에 내가 있으면 팔로우 버튼을 언팔로우로 바꾼다.
-                            for(int i = 0; i<responseResult.size(); i++){
-                                if(UserInfo.user_id.equals(responseResult.get(i).getFollowee_id())){
-                                    bt_following.setVisibility(View.GONE);
-                                    bt_unfollowing.setVisibility(View.VISIBLE);
-                                }
-                            }
                             tv_following.setText("" + responseResult.size());
                         }
                     }
@@ -235,7 +242,10 @@ public class SS_Profile extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        //서치 버튼
+        tv_title = findViewById(R.id.tv_title_ss_profile);
+        // 툴바 안 검색 버튼
+        bt_search = findViewById(R.id.bt_search_ss_profile);
         swipeRefreshLayout = findViewById(R.id.ss_profile_refresh);
 
 
@@ -268,7 +278,12 @@ public class SS_Profile extends AppCompatActivity {
                     {
                         if (response.isSuccessful() && response.body() != null)
                         {
+
+                            Toast.makeText(getApplicationContext(), "팔로워로 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                            setProfileData();
+                            swipeRefreshLayout.setRefreshing(false);
                             Log.e("팔로우 추가 성공", response.body().toString());
+
                         }
                     }
                     @Override
@@ -293,6 +308,9 @@ public class SS_Profile extends AppCompatActivity {
                     {
                         if (response.isSuccessful() && response.body() != null)
                         {
+                            Toast.makeText(getApplicationContext(), "팔로잉이 취소되었습니다.", Toast.LENGTH_SHORT).show();
+                            setProfileData();
+                            swipeRefreshLayout.setRefreshing(false);
                             Log.e("팔로우 삭제 성공", response.body().toString());
                         }
                     }
@@ -313,13 +331,20 @@ public class SS_Profile extends AppCompatActivity {
             }
         });
 
+        //툴바 서치 버튼
+        bt_search.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);
+            mIntent.putExtra("keyword", "");
+            startActivity(mIntent);
+        });
+
         // 리사이클러뷰 새로고침 인식
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-//                        loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
+                        setProfileData();
+                        //Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
                         /* 업데이트가 끝났음을 알림 */
                         swipeRefreshLayout.setRefreshing(false);
                     }
