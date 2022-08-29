@@ -23,11 +23,13 @@ public class RecentlySearched_Adapter extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
     ArrayList<String> keywordList;
+    RecentlySearched_Adapter_Callback callback;
 
-    public RecentlySearched_Adapter(Context context, ArrayList<String> data) {
+    public RecentlySearched_Adapter(Context context, ArrayList<String> data, RecentlySearched_Adapter_Callback callback) {
         mContext = context;
         keywordList = data;
         mLayoutInflater = LayoutInflater.from(mContext);
+        this.callback = callback;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class RecentlySearched_Adapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View converView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         View view = mLayoutInflater.inflate(R.layout.item_recently_searched_listview, null);
 
         LinearLayout linearLayout = view.findViewById(R.id.ll_item_recentlySearched);
@@ -54,14 +56,16 @@ public class RecentlySearched_Adapter extends BaseAdapter {
 
         String recentlySearched = keywordList.get(position);
         keyword.setText(recentlySearched);
+        System.out.println("리센트리서치 어댑터"+recentlySearched);
 
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(mContext.getApplicationContext(),"TODO 해당 키워드를 검색한 결과 페이지 : "+ recentlySearched + "위",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, SS_SearchResult.class);
+                System.out.println("인텐트"+keywordList.get(position));
                 intent.putExtra("keyword", keywordList.get(position));
                 mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                callback.updateListRecentlySearched(keywordList.get(position));
             }
         });
 

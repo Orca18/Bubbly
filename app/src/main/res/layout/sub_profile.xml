@@ -26,15 +26,24 @@
                     android:background="@color/white"
                     app:layout_scrollFlags="scroll|enterAlways">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/tv_title_ss_profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_baseline_more_vert_24"
-                        app:tint="#222" />
+                        android:fontFamily="@font/spoqa_bold"
+                        android:text="사용자 정보"
+                        android:textColor="@color/black"
+                        android:textSize="20dp" />
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="right"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:src="@drawable/ic_baseline_more_vert_24"-->
+<!--                        app:tint="#222" />-->
 
                     <ImageView
+                        android:id="@+id/bt_search_ss_profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
@@ -58,17 +67,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ScrollView
-                        android:id="@+id/ss_text_scrollview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:fillViewport="true"
-                        android:nestedScrollingEnabled="true"
-                        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<!--                    <ScrollView-->
+<!--                        android:id="@+id/ss_text_scrollview"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:fillViewport="true"-->
+<!--                        android:nestedScrollingEnabled="true"-->
+<!--                        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
                         <include layout="@layout/sub_profile_include" />
 
-                    </ScrollView>
+<!--                    </ScrollView>-->
                 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             </RelativeLayout>
