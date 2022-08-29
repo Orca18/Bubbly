@@ -122,8 +122,10 @@ public class LL_Splash extends AppCompatActivity {
                                                             masterkey,
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+                                            String address = sharedPreferences.getString("address","");
                                             String mnemonic = sharedPreferences.getString("mnemonic","");
                                             Log.e("니모닉",mnemonic);
+                                            UserInfo.user_addr = address;
                                             UserInfo.mnemonic = mnemonic;
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();

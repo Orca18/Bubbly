@@ -41,8 +41,8 @@ public class LL_Register_C extends AppCompatActivity {
     LinearLayout bt_go_login;
     androidx.appcompat.widget.Toolbar toolbar;
 
-    Button bt_copy_mnemonic, bt_share_wallet;
-    TextView tv_mnemonic;
+    Button bt_copy_address,bt_copy_mnemonic, bt_share_wallet;
+    TextView tv_address,tv_mnemonic;
     ClipboardManager clipboard;
 
     @Override
@@ -56,17 +56,22 @@ public class LL_Register_C extends AppCompatActivity {
         // 뒤로가기 버튼, 디폴트로 true 만 해도 백버튼이 생김
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //로그인 페이지 이동
-       bt_copy_mnemonic = findViewById(R.id.bt_copy_mnemonic_register);
-       bt_share_wallet = findViewById(R.id.bt_shar_wallet_register);
-       bt_go_login = findViewById(R.id.bt_go_login_register);
-       tv_mnemonic = findViewById(R.id.tv_mnemonic_register);
+        //리소스 할당
+        bt_copy_address = findViewById(R.id.bt_copy_address_register);
+        tv_address = findViewById(R.id.tv_address_register);
+        bt_copy_mnemonic = findViewById(R.id.bt_copy_mnemonic_register);
+        tv_mnemonic = findViewById(R.id.tv_mnemonic_register);
+        bt_share_wallet = findViewById(R.id.bt_shar_wallet_register);
+        bt_go_login = findViewById(R.id.bt_go_login_register);
+
 
         //니모닉 가져오기
         Intent mIntent = getIntent();
+        String address = mIntent.getStringExtra("address");
         String mnemonic = mIntent.getStringExtra("mnemonic");
 
         //데이터 표시
+        tv_address.setText(address);
         tv_mnemonic.setText(mnemonic);
 
         // 로그인 페이지 이동
@@ -76,6 +81,17 @@ public class LL_Register_C extends AppCompatActivity {
                 Intent mIntent = new Intent(getApplicationContext(), LL_Login.class);
                 startActivity(mIntent);
                 finish();
+            }
+        });
+
+        //주소 카피
+        bt_copy_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("address", address);
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getApplicationContext(), "클립보드에 복사되었습니다.",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -99,8 +115,8 @@ public class LL_Register_C extends AppCompatActivity {
                 if(isAppInstalled(unicornWalletPackageName)){
                     Intent intent = new Intent();
                     intent.setComponent(new ComponentName(unicornWalletPackageName,unicornWalletPackageName+".MainActivity"));
-                    intent.putExtra("address","5QX5D4HPXQIQ3ODMGN6NTH6GO435N5GJSA72FBKSJI4WCAJ5VAXWTAF6UU");
-                    intent.putExtra("mnemonic","above luxury grocery barely obtain recipe record need card invest gold exclude market huge frozen wheat nation deal same option burst slam section about stone");
+                    intent.putExtra("address",address);
+                    intent.putExtra("mnemonic",mnemonic);
                     startActivity(intent);
                 }
                 else{

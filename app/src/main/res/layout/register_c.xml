@@ -38,55 +38,54 @@
             android:layout_height="26dp" />
 
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:visibility="gone">-->
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginHorizontal="44dp"-->
-<!--            android:fontFamily="@font/spoqa_bold"-->
-<!--            android:text="주소"-->
-<!--            android:textSize="18dp"-->
-<!--            android:textColor="@color/black" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="44dp"
+            android:fontFamily="@font/spoqa_bold"
+            android:text="주소"
+            android:textSize="18dp"
+            android:textColor="@color/black" />
 
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginHorizontal="44dp"-->
-<!--            android:textSize="12dp"-->
-<!--            android:fontFamily="@font/spoqa_medium"-->
-<!--            android:text="블록체인 계정 주소입니다. 블록체인 네트워크 내 자산정보를 조회할 수 있습니다."/>-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="44dp"
+            android:textSize="12dp"
+            android:fontFamily="@font/spoqa_medium"
+            android:text="블록체인 계정 주소입니다. 블록체인 네트워크 내 자산정보를 조회할 수 있습니다."/>
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal">-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-<!--                <Button-->
-<!--                    android:id="@+id/bt_copy_address_register"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="44dp"-->
-<!--                    android:textSize="10dp"-->
-<!--                    android:layout_weight="0.3"-->
-<!--                    app:icon="@drawable/ic_baseline_content_copy_24" />-->
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_address_register"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="16dp"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:layout_marginBottom="10dp"-->
-<!--                    android:layout_marginRight="44dp"-->
-<!--                    android:fontFamily="@font/spoqa_medium"-->
-<!--                    android:text="aaa"/>-->
-<!--            </LinearLayout>-->
+                <Button
+                    android:id="@+id/bt_copy_address_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="44dp"
+                    android:textSize="10dp"
+                    android:layout_weight="0.3"
+                    app:icon="@drawable/ic_baseline_content_copy_24" />
+                <TextView
+                    android:id="@+id/tv_address_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="44dp"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:text="aaa"/>
+            </LinearLayout>
 
-<!--        </LinearLayout>-->
+        </LinearLayout>
 
 
         <View
