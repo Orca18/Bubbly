@@ -142,7 +142,8 @@ public interface ApiInterface {
 //                            @Part("fileContents[]") String fileContents,
                              @Part("share_post_yn") String share_post_yn,
                              @Part("community_id") String community_id,
-                             @Part("mentioned_user_id_list[]") String mentioned_user_id_list);
+                             @Part("mentioned_user_id_list[]") String mentioned_user_id_list,
+                             @Part("post_type") String post_type);
     @Multipart
     @POST("post/updatePost") // 게시글 수정 api
     Call<String> updatePost(@Part("post_id") String post_id,

@@ -120,7 +120,8 @@ public class Fragment_Tab1_AllPosts_ss extends Fragment {
                                 responseResult.get(i).getCre_datetime(),
                                 responseResult.get(i).getMentioned_user_list(),
                                 responseResult.get(i).getCommunity_id(),
-                                responseResult.get(i).getLogin_id()));
+                                responseResult.get(i).getLogin_id(),
+                                responseResult.get(i).getPost_type()));
                     }
                     post_adapter.notifyDataSetChanged();
                 }

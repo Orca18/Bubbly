@@ -40,14 +40,14 @@ public interface Kim_ApiInterface {
     Call<String> createCommunityParticipant(
             @Field("user_id") String user_id,
             @Field("community_id") String community_id
-            );
+    );
 
     // 3. 커뮤니티 아이디로 커뮤니티 정보 조회
     @GET("community/selectCommunityUsingCommunityId")
     Call<List<Kim_Com_Info_Response>> selectCommunityUsingCommunityId(
             @Query("community_id") String community_id
     );
-    
+
 
     // 4. 멤버 목록 불러오기
     @GET("community/selectCommunityParticipantList")
@@ -57,12 +57,11 @@ public interface Kim_ApiInterface {
 
 
     // 5. 공지사항 가져오기
-    
-    
-    
+
+
     // 6. 커뮤니티에서 파생(?)된 NFT 목록
-    
-    
+
+
     // 7. 커뮤니티 정보 수정
     @Multipart
     @POST("community/updateCommunity")
@@ -75,7 +74,7 @@ public interface Kim_ApiInterface {
             @Part("rule") String rule
 
     );
-    
+
     // 8. 특정 커뮤니티의 게시글 가져오기
     @GET("post/selectCommunityPost")
     Call<List<Kim_Com_post_Response>> selectCommunityPost(
@@ -91,15 +90,6 @@ public interface Kim_ApiInterface {
     );
 
 
-    // 10. 커뮤니티 나가기
-    @FormUrlEncoded
-    @POST("community/participate/deleteCommunityParticipant")
-    Call<String> deleteCommunityParticipant(
-            @Part("user_id") String user_id,
-            @Part("community_id") String community_id
-    );
-
-
     // 9. 커뮤니티 폐쇄
     @FormUrlEncoded
     @POST("community/deleteCommunity")
@@ -108,5 +98,45 @@ public interface Kim_ApiInterface {
     );
 
     // 10 ~ : 게시글 작성 관련 수정 & 검색?
-    
+
+
+    // 커뮤니티 가입 신청
+    @FormUrlEncoded
+    @POST("community/participate/createCommunityParticipationReq")
+    Call<String> createCommunityParticipationReq(
+            @Field("community_participation_req_id") String community_participation_req_id, // 이게 유저 아이디
+            @Field("community_id") String community_id
+    );
+
+    // 커뮤니티 가입 요청자 리스트 조회
+    @GET("community/participate/selectCommunityParticipantReqList")
+    Call<List<Kim_Com_ParticipantReq_Response>> selectCommunityParticipantReqList(
+            @Query("community_id") String community_id
+    );
+
+    // 커뮤니티 가입 승인
+    @FormUrlEncoded
+    @POST("community/participate/approveCommunityParticipation")
+    Call<String> approveCommunityParticipation(
+            @Field("community_participation_req_id") String user_id,
+            @Field("community_id") String community_id
+    );
+
+    // 커뮤니티 가입 거절
+    @FormUrlEncoded
+    @POST("community/participate/rejectCommunityParticipation")
+    Call<String> rejectCommunityParticipation(
+            @Field("user_id") String user_id,
+            @Field("community_id") String community_id
+    );
+
+
+    // 커뮤니티 나가기
+    @FormUrlEncoded
+    @POST("community/participate/deleteCommunityParticipant")
+    Call<String> deleteCommunityParticipant(
+            @Field("user_id") String user_id,
+            @Field("community_id") String community_id
+    );
+
 }
