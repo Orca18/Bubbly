@@ -60,7 +60,7 @@ public class Ranking_Adapter extends BaseAdapter {
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext.getApplicationContext(),"TODO 해당 키워드를 검색한 결과 페이지 : "+ s_rank + "위",Toast.LENGTH_SHORT).show();
+
             }
         });
 

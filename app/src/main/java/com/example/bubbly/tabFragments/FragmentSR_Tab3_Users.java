@@ -77,7 +77,6 @@ public class FragmentSR_Tab3_Users extends Fragment {
         v = inflater.inflate(R.layout.fragment_ss_search_result, container, false);
         recyclerView = v.findViewById(R.id.rv_searchResult);
 
-        selectUser();
         return v;
     }
 
@@ -134,6 +133,7 @@ public class FragmentSR_Tab3_Users extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        selectUser();
     }
 
 }

@@ -97,6 +97,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
         //전체 nft 목록 가져오기
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        System.out.println("nfthold"+UserInfo.user_id);
         Call<List<NFT_Item>> call = api.selectNftUsingHolderId(UserInfo.user_id);
         call.enqueue(new Callback<List<NFT_Item>>() {
             @Override

@@ -2,8 +2,11 @@ package com.example.bubbly;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -89,10 +92,41 @@ public class LL_Register_C extends AppCompatActivity {
         });
 
         //지갑연결
-
-
+        bt_share_wallet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String unicornWalletPackageName = "com.example.unicornWallet";
+                if(isAppInstalled(unicornWalletPackageName)){
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName(unicornWalletPackageName,unicornWalletPackageName+".MainActivity"));
+                    intent.putExtra("address","5QX5D4HPXQIQ3ODMGN6NTH6GO435N5GJSA72FBKSJI4WCAJ5VAXWTAF6UU");
+                    intent.putExtra("mnemonic","above luxury grocery barely obtain recipe record need card invest gold exclude market huge frozen wheat nation deal same option burst slam section about stone");
+                    startActivity(intent);
+                }
+                else{
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    intent.setData(Uri.parse("market://details?id="+unicornWalletPackageName));
+                    startActivity(intent);
+                }
+            }
+        });
 
     } // onCreate 닫는곳
+
+
+
+    private boolean isAppInstalled(String packageName) {
+        PackageManager pm = getPackageManager();
+        boolean installed = false;
+        try {
+            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
+            installed = true;
+        } catch (PackageManager.NameNotFoundException e) {
+            installed = false;
+        }
+        return installed;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

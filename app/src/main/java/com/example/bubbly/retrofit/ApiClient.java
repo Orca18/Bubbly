@@ -14,6 +14,8 @@ public class ApiClient {
     private static final String BASE_URL = "http://3.39.84.115:80/";
 
     private static Retrofit retrofit;
+    private static Retrofit retrofit_pure_stake;
+    private static Retrofit retrofit_test;
 
     public static Retrofit getApiClient()
     {
@@ -55,15 +57,39 @@ public class ApiClient {
                 .readTimeout(40, TimeUnit.SECONDS)
                 .writeTimeout(40, TimeUnit.SECONDS)
                 .build();
+        if (retrofit_pure_stake == null) {
+            retrofit_pure_stake = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClient)
+                    .build();
+        }
+        return retrofit_pure_stake;
+    }
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl(url)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(okHttpClient)
+    public static Retrofit getApiClientTest(String url)
+    {
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+
+        // timeout setting 해주기
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
                 .build();
-
-        return retrofit;
+        if (retrofit_test == null) {
+            retrofit_test = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClient)
+                    .build();
+        }
+        return retrofit_test;
     }
 
 

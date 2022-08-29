@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,6 +42,8 @@ public class Community_MainPage extends AppCompatActivity {
 
     String com_id;
     Toolbar toolbar;
+    TextView tv_title;
+    ImageView bt_search;
     //////////////////////////////////////////////
     Kim_Post_Adapter post_adapter;
     ArrayList<Kim_Com_post_Response> postList;
@@ -126,6 +129,10 @@ public class Community_MainPage extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        tv_title = findViewById(R.id.tv_title_com);
+        // 툴바 안 검색 버튼
+        bt_search = findViewById(R.id.bt_search_com);
+
         // 게시글
         recyclerView = findViewById(R.id.com_main_recyclerview);
         // 나머지
@@ -225,6 +232,12 @@ public class Community_MainPage extends AppCompatActivity {
                 startActivity(mIntent);
             }
         });
+        //툴바 서치 버튼
+        bt_search.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);
+            mIntent.putExtra("keyword", "");
+            startActivity(mIntent);
+        });
     }
 
 
@@ -237,6 +250,7 @@ public class Community_MainPage extends AppCompatActivity {
                 com_name = response.body().get(0).getCommunity_name();
                 com_owner = response.body().get(0).getCommunity_owner_id();
                 title_name.setText(com_name);
+                tv_title.setText(com_name); //툴바 타이틀 설정
                 Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
                         .load("https://d2gf68dbj51k8e.cloudfront.net/"+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
                         .centerCrop()
@@ -250,8 +264,6 @@ public class Community_MainPage extends AppCompatActivity {
             }
         });
 
-
-
         // 프로파일 이미지
         if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
             Glide.with(getApplicationContext())
@@ -259,9 +271,6 @@ public class Community_MainPage extends AppCompatActivity {
                     .circleCrop()
                     .into(cv_profile);
         }
-
-
-
 
     }
 

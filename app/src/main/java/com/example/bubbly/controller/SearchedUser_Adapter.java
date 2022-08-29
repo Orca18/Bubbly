@@ -1,6 +1,7 @@
 package com.example.bubbly.controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +15,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.Community_MainPage;
 import com.example.bubbly.R;
+import com.example.bubbly.SS_Profile;
 import com.example.bubbly.model.SearchedUser_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -69,7 +72,16 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         }else{
             //아무 처리도 하지 않는다. default 프로필 이미지 나타남.
         }
-        //이미 팔로우한 사람을 중복 팔로우하지 않게 기존 팔로우 목록을 가져와서 저장한다.
+        holder.iv_user_image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(mContext, SS_Profile.class);
+                mIntent.putExtra("user_id",user_response.getUser_id());
+                mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+         //이미 팔로우한 사람을 중복 팔로우하지 않게 기존 팔로우 목록을 가져와서 저장한다.
         //followee id가 follower목록에 존재하면 맞팔로우버튼을 숨긴다.
         ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<following_Response>> call = selectFolloweeList_api.selectFolloweeList(user_id);
@@ -84,7 +96,9 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
                     List<following_Response> responseResult = response.body();
                     boolean isAlreadyFollow = false;
                     for(int i=0; i<responseResult.size(); i++){
+
                         String element = responseResult.get(i).getFollowee_id();
+                        System.out.println(element+"이번 대상-내 팔로워들"+responseResult.get(i).getFollowee_id());
                         if (element.equals(user_response.getUser_id())) {
                             isAlreadyFollow = true;
                             break;
@@ -92,6 +106,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
                             isAlreadyFollow = false;
                         }
                     }
+                    System.out.println(isAlreadyFollow);
                     if(isAlreadyFollow){
                         holder.bt_follow.setVisibility(View.INVISIBLE);
                         holder.bt_unfollow.setVisibility(View.VISIBLE);
