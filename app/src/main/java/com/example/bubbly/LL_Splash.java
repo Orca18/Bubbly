@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -122,6 +123,8 @@ public class LL_Splash extends AppCompatActivity {
                                                             masterkey,
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+                                            Map<String, ?> all = sharedPreferences.getAll();
+                                            System.out.println(all.values());
                                             String address = sharedPreferences.getString("address","");
                                             String mnemonic = sharedPreferences.getString("mnemonic","");
                                             Log.e("니모닉",mnemonic);

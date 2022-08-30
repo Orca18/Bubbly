@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -134,6 +135,8 @@ public class LL_Login extends AppCompatActivity {
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
                                             System.out.println(sharedPreferences.getString("mnemonic",""));
+                                            Map<String, ?> all = sharedPreferences.getAll();
+                                            System.out.println(all.values());
                                             UserInfo.user_addr = sharedPreferences.getString("address","");
                                             UserInfo.mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
                                         } catch (GeneralSecurityException e) {
