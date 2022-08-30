@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.example.bubbly.controller.Ranking_Adapter;
 import com.example.bubbly.controller.RecentlySearched_Adapter;
+import com.example.bubbly.controller.RecentlySearched_Adapter_Callback;
 import com.example.bubbly.model.Ranking_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -45,6 +46,25 @@ public class SS_SearchMode extends AppCompatActivity {
     SharedPreferences preferences;
     String user_id;
 
+    RecentlySearched_Adapter_Callback callback = new RecentlySearched_Adapter_Callback() {
+        @Override
+        public void updateListRecentlySearched(String keyword) {
+            //역순으로 보여주었던 것을 저장시 올바른 순서로 저장하기 위해서 다시 역순(원래 순서)로 재배치
+            Collections.reverse(recentlySearchedList);
+            //검색 키워드 저장하기 - 로컬 (화면 이동 후 업데이트)
+            //만약 동일 키워드가 이미 존재하면 해당 키워드를 지우고 새로 추가
+            for(int i =0;i<recentlySearchedList.size();i++){
+                if(recentlySearchedList.get(i).equals(keyword)){
+                    recentlySearchedList.remove(i);
+                }
+            }
+            recentlySearchedList.add(keyword);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("recentlySearched", recentlySearchedList.toString());
+            editor.commit();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,9 +80,14 @@ public class SS_SearchMode extends AppCompatActivity {
 
         editText = findViewById(R.id.searchmode_edittext);
         listView = findViewById(R.id.lv_recentlySearched);
+
+    }
+
+
+    private void selectRecentlySearched(){
         recentlySearchedList = new ArrayList<String>();
         // 리스트뷰 어답터 - 리스트뷰 연결
-        final RecentlySearched_Adapter adapter = new RecentlySearched_Adapter(this, recentlySearchedList);
+        final RecentlySearched_Adapter adapter = new RecentlySearched_Adapter(this, recentlySearchedList,callback);
         listView.setAdapter(adapter);
 
         editText.setText(keywordset);
@@ -79,6 +104,7 @@ public class SS_SearchMode extends AppCompatActivity {
                 String recentlySearchedItem = jsonArray.getString(i);
                 recentlySearchedList.add(recentlySearchedItem);
             }
+            //리스트뷰 역순으로 보이게 하기(최신 검색어가 맨 상위로)
             Collections.reverse(recentlySearchedList);
             adapter.notifyDataSetChanged();
         } catch (JSONException e) {
@@ -108,7 +134,7 @@ public class SS_SearchMode extends AppCompatActivity {
                             //검색 결과 페이지 이동
                             Intent mIntent = new Intent(getApplicationContext(), SS_SearchResult.class);
                             mIntent.putExtra("keyword", keyword);
-                            Log.i("정보태그", "xxx"+keyword);
+                            Log.i("정보태그", keyword);
                             startActivity(mIntent);
                             finish();
 
@@ -132,14 +158,9 @@ public class SS_SearchMode extends AppCompatActivity {
                         Log.e("에러", t.getMessage());
                     }
                 });
-
-
             } else {
 
             }
-
-
-
             return false;
         });
     }
@@ -157,5 +178,12 @@ public class SS_SearchMode extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        selectRecentlySearched();
+    }
+
 
 }

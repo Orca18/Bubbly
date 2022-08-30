@@ -73,11 +73,10 @@ public class FragmentSR_Tab5_Community extends Fragment {
         v = inflater.inflate(R.layout.fragment_ss_search_result, container, false);
         recyclerView = v.findViewById(R.id.rv_searchResult);
 
-        selectNFTPost();
         return v;
     }
 
-    public void selectNFTPost(){
+    public void selectCommunity(){
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지
@@ -124,6 +123,7 @@ public class FragmentSR_Tab5_Community extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        selectCommunity();
     }
 
 }

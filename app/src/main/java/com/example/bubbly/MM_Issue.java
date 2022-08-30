@@ -121,10 +121,6 @@ public class MM_Issue extends AppCompatActivity {
         btwallet = findViewById(R.id.issue_towallet);
 
 
-        // 카테고리
-        cat1 = findViewById(R.id.issue_category_hot);
-        cat2 = findViewById(R.id.issue_category_bubble);
-        cat3 = findViewById(R.id.issue_category_community);
 
         scrollView = findViewById(R.id.issue__scrollview);
 
@@ -278,9 +274,7 @@ public class MM_Issue extends AppCompatActivity {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-//                        loadrecycler();
-                        Toast.makeText(getApplicationContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
-                        /* 업데이트가 끝났음을 알림 */
+                        RankingList();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
@@ -300,7 +294,7 @@ public class MM_Issue extends AppCompatActivity {
             public void onClick(View v) {
                 issacToast("간단한 유머글? - 카테고리 상세 분할은 다음에...");
                 Intent mIntent2 = new Intent(getApplicationContext(), SS_KeywordResult.class);
-                mIntent2.putExtra("keyword", "잡담");
+                mIntent2.putExtra("keyword", "NFT");
                 startActivity(mIntent2);
             }
 
@@ -377,7 +371,7 @@ public class MM_Issue extends AppCompatActivity {
 
     // 랭킹 리스트 채우기
     private void RankingList() {
-        rankingList = new ArrayList<Ranking_Item>();
+        rankingList = new ArrayList<>();
         // 리스트뷰 어답터 - 리스트뷰 연결
         final Ranking_Adapter adapter = new Ranking_Adapter(this, rankingList);
         listView.setAdapter(adapter);
@@ -406,20 +400,20 @@ public class MM_Issue extends AppCompatActivity {
                             rankingList.add(ri);
                         }
                         adapter.notifyDataSetChanged();
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             }
-
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
             {
                 Log.e("실시간 검색어 트랜드 에러", t.getMessage());
             }
         });
-
     }
+
+
+
 
 }

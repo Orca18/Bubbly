@@ -37,7 +37,7 @@
                     <LinearLayout
                         android:orientation="horizontal"
                         android:id="@+id/action_search"
-                        android:layout_width="220dp"
+                        android:layout_width="300dp"
                         android:layout_height="34dp"
                         android:layout_gravity="center"
                         android:background="@drawable/edittext_radius"
@@ -63,14 +63,14 @@
                             android:src="@drawable/ic_baseline_search_24"/>
                     </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/home_alarm"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_outline_settings_24"
-                        app:tint="#222" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/home_alarm"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="right"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:src="@drawable/ic_outline_settings_24"-->
+<!--                        app:tint="#222" />-->
 
                     <!--                    <ImageView-->
                     <!--                        android:layout_width="wrap_content"-->

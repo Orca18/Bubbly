@@ -38,7 +38,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/chocolate"
+                        android:fontFamily="@font/cafe24bold"
                         android:text="Bubbly"
                         android:textColor="@color/black"
                         android:textSize="20dp" />
@@ -63,6 +63,10 @@
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/wallet_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <ScrollView
                 android:id="@+id/text_scrollview"
@@ -76,7 +80,7 @@
 
 
             </ScrollView>
-
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

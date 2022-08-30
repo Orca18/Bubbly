@@ -75,7 +75,6 @@ public class FragmentSR_Tab2_Recents extends Fragment {
         v = inflater.inflate(R.layout.fragment_ss_search_result, container, false);
         recyclerView = v.findViewById(R.id.rv_searchResult);
 
-        selectRecentPost();
         return v;
     }
 
@@ -119,7 +118,8 @@ public class FragmentSR_Tab2_Recents extends Fragment {
                                 responseResult.get(i).getCre_datetime(),
                                 responseResult.get(i).getMentioned_user_list(),
                                 responseResult.get(i).getCommunity_id(),
-                                responseResult.get(i).getLogin_id()));
+                                responseResult.get(i).getLogin_id(),
+                                responseResult.get(i).getPost_type()));
                     }
                     post_adapter.notifyDataSetChanged();
                 }
@@ -136,6 +136,7 @@ public class FragmentSR_Tab2_Recents extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        selectRecentPost();
     }
 
 }

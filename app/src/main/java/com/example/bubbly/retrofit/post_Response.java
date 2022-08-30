@@ -51,8 +51,12 @@ public class post_Response {
     @Expose
     @SerializedName("community_id") private String community_id;
 
+    @Expose
+    @SerializedName("post_type") private String post_type;
 
-    public post_Response(String post_id, String post_writer_id, String writer_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String nick_name, String profile_file_name, String cre_datetime, String[] mentioned_user_list, String community_id, String login_id) {
+
+
+    public post_Response(String post_id, String post_writer_id, String writer_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String nick_name, String profile_file_name, String cre_datetime, String[] mentioned_user_list, String community_id, String login_id, String post_type) {
         this.post_id = post_id;
         this.post_writer_id = post_writer_id;
         this.writer_name = writer_name;
@@ -68,6 +72,7 @@ public class post_Response {
         this.mentioned_user_list = mentioned_user_list;
         this.community_id = community_id;
         this.login_id = login_id;
+        this.post_type = post_type;
     }
 
     public String getCommunity_id() {
@@ -188,5 +193,11 @@ public class post_Response {
     public void setMentioned_user_list(String[] mentioned_user_list) {
         this.mentioned_user_list = mentioned_user_list;
     }
+    public String getPost_type() {
+        return post_type;
+    }
 
+    public void setPost_type(String post_type) {
+        this.post_type = post_type;
+    }
 }

@@ -23,6 +23,7 @@ import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.user_Response;
+import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,11 +85,38 @@ public class LL_Login extends AppCompatActivity {
                             if (response.isSuccessful() && response.body() != null)
                             {
                                 Log.e("로그인 데이터", response.body().toString());
+                                Log.d("502 테스트", "onResponse: "+response.body());
+                                Log.d("502 테스트", "onResponse: "+response.message());
                                 if(response.body().toString().equals("fail")){
                                     Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
                                 }
                                 else{
                                     Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+
+                                    //자동로그인 : 쉐어드프리퍼런스에 저장한다.
+                                    String mnemonic = response.body().toString();
+                                    MasterKey masterKey = null;
+                                    try {
+                                        masterKey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                                                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                                                .build(); //암호화 키 생성
+                                        SharedPreferences sharedPreferences = EncryptedSharedPreferences
+                                                .create(getApplicationContext(),
+                                                        "account",
+                                                        masterKey,
+                                                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, //key(name, 이경우 mnemonic) 암호화 방식
+                                                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM); //value 암호화 방식 선택
+
+                                        SharedPreferences.Editor spfEditor = sharedPreferences.edit();
+                                        spfEditor.putString("id", et_login_id.getText().toString());
+                                        spfEditor.putString("pw", et_login_pw.getText().toString());
+                                        spfEditor.commit();
+                                    } catch (GeneralSecurityException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+
                                     //수신한 데이터를 json으로 파싱한다.
                                     JSONObject json = null;
                                     try {
@@ -111,6 +139,7 @@ public class LL_Login extends AppCompatActivity {
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
                                             System.out.println(sharedPreferences.getString("mnemonic",""));
+                                            UserInfo.user_addr = sharedPreferences.getString("address","");
                                             UserInfo.mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
@@ -164,7 +193,9 @@ public class LL_Login extends AppCompatActivity {
                                     editor.putString("user_id",splitId);
                                     editor.commit();
 
-                                    startActivity(new Intent(LL_Login.this, MM_Home.class));
+                                    // TODO MM_액티비티 없애고, MainActivity로 변경
+//                                    startActivity(new Intent(LL_Login.this, MM_Home.class));
+                                    startActivity(new Intent(LL_Login.this, MainActivity.class));
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                                     finish();
                                 }

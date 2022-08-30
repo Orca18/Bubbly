@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bubbly.Kim_Bottom.Bottom4_Fragment;
 import com.example.bubbly.MM_Profile;
 import com.example.bubbly.R;
 import com.example.bubbly.controller.JoinedCom_Adapter;
@@ -61,7 +62,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        uid = ((MM_Profile)getActivity()).getUid();
+        uid = Bottom4_Fragment.getUid();
 
     }
 
@@ -97,6 +98,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
 
         //전체 nft 목록 가져오기
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        System.out.println("nfthold"+UserInfo.user_id);
         Call<List<NFT_Item>> call = api.selectNftUsingHolderId(UserInfo.user_id);
         call.enqueue(new Callback<List<NFT_Item>>() {
             @Override
