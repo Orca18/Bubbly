@@ -23,7 +23,7 @@
             android:background="@drawable/chat"
             android:fontFamily="@font/spoqa_bold"
             android:paddingHorizontal="18dp"
-            android:paddingVertical="10dp"
+            android:paddingVertical="6dp"
             android:text="작성"
             android:textColor="@color/white" />
 
@@ -51,23 +51,30 @@
         android:background="@color/gray" />
 
     <LinearLayout
+        android:layout_marginBottom="4dp"
         android:paddingVertical="5dp"
         android:paddingHorizontal="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
             android:id="@+id/posting_create_addimage"
-            android:layout_width="38dp"
-            android:layout_height="39dp"
-            android:src="@drawable/ic_outline_image_24" />
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_outline_image_24"
+            app:tint="@color/skyblue_medium" />
 
 
         <ImageView
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
             android:id="@+id/posting_create_addvideo"
-            android:layout_width="38dp"
-            android:layout_height="39dp"
-            android:src="@drawable/ic_baseline_videocam_24" />
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:src="@drawable/ic_baseline_videocam_24"
+            app:tint="@color/skyblue_medium" />
 
     </LinearLayout>
 

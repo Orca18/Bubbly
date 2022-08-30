@@ -36,7 +36,7 @@ import retrofit2.Response;
 public class LL_Splash extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
 
-    ImageView appname,splashimg;
+    ImageView appname, splashimg;
 
     LottieAnimationView lottieAnimationView;
 
@@ -60,7 +60,7 @@ public class LL_Splash extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         lottieAnimationView = findViewById(R.id.lottie_voltz);
 
@@ -70,8 +70,8 @@ public class LL_Splash extends AppCompatActivity {
             @Override
             public void run() {
                 //쉐어드프리퍼런스에서 로그인정보 가져오기
-                String id="";
-                String pw="";
+                String id = "";
+                String pw = "";
                 MasterKey masterkey = null;
                 try {
                     masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
@@ -83,35 +83,34 @@ public class LL_Splash extends AppCompatActivity {
                                     masterkey,
                                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-                    id = sharedPreferences.getString("id","");
-                    pw = sharedPreferences.getString("pw","");
+                    id = sharedPreferences.getString("id", "");
+                    pw = sharedPreferences.getString("pw", "");
                 } catch (GeneralSecurityException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if(id.equals("")&pw.equals("")){
+                if (id.equals("") & pw.equals("")) {
                     //만약 쉐어드프리퍼런스에 저장된 사용자 정보가 없으면 로그인 페이지로 이동
                     startActivity(new Intent(LL_Splash.this, LL_Login.class));
                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                     finish();
-                }else{
+                } else {
                     //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
                     ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
-                    Call<String> call = login_api.login(id,pw);
-                    call.enqueue(new Callback<String>()
-                    {
+                    Call<String> call = login_api.login(id, pw);
+                    call.enqueue(new Callback<String>() {
                         @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                        {
-                            if (response.isSuccessful() && response.body() != null)
-                            {
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                            Log.d("디버그태그", "바디:" + response.body());
+                            Log.d("디버그태그", "메시지:" + response.message());
+
+                            if (response.isSuccessful() && response.body() != null) {
                                 Log.e("로그인 데이터", response.body().toString());
-                                if(response.body().toString().equals("fail")){
-                                    Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+                                if (response.body().toString().equals("fail")) {
+                                    Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                                } else {
+//                                    Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
                                     //수신한 데이터를 json으로 파싱한다.
                                     JSONObject json = null;
                                     try {
@@ -132,8 +131,10 @@ public class LL_Splash extends AppCompatActivity {
                                                             masterkey,
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-                                            String mnemonic = sharedPreferences.getString("mnemonic","");
-                                            Log.e("니모닉",mnemonic);
+                                            String address = sharedPreferences.getString("address", "");
+                                            String mnemonic = sharedPreferences.getString("mnemonic", "");
+                                            Log.e("니모닉", mnemonic);
+                                            UserInfo.user_addr = address;
                                             UserInfo.mnemonic = mnemonic;
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
@@ -141,12 +142,10 @@ public class LL_Splash extends AppCompatActivity {
                                             e.printStackTrace();
                                         }
                                         //회원정보를 요청한다.
-                                        Call<List<user_Response>> call_userInfo = login_api.selectUserInfo(""+user_id);
-                                        call_userInfo.enqueue(new Callback<List<user_Response>>()
-                                        {
+                                        Call<List<user_Response>> call_userInfo = login_api.selectUserInfo("" + user_id);
+                                        call_userInfo.enqueue(new Callback<List<user_Response>>() {
                                             @Override
-                                            public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response)
-                                            {
+                                            public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response) {
                                                 System.out.println(response.body());
                                                 //수신한 회원정보를 스태틱으로 저장한다.
                                                 List<user_Response> responseResult = response.body();
@@ -158,13 +157,14 @@ public class LL_Splash extends AppCompatActivity {
                                                 UserInfo.user_nick = responseResult.get(0).getUser_nick();
                                                 UserInfo.self_info = responseResult.get(0).getSelf_info();
                                                 UserInfo.token = responseResult.get(0).getToken();
+
                                                 if(responseResult.get(0).getProfile_file_name()!=null && !responseResult.get(0).getProfile_file_name().equals("")){
                                                     UserInfo.profile_file_name = Config.cloudfront_addr+responseResult.get(0).getProfile_file_name();
                                                 }
                                             }
+
                                             @Override
-                                            public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
-                                            {
+                                            public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t) {
                                                 Log.e("에러", t.getMessage());
                                             }
                                         });
@@ -176,25 +176,26 @@ public class LL_Splash extends AppCompatActivity {
                                     String splitId = split[3];
                                     splitId = splitId.replace("}", "");
                                     Log.e("userID", splitId);
-                                    SharedPreferences preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+                                    SharedPreferences preferences = getSharedPreferences("novarand", MODE_PRIVATE);
                                     SharedPreferences.Editor editor = preferences.edit();
-                                    editor.putString("user_id",splitId);
+                                    editor.putString("user_id", splitId);
                                     editor.commit();
-                                    startActivity(new Intent(LL_Splash.this, MM_Home.class));
+//                                    startActivity(new Intent(LL_Splash.this, MM_Home.class));
+                                    startActivity(new Intent(LL_Splash.this, MainActivity.class));
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                                     finish();
                                 }
                             }
                         }
+
                         @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                        {
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                             Log.e("로그인 에러", t.getMessage());
                         }
                     });
                 }
             }
-        },2300);
+        }, 2300);
     }
 
 }

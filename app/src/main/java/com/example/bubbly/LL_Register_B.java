@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
 
+import com.algorand.algosdk.kmd.client.JSON;
 import com.example.bubbly.model.AccessAndRefreshToken;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -32,6 +33,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
@@ -142,7 +144,15 @@ public class LL_Register_B extends AppCompatActivity {
                                                                         {
                                                                             if(!response.body().equals("fail")){
                                                                                 Log.e("성공 : 니모닉  - ", response.body().toString());
-                                                                                String mnemonic = response.body().toString();
+                                                                                String mnemonic = "";
+                                                                                String address = "";
+                                                                                try {
+                                                                                    JSONObject jsonObject = new JSONObject(response.body().toString());
+                                                                                    mnemonic = jsonObject.getString("mnemonic");
+                                                                                    address = jsonObject.getString("addr");
+                                                                                } catch (JSONException e) {
+                                                                                    e.printStackTrace();
+                                                                                }
                                                                                 MasterKey masterkey = null;
                                                                                 try {
                                                                                     masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
@@ -156,6 +166,7 @@ public class LL_Register_B extends AppCompatActivity {
                                                                                                     EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM); //value 암호화 방식 선택
 
                                                                                     SharedPreferences.Editor spfEditor = sharedPreferences.edit();
+                                                                                    spfEditor.putString("address", address);
                                                                                     spfEditor.putString("mnemonic", mnemonic);
                                                                                     spfEditor.commit();
                                                                                 } catch (GeneralSecurityException e) {
@@ -166,6 +177,7 @@ public class LL_Register_B extends AppCompatActivity {
 
                                                                                 //인텐트 전달
                                                                                 Intent mIntent = new Intent(getApplicationContext(), LL_Register_C.class);
+                                                                                mIntent.putExtra("address",address);
                                                                                 mIntent.putExtra("mnemonic",mnemonic);
                                                                                 startActivity(mIntent);
 

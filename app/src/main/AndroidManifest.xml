@@ -35,14 +35,8 @@
             android:name=".VideoDownloadActivity"
             android:exported="false" />
         <activity
-            android:name=".chatting.TestActivity"
-            android:exported="true">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        </activity>
+            android:name=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".Community_Info_Edit"
             android:exported="false" />
@@ -72,7 +66,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="3.39.84.115"
+                    android:host="3.39.84.115/"
                     android:scheme="bubbly2" />
             </intent-filter>
         </activity>
@@ -123,7 +117,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="3.39.84.115"
+                    android:host="3.39.84.115/"
                     android:scheme="bubbly1" />
             </intent-filter>
         </activity>

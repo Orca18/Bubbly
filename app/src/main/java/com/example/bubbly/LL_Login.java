@@ -24,6 +24,7 @@ import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.user_Response;
+import com.google.android.datatransport.runtime.firebase.transport.LogEventDropped;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -85,6 +86,8 @@ public class LL_Login extends AppCompatActivity {
                             if (response.isSuccessful() && response.body() != null)
                             {
                                 Log.e("로그인 데이터", response.body().toString());
+                                Log.d("502 테스트", "onResponse: "+response.body());
+                                Log.d("502 테스트", "onResponse: "+response.message());
                                 if(response.body().toString().equals("fail")){
                                     Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
                                 }
@@ -137,6 +140,7 @@ public class LL_Login extends AppCompatActivity {
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
                                             System.out.println(sharedPreferences.getString("mnemonic",""));
+                                            UserInfo.user_addr = sharedPreferences.getString("address","");
                                             UserInfo.mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
@@ -190,7 +194,9 @@ public class LL_Login extends AppCompatActivity {
                                     editor.putString("user_id",splitId);
                                     editor.commit();
 
-                                    startActivity(new Intent(LL_Login.this, MM_Home.class));
+                                    // TODO MM_액티비티 없애고, MainActivity로 변경
+//                                    startActivity(new Intent(LL_Login.this, MM_Home.class));
+                                    startActivity(new Intent(LL_Login.this, MainActivity.class));
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                                     finish();
                                 }

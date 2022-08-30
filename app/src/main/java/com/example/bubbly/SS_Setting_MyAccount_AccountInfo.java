@@ -33,38 +33,43 @@ public class SS_Setting_MyAccount_AccountInfo extends AppCompatActivity {
         // (기본) 리소스 ID 선언
         initiallize();
 
+        tv_id.setText("@"+UserInfo.login_id);
+        tv_phone.setText(UserInfo.phone_num);
+        tv_email.setText(UserInfo.email_addr);
+        tv_address.setText(UserInfo.user_addr);
+
         //블록체인 계정 정보 요청
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<String> call_addr = api.selectAddrUsingUserId(UserInfo.user_id);
-        call_addr.enqueue(new Callback<String>()
-        {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
-                    System.out.println(response.body());
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body());
-                        String address = jsonObject.getString("address");
-
-                        //화면에 개인 정보 표시하기
-                        tv_id.setText("@"+UserInfo.login_id);
-                        tv_phone.setText(UserInfo.phone_num);
-                        tv_email.setText(UserInfo.email_addr);
-                        tv_address.setText(address);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-            {
-                Log.e("계정 정보 수신 에러", t.getMessage());
-            }
-        });
+//        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+//        Call<String> call_addr = api.selectAddrUsingUserId(UserInfo.user_id);
+//        call_addr.enqueue(new Callback<String>()
+//        {
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+//            {
+//                if (response.isSuccessful() && response.body() != null)
+//                {
+//                    System.out.println(response.body());
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(response.body());
+//                        String address = jsonObject.getString("address");
+//
+//                        //화면에 개인 정보 표시하기
+//                        tv_id.setText("@"+UserInfo.login_id);
+//                        tv_phone.setText(UserInfo.phone_num);
+//                        tv_email.setText(UserInfo.email_addr);
+//                        tv_address.setText(UserInfo.user_addr);
+//
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//            @Override
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+//            {
+//                Log.e("계정 정보 수신 에러", t.getMessage());
+//            }
+//        });
 
 
     }

@@ -10,7 +10,7 @@
     <color name="gray">#ccc</color>
     <color name="icon_black">#333</color>
     <color name="text_black">#2d2d2d</color>
-    <color name="blueblack">#3F4557</color>
+    <color name="blueblack">#586480</color>
     <color name="red">#D1180B</color>
 
     <color name="mainblue">#1F2837</color>
@@ -26,5 +26,8 @@
     <color name="grey">#BDBDBD</color>
     <color name="light_grey">#EDEDED</color>
     <color name="light_grey2">#C9C9C9</color>
+    <color name="skyblue_bold">#0055FF</color>
+    <color name="skyblue_light">#00AAFF</color>
+    <color name="skyblue_medium">#006AFF</color>
 
 </resources>
