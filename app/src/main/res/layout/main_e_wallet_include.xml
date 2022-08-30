@@ -39,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:fontFamily="@font/chocolate"
-                        android:text="Bubbly"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="20dp" />
 
