@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bubbly.MainActivity;
 import com.example.bubbly.Option_Notice_List;
 import com.example.bubbly.Post_Create;
 import com.example.bubbly.R;
@@ -115,8 +116,7 @@ public class Bottom1_Fragment extends Fragment {
         sidemenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                drawerLayout.openDrawer(GravityCompat.START);
-                Toast.makeText(getActivity().getApplicationContext(),"사이드 메뉴, 메인액티비티에서 구현해야되는데...",Toast.LENGTH_SHORT).show();
+                MainActivity.drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 

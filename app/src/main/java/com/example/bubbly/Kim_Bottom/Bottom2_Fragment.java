@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.bubbly.MainActivity;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_SearchMode;
 import com.example.bubbly.controller.Ranking_Adapter;
@@ -85,7 +86,7 @@ public class Bottom2_Fragment extends Fragment {
         sidemenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                drawerLayout.openDrawer(GravityCompat.START);
+                MainActivity.drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 

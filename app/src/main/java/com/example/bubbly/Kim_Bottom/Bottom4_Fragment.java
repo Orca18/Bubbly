@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.bubbly.Follower;
 import com.example.bubbly.Following;
 import com.example.bubbly.MM_Profile;
+import com.example.bubbly.MainActivity;
 import com.example.bubbly.ModifyProfile;
 import com.example.bubbly.R;
 import com.example.bubbly.controller.FragmentAdapter;
@@ -247,7 +248,7 @@ public class Bottom4_Fragment extends Fragment {
         sidemenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                drawerLayout.openDrawer(GravityCompat.START);
+                MainActivity.drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 
@@ -257,9 +258,7 @@ public class Bottom4_Fragment extends Fragment {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-//                        loadrecycler();
-                        Toast.makeText(getContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
-                        /* 업데이트가 끝났음을 알림 */
+                        // 새로고침
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });

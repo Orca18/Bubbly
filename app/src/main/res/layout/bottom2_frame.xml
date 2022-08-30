@@ -94,11 +94,6 @@
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/issue_refresh"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
 
                     <ScrollView
                         android:id="@+id/issue__scrollview"
@@ -111,7 +106,7 @@
                         <include layout="@layout/main_b_issue_include_scrollview" />
 
                     </ScrollView>
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
             </RelativeLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="60dp"
-            android:fontFamily="@font/chocolate"
+            android:fontFamily="@font/cafe24bold"
             android:text="Bubbly"
             android:textColor="@color/black"
             android:textSize="50dp" />

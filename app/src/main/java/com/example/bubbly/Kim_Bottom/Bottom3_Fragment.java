@@ -10,14 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bubbly.MainActivity;
 import com.example.bubbly.R;
 import com.example.bubbly.controller.Messages_Adapter;
 import com.example.bubbly.model.Chat_Room_Info;
@@ -52,10 +55,13 @@ public class Bottom3_Fragment extends Fragment {
 
         // 리소스 ID 선언
         initiallize();
-        
-        
-        return view;
+        clickListeners();
+
+
+            return view;
     }
+
+
 
     // 리소스 아이디 선언
     private void initiallize() {
@@ -83,5 +89,26 @@ public class Bottom3_Fragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences("novarand",MODE_PRIVATE);
         userId = preferences.getString("user_id", "");
+    }
+
+    private void clickListeners() {
+        // 좌측 상단 메뉴 버튼
+        sidemenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+
+        // 리사이클러뷰 새로고침 인식
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Toast.makeText(getContext(), "TODO 새로고침", Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
     }
 }

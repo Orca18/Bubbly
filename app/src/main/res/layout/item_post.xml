@@ -91,7 +91,7 @@
 
                 <TextView
                     android:id="@+id/tv_time"
-                    android:layout_width="28dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginRight="3dp"
@@ -109,10 +109,11 @@
 
 
             <TextView
+                android:lineSpacingExtra ="2dp"
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bubble Text - 버블 내용"
+                android:text="Bubble Text - 버블 내용\n간격 테스트"
                 android:textColor="@color/black"
                 android:textSize="18dp" />
 
@@ -249,6 +250,7 @@
                         android:padding="3dp"
                         android:src="@drawable/ic_baseline_share_24"
                         app:tint="@color/blueblack" />
+
                 </LinearLayout>
 
             </LinearLayout>
