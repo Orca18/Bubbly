@@ -172,7 +172,8 @@ public class LL_Splash extends AppCompatActivity {
                                     SharedPreferences.Editor editor = preferences.edit();
                                     editor.putString("user_id",splitId);
                                     editor.commit();
-                                    startActivity(new Intent(LL_Splash.this, MM_Home.class));
+//                                    startActivity(new Intent(LL_Splash.this, MM_Home.class));
+                                    startActivity(new Intent(LL_Splash.this, MainActivity.class));
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                                     finish();
                                 }

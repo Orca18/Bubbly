@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.bubbly.Kim_Bottom.Bottom1_Fragment;
+import com.example.bubbly.Kim_Bottom.Bottom4_Fragment;
 import com.example.bubbly.MM_Profile;
 import com.example.bubbly.R;
 import com.example.bubbly.controller.Post_Adapter;
@@ -62,8 +64,7 @@ public class Fragment_Tab1_AllPosts extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uid = ((MM_Profile) getActivity()).getUid();
-
+        uid = Bottom4_Fragment.getUid();
     }
 
 
