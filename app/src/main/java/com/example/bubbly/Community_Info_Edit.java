@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
@@ -234,7 +235,7 @@ public class Community_Info_Edit extends AppCompatActivity {
                 et_com_rule.setText(com_rule);
 
                 Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/"+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
+                        .load(Config.cloudfront_addr+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
                         .centerCrop()
                         .into(com_image);
 

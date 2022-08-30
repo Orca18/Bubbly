@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -308,7 +309,7 @@ public class ModifyProfile extends AppCompatActivity {
                 UserInfo.user_nick = responseResult.get(0).getUser_nick();
                 UserInfo.self_info = responseResult.get(0).getSelf_info();
                 if(responseResult.get(0).getProfile_file_name()!=null && !responseResult.get(0).getProfile_file_name().equals("")){
-                    UserInfo.profile_file_name = "https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(0).getProfile_file_name();
+                    UserInfo.profile_file_name = Config.cloudfront_addr+responseResult.get(0).getProfile_file_name();
                 }
                 callback.updateUserInfo();
                 //프로필 변경 페이지로 이동

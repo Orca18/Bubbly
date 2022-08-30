@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.controller.Reply_Adapter;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
@@ -273,7 +274,7 @@ public class SS_PostDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ImageView_FullScreen.class);
-                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + media_link);
+                intent.putExtra("img_url", Config.cloudfront_addr + media_link);
                 startActivity(intent);
             }
         });
@@ -384,11 +385,11 @@ public class SS_PostDetail extends AppCompatActivity {
                     }
 
                     Glide.with(SS_PostDetail.this)
-                            .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names())
+                            .load(Config.cloudfront_addr + responseResult.get(0).getFile_save_names())
                             .into(iv_media);
 
                     Glide.with(SS_PostDetail.this)
-                            .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getProfile_file_name())
+                            .load(Config.cloudfront_addr + responseResult.get(0).getProfile_file_name())
                             .into(iv_user_image);
 
                     SetDate(responseResult.get(0).getCre_datetime());

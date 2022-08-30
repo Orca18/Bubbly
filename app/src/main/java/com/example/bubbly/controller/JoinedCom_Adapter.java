@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bubbly.Community_MainPage;
 import com.example.bubbly.R;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Members_Response;
@@ -80,7 +81,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
 
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + response.getProfile_file_name())
+                .load(Config.cloudfront_addr + response.getProfile_file_name())
                 .centerCrop()
                 .into(holder.profile);
 

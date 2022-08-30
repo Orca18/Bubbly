@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,9 @@ import com.example.bubbly.ImageView_FullScreen;
 import com.example.bubbly.ImageView_FullScreen_With_Save;
 import com.example.bubbly.Post_Create;
 import com.example.bubbly.R;
+import com.example.bubbly.VideoDownloadActivity;
 import com.example.bubbly.Video_Play;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.Chat_Item;
 import com.example.bubbly.model.UserInfo;
 
@@ -50,7 +53,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 채팅 메시지를 보여주는 아답터
  * */
 public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    String cloudFrontAddr = "https://d2gf68dbj51k8e.cloudfront.net/";
     Context mContext;
     List<Chat_Item> chatItemList;
     // 액티비티에서 채팅데이터를 가져올 때마다 변경해준다.
@@ -244,7 +246,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     /** 동영싱 뷰홀더*/
     // 내가 작성한 동영상을 보여주는 뷰홀더
     public class MyMsgViewHolderWithVideo extends RecyclerView.ViewHolder {
-        ConstraintLayout layout_my_chatBox;
+        ConstraintLayout thumbnailLayout;
+        LinearLayout progressbarLayout;
         TextView textView_my_nickName;
         VideoView video_myMsg;
         TextView textViewMyTime;
@@ -264,6 +267,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
             thumbnail = itemView.findViewById(R.id.thumbnail);
             playBtn = itemView.findViewById(R.id.play_btn);
+            thumbnailLayout = itemView.findViewById(R.id.thumbnail_layout);
+            progressbarLayout = itemView.findViewById(R.id.progressbar_layout);
         }
     }
 
@@ -277,6 +282,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         CircleImageView user_profile;
         TextView not_read_user_count;
         ImageView thumbnail;
+        ConstraintLayout thumbnailLayout;
+        LinearLayout progressbarLayout;
 
         public OpponentMsgViewHolderViewHolderWithVideo(View itemView) {
             super(itemView);
@@ -288,6 +295,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             user_profile = itemView.findViewById(R.id.user_profile);
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
             thumbnail = itemView.findViewById(R.id.thumbnail);
+            thumbnailLayout = itemView.findViewById(R.id.thumbnail_layout);
+            progressbarLayout = itemView.findViewById(R.id.progressbar_layout);
         }
     }
 
@@ -301,6 +310,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         CircleImageView user_profile;
         TextView not_read_user_count;
         ImageView thumbnail;
+        ConstraintLayout thumbnailLayout;
+        LinearLayout progressbarLayout;
 
         public MyMsgViewHolderWithDayAndVideo(View itemView) {
             super(itemView);
@@ -312,6 +323,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             user_profile = itemView.findViewById(R.id.user_profile);
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
             thumbnail = itemView.findViewById(R.id.thumbnail);
+            thumbnailLayout = itemView.findViewById(R.id.thumbnail_layout);
+            progressbarLayout = itemView.findViewById(R.id.progressbar_layout);
         }
     }
 
@@ -327,6 +340,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         CircleImageView user_profile;
         TextView not_read_user_count;
         ImageView thumbnail;
+        ConstraintLayout thumbnailLayout;
+        LinearLayout progressbarLayout;
 
         public OpponentMsgViewHolderViewHolderWithDayAndVideo(View itemView) {
             super(itemView);
@@ -340,6 +355,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             user_profile = itemView.findViewById(R.id.user_profile);
             not_read_user_count = itemView.findViewById(R.id.not_read_user_count);
             thumbnail = itemView.findViewById(R.id.thumbnail);
+            thumbnailLayout = itemView.findViewById(R.id.thumbnail_layout);
+            progressbarLayout = itemView.findViewById(R.id.progressbar_layout);
         }
     }
 
@@ -435,7 +452,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             /*if(currentItem.getProfileImageURL().equals("null")) {
                 ((MyMsgViewHolder)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
             } else{
-                Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((MyMsgViewHolder)holder).user_profile);
+                Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((MyMsgViewHolder)holder).user_profile);
             }*/
 
             ((MyMsgViewHolder)holder).editText_MyMsg.setText(currentItem.getChatText());
@@ -458,7 +475,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolder)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
             } else{
-                Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolder)holder).user_profile);
+                Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolder)holder).user_profile);
             }
             
             ((OpponentMsgViewHolderViewHolder)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
@@ -495,7 +512,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
             } else{
-                Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile);
+                Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile);
             }
             ((OpponentMsgViewHolderViewHolderWithDay)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
             ((OpponentMsgViewHolderViewHolderWithDay)holder).editText_OpponentMsg.setText(currentItem.getChatText());
@@ -514,7 +531,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         } if(holder instanceof MyMsgViewHolderWithPhoto){ // 내가 작성한 이미지인 경우
             // 내가 전송한 이미지를 출력하는 경우 비트맵에 있는 데이터를 가져온다.
-            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithPhoto)holder).img_myMsg);
+            Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithPhoto)holder).img_myMsg);
 
             ((MyMsgViewHolderWithPhoto)holder).textViewMyTime.setText(currentItem.getChatTime());
 
@@ -537,33 +554,20 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     Log.d("클릭","11");
 
                     Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
-                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    intent.putExtra("img_url", Config.cloudfront_addr + currentItem.getChatFileUrl());
                     mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     
                 }
             });
-
-            /*
-            // 클릭 시 다운로드 화면으로 이동
-            ((MyMsgViewHolderWithPhoto)holder).img_myMsg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
-
-                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl();
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });
-            */
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithPhoto){ //상대방이 작성한 이미지인 경우
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolderWithPhoto)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
             } else{
-                Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithPhoto)holder).user_profile);
+                Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithPhoto)holder).user_profile);
             }
 
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
-            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg);
+            Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg);
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).textView_oppo_time.setText(currentItem.getChatTime());
 
             ((OpponentMsgViewHolderViewHolderWithPhoto)holder).not_read_user_count.setVisibility(View.GONE);
@@ -583,23 +587,12 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     Log.d("클릭","22");
 
                     Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
-                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    intent.putExtra("img_url", Config.cloudfront_addr + currentItem.getChatFileUrl());
                     mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
-
-            /*// 클릭 시 다운로드 화면으로 이동
-            ((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
-
-                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl());
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });*/
         } else if(holder instanceof MyMsgViewHolderWithDayAndPhoto){ //내가 작성한 이미지이고 날짜를 보여줘야 하는 경우
-            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithDayAndPhoto)holder).img_myMsg);
+            Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getChatFileUrl()).into(((MyMsgViewHolderWithDayAndPhoto)holder).img_myMsg);
 
             ((MyMsgViewHolderWithDayAndPhoto)holder).textViewMyTime.setText(currentItem.getChatTime());
             ((MyMsgViewHolderWithDayAndPhoto)holder).textView_date.setText(currentItem.getChatDate());
@@ -621,29 +614,18 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     Log.d("클릭","33");
 
                     Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
-                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    intent.putExtra("img_url", Config.cloudfront_addr + currentItem.getChatFileUrl());
                     mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
-
-            /*// 클릭 시 다운로드 화면으로 이동
-            ((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
-
-                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl());
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });*/
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDayAndPhoto){ //상대방이 작성한 이미지이고 날짜를 보여줘야 하는 경우
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
             } else{
-                Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).user_profile);
+                Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).user_profile);
             }
             ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
-            Glide.with(mContext).load(cloudFrontAddr + currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).img_OpponentMsg);
+            Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getChatFileUrl()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).img_OpponentMsg);
             ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).textView_oppo_time.setText(currentItem.getChatTime());
             ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).textView_date.setText(currentItem.getChatDate());
 
@@ -664,192 +646,237 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     Log.d("클릭","44");
 
                     Intent intent = new Intent(mContext, ImageView_FullScreen_With_Save.class);
-                    intent.putExtra("img_url", cloudFrontAddr + currentItem.getChatFileUrl());
+                    intent.putExtra("img_url", Config.cloudfront_addr + currentItem.getChatFileUrl());
                     mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
                 }
             });
-
-            /*// 클릭 시 다운로드 화면으로 이동
-            ((OpponentMsgViewHolderViewHolderWithPhoto)holder).img_OpponentMsg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, GlideLoaderActivity.class);
-
-                    intent.putExtra("url", cloudFrontAddr + currentItem.getChatFileUrl());
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            });*/
         } if(holder instanceof MyMsgViewHolderWithVideo){ // 내가 작성한 동영상인 경우
-            String[] fileNames = currentItem.getChatFileUrl().split(",");
+            String fileUrl = currentItem.getChatFileUrl();
 
-            // 썸네일 파일명
-            String thumbnailFileName = fileNames[0];
+            // 전송중 프로그레스바가 아니라면
+            if(fileUrl != null){ //썸네일을 보여주는거라면
+                // 프로그레스바 레이아웃 gone
+                ((MyMsgViewHolderWithVideo)holder).progressbarLayout.setVisibility(View.GONE);
+                // 썸네일 레이아웃 visible
+                ((MyMsgViewHolderWithVideo)holder).thumbnailLayout.setVisibility(View.VISIBLE);
+                // 시간 visible
+                ((MyMsgViewHolderWithVideo)holder).textViewMyTime.setVisibility(View.VISIBLE);
 
-            // 비디오 파일명
-            String videoFileName = fileNames[1];
+                String[] fileNames = fileUrl.split(",");
 
-            String url = cloudFrontAddr + videoFileName;
+                // 썸네일 파일명
+                String thumbnailFileName = fileNames[0];
 
-            Log.d("thumbnailFileName: " , thumbnailFileName);
+                // 비디오 파일명
+                String videoFileName = fileNames[1];
 
-            // 썸네일 넣기
-            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((MyMsgViewHolderWithVideo)holder).thumbnail);
+                
 
-            //((MyMsgViewHolderWithVideo)holder).playBtn.setImageDrawable(mContext.getDrawable(R.drawable.ic_baseline_play_circle_outline_48));
+                Log.d("thumbnailFileName: " , thumbnailFileName);
 
-            // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
-            ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
+                // 썸네일 넣기
+                Glide.with(mContext).load(Config.cloudfront_addr + thumbnailFileName).into(((MyMsgViewHolderWithVideo)holder).thumbnail);
 
-            // 읽지 않은 사용자 설정
-            if(currentItem.getNotReadUserCount() <= 0){
+                //((MyMsgViewHolderWithVideo)holder).playBtn.setImageDrawable(mContext.getDrawable(R.drawable.ic_baseline_play_circle_outline_48));
+
+                // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
                 ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
-            } else {
-                ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-                ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
-            }
+                // 읽지 않은 사용자 설정
+                if(currentItem.getNotReadUserCount() <= 0){
+                    ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
+                } else {
+                    ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-
-            // 썸네일 클릭 시 재생화면으로 이동
-            ((MyMsgViewHolderWithVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, Video_Play.class);
-
-                    intent.putExtra("videoUrl", url);
-                    // FLAG_ACTIVITY_NEW_TASK
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    ((MyMsgViewHolderWithVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
                 }
-            });
+
+
+                // 썸네일 클릭 시 재생화면으로 이동
+                ((MyMsgViewHolderWithVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, VideoDownloadActivity.class);
+                        
+                        intent.putExtra("videoFileName", videoFileName);
+                        intent.putExtra("thumbnailFileName", thumbnailFileName);
+                        
+                        // FLAG_ACTIVITY_NEW_TASK
+                        mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
+            }
 
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithVideo){ //상대방이 작성한 동영상인 경우
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolderWithVideo)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
             } else{
-                Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).user_profile);
+                Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).user_profile);
             }
 
-            String[] fileNames = currentItem.getChatFileUrl().split(",");
+            String fileUrl = currentItem.getChatFileUrl();
 
-            // 썸네일 파일명
-            String thumbnailFileName = fileNames[0];
+            // 전송중 프로그레스바가 아니라면
+            if(fileUrl != null) { //썸네일을 보여주는거라면
+                // 프로그레스바 레이아웃 gone
+                ((OpponentMsgViewHolderViewHolderWithVideo)holder).progressbarLayout.setVisibility(View.GONE);
+                // 썸네일 레이아웃 visible
+                ((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnailLayout.setVisibility(View.VISIBLE);
+                // 시간 visible
+                ((OpponentMsgViewHolderViewHolderWithVideo)holder).textView_oppo_time.setVisibility(View.VISIBLE);
 
-            // 비디오 파일명
-            String videoFileName = fileNames[1];
+                String[] fileNames = currentItem.getChatFileUrl().split(",");
 
-            String url = cloudFrontAddr + videoFileName;
+                // 썸네일 파일명
+                String thumbnailFileName = fileNames[0];
 
-            Log.d("thumbnailFileName: " , thumbnailFileName);
+                // 비디오 파일명
+                String videoFileName = fileNames[1];
 
-            // 썸네일 넣기
-            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail);
+                
+
+                Log.d("thumbnailFileName: " , thumbnailFileName);
+
+                // 썸네일 넣기
+                Glide.with(mContext).load(Config.cloudfront_addr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail);
+
+                ((OpponentMsgViewHolderViewHolderWithVideo)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
 
 
-            // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
-            ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
-
-            // 읽지 않은 사용자 설정
-            if(currentItem.getNotReadUserCount() <= 0){
+                // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
                 ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
-            } else {
-                ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-                ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
-            }
+                // 읽지 않은 사용자 설정
+                if(currentItem.getNotReadUserCount() <= 0){
+                    ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.GONE);
+                } else {
+                    ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-            // 썸네일 클릭 시 재생화면으로 이동
-            ((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, Video_Play.class);
-
-                    intent.putExtra("videoUrl", url);
-                    // FLAG_ACTIVITY_NEW_TASK
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    ((OpponentMsgViewHolderViewHolderWithVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
                 }
-            });
+
+                // 썸네일 클릭 시 재생화면으로 이동
+                ((OpponentMsgViewHolderViewHolderWithVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, VideoDownloadActivity.class);
+
+                        intent.putExtra("videoFileName", videoFileName);
+                        intent.putExtra("thumbnailFileName", thumbnailFileName);
+                        // FLAG_ACTIVITY_NEW_TASK
+                        mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
+            }
         } else if(holder instanceof MyMsgViewHolderWithDayAndVideo){ //내가 작성한 동영상이고 날짜를 보여줘야 하는 경우
-            String[] fileNames = currentItem.getChatFileUrl().split(",");
+            String fileUrl = currentItem.getChatFileUrl();
 
-            // 썸네일 파일명
-            String thumbnailFileName = fileNames[0];
+            // 전송중 프로그레스바가 아니라면
+            if(fileUrl != null) { //썸네일을 보여주는거라면
+                // 프로그레스바 레이아웃 gone
+                ((MyMsgViewHolderWithDayAndVideo)holder).progressbarLayout.setVisibility(View.GONE);
+                // 썸네일 레이아웃 visible
+                ((MyMsgViewHolderWithDayAndVideo)holder).thumbnailLayout.setVisibility(View.VISIBLE);
+                // 시간 visible
+                ((MyMsgViewHolderWithDayAndVideo)holder).textViewMyTime.setVisibility(View.VISIBLE);
 
-            // 비디오 파일명
-            String videoFileName = fileNames[1];
+                String[] fileNames = currentItem.getChatFileUrl().split(",");
 
-            String url = cloudFrontAddr + videoFileName;
+                // 썸네일 파일명
+                String thumbnailFileName = fileNames[0];
 
-            // 썸네일 넣기
-            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((MyMsgViewHolderWithDayAndVideo)holder).thumbnail);
+                // 비디오 파일명
+                String videoFileName = fileNames[1];
 
-            // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
-            ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
+                
 
+                // 썸네일 넣기
+                Glide.with(mContext).load(Config.cloudfront_addr + thumbnailFileName).into(((MyMsgViewHolderWithDayAndVideo)holder).thumbnail);
 
-            // 읽지 않은 사용자 설정
-            if(currentItem.getNotReadUserCount() <= 0){
+                // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
                 ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
-            } else {
-                ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-                ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
-            }
 
-            // 썸네일 클릭 시 재생화면으로 이동
-            ((MyMsgViewHolderWithDayAndVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, Video_Play.class);
+                // 읽지 않은 사용자 설정
+                if(currentItem.getNotReadUserCount() <= 0){
+                    ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
+                } else {
+                    ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-                    intent.putExtra("videoUrl", url);
-                    // FLAG_ACTIVITY_NEW_TASK
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    ((MyMsgViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
                 }
-            });
+
+                // 썸네일 클릭 시 재생화면으로 이동
+                ((MyMsgViewHolderWithDayAndVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, VideoDownloadActivity.class);
+
+                        intent.putExtra("videoFileName", videoFileName);
+                        intent.putExtra("thumbnailFileName", thumbnailFileName);
+                        // FLAG_ACTIVITY_NEW_TASK
+                        mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
+            }
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDayAndVideo){ //상대방이 작성한 동영상이고 날짜를 보여줘야 하는 경우
             if(currentItem.getProfileImageURL().equals("null")) {
                 ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
             } else{
-                Glide.with(mContext).load(cloudFrontAddr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).user_profile);
+                Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).user_profile);
             }
 
-            String[] fileNames = currentItem.getChatFileUrl().split(",");
+            String fileUrl = currentItem.getChatFileUrl();
 
-            // 썸네일 파일명
-            String thumbnailFileName = fileNames[0];
+            // 전송중 프로그레스바가 아니라면
+            if(fileUrl != null) { //썸네일을 보여주는거라면
+                // 프로그레스바 레이아웃 gone
+                ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).progressbarLayout.setVisibility(View.GONE);
+                // 썸네일 레이아웃 visible
+                ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).thumbnailLayout.setVisibility(View.VISIBLE);
+                // 시간 visible
+                ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).textView_oppo_time.setVisibility(View.VISIBLE);
 
-            // 비디오 파일명
-            String videoFileName = fileNames[1];
+                String[] fileNames = currentItem.getChatFileUrl().split(",");
 
-            String url = cloudFrontAddr + videoFileName;
+                // 썸네일 파일명
+                String thumbnailFileName = fileNames[0];
 
-            // 썸네일 넣기
-            Glide.with(mContext).load(cloudFrontAddr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).thumbnail);
+                // 비디오 파일명
+                String videoFileName = fileNames[1];
 
-            // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
-            ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
+                // 썸네일 넣기
+                Glide.with(mContext).load(Config.cloudfront_addr + thumbnailFileName).into(((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).thumbnail);
 
-            // 읽지 않은 사용자 설정
-            if(currentItem.getNotReadUserCount() <= 0){
+                ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).textView_oppo_nickName.setText(currentItem.getChatUserNickName());
+
+                // 이렇게 하지 않으면 안읽은사람 = 0인데도 기존 뷰홀더가 사용하던 값을 가지고 올 수 있다.
                 ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
-            } else {
-                ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-                ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
-            }
 
-            // 썸네일 클릭 시 재생화면으로 이동
-            ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(mContext, Video_Play.class);
+                // 읽지 않은 사용자 설정
+                if(currentItem.getNotReadUserCount() <= 0){
+                    ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.GONE);
+                } else {
+                    ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setVisibility(View.VISIBLE);
 
-                    intent.putExtra("videoUrl", url);
-                    // FLAG_ACTIVITY_NEW_TASK
-                    mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
                 }
-            });
+
+                // 썸네일 클릭 시 재생화면으로 이동
+                ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).thumbnail.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(mContext, VideoDownloadActivity.class);
+
+                        intent.putExtra("videoFileName", videoFileName);
+                        intent.putExtra("thumbnailFileName", thumbnailFileName);
+                        // FLAG_ACTIVITY_NEW_TASK
+                        mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
+            }
         } else if(holder instanceof EnterAndExitViewHolder){ //나가거나 들어온 경우
             ((EnterAndExitViewHolder)holder).textView_enter_or_exit.setText(currentItem.getChatText());
         }
@@ -935,6 +962,10 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     // 새로 채팅방에 들어왔을 때 안읽은 사용자수를 업데이트 한다!
     public void updateNotReadUserCount(int lastIdx){
+        Log.d("updateNotReadUserCount 들어옴","11");
+        Log.d("lastIdx","" + lastIdx);
+        Log.d("updateNotReadUserCount 들어옴","11");
+
         int position = 0;
 
         // 현재 리사이클러뷰의 마지막 메시지 아이디보다 입장한 사용자의 마지막으로 읽은 메시지 아이디가 작다면 리사이클러뷰의 모든 안읽은 사용자 --
@@ -942,18 +973,22 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if(chatItemList.get(chatItemList.size() - 1).getChatId() > lastIdx){
             for(int j = 0; j < chatItemList.size(); j ++) {
                 chatItemList.get(j).setNotReadUserCount(chatItemList.get(j).getNotReadUserCount() - 1);
+                Log.d("updateNotReadUserCount 들어옴","22");
             }
         } else {
             // 역순으로 저장하므로 뒤에서부터 체크한다!!
             for(int i = chatItemList.size() - 1; i >= 0; i--){
                 if(chatItemList.get(i).getChatId() == lastIdx){
                     position = i;
+                    Log.d("updateNotReadUserCount 들어옴","33" + "chatItemList.get(i).getChatId() " +  chatItemList.get(i).getChatId() );
+                    Log.d("updateNotReadUserCount 들어옴","33" + "position: " +  position);
                     break;
                 }
             }
 
             for(int j = 0; j < position; j ++) {
                 chatItemList.get(j).setNotReadUserCount(chatItemList.get(j).getNotReadUserCount() - 1);
+                Log.d("updateNotReadUserCount 들어옴","44");
             }
         }
 
@@ -972,7 +1007,23 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 break;
             }
         }
+    }
 
+    // 전송중 프로그레스바를 동영상의 썸네일로 교체해준다.
+    public void updateVideoItem(Chat_Item chatItem) {
+        for(int j = 0; j < chatItemList.size(); j ++) {
+            // 프로그레스바라면!! => 채팅타입이 3이지만 파일 url이 없다면!
+            if(chatItemList.get(j).getChatText().equals(chatItem.getChatText())
+                    && chatItemList.get(j).getChatUserId().equals(chatItem.getChatUserId())
+                    && chatItemList.get(j).getChatType() == 2
+                    && chatItemList.get(j).getChatFileUrl() == null){
+
+                chatItemList.get(j).setChatFileUrl(chatItem.getChatFileUrl());
+
+                notifyItemChanged(j);
+                break;
+            }
+        }
     }
 
     public List<Chat_Item> getChatItemList() {

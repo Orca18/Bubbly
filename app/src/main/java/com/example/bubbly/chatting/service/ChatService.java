@@ -66,6 +66,10 @@ public class ChatService extends Service {
     // 알림으로 채팅방 전송 => 채팅방리스트의 안읽은 메시지 없애주기위해 필요
     public static final int NOTIFICATION = 12;
 
+    // 서비스와 연결됐는지 여부
+    public static boolean IS_BOUND_MM_MESSAGE = false;
+    public static boolean IS_BOUND_CHATTING_ROOM = false;
+
     // 채팅서버 주소
     private String ServerIP = "tcp://43.200.189.111:1883";
 
@@ -181,6 +185,8 @@ public class ChatService extends Service {
                     break;
                 // 홈 액티비티와 연결
                 case CONNECT_HOME_ACT:
+                    IS_BOUND_MM_MESSAGE = true;
+
                     // fcm토큰 가져오기
                     FCMService.getToken();
 
@@ -239,6 +245,7 @@ public class ChatService extends Service {
                                         }
 
                                         Log.e("액티비티로 메시지 전송: ", " 6. 채팅방이 활성화되어있고 동일한 채팅방에서 메시지 전송 시 ChattingRoom로 전송 시작");
+
                                         Message tempMsg2 = new Message();
                                         tempMsg2.copyFrom(msg);
                                         mActivityMessengerList.get(1).send(tempMsg2);
@@ -253,7 +260,7 @@ public class ChatService extends Service {
                                     // 채팅방이 활성화돼있고 해당 채팅방의 메시지라면!
                                     Log.d("isChattingRoomivityActive: " , "" + isChattingRoomivityActive);
                                     Log.d("chatItem.getChatRoomId(): " + "" , chatItem.getChatRoomId());
-                                    Log.d("chatRoomId: " + "" , chatRoomId);
+                                    //Log.d("chatRoomId: " + "" , chatRoomId);
 
                                     if (isChattingRoomivityActive && chatItem.getChatRoomId().equals(chatRoomId)) {
                                         Log.e("액티비티로 메시지 전송 완료!!", chatItem.toString());
@@ -314,6 +321,7 @@ public class ChatService extends Service {
                     break;
                 // 채팅 액티비티와 연결
                 case CONNECT_CHAT_ACT:
+                    IS_BOUND_CHATTING_ROOM = true;
                     // 액티비티와 연결된 경우 그것과 통신할 수 있는 메신저를 저장한다.
                     mActivityMessengerList.add(msg.replyTo);
                     Log.e("ChattingRoom과 연결 메신저리스트에 새로운 메신저 추가 ","" + mActivityMessengerList.size());

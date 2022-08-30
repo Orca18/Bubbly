@@ -29,6 +29,7 @@ import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
@@ -113,11 +114,11 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/"+post_response.getProfile_file_name())
+                .load(Config.cloudfront_addr+post_response.getProfile_file_name())
                 .into(holder.iv_user_image);
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                .load(Config.cloudfront_addr + post_response.getFile_save_names())
                 .fitCenter()
                 .into(holder.iv_media);
 
@@ -288,7 +289,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ImageView_FullScreen.class);
-                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names());
+                intent.putExtra("img_url", Config.cloudfront_addr + post_response.getFile_save_names());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });

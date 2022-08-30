@@ -82,6 +82,7 @@
                         android:gravity="right|bottom"
                         android:text="오후 08:15"
                         android:textColor="#ff58616d"
+                        android:visibility="gone"
                         android:textSize="10sp" />
                 </LinearLayout>
 
@@ -89,6 +90,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
                     android:maxWidth="225dp"
+                    android:visibility="gone"
+                    android:id="@+id/thumbnail_layout"
                     android:layout_height="wrap_content">
 
                     <ImageView
@@ -116,6 +119,28 @@
                         app:layout_constraintTop_toTopOf="@+id/thumbnail" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progressbar_layout"
+                    android:orientation="vertical">
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="전송중..."/>
+                </LinearLayout>
+
 
                 <VideoView
                     android:id="@+id/video_MyMsg"

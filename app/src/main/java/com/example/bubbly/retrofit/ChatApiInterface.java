@@ -51,6 +51,4 @@ public interface ChatApiInterface {
     @FormUrlEncoded
     @POST("/updateUserCountMap") //
     Call<String> updateUserCountMap(@Field("chat_room_id") String chatRoomId, @Field("update_div") int updateDiv, @Field("all_userCount") int allUserCount, @Field("user_id") String userId);
-
-
 }

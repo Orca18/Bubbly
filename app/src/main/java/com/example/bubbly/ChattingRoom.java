@@ -126,9 +126,6 @@ public class ChattingRoom extends AppCompatActivity {
     // 서비스로 보낼 메신저
     final Messenger mActivityMessenger = new Messenger(new ActivityHandler());
 
-    // 서비스와 연결됐는지 여부
-    boolean isBound = false;
-
     // 서비스의 상태에 따라 콜백 함수를 호출하는 객체.
     private ServiceConnection conn;
 
@@ -160,13 +157,13 @@ public class ChattingRoom extends AppCompatActivity {
     // 마지막으로 읽은 메시지 아이디
     int lastReadMsgId;
 
-    
+
     /**
     * 새로운 채팅방인 경우 사용할 변수 - 메시지 전송여부
      * 메시지를 전송하지 않고 채팅방이 파괴되는 경우 채팅방 정보 삭제, MQTT, FCM 구독해지를 해야 함.
     * */
     private boolean isMsgTransfered;
-    
+
     // 채팅에 참여하는 멤버 리스트
     private ArrayList<OtherUserInfo> chatMemberList;
 
@@ -198,16 +195,16 @@ public class ChattingRoom extends AppCompatActivity {
                     } else {
                         // 수신한 메시지 리사이클러뷰에 표시
                         adapter.addChatMsgInfo(read);
-                        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
+                        /*RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
                             @Override protected int getVerticalSnapPreference() {
                                 return LinearSmoothScroller.SNAP_TO_END;
                             }
                         };
 
                         smoothScroller.setTargetPosition( 0 ); //itemPosition - 이동시키고자 하는 Item의 Position
-                        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
+                        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);*/
 
-                        //recyclerView.scrollToPosition(newPosition);
+                        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(0,0);
                     }
 
                     // 메시지 출력
@@ -286,15 +283,17 @@ public class ChattingRoom extends AppCompatActivity {
     private void loadrecycler(int pageNo) {
         // 쓰레드 http 요청 & run 데이터 넣기
         fillList(chatRoomId, pageNo);
-        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
+        /*RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
             @Override protected int getVerticalSnapPreference() {
                 return LinearSmoothScroller.SNAP_TO_END;
             }
         };
 
         smoothScroller.setTargetPosition( 0 ); //itemPosition - 이동시키고자 하는 Item의 Position
-        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
+        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);*/
         //recyclerView.scrollToPosition(0);
+
+        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(0,0);
     }
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
@@ -396,13 +395,13 @@ public class ChattingRoom extends AppCompatActivity {
     // 인텐트에서 받아온 값 세팅
     public void getIntentFromAct(){
         Intent getIntentFromAct = getIntent();
-        
+
         // 새로운 채팅방 여부 - 채팅방 리스트 화면에서 넘어온 경우 값이 없으므로 false로 세팅
         isNew = getIntentFromAct.getBooleanExtra("isNew", false);
 
         // 메시지 전송됐는지 여부 - 채팅방 리스트 화면에서 넘어온 경우 값이 없으므로 true로 세팅
         isMsgTransfered = getIntentFromAct.getBooleanExtra("isMsgTransfered", true);
-        
+
         // 채팅 참여자 리스트
         chatMemberList = (ArrayList<OtherUserInfo>) getIntentFromAct.getSerializableExtra("chatMemberList");
 
@@ -418,10 +417,10 @@ public class ChattingRoom extends AppCompatActivity {
 
         // 채팅방 생성 혹은 파괴 시 사용하는 객체
         chatRoomCreOrDel = (Chat_Room_Cre_Or_Del) getIntentFromAct.getSerializableExtra("chatRoomCreOrDel");
-        
+
         // 프로필맵 세팅
         setProfileMap(chatMemberList);
-        
+
         Log.d("채팅방 입장 시 Intent에서 데이터 잘 가져오나 확인 - isNew: ","" + isNew);
         Log.d("채팅방 입장 시 Intent에서 데이터 잘 가져오나 확인 - isMsgTransfered: ","" + isMsgTransfered);
         Log.d("채팅방 입장 시 Intent에서 데이터 잘 가져오나 확인 - chatRoomId: ",chatRoomId);
@@ -455,9 +454,6 @@ public class ChattingRoom extends AppCompatActivity {
                 mServiceMessenger = new Messenger(service);
 
                 Log.e("ChattingRoom입장 시 ChatService와 연결 - mServiceMessenger 생성", mServiceMessenger.toString());
-
-                // 연결여부를 true로 변경해준다.
-                isBound = true;
 
                 try {
                     // 서비스에게 보낼 메시지를 생성한다.
@@ -498,7 +494,7 @@ public class ChattingRoom extends AppCompatActivity {
                 // 서비스에게 메시지를 전송하는 메신저를 null로 변경
                 mServiceMessenger = null;
                 // 연결이 종료되었으므로 연결여부를 false로 봐꿔준다.
-                isBound = false;
+                ChatService.IS_BOUND_CHATTING_ROOM = false;
             }
         };
 
@@ -603,18 +599,26 @@ public class ChattingRoom extends AppCompatActivity {
 
         Log.e("채팅 메시지 송신", "1. 작성한 메시지 sendMsg에 저장 => sendMsg: " + sendMsg);
 
-        // 작성한 메시지 리사이클러뷰에 표시
-        adapter.addChatMsgInfo(chat_item);
-        RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
+        if(chatType == 2){
+            // 작성한 메시지 리사이클러뷰에 표시
+            adapter.updateVideoItem(chat_item);
+        } else {
+            adapter.addChatMsgInfo(chat_item);
+        }
+
+
+        /*RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
             @Override protected int getVerticalSnapPreference() {
                 return LinearSmoothScroller.SNAP_TO_END;
             }
         };
 
         smoothScroller.setTargetPosition( 0 ); //itemPosition - 이동시키고자 하는 Item의 Position
-        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);
+        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);*/
 
         //recyclerView.scrollToPosition(newPosition);
+
+        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(0,0);
 
         String chatItemRoomId = chat_item.getChatRoomId();
         String chatItemStr = chatUtil.chatItemToString(chat_item);
@@ -699,15 +703,14 @@ public class ChattingRoom extends AppCompatActivity {
         }
 
         // 서비스와 연결여부
-        isBound = false;
-        Log.e("채팅방 나갈 때 서비스와의 연결 제거 - isBound false로 변경", "" + isBound);
+        ChatService.IS_BOUND_CHATTING_ROOM = false;
 
         // 채팅방이 생성되고 메시지를 보내지 않은 상태에서 채팅방 액트가 종료된 경우 db에 저장된 채팅 관련 데이터 삭제 및 MQTT, FCM 구족 정보를 해지해야 한다.
         // 1. db의 채팅방 정보 삭제
         // 2. MQTT 구독 해지
         // 3. FCM 구독 해지
         if(isNew && !isMsgTransfered){
-            Log.e("채팅방이 새로 생성되고 메시지를 전송하지 않은채로 파괴되어 db저장정보 삭제!", "isNew: " + isBound + "isMsgTransfered: " + isMsgTransfered);
+            Log.e("채팅방이 새로 생성되고 메시지를 전송하지 않은채로 파괴되어 db저장정보 삭제!", "isNew: " + ChatService.IS_BOUND_CHATTING_ROOM + "isMsgTransfered: " + isMsgTransfered);
 
             ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
             Call<String> call = apiClient.deleteChatRoom(chatRoomId);
@@ -801,6 +804,11 @@ public class ChattingRoom extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == RESULT_OK) {
+                        // 리사이클러뷰를 보여준다.
+                        // 프로그레스바 보여주기! => 타입:2, chatFileUrl: null
+                        Chat_Item chat_item = new Chat_Item(chatRoomId, userId, "동영상",null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 2);
+                        adapter.addChatMsgInfo(chat_item);
+
                         Intent intent = result.getData();
                         Uri uri = intent.getData();
 

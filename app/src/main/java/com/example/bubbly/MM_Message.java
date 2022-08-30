@@ -35,13 +35,17 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.chatting.service.ChatService;
 import com.example.bubbly.chatting.util.ChatUtil;
 import com.example.bubbly.chatting.util.GetDate;
 import com.example.bubbly.chatting.viewmodel.ChattingRoomViewModel;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.controller.Messages_Adapter;
+import com.example.bubbly.model.AccessAndRefreshToken;
 import com.example.bubbly.model.Chat_Item;
 import com.example.bubbly.model.Chat_Member_FCM_Sub;
 import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
@@ -53,6 +57,7 @@ import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.ChatApiClient;
 import com.example.bubbly.retrofit.ChatApiInterface;
+import com.example.bubbly.retrofit.user_Response;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
@@ -60,8 +65,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -131,9 +140,6 @@ public class MM_Message extends AppCompatActivity {
     // 서비스로 보낼 메신저
     final Messenger mActivityMessenger = new Messenger(new ActivityHandler());
 
-    // 서비스와 연결됐는지 여부
-    boolean isBound = false;
-
     // 서비스의 상태에 따라 콜백 함수를 호출하는 객체.
     private ServiceConnection conn;
 
@@ -179,9 +185,14 @@ public class MM_Message extends AppCompatActivity {
                                     // viewModel에 채팅방 정보를 업데이트 해준다!
                                     // 기존의 채팅방정보 리스트
                                     ArrayList<Chat_Room_Info> chatRoomList = chattingRoomViewModel.getChatRoomList().getValue();
+
+                                    Log.d("새로운 채팅방 생성전 사이즈: ", "" + chatRoomList.size());
+
                                     chatRoomList.add(0,chatRoomInfo);
 
                                     chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
+
+                                    Log.d("새로운 채팅방 생성후 사이즈: ", "" + chatRoomList.size());
 
                                     // 채팅방아이디를 관리하는 맵에도 데이터를 넣어준다!
                                     chatRoomIdMap.put(chatRoomId, chatRoomInfo.getLatestMsgId());
@@ -195,6 +206,7 @@ public class MM_Message extends AppCompatActivity {
                         });
                     } else { // 해당 메시지의 채팅방 아이디와 동일한 채팅방 아이디를 가지는 채팅방 객체가 이미 존재!
                         ArrayList<Chat_Room_Info> chatRoomList = chattingRoomViewModel.getChatRoomList().getValue();
+                        Log.e("이미 있는 채팅방 => 갱신전", "" + chatRoomList.get(0).getLatestMsg());
 
                         for(int i = 0; i < chatRoomList.size(); i++){
                             Chat_Room_Info chatRoomInfo = chatRoomList.get(i);
@@ -202,13 +214,17 @@ public class MM_Message extends AppCompatActivity {
                             if(chatRoomInfo.getChatRoomId().equals(chatRoomId)){
                                 chatRoomInfo.setLatestMsg(read.getChatText());
                                 chatRoomInfo.setLatestMsgId(read.getChatId());
+
                                 // 브로커로부터 받은 메시지의 시간은 yyyy년 mm월 dd일 (요일) 오전/오후 hh:mm의 형태로 보여짐
                                 // db에서 조회할 땐 yyyy.MM.dd hh:mm의 형태로 될 것임 => 둘을 맞춰줘야 함!!
-                                chatRoomInfo.setLatestMsgTime(read.getChatDate() + " " + read.getChatTime());
+                                // 최신 메시지 수신 시간
+                                chatRoomInfo.setLatestMsgTime(read.getChatTime());
                                 // 해당 위치의 아이템 삭제
                                 chatRoomList.remove(i);
                                 // 가장 최근에 메시지를 받았으므로 0번쨰 인덱스로 이동!
                                 chatRoomList.add(0,chatRoomInfo);
+
+                                Log.e("이미 있는 채팅방 => 갱신 후", "" + chatRoomList.get(0).getLatestMsg());
 
                                 // 뷰모델 갱신!
                                 chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
@@ -236,26 +252,140 @@ public class MM_Message extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_c_message);
 
+        // 스플래시 화면을 거치지 않고 채팅 리스트 화면으로 왔다면 설정파일의 데이터를 가져온다.
+        if(Config.api_server_addr == null){
+            try {
+                new Config(getApplicationContext()).getConfigData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         userId = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        // 채팅서비스와 연결한다.
-        connectToService();
+        // noti를 클릭해서 넘어왔다면!
+        if(UserInfo.user_id.equals("")){
+            //쉐어드프리퍼런스에서 로그인정보 가져오기
+            String id="";
+            String pw="";
+            MasterKey masterkey = null;
+            try {
+                masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                        .build();
+                SharedPreferences sharedPreferences = EncryptedSharedPreferences
+                        .create(getApplicationContext(),
+                                "account",
+                                masterkey,
+                                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+                id = sharedPreferences.getString("id","");
+                pw = sharedPreferences.getString("pw","");
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(id.equals("")&pw.equals("")){
+                //만약 쉐어드프리퍼런스에 저장된 사용자 정보가 없으면 로그인 페이지로 이동
+                startActivity(new Intent(MM_Message.this, LL_Login.class));
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                finish();
+            }else{
+                //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
+                ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                Call<String> call = login_api.login(id,pw);
+                call.enqueue(new Callback<String>()
+                {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            Log.e("로그인 데이터", response.body().toString());
+                            if(response.body().toString().equals("fail")){
+                                Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+                                //수신한 데이터를 json으로 파싱한다.
+                                JSONObject json = null;
+                                try {
+                                    //수신한 토큰을 static으로 저장한다.
+                                    json = new JSONObject(response.body().toString());
+                                    AccessAndRefreshToken.accessToken = json.getString("accessToken");
+                                    AccessAndRefreshToken.refreshToken = json.getString("refreshToken");
+                                    int user_id = json.getInt("userId");
+                                    //암호화 쉐어드 프리퍼런스 복호화해 주소와 니모니 불러온다 (공동작업 위해 복호화 주석처리 이후 다시 주석 해제 예정)
+                                    MasterKey masterkey = null;
+                                    try {
+                                        masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                                                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                                                .build();
+                                        SharedPreferences sharedPreferences = EncryptedSharedPreferences
+                                                .create(getApplicationContext(),
+                                                        "account",
+                                                        masterkey,
+                                                        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                                                        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+                                        String mnemonic = sharedPreferences.getString("mnemonic","");
+                                        Log.e("니모닉",mnemonic);
+                                        UserInfo.mnemonic = mnemonic;
+                                    } catch (GeneralSecurityException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    //회원정보를 요청한다.
+                                    Call<List<user_Response>> call_userInfo = login_api.selectUserInfo(""+user_id);
+                                    call_userInfo.enqueue(new Callback<List<user_Response>>()
+                                    {
+                                        @Override
+                                        public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response)
+                                        {
+                                            System.out.println(response.body());
+                                            //수신한 회원정보를 스태틱으로 저장한다.
+                                            List<user_Response> responseResult = response.body();
+                                            UserInfo.user_id = responseResult.get(0).getUser_id();
+                                            UserInfo.login_id = responseResult.get(0).getLogin_id();
+                                            UserInfo.email_addr = responseResult.get(0).getEmail_addr();
+                                            UserInfo.novaland_account_addr = responseResult.get(0).getNovaland_account_addr();
+                                            UserInfo.phone_num = responseResult.get(0).getPhone_num();
+                                            UserInfo.user_nick = responseResult.get(0).getUser_nick();
+                                            UserInfo.self_info = responseResult.get(0).getSelf_info();
+                                            UserInfo.token = responseResult.get(0).getToken();
+                                            if(responseResult.get(0).getProfile_file_name()!=null && !responseResult.get(0).getProfile_file_name().equals("")){
+                                                UserInfo.profile_file_name = Config.cloudfront_addr+responseResult.get(0).getProfile_file_name();
+                                            }
 
-        // 리소스 ID 선언
-        initiallize();
-        // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
-        bottomNavi();
-        // 클릭 리스너 모음 - 스택 O
-        clickListeners();
-        // 내비 터치
-        NaviTouch();
-
-        // 뷰모델 생성
-        chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
-
-        // 뷰모델 변경 시 리사이클러뷰에 변경된 데이터 세팅
-        observe();
+                                            initiallize();
+                                        }
+                                        @Override
+                                        public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
+                                        {
+                                            Log.e("에러", t.getMessage());
+                                        }
+                                    });
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                    {
+                        Log.e("로그인 에러", t.getMessage());
+                    }
+                });
+            }
+        } else {
+            // 리소스 ID 선언
+            initiallize();
+        }
     }
 
 
@@ -263,6 +393,11 @@ public class MM_Message extends AppCompatActivity {
 
     // 리소스 아이디 선언
     private void initiallize() {
+        // 채팅서비스와 연결한다.
+        if(!ChatService.IS_BOUND_MM_MESSAGE) {
+            connectToService();
+        }
+
         // 툴바
         toolbar = findViewById(R.id.message_toolbar);
         setSupportActionBar(toolbar);
@@ -307,6 +442,25 @@ public class MM_Message extends AppCompatActivity {
 
         // 채팅방 추가 버튼
         btnChatRoomAdd = findViewById(R.id.message_chat_room_add);
+
+        // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
+        bottomNavi();
+        // 클릭 리스너 모음 - 스택 O
+        clickListeners();
+        // 내비 터치
+        NaviTouch();
+
+        // 뷰모델 생성
+        chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
+
+        // 뷰모델 변경 시 리사이클러뷰에 변경된 데이터 세팅
+        observe();
+
+        // 채팅서비스와 연결이 돼있다면
+        if(ChatService.IS_BOUND_MM_MESSAGE){
+            // 리사이클러뷰 데이터 가져오기
+            loadrecycler();
+        }
     }
 
     // 바텀 메뉴 클릭
@@ -483,9 +637,7 @@ public class MM_Message extends AppCompatActivity {
                 mServiceMessenger = new Messenger(service);
                 Log.e("채팅서비스와 연결 - mServiceMessenger 생성", mServiceMessenger.toString());
 
-                // 연결여부를 true로 변경해준다.
-                isBound = true;
-                Log.e("채팅서비스와 연결 - isBound true로 변경", "" + isBound);
+                Log.e("채팅서비스와 연결 - ChatService.IS_BOUND_MM_MESSAGE true로 변경", "" + ChatService.IS_BOUND_MM_MESSAGE);
 
                 try {
                     // 서비스에게 보낼 메시지를 생성한다.
@@ -518,7 +670,7 @@ public class MM_Message extends AppCompatActivity {
                 // 서비스의 메시지를 받는 메신저를 null로 변경
                 mServiceMessenger = null;
                 // 연결이 종료되었으므로 연결여부를 false로 봐꿔준다.
-                isBound = false;
+                ChatService.IS_BOUND_MM_MESSAGE = false;
             }
         };
 
@@ -663,7 +815,7 @@ public class MM_Message extends AppCompatActivity {
                     @Override public void onActivityResult(ActivityResult result) {
                         Log.d("df","11");
                         if (result.getResultCode() == Activity.RESULT_OK) {
-                            // 채팅 참여자 리스트
+                            /*// 채팅 참여자 리스트
                             Chat_Room_Info chatRoomInfo = (Chat_Room_Info) result.getData().getSerializableExtra("chatRoomInfo");
 
                             // viewModel에 채팅방 정보를 업데이트 해준다!
@@ -674,7 +826,7 @@ public class MM_Message extends AppCompatActivity {
                             chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
 
                             // 채팅방아이디를 관리하는 맵에도 데이터를 넣어준다!
-                            chatRoomIdMap.put(chatRoomInfo.getChatRoomId(), chatRoomInfo.getLatestMsgId());
+                            chatRoomIdMap.put(chatRoomInfo.getChatRoomId(), chatRoomInfo.getLatestMsgId());*/
                         }
                     }
                 });
@@ -729,11 +881,11 @@ public class MM_Message extends AppCompatActivity {
 
                             // FCM 토큰리스트
                             mIntent.putExtra("chatMemberFcmTokenList", chatMemberFcmSub);
-                            Log.d("chatMemberFcmTokenList", chatMemberFcmSub.toString());
+                            //Log.d("chatMemberFcmTokenList", chatMemberFcmSub.toString());
 
                             // 채팅방 생성 혹은 파괴 객체정보
                             mIntent.putExtra("chatRoomCreOrDel", chatRoomCreOrDel);
-                            Log.d("chatRoomCreOrDel",chatRoomCreOrDel.toString());
+                            //Log.d("chatRoomCreOrDel",chatRoomCreOrDel.toString());
 
                             // 채팅방 화면으로 이동!
                             startActResultForChattingRoom.launch(mIntent);
@@ -826,11 +978,15 @@ public class MM_Message extends AppCompatActivity {
     
     // 뷰모델 observe
     public void observe(){
+        Log.d("여기 들어옴?", "!1");
+
         // 가져온 채팅방리스트정보 observe
-        chattingRoomViewModel.getChatRoomList().observe(this, chatRoomList -> { 
+        chattingRoomViewModel.getChatRoomList().observe(this, chatRoomList -> {
             adapter = new Messages_Adapter(this, chatRoomList);
-            
+            Log.d("여기 들어옴?", "22");
+
             recyclerView.setAdapter(adapter);
+
         });
     }
 }

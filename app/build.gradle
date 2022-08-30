@@ -114,4 +114,7 @@ dependencies {
     // support thumbnail and gif with Glide
     implementation 'com.github.piasy:GlideImageViewFactory:1.8.1'
 
+    implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.13.5'
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.13.5'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.13.5'
 }

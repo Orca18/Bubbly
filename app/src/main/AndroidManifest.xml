@@ -31,7 +31,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".VideoDownloadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".chatting.TestActivity"
+            android:exported="true">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
         <activity
             android:name=".Community_Info_Edit"
             android:exported="false" />
@@ -47,22 +58,23 @@
         <activity
             android:name=".Community_Create"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ImageView_FullScreen"
             android:exported="false" />
         <activity
             android:name=".Community_MainPage"
             android:exported="true">
-
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="bubbly2" android:host="3.39.84.115"/>
-            </intent-filter>
 
+                <data
+                    android:host="3.39.84.115"
+                    android:scheme="bubbly2" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ReplyModify"
@@ -104,17 +116,17 @@
             android:name=".SS_PostDetail"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
-
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="bubbly1" android:host="3.39.84.115"/>
+
+                <data
+                    android:host="3.39.84.115"
+                    android:scheme="bubbly1" />
             </intent-filter>
-
         </activity>
-
-
         <activity
             android:name=".Post_Create"
             android:exported="false"
@@ -140,7 +152,7 @@
         <activity
             android:name=".ChattingRoom"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".LL_Register_A"
             android:exported="false" />
@@ -150,7 +162,6 @@
         <activity
             android:name=".Option_Notice_List"
             android:exported="false" />
-
         <activity
             android:name=".LL_Register_B"
             android:exported="false" />
@@ -160,7 +171,7 @@
         <activity
             android:name=".LL_Login"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".LL_FindID_A"
             android:exported="false" />
@@ -193,7 +204,7 @@
             android:exported="false" />
         <activity
             android:name=".MM_Message"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="FCM_NOTI_ACTIVITY" />
 
@@ -221,6 +232,9 @@
             android:name=".chatting.service.ChatService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -62,7 +63,7 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
         holder.tv_user_id.setText("@"+follower_response.getLogin_id());
         if(follower_response.getProfile_file_name()!=null&&!follower_response.getProfile_file_name().equals("")){
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+follower_response.getProfile_file_name())
+                    .load(Config.cloudfront_addr+follower_response.getProfile_file_name())
                     .circleCrop()
                     .into(holder.iv_user_image);
         }else{

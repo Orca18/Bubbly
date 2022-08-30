@@ -370,9 +370,15 @@ public interface ApiInterface {
 
     // todo 채팅 관련 api (시작 지점)
 
+    // 채팅 파일 저장
     @Multipart
-    @POST("chat/saveChatFiles") // nft 저장
-    Call<String> saveChatFiles(@Part List<MultipartBody.Part> files); // 검색어
+    @POST("chat/saveChatFiles")
+    Call<String> saveChatFiles(@Part List<MultipartBody.Part> files);
+
+    // 기존에 존재하는 채팅방여부 조회
+    @GET("chat/selectExistingChatRoomId")
+    Call<String> selectExistingChatRoomId(@Query("chatMember1") String chatMember1, @Query("chatMember2") String chatMember2);
+
 
     // todo 채팅 관련api (끝 지점)
 
