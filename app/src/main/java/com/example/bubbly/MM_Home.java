@@ -239,7 +239,8 @@ public class MM_Home extends AppCompatActivity {
                                 responseResult.get(i).getCre_datetime(),
                                 responseResult.get(i).getMentioned_user_list(),
                                 responseResult.get(i).getCommunity_id(),
-                                responseResult.get(i).getLogin_id()));
+                                responseResult.get(i).getLogin_id(),
+                                responseResult.get(i).getPost_type()));
                     }
                     post_adapter.notifyDataSetChanged();
                 }
@@ -258,19 +259,19 @@ public class MM_Home extends AppCompatActivity {
 
 
     // 바닥에 도달했을 때...
-    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
-            int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
-            if (lastVisibleItemPosition == itemTotalCount) {
-                //TODO 바닥 작업
-//                progressBar.setVisibility(View.VISIBLE);
-//                loadMoreData();
-            }
-        }
-    };
+//    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+//        @Override
+//        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//            super.onScrolled(recyclerView, dx, dy);
+//            int lastVisibleItemPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+//            int itemTotalCount = recyclerView.getAdapter().getItemCount() - 1;
+//            if (lastVisibleItemPosition == itemTotalCount) {
+//                //TODO 바닥 작업
+////                progressBar.setVisibility(View.VISIBLE);
+////                loadMoreData();
+//            }
+//        }
+//    };
 
     // 클릭 이벤트 모음
     private void clickListeners() {

@@ -22,7 +22,7 @@ public class FileUtils {
     static final String MIME_TYPE_AUDIO = "audio/*";
     static public String MIME_TYPE_TEXT = "text/*";
     static public String MIME_TYPE_IMAGE = "image/jpeg";
-    static final String MIME_TYPE_VIDEO = "video/*";
+    static public String MIME_TYPE_VIDEO = "video/*";
     static final String MIME_TYPE_APP = "application/*";
 
     public static final String HIDDEN_PREFIX = ".";
