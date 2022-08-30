@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:fontFamily="@font/spoqa_medium"
-                android:text=""
+                android:text="Bubbly"
                 android:textSize="16dp" />
 
 
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:fontFamily="@font/spoqa_medium"
-                android:text=""
+                android:text="Bubbly"
                 android:textSize="16dp" />
 
 
@@ -141,7 +141,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:fontFamily="@font/spoqa_medium"
-                android:text=""
+                android:text="Bubbly"
                 android:textSize="16dp" />
 
 
@@ -181,7 +181,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:fontFamily="@font/spoqa_medium"
-                android:text=""
+                android:text="Bubbly"
                 android:textSize="16dp" />
 
 

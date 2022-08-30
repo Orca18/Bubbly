@@ -121,10 +121,6 @@ public class MM_Issue extends AppCompatActivity {
         btwallet = findViewById(R.id.issue_towallet);
 
 
-        // 카테고리
-        cat1 = findViewById(R.id.issue_category_hot);
-        cat2 = findViewById(R.id.issue_category_bubble);
-        cat3 = findViewById(R.id.issue_category_community);
 
         scrollView = findViewById(R.id.issue__scrollview);
 
