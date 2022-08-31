@@ -123,7 +123,8 @@ public class LL_Splash extends AppCompatActivity {
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
                                             Map<String, ?> all = sharedPreferences.getAll();
-                                            System.out.println(all.values());
+                                            System.out.println("모든값"+all.toString());
+                                            System.out.println("모든값"+all.values());
                                             String address = sharedPreferences.getString("address","");
                                             String mnemonic = sharedPreferences.getString("mnemonic","");
                                             Log.e("니모닉",mnemonic);
