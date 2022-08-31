@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Community_MainPage"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Community_MainPage">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/com_main_toolbar"
@@ -23,26 +22,26 @@
             android:textColor="@color/black"
             android:textSize="20dp" />
 
-<!--        <ImageView-->
-<!--            android:layout_gravity="right"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_baseline_more_vert_24"/>-->
+        <!--        <ImageView-->
+        <!--            android:layout_gravity="right"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:src="@drawable/ic_baseline_more_vert_24"/>-->
 
         <ImageView
             android:id="@+id/bt_search_com"
-            android:layout_gravity="right"
-            android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_search_24"/>
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_baseline_search_24" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#ddd"/>
+        android:background="#ddd" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/com_main_refresh"
@@ -50,16 +49,15 @@
         android:layout_height="wrap_content">
 
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:fillViewport="true">
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:fillViewport="true">
 
-        <include layout="@layout/activity_community_mainpage_include" />
+            <include layout="@layout/activity_community_mainpage_include" />
 
-
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 

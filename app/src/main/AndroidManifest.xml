@@ -58,12 +58,11 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="3.39.84.115/"
+                    android:host="3.39.84.115"
                     android:scheme="bubbly2" />
             </intent-filter>
         </activity>
@@ -103,21 +102,27 @@
         <activity
             android:name=".Community_Joined_List"
             android:exported="false" />
+
         <activity
             android:name=".SS_PostDetail"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="3.39.84.115/"
+                    android:host="3.39.84.115"
                     android:scheme="bubbly1" />
             </intent-filter>
+
+
         </activity>
+
+
+
         <activity
             android:name=".Post_Create"
             android:exported="false"

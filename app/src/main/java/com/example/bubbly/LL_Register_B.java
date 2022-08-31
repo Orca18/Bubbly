@@ -111,7 +111,7 @@ public class LL_Register_B extends AppCompatActivity {
                                                     Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
                                                 }
                                                 else{
-                                                    Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+//                                                    Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
                                                     //수신한 데이터를 json으로 파싱한다.
                                                     JSONObject json = null;
                                                     try {

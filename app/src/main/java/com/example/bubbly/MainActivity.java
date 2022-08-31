@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {

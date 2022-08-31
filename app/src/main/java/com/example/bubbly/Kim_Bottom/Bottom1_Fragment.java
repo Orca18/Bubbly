@@ -144,7 +144,7 @@ public class Bottom1_Fragment extends Fragment {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         postList = new ArrayList<>();
-        post_adapter = new Post_Adapter(getContext(), this.postList, getContext());
+        post_adapter = new Post_Adapter(getContext(), this.postList, getContext(),getActivity());
         recyclerView.setAdapter(post_adapter);
         post_adapter.notifyDataSetChanged();
 

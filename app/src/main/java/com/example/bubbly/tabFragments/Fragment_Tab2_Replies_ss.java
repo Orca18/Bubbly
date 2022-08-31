@@ -64,6 +64,7 @@ public class Fragment_Tab2_Replies_ss extends Fragment {
         super.onCreate(savedInstanceState);
 
         uid = ((SS_Profile)getActivity()).getUid();
+        Log.d("디버그태그", "user_id in post44"+uid);
 
     }
 
@@ -94,10 +95,9 @@ public class Fragment_Tab2_Replies_ss extends Fragment {
         reply_adapter = new Reply_Adapter(getActivity().getApplicationContext(), replyList, getActivity().getApplicationContext() );
         recyclerView.setAdapter(reply_adapter);
         reply_adapter.notifyDataSetChanged();
-        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
         ApiInterface selectCommentUsingCommentWriterId_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<reply_Response>> call = selectCommentUsingCommentWriterId_api.selectCommentUsingCommentWriterId(user_id);
+        Call<List<reply_Response>> call = selectCommentUsingCommentWriterId_api.selectCommentUsingCommentWriterId(uid);
         call.enqueue(new Callback<List<reply_Response>>()
         {
             @Override

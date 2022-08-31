@@ -256,11 +256,6 @@ public class SS_PostDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-
-
-
-
                 if (user_id.equals(owner_id)) {
                     bottomSheetFragment_owner.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 } else {
@@ -284,6 +279,21 @@ public class SS_PostDetail extends AppCompatActivity {
                 ClipboardManager cm = (ClipboardManager)getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 cm.setText(tv_content.getText());
                 Toast.makeText(getApplicationContext(), "복사", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        iv_share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+
+                // tODO 링크 넣기 String으로 받아서 넣기
+                String sendMessage = "http://3.39.84.115/share/deep_post?id="+post_id;
+                intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
+
+                Intent shareIntent = Intent.createChooser(intent, "share");
+                startActivity(shareIntent);
             }
         });
     }
@@ -393,7 +403,7 @@ public class SS_PostDetail extends AppCompatActivity {
 
                     SetDate(responseResult.get(0).getCre_datetime());
 
-                    media_link = responseResult.get(0).getProfile_file_name();
+                    media_link =  responseResult.get(0).getFile_save_names();
                 }
             }
 

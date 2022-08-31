@@ -63,6 +63,7 @@
         </LinearLayout>
 
         <ImageButton
+            android:visibility="invisible"
             android:id="@+id/item_com_member_add"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_baseline_person_add_alt_1_24"
