@@ -123,14 +123,14 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         Log.i("파일 타입", "과연:" + post_response.getPost_type());
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                .load(Config.cloudfront_addr + post_response.getFile_save_names())
                 .fitCenter()
                 .into(holder.iv_media);
 
 
         String type = post_response.getPost_type();
 
-        String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names();
+        String videoURL = Config.cloudfront_addr + post_response.getFile_save_names();
         try {
             Log.d("디버그태그", "try 전:"+type);
             if(type.equals("2")){
@@ -160,7 +160,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 holder.vd_media.setVisibility(View.GONE);
                 Log.d("디버그태그", "엑소플레이어1:"+type);
                 Glide.with(mContext)
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                        .load(Config.cloudfront_addr + post_response.getFile_save_names())
                         .fitCenter()
                         .into(holder.iv_media);
             } else {
@@ -192,7 +192,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_community?id="+post_response.getPost_id();
+                String sendMessage = Config.api_server_addr + "/share/deep_community?id="+post_response.getPost_id();
 //                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 

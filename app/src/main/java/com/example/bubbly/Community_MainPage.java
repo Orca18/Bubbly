@@ -317,7 +317,8 @@ public class Community_MainPage extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_community?id="+com_id;
+                String sendMessage = Config.api_server_addr + "/share/deep_community?id="+com_id;
+
 //                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 

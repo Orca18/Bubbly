@@ -62,6 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
 public class SS_PostDetail extends AppCompatActivity {
 
@@ -295,7 +296,7 @@ public class SS_PostDetail extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_post?id=" + post_id;
+                String sendMessage = Config.api_server_addr + "/share/deep_post?id=" + post_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
                 Intent shareIntent = Intent.createChooser(intent, "share");
@@ -403,12 +404,11 @@ public class SS_PostDetail extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-<<<<<<< HEAD
                     Glide.with(SS_PostDetail.this)
                             .load(Config.cloudfront_addr + responseResult.get(0).getFile_save_names())
                             .into(iv_media);
-=======
-                    String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names();
+
+                    String videoURL = Config.cloudfront_addr + responseResult.get(0).getFile_save_names();
 
                     if (responseResult.get(0).getPost_type().equals("2")) {  // 동영상
                         vd_media.setVisibility(View.VISIBLE);
@@ -435,11 +435,10 @@ public class SS_PostDetail extends AppCompatActivity {
                         exoPlayer.setPlayWhenReady(false);
                     } else { // 이미지 또는 텍스트
                         Glide.with(SS_PostDetail.this)
-                                .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names())
+                                .load(Config.cloudfront_addr + responseResult.get(0).getFile_save_names())
                                 .into(iv_media);
                     }
 
->>>>>>> bfed9065a8063835db577724e241656ef353ebce
 
                     Glide.with(SS_PostDetail.this)
                             .load(Config.cloudfront_addr + responseResult.get(0).getProfile_file_name())
