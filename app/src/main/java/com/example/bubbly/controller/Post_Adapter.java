@@ -122,12 +122,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         Log.i("파일 타입", "과연:" + post_response.getPost_type());
 
 
-
-
-
-
-
-
         String type = post_response.getPost_type();
 
         String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names();
