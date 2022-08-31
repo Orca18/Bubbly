@@ -1,7 +1,1 @@
-{
-  "api_server_address" : "http://3.39.84.115:80/",
-  "chat_server_address" : "http://43.200.189.111:3000",
-  "aws_access_key" : "AKIAT2UD4WFJSH7BNKF6",
-  "aws_secret_key" : "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",
-  "cloudfront_addr" : "https://d2gf68dbj51k8e.cloudfront.net/"
-}
+{}
