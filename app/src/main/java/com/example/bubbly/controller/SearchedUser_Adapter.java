@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.bubbly.Community_MainPage;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.SearchedUser_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -66,7 +67,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         holder.tv_user_id.setText("@"+user_response.getLogin_id());
         if(user_response.getProfile_file_name()!=null&&!user_response.getProfile_file_name().equals("")){
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+user_response.getProfile_file_name())
+                    .load(Config.cloudfront_addr+user_response.getProfile_file_name())
                     .circleCrop()
                     .into(holder.iv_user_image);
         }else{

@@ -67,17 +67,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-<!--                    <ScrollView-->
-<!--                        android:id="@+id/ss_text_scrollview"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:fillViewport="true"-->
-<!--                        android:nestedScrollingEnabled="true"-->
-<!--                        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+                    <!--                    <ScrollView-->
+                    <!--                        android:id="@+id/ss_text_scrollview"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="match_parent"-->
+                    <!--                        android:fillViewport="true"-->
+                    <!--                        android:nestedScrollingEnabled="true"-->
+                    <!--                        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-                        <include layout="@layout/sub_profile_include" />
+                    <include layout="@layout/sub_profile_include" />
 
-<!--                    </ScrollView>-->
+                    <!--                    </ScrollView>-->
                 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             </RelativeLayout>

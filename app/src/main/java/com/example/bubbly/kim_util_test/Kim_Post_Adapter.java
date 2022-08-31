@@ -28,6 +28,7 @@ import com.example.bubbly.ImageView_FullScreen;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -141,11 +142,11 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getProfile_file_name())
+                .load(Config.cloudfront_addr + post_response.getProfile_file_name())
                 .into(holder.iv_user_image);
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                .load(Config.cloudfront_addr + post_response.getFile_save_names())
                 .fitCenter()
                 .into(holder.iv_media);
 
@@ -209,7 +210,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         } else {
             Log.d("디버그태그", "null 아니다");
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getProfile_file_name())
+                    .load(Config.cloudfront_addr + post_response.getProfile_file_name())
                     .into(holder.iv_user_image);
         }
 
@@ -231,7 +232,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ImageView_FullScreen.class);
-                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names());
+                intent.putExtra("img_url", Config.cloudfront_addr + post_response.getFile_save_names());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -363,7 +364,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
         String type = post_response.getPost_type();
 
-        String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names();
+        String videoURL = Config.cloudfront_addr + post_response.getFile_save_names();
         try {
             Log.d("디버그태그", "try 전:"+type);
             if(type.equals("2")){
@@ -392,7 +393,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
             } if (type.equals("1")) {
                 Log.d("디버그태그", "엑소플레이어1:"+type);
                 Glide.with(mContext)
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                        .load(Config.cloudfront_addr + post_response.getFile_save_names())
                         .fitCenter()
                         .into(holder.iv_media);
             } else {

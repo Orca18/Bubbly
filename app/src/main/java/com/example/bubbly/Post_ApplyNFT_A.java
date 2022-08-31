@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.controller.Custom_Toast;
 import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.model.UserInfo;
@@ -93,7 +94,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                     for (int i = 0; i < responseResult.size(); i++) {
                         if(responseResult.get(i).getProfile_file_name()!=null&&!responseResult.get(i).getProfile_file_name().equals("")){
                             Glide.with(getApplicationContext())
-                                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(i).getProfile_file_name())
+                                    .load(Config.cloudfront_addr+responseResult.get(i).getProfile_file_name())
                                     .into(iv_user_image);
                         }
                         if(responseResult.get(i).getNick_name()!=null&&!responseResult.get(i).getNick_name().equals("")){
@@ -139,7 +140,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                         tv_contents.setText(responseResult.get(i).getPost_contents());
                         if(responseResult.get(i).getFile_save_names()!=null&&!responseResult.get(i).getFile_save_names().equals("")){
                             Glide.with(getApplicationContext())
-                                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(i).getFile_save_names())
+                                    .load(Config.cloudfront_addr+responseResult.get(i).getFile_save_names())
                                     .into(iv_media);
                         }
                     }

@@ -33,6 +33,7 @@ import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_ForAdapter;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
@@ -122,14 +123,14 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         Log.i("파일 타입", "과연:" + post_response.getPost_type());
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                .load(Config.cloudfront_addr + post_response.getFile_save_names())
                 .fitCenter()
                 .into(holder.iv_media);
 
 
         String type = post_response.getPost_type();
 
-        String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names();
+        String videoURL = Config.cloudfront_addr + post_response.getFile_save_names();
         try {
             Log.d("디버그태그", "try 전:"+type);
             if(type.equals("2")){
@@ -159,7 +160,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 holder.vd_media.setVisibility(View.GONE);
                 Log.d("디버그태그", "엑소플레이어1:"+type);
                 Glide.with(mContext)
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                        .load(Config.cloudfront_addr + post_response.getFile_save_names())
                         .fitCenter()
                         .into(holder.iv_media);
             } else {
@@ -191,7 +192,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_community?id="+post_response.getPost_id();
+                String sendMessage = Config.api_server_addr + "/share/deep_community?id="+post_response.getPost_id();
 //                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
@@ -201,6 +202,11 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
+        Glide.with(mContext)
+                .load(Config.cloudfront_addr + post_response.getFile_save_names())
+                .fitCenter()
+                .into(holder.iv_media);
+
         if(post_response.getProfile_file_name().equals(null)){
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)
@@ -209,10 +215,9 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         } else {
             Log.d("디버그태그", "null 아니다");
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getProfile_file_name())
+                    .load(Config.cloudfront_addr + post_response.getProfile_file_name())
                     .into(holder.iv_user_image);
         }
-
 
 
         String a = null;
@@ -393,7 +398,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ImageView_FullScreen.class);
-                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names());
+                intent.putExtra("img_url", Config.cloudfront_addr + post_response.getFile_save_names());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });

@@ -32,8 +32,17 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".VideoDownloadActivity"
             android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="FCM_NOTI_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Community_Info_Edit"
             android:exported="false" />
@@ -147,7 +156,8 @@
             android:exported="false" />
         <activity
             android:name=".ChattingRoom"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".LL_Register_A"
             android:exported="false" />
@@ -200,15 +210,13 @@
         <activity
             android:name=".MM_Message"
             android:exported="true">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
+        <activity
+            android:name=".ImageView_FullScreen_With_Save"
+            android:exported="false" />
+        <activity
+            android:name=".Video_Play"
+            android:exported="false" />
         <activity
             android:name=".MM_Wallet"
             android:exported="false" /> <!-- FCM 서비스 -->
@@ -224,6 +232,9 @@
             android:name=".chatting.service.ChatService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true" />
     </application>
 
 </manifest>

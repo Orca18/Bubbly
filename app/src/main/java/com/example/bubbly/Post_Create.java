@@ -132,11 +132,11 @@ public class Post_Create extends AppCompatActivity {
 // 수정 할 때 사용
 //        System.out.println("post_file" + post_file);
 //        if (post_file != null) {
-//            imageList.add(Uri.parse("https://d2gf68dbj51k8e.cloudfront.net/" + post_file));
+//            imageList.add(Uri.parse(Config.cloudfront_addr + post_file));
 //            r_thumb.setVisibility(View.GONE);
 //            r_img.setVisibility(View.VISIBLE);
 //            Glide.with(Post_Create.this)
-//                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_file)
+//                    .load(Config.cloudfront_addr + post_file)
 //                    .into(my_image);
 //        }
 

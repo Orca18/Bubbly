@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.Kim_Com_Members_Response;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class Memberlists_Adapter extends RecyclerView.Adapter<Memberlists_Adapte
         Kim_Com_Members_Response currentItem = this.mData.get(position);
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + currentItem.getProfile_file_name())
+                .load(Config.cloudfront_addr + currentItem.getProfile_file_name())
                 .centerCrop()
                 .into(holder.cv_profile);
         

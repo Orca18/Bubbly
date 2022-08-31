@@ -346,9 +346,9 @@ public class ChatUtil {
     }
 
     // 서버의 사용자수맵 업데이트
-    public void updateUserCountMap(String chatRoomId, int updateDiv, int allUserCount){
+    public void updateUserCountMap(String chatRoomId, int updateDiv, int allUserCount, String userId){
         ChatApiInterface chatApiClient = ChatApiClient.getApiClient().create(ChatApiInterface.class);
-        Call<String> call2 = chatApiClient.updateUserCountMap(chatRoomId, updateDiv, allUserCount);
+        Call<String> call2 = chatApiClient.updateUserCountMap(chatRoomId, updateDiv, allUserCount, userId);
         call2.enqueue(new Callback<String>()
         {
             @Override

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bubbly.Post_Create;
 import com.example.bubbly.R;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.OtherUserInfo;
 
 import java.util.ArrayList;
@@ -81,12 +82,12 @@ public class Chat_Searched_User_Adapter extends RecyclerView.Adapter<Chat_Search
         // 리스트에 있는 사용자 정보 세팅
         OtherUserInfo currentItem = this.mUserInfoList.get(position);
 
-        Log.d("사용자 프로필: ", "https://d2gf68dbj51k8e.cloudfront.net/" + currentItem.getProfile_file_name());
+        Log.d("사용자 프로필: ", Config.cloudfront_addr + currentItem.getProfile_file_name());
 
         // 사용자 프로필 세팅
         if(currentItem.getProfile_file_name() != null){
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + currentItem.getProfile_file_name())
+                    .load(Config.cloudfront_addr + currentItem.getProfile_file_name())
                     .into(holder.userProfile);
         } else {
             holder.userProfile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));

@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.controller.Reply_Adapter;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
@@ -61,6 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
 public class SS_PostDetail extends AppCompatActivity {
 
@@ -273,7 +275,7 @@ public class SS_PostDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ImageView_FullScreen.class);
-                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + media_link);
+                intent.putExtra("img_url", Config.cloudfront_addr + media_link);
                 startActivity(intent);
             }
         });
@@ -294,7 +296,7 @@ public class SS_PostDetail extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_post?id=" + post_id;
+                String sendMessage = Config.api_server_addr + "/share/deep_post?id=" + post_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
                 Intent shareIntent = Intent.createChooser(intent, "share");
@@ -402,7 +404,11 @@ public class SS_PostDetail extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                    String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names();
+                    Glide.with(SS_PostDetail.this)
+                            .load(Config.cloudfront_addr + responseResult.get(0).getFile_save_names())
+                            .into(iv_media);
+
+                    String videoURL = Config.cloudfront_addr + responseResult.get(0).getFile_save_names();
 
                     if (responseResult.get(0).getPost_type().equals("2")) {  // 동영상
                         vd_media.setVisibility(View.VISIBLE);
@@ -429,13 +435,13 @@ public class SS_PostDetail extends AppCompatActivity {
                         exoPlayer.setPlayWhenReady(false);
                     } else { // 이미지 또는 텍스트
                         Glide.with(SS_PostDetail.this)
-                                .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names())
+                                .load(Config.cloudfront_addr + responseResult.get(0).getFile_save_names())
                                 .into(iv_media);
                     }
 
 
                     Glide.with(SS_PostDetail.this)
-                            .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getProfile_file_name())
+                            .load(Config.cloudfront_addr + responseResult.get(0).getProfile_file_name())
                             .into(iv_user_image);
 
                     SetDate(responseResult.get(0).getCre_datetime());

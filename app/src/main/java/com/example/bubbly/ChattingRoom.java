@@ -1,11 +1,17 @@
 package com.example.bubbly;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,20 +20,29 @@ import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcelable;
 import android.os.RemoteException;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.bubbly.chatting.service.ChatService;
 import com.example.bubbly.chatting.util.ChatUtil;
 import com.example.bubbly.chatting.util.GetDate;
@@ -43,13 +58,33 @@ import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.ChatApiClient;
 import com.example.bubbly.retrofit.ChatApiInterface;
+import com.example.bubbly.retrofit.FileUtils;
 import com.example.bubbly.retrofit.chat.SyncGetChatInfo;
 import com.example.bubbly.retrofit.chat.SyncGetMqttId;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,6 +95,10 @@ import retrofit2.Response;
 public class ChattingRoom extends AppCompatActivity {
 
     androidx.appcompat.widget.Toolbar toolbar;
+
+    private ArrayList<Uri> fileUriList;
+    ImageView add_image, add_video;
+    ImageView playicon, imgdelete, thumbdelete;
 
     RecyclerView recyclerView;
 
@@ -88,9 +127,6 @@ public class ChattingRoom extends AppCompatActivity {
     // 서비스로 보낼 메신저
     final Messenger mActivityMessenger = new Messenger(new ActivityHandler());
 
-    // 서비스와 연결됐는지 여부
-    boolean isBound = false;
-
     // 서비스의 상태에 따라 콜백 함수를 호출하는 객체.
     private ServiceConnection conn;
 
@@ -118,13 +154,17 @@ public class ChattingRoom extends AppCompatActivity {
 
     // 채팅방 생성 혹은 파괴시 사용하는 객체
     private Chat_Room_Cre_Or_Del chatRoomCreOrDel;
-    
+
+    // 마지막으로 읽은 메시지 아이디
+    int lastReadMsgId;
+
+
     /**
     * 새로운 채팅방인 경우 사용할 변수 - 메시지 전송여부
      * 메시지를 전송하지 않고 채팅방이 파괴되는 경우 채팅방 정보 삭제, MQTT, FCM 구독해지를 해야 함.
     * */
     private boolean isMsgTransfered;
-    
+
     // 채팅에 참여하는 멤버 리스트
     private ArrayList<OtherUserInfo> chatMemberList;
 
@@ -132,6 +172,8 @@ public class ChattingRoom extends AppCompatActivity {
     class ActivityHandler extends Handler {
         @Override
         public void handleMessage(@NonNull Message msg) {
+            Log.d("ChattingRoom 메시지 받음111", "" + msg.what);
+
             super.handleMessage(msg);
             // msg.what에는 메시지 종류가 들어있음(서비스에서 설정)
             switch(msg.what){
@@ -140,19 +182,40 @@ public class ChattingRoom extends AppCompatActivity {
                     // 서비스로부터 받은 수신한 메시지 객체
                     Bundle bundle = msg.getData();
                     Chat_Item read = (Chat_Item)bundle.getSerializable("message");
+                    Log.d("ChattingRoom 메시지 받음", "" + msg.what);
 
                     // 안읽은 사용자 수 업데이트
                     if(read.getChatType() == 3) {
                         adapter.updateNotReadUserCount(Integer.parseInt(read.getChatText()));
+                        Log.d("스크롤","111");
+
+                        // 메시지 수신 후 0.1초 후에 스크롤을 이동시킨다.
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(0);
+                            }
+                        },100);
                         break;
                     }
 
-                    // 수신한 메시지 리사이클러뷰에 표시
-                    int newPosition = adapter.addChatMsgInfo(read);
-                    recyclerView.scrollToPosition(newPosition);
+                    // 내가보낸 메시지라면 안읽은 사용자만 업데이트
+                    if(read.getChatUserId().equals(userId)){
+                        adapter.updateNotReadUserCountOne(read);
 
-                    // 최신 메세지id 업데이트
-                    saveLatestChatIdToSharedPreference(read);
+
+                    } else {
+                        // 수신한 메시지 리사이클러뷰에 표시
+                        adapter.addChatMsgInfo(read);
+                    }
+
+                    // 메시지 수신 후 0.1초 후에 스크롤을 이동시킨다.
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(0);
+                        }
+                    },100);
 
                     // 메시지 출력
                     Log.e("ChattingRoomActivity - 서버로부터 메시지 수신", "1-1. 수신한 메시지 => " + read.getChatText());
@@ -182,12 +245,19 @@ public class ChattingRoom extends AppCompatActivity {
         inputText = findViewById(R.id.input_text);
         sendChat = findViewById(R.id.send_chat);
         chatRoomNameTextview = findViewById(R.id.chatRoomName);
+        add_image = findViewById(R.id.posting_create_addimage);
+        add_video = findViewById(R.id.posting_create_addvideo);
+
+        fileUriList = new ArrayList<>();
 
         // 뒤로가기 버튼, 디폴트로 true만 해도 백버튼이 생김
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Intent에서 받아온 값 세팅
         getIntentFromAct();
+
+        // 마지막으로 읽은 메시지 아이디!
+        lastReadMsgId = getLastMsgIdx(chatRoomId);
 
         recyclerView = findViewById(R.id.chatroom_recyclerview);
 
@@ -205,9 +275,6 @@ public class ChattingRoom extends AppCompatActivity {
         // 클릭리스너 세팅
         setClickListener();
 
-        // 해당 채팅방에서 마지막으로 읽은 메시지id 가져오기
-        int lastReadMsgId = getLastMsgIdx(chatRoomId);
-
         // 리사이클러뷰 데이터 가져오기
         int updateDiv;
         if(!isNew){
@@ -219,27 +286,13 @@ public class ChattingRoom extends AppCompatActivity {
             updateDiv = 3;
         }
         // 서버에 사용자수 업데이트!
-        chatUtil.updateUserCountMap(chatRoomId,updateDiv,chatMemberList.size());
-
-        // 마지막으로 읽은 메시지id가 있다면
-        if(lastReadMsgId != 99999999){
-            // 브로커에게 마지막으로 읽은 메시지의 id를 전달한다 => 이 메시지 다음 id부터 안읽은 사용자수 -1 을 해주기 위해서
-            sendLastReadIdToBroker(lastReadMsgId);
-        } else {
-            // 마디막으로 읽은 메시지가 없다면 채팅방을 새로 만들거나 기존에 만들어진 채팅방에 처음 들어올 때이다.
-            // 채팅방 생성시는 업데이트할 필요가 없고 기존에 있던 채팅방에 처음들어왔을 때만 업데이트 해주면 된다.
-            if(!isNew) {
-                // 모든 메시지 업데이트 (서버에서 lastIdx + 1부터 업데이트 하기 때문에 -1을 보낸다!)
-                sendLastReadIdToBroker(-1);
-            }
-        }
+        chatUtil.updateUserCountMap(chatRoomId,updateDiv,chatMemberList.size(), userId);
     }
 
     // 데이터 http 요청
     private void loadrecycler(int pageNo) {
         // 쓰레드 http 요청 & run 데이터 넣기
         fillList(chatRoomId, pageNo);
-        recyclerView.scrollToPosition(0);
     }
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
@@ -267,6 +320,19 @@ public class ChattingRoom extends AppCompatActivity {
                         // 첫번째 페이지의 0번째 인덱스의 값이 최신 메시지이므로 SP에 저장한다.
                         if(page_no == 1){
                             saveLatestChatIdToSharedPreference(chatInfoList.get(0));
+
+                            // 마지막으로 읽은 메시지id가 있다면
+                            if(lastReadMsgId != 99999999){
+                                // 브로커에게 마지막으로 읽은 메시지의 id를 전달한다 => 이 메시지 다음 id부터 안읽은 사용자수 -1 을 해주기 위해서
+                                sendLastReadIdToBroker(lastReadMsgId);
+                            } else {
+                                // 마디막으로 읽은 메시지가 없다면 채팅방을 새로 만들거나 기존에 만들어진 채팅방에 처음 들어올 때이다.
+                                // 채팅방 생성시는 업데이트할 필요가 없고 기존에 있던 채팅방에 처음들어왔을 때만 업데이트 해주면 된다.
+                                if(!isNew) {
+                                    // 모든 메시지 업데이트 (서버에서 lastIdx + 1부터 업데이트 하기 때문에 -1을 보낸다!)
+                                    sendLastReadIdToBroker(-1);
+                                }
+                            }
                         }
                     }
                 }
@@ -299,6 +365,15 @@ public class ChattingRoom extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         recyclerView.addOnScrollListener(onScrollListener);
+
+        /*recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
+            {
+                Log.d("레이아웃 변화 감지 bottom", "" + bottom);
+                recyclerView.scrollToPosition(0);
+            }
+        });*/
     }
 
     // 리사이클러뷰의 스크롤이 최상단에 도달했을 때 새로운 채팅 데이터를 가져오기 위함!
@@ -310,44 +385,26 @@ public class ChattingRoom extends AppCompatActivity {
             if(!recyclerView.canScrollVertically(-1)){
                 Log.d("맨위입니까?", "111");
 
-                pageNo++;
-                fillList(chatRoomId, pageNo);
-
-                 /*// 리사이클러뷰에서 눈에
-                int firstVisibleItemPos = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-
-                Log.d("firstVisibleItemPos", "" + firstVisibleItemPos);
-                Log.d("pageNo", "" + pageNo);
-
-                // 페이지의 끝에 도달했다면 데이터 가져오기!
-                if(firstVisibleItemPos % 10 == 2){
+                if(pageNo == (chatItemList.size() / 10)){
                     pageNo++;
                     fillList(chatRoomId, pageNo);
-                }*/
+                    Log.d("페이징", "" + pageNo);
+                }
+
             }
         }
     };
-    /*private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (recyclerView.computeVerticalScrollOffset() == 0) {
-                // 최상단인 경우 페이징해서 메시지 가져오기
-                fillList(chatRoomId, (pageNo++));
-            }
-
-        }
-    };*/
 
     // 인텐트에서 받아온 값 세팅
     public void getIntentFromAct(){
         Intent getIntentFromAct = getIntent();
-        
+
         // 새로운 채팅방 여부 - 채팅방 리스트 화면에서 넘어온 경우 값이 없으므로 false로 세팅
         isNew = getIntentFromAct.getBooleanExtra("isNew", false);
 
         // 메시지 전송됐는지 여부 - 채팅방 리스트 화면에서 넘어온 경우 값이 없으므로 true로 세팅
         isMsgTransfered = getIntentFromAct.getBooleanExtra("isMsgTransfered", true);
-        
+
         // 채팅 참여자 리스트
         chatMemberList = (ArrayList<OtherUserInfo>) getIntentFromAct.getSerializableExtra("chatMemberList");
 
@@ -363,10 +420,10 @@ public class ChattingRoom extends AppCompatActivity {
 
         // 채팅방 생성 혹은 파괴 시 사용하는 객체
         chatRoomCreOrDel = (Chat_Room_Cre_Or_Del) getIntentFromAct.getSerializableExtra("chatRoomCreOrDel");
-        
+
         // 프로필맵 세팅
         setProfileMap(chatMemberList);
-        
+
         Log.d("채팅방 입장 시 Intent에서 데이터 잘 가져오나 확인 - isNew: ","" + isNew);
         Log.d("채팅방 입장 시 Intent에서 데이터 잘 가져오나 확인 - isMsgTransfered: ","" + isMsgTransfered);
         Log.d("채팅방 입장 시 Intent에서 데이터 잘 가져오나 확인 - chatRoomId: ",chatRoomId);
@@ -401,9 +458,6 @@ public class ChattingRoom extends AppCompatActivity {
 
                 Log.e("ChattingRoom입장 시 ChatService와 연결 - mServiceMessenger 생성", mServiceMessenger.toString());
 
-                // 연결여부를 true로 변경해준다.
-                isBound = true;
-
                 try {
                     // 서비스에게 보낼 메시지를 생성한다.
                     // 파라미터: 핸들러, msg.what에 들어갈 int값
@@ -420,6 +474,12 @@ public class ChattingRoom extends AppCompatActivity {
                     // 서비스로 사용자아이디 보내기
                     bundle.putString("userId", userId);
 
+                    // 서비스로 새로운 채팅방 여부 보내기
+                    bundle.putBoolean("isNew", isNew);
+
+                    // 서비스로 마지막으로 읽은 메시지아이디 보내기
+                    bundle.putInt("lastReadMsgId", lastReadMsgId);
+
                     // 메시지의 송신자를 넣어준다.
                     msg.replyTo = mActivityMessenger;
                     Log.e("ChattingRoom입장 시 ChatService와 연결 - 서비스와 통신하기 위한 메신저: ", mActivityMessenger.toString());
@@ -427,7 +487,6 @@ public class ChattingRoom extends AppCompatActivity {
                     // 서비스에 연결됐다는 메시지를 전송한다.
                     mServiceMessenger.send(msg);
                     Log.e("ChattingRoom입장 시 ChatService와 연결 - 서비스에 메시지 전송: ", msg.toString());
-
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -438,7 +497,7 @@ public class ChattingRoom extends AppCompatActivity {
                 // 서비스에게 메시지를 전송하는 메신저를 null로 변경
                 mServiceMessenger = null;
                 // 연결이 종료되었으므로 연결여부를 false로 봐꿔준다.
-                isBound = false;
+                ChatService.IS_BOUND_CHATTING_ROOM = false;
             }
         };
 
@@ -462,23 +521,76 @@ public class ChattingRoom extends AppCompatActivity {
 
                 // 서비스에게 텍스트 메시지 전송
                 if(!sendMsg.equals("")) {
-                    sendTextMsg(sendMsg);
+                    sendChatMsg(sendMsg, 0, null);
                 }
 
                 inputText.setText("");
                 Log.e("텍스트 메시지 송신", "8. 텍스트박스 비워주기");
             }
         });
+
+        /**
+        * 이미지 전송
+        * */
+        add_image.setOnClickListener(v -> {
+            Dexter.withContext(ChattingRoom.this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
+                @Override
+                public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                    Intent mIntent = new Intent();
+                    mIntent.setType("image/*");
+                    mIntent.setAction(Intent.ACTION_GET_CONTENT);
+                    launcher.launch(mIntent);
+                }
+
+                @Override
+                public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+
+                }
+
+                @Override
+                public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                    permissionToken.continuePermissionRequest();
+                }
+            }).check();
+
+        });
+
+        /**
+         * 동영상 전송
+         * */
+        add_video.setOnClickListener(v -> {
+
+            Dexter.withContext(ChattingRoom.this).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
+                @Override
+                public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                    Intent mIntent2 = new Intent();
+                    mIntent2.setType("video/*");
+                    mIntent2.setAction(Intent.ACTION_GET_CONTENT);
+                    launcher2.launch(mIntent2);
+                }
+
+                @Override
+                public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+
+                }
+
+                @Override
+                public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                    permissionToken.continuePermissionRequest();
+                }
+            }).check();
+
+        });
     }
 
-    public void sendTextMsg(String sendMsg){
+    public void sendChatMsg(String sendMsg, int chatType, String fileName){
         // 채팅방 생성 후 처음 보내는 메시지인 경우 msgTransffered값을 true로 변경!
         if(isNew && !isMsgTransfered){
             isMsgTransfered = true;
         }
 
         // Chat_Item 만들기
-        Chat_Item chat_item = new Chat_Item(chatRoomId, userId, sendMsg,null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 0);
+        Chat_Item chat_item = new Chat_Item(chatRoomId, userId, sendMsg,fileName, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, chatType);
 
         // 사용자 프로필 세팅: null이면 null이 들어가나? => ""(공백)이 들어감 명확하게 null을 넣어주자!
         if(profileMap.get(userId) == null || profileMap.get(userId).equals("")){
@@ -488,11 +600,16 @@ public class ChattingRoom extends AppCompatActivity {
         }
 
 
-        Log.e("텍스트 메시지 송신", "1. 작성한 메시지 sendMsg에 저장 => sendMsg: " + sendMsg);
+        Log.e("채팅 메시지 송신", "1. 작성한 메시지 sendMsg에 저장 => sendMsg: " + sendMsg);
 
-        // 작성한 메시지 리사이클러뷰에 표시
-        int newPosition = adapter.addChatMsgInfo(chat_item);
-        recyclerView.scrollToPosition(newPosition);
+        if(chatType == 2){
+            // 작성한 메시지 리사이클러뷰에 표시
+            adapter.updateVideoItem(chat_item);
+        } else {
+            adapter.addChatMsgInfo(chat_item);
+        }
+
+        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(0);
 
         String chatItemRoomId = chat_item.getChatRoomId();
         String chatItemStr = chatUtil.chatItemToString(chat_item);
@@ -508,25 +625,6 @@ public class ChattingRoom extends AppCompatActivity {
                 }
             }
         }).start();
-
-        // 서비스에게 보낼 메시지를 생성한다.
-        // 파라미터: 핸들러, msg.what에 들어갈 int값
-        // 텍스트 메시지 전송
-       /* Message msg = Message.obtain(null, ChatService.SEND_TEXT);
-
-        Bundle bundle = msg.getData();
-
-        // 서비스에 전달할 Chat_Item을 넣는다.
-        bundle.putSerializable("sendMsg", chat_item);
-        Log.e("텍스트 메시지 송신", "2. 서비스에 보낼 msg객체 생성 및 sendMsg 저장 => bundle.get(\"sendMsg\"): " + bundle.get("sendMsg"));
-
-        // 서버에 전송할 텍스트 메시지를 서비스로 전송한다.
-        try {
-            mServiceMessenger.send(msg);
-            Log.e("텍스트 메시지 송신", "3. 서비스로 메시지 전송");
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }*/
     }
 
     @Override
@@ -596,15 +694,14 @@ public class ChattingRoom extends AppCompatActivity {
         }
 
         // 서비스와 연결여부
-        isBound = false;
-        Log.e("채팅방 나갈 때 서비스와의 연결 제거 - isBound false로 변경", "" + isBound);
+        ChatService.IS_BOUND_CHATTING_ROOM = false;
 
         // 채팅방이 생성되고 메시지를 보내지 않은 상태에서 채팅방 액트가 종료된 경우 db에 저장된 채팅 관련 데이터 삭제 및 MQTT, FCM 구족 정보를 해지해야 한다.
         // 1. db의 채팅방 정보 삭제
         // 2. MQTT 구독 해지
         // 3. FCM 구독 해지
         if(isNew && !isMsgTransfered){
-            Log.e("채팅방이 새로 생성되고 메시지를 전송하지 않은채로 파괴되어 db저장정보 삭제!", "isNew: " + isBound + "isMsgTransfered: " + isMsgTransfered);
+            Log.e("채팅방이 새로 생성되고 메시지를 전송하지 않은채로 파괴되어 db저장정보 삭제!", "isNew: " + ChatService.IS_BOUND_CHATTING_ROOM + "isMsgTransfered: " + isMsgTransfered);
 
             ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
             Call<String> call = apiClient.deleteChatRoom(chatRoomId);
@@ -665,10 +762,60 @@ public class ChattingRoom extends AppCompatActivity {
         }
 
         // 채팅방 나가기
-        chatUtil.updateUserCountMap(chatRoomId,1,chatMemberList.size());
+        chatUtil.updateUserCountMap(chatRoomId,1,chatMemberList.size(), userId);
 
         super.onDestroy();
     }
+
+    // 이미지 전송
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        fileUriList.clear();
+                        // r_thumb.setVisibility(View.GONE);
+                        // r_img.setVisibility(View.VISIBLE);
+
+                        Intent intent = result.getData();
+                        Uri uri = intent.getData();
+
+                        Log.e("uri", String.valueOf(uri));
+                        fileUriList.add(uri);
+
+                        sendChatFile(fileUriList, 1);
+                    }
+                }
+            });
+
+    // 동영상 전송
+    ActivityResultLauncher<Intent> launcher2 = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        // 리사이클러뷰를 보여준다.
+                        // 프로그레스바 보여주기! => 타입:2, chatFileUrl: null
+                        Chat_Item chat_item = new Chat_Item(chatRoomId, userId, "동영상",null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 2);
+                        adapter.addChatMsgInfo(chat_item);
+
+                        Intent intent = result.getData();
+                        Uri uri = intent.getData();
+
+                        Log.e("uri", String.valueOf(uri));
+
+                        // 썸네일 생성
+                        Bitmap thumbnail = createThumbnail(ChattingRoom.this, uri.toString());
+
+                        // 썸네일을 파일로 변경
+                        File thumbnailFile = bitmapToJpeg(thumbnail);
+
+                        // 동영상 한개 전송!!!
+                        sendVideoAndThumbnail(uri, thumbnailFile);
+                    }
+                }
+            });
 
     /** 메시지 수신 시 SharedPreference에 메시지 정보 저장*/
     public void saveLatestChatIdToSharedPreference(Chat_Item chatItem){
@@ -690,6 +837,177 @@ public class ChattingRoom extends AppCompatActivity {
         return idx;
     }
 
+    /** 채팅파일을 전송하고 저장명을 반환받는다 */
+    public void sendChatFile(ArrayList<Uri> fileUriList, int chatType){
+        //파일 정보를 담는다
+        List<MultipartBody.Part> parts = new ArrayList<>();
+
+        //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
+        if (fileUriList != null) {
+            String partName = null;
+
+            if(chatType == 1){
+                partName = "image";
+            } else {
+                partName = "video";
+            }
+
+            for (int i = 0; i < fileUriList.size(); i++) {
+                //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
+                parts.add(prepareFilePart(partName + i, fileUriList.get(i), chatType)); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+            }
+        }
+
+        // 파일을 저장하고 파일저장명 리스트를 가져온다.
+        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<String> call = apiClient.saveChatFiles(parts);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    Log.d("채팅파일 저장 후 가져온 파일명 리스트 ','으로 구분", response.body());
+                    String[] fileArr = response.body().split(",");
+
+                    String sendMsg;
+
+                    for(String fileName : fileArr ) {
+                        // 메시지 전송하기 위해 채팅메시지 생성 - chatType = 1(이미지)
+                        if(chatType == 1) {
+                            sendMsg = "사진";
+                        } else {
+                            sendMsg = "동영상";
+                        }
+                        sendChatMsg(sendMsg, chatType, fileName);
+                    }
+                }else {
+                    Log.d("채팅파일 저장했지만 null", "empty");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e("채팅파일 저장 실패", t.getMessage());
+            }
+        });
+    }
+
+    // 비디오와 썸네일을 저장한다.
+    public void sendVideoAndThumbnail(Uri videoUri, File thumbnail){
+        //파일 정보를 담는다
+        List<MultipartBody.Part> parts = new ArrayList<>();
+
+        parts.add(prepareFilePart("thumbnail", thumbnail, 1)); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+        parts.add(prepareFilePart("video", videoUri, 2)); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+
+        // 파일을 저장하고 파일저장명 리스트를 가져온다.
+        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<String> call = apiClient.saveChatFiles(parts);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful() && response.body() != null) {
+
+                    Log.d("채팅파일 저장 후 가져온 파일명 리스트 ','으로 구분", response.body());
+                    String fileName = response.body();
+
+                    // ","로 구분되어있음 첫번쨰 썸네일 파일명, 두번쨰 비디오 파일명
+                    sendChatMsg("동영상", 2, fileName);
+
+                } else {
+                    Log.d("채팅파일 저장했지만 null", "empty");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                Log.e("채팅파일 저장 실패", t.getMessage());
+            }
+        });
+    }
+
+    /** 파일 파트를 준비하는 매서드 (파트이름, 그리고 파일의 Uri) */
+    @NonNull
+    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri, int chatType) {
+
+        // use the FileUtils to get the actual file by uri uri를 통해서 실제 파일을 받아온다.
+        File file = FileUtils.getFile(this, fileUri);
+
+        return prepareFilePart(partName, file, chatType);
+    }
+
+    @NonNull
+    private MultipartBody.Part prepareFilePart(String partName, File file, int chatType) {
+        String fileName = file.getName();
+        fileName = fileName.replace("jpg","jpeg");
+
+        String mimeTYpe = fileName.substring(fileName.indexOf(".") + 1);
+
+
+        if(chatType == 1){
+            mimeTYpe = "image/" + mimeTYpe;
+        } else {
+            mimeTYpe = "video/" + mimeTYpe;
+        }
+
+        // create RequestBody instance from file 리퀘스트바디를 파일로부터 만든다.
+        RequestBody requestFile = RequestBody.create(MediaType.parse(mimeTYpe), file);
+
+        // MultipartBody.Part is used to send also the actual file name //
+        try {
+            fileName = URLEncoder.encode(fileName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return MultipartBody.Part.createFormData(partName, fileName, requestFile);
+    }
+
+    // 동영상 썸네일 제작
+    public static Bitmap createThumbnail(Context activity, String path) {
+        MediaMetadataRetriever mediaMetadataRetriever = null;
+        Bitmap bitmap = null;
+        try {
+            mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource(activity, Uri.parse(path));
+            bitmap = mediaMetadataRetriever.getFrameAtTime(1000000, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (mediaMetadataRetriever != null) {
+                mediaMetadataRetriever.release();
+            }
+        }
+        return bitmap;
+    }
+
+    // 캐시영역에 썸네일 사진 생성
+    public File bitmapToJpeg(Bitmap bitmap) {
+        File imageFile = null;
+
+        try {
+            imageFile = File.createTempFile( "JPEG_" + GetDate.getTodayDateWithTime(), ".jpeg" , ChattingRoom.this.getCacheDir());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        OutputStream outStream = null;
+
+        try {
+            outStream = new FileOutputStream(imageFile);
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return imageFile;
+    }
 
     /** 채팅방에 입장했을 때 다른 채팅방의 안읽은사용자수 -- 해주기위해 브로커에게 채팅방 id와 마지막 인덱스를 보내준다.
      */

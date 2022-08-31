@@ -23,6 +23,8 @@ import com.example.bubbly.MM_Message;
 import com.example.bubbly.R;
 import com.example.bubbly.chatting.service.ChatService;
 import com.example.bubbly.chatting.util.ChatUtil;
+import com.example.bubbly.chatting.util.GetDate;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.Chat_Item;
 import com.example.bubbly.model.Chat_Member_FCM_Sub;
 import com.example.bubbly.model.Chat_Room_Info;
@@ -52,6 +54,7 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
     List<Chat_Room_Info> mData;
     String user_id;
     int position;
+    String today = GetDate.getTodayDateWithSlash();
 
     public Messages_Adapter(Context mContext, List<Chat_Room_Info> mData) {
         this.mContext = mContext;
@@ -104,10 +107,13 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
             chatRoomProfile = currentItem.getProfileFileNameOther();
         }
 
+        holder.chatprofile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
+
+
         // 채팅방 프로필
         if(chatRoomProfile != null){
             Glide.with(holder.itemView.getContext())
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + chatRoomProfile)
+                    .load(Config.cloudfront_addr + chatRoomProfile)
                     .centerCrop()
                     .into(holder.chatprofile);
         }
@@ -119,7 +125,27 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
         holder.content.setText(currentItem.getLatestMsg());
 
         // 마지막 메시지 수신 시간
-        holder.time.setText(currentItem.getLatestMsgTime());
+        Log.d("최신 메시지 수신 시간", currentItem.getLatestMsgTime());
+
+        String latestMsgTime = currentItem.getLatestMsgTime();
+        // db에서 가져옴
+        if(latestMsgTime.contains("T")){
+            String date = latestMsgTime.split("T")[0];
+            String time = latestMsgTime.split("T")[1];
+            String[] timeArr = time.split(":");
+            String hhmm = timeArr[0] + ":" + timeArr[1];
+            String amPmTime = GetDate.getAmPmTime(hhmm);
+
+            if(date.equals(today)){
+                holder.time.setText(amPmTime);
+            } else{
+                holder.time.setText(date);
+            }
+        } else {
+            holder.time.setText(latestMsgTime);
+        }
+
+
 
         // 읽지 않은 메시지수
         if(notReadMsgCount > 0){
@@ -173,6 +199,10 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
 
                             // 채팅멤버 리스트
                             intent.putExtra("chatMemberList", chatMemberList);
+
+                            // 안읽은 메시지 0으로 변경하기
+                            holder.notReadMsgCount.setText("0");
+                            holder.notReadMsgCount.setVisibility(View.GONE);
 
                             //어답터에서 클릭 이용할 때, 아래 해줘야됨!
                             mContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));

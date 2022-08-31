@@ -141,7 +141,8 @@ public class MM_Home extends AppCompatActivity {
         // FCM토큰 refresh
         preferences = getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", "");
-        //FCMService.refreshToken(user_id);
+
+        FCMService.refreshToken(user_id);
     }
 
     // 바텀 메뉴 클릭
