@@ -121,10 +121,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
         Log.i("파일 타입", "과연:" + post_response.getPost_type());
 
-        Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
-                .fitCenter()
-                .into(holder.iv_media);
+            Glide.with(mContext)
+                   .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                   .fitCenter()
+                   .into(holder.iv_media);
 
         String type = post_response.getPost_type();
 
