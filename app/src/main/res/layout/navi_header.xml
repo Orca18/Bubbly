@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/spoqa_regular"
-            android:text="내 NFTs"
+            android:text="내 지갑"
             android:textColor="@color/text_black"
             android:textSize="19dp" />
 
