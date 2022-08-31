@@ -2,7 +2,6 @@ package com.example.bubbly.kim_util_test;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,11 +12,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 
-import com.example.bubbly.MM_Home;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
+import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -29,12 +27,16 @@ import retrofit2.Response;
 //                 final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
 // 활용하고 싶으면 onClick 에 오른쪽 코드=>                 bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
 
-public class BottomSheetFragment_owner extends BottomSheetDialogFragment {
+public class BottomSheetFragment_owner_ForAdapter extends BottomSheetDialogFragment {
     Context context;
     Activity activity;
+    String post_id;
+    int position;
 
-    public BottomSheetFragment_owner(Context context) {
+    public BottomSheetFragment_owner_ForAdapter(Context context, String post_id, int position) {
         this.context = context;
+        this.post_id = post_id;
+        this.position = position;
     }
 
     @Nullable
@@ -68,7 +70,8 @@ public class BottomSheetFragment_owner extends BottomSheetDialogFragment {
                         if (response.isSuccessful() && response.body() != null)
                         {
                             // 삭제 완료 후, 화면 끄기
-                            activity.finish();
+                            Post_Adapter.lists.remove(position);
+//                            notifyItemRemoved(position);
 
                             dismiss();
 

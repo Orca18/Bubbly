@@ -90,7 +90,7 @@ public class LL_Login extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
 
                                     //자동로그인 : 쉐어드프리퍼런스에 저장한다.
                                     String mnemonic = response.body().toString();

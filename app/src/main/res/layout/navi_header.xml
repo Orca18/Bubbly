@@ -64,8 +64,8 @@
         android:paddingVertical="8dp">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center"
             android:layout_marginRight="15dp"
             android:src="@drawable/ic_round_money_24"
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/spoqa_regular"
-            android:text="내 활동"
+            android:text="내 지갑"
             android:textColor="@color/text_black"
             android:textSize="19dp" />
 
@@ -89,8 +89,8 @@
         android:paddingVertical="8dp">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center"
             android:layout_marginRight="15dp"
             android:src="@drawable/ic_outline_list_alt_24"
@@ -114,8 +114,8 @@
         android:paddingVertical="8dp">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_gravity="center"
             android:layout_marginRight="15dp"
             android:src="@drawable/ic_outline_group_24"

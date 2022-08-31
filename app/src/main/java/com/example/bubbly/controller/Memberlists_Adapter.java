@@ -60,8 +60,9 @@ public class Memberlists_Adapter extends RecyclerView.Adapter<Memberlists_Adapte
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext.getApplicationContext(),"해당 유저의 프로필로 이동\nSS 프로필 user_id 번들",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext.getApplicationContext(),"해당 유저의 프로필로 이동\nSS 프로필 user_id 번들",Toast.LENGTH_SHORT).show();
                 Intent mIntent = new Intent(mContext, SS_Profile.class);
+                mIntent.putExtra("user_id", currentItem.getUser_id());
                 mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });

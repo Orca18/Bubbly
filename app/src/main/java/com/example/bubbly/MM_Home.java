@@ -209,7 +209,7 @@ public class MM_Home extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         postList = new ArrayList<>();
-        post_adapter = new Post_Adapter(getApplicationContext(), this.postList, getApplicationContext());
+//        post_adapter = new Post_Adapter(getApplicationContext(), this.postList, getApplicationContext());
         recyclerView.setAdapter(post_adapter);
         post_adapter.notifyDataSetChanged();
 
@@ -359,7 +359,7 @@ public class MM_Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {

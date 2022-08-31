@@ -29,6 +29,7 @@ import com.example.bubbly.Following;
 import com.example.bubbly.MM_Profile;
 import com.example.bubbly.MainActivity;
 import com.example.bubbly.ModifyProfile;
+import com.example.bubbly.Post_Create;
 import com.example.bubbly.R;
 import com.example.bubbly.controller.FragmentAdapter;
 import com.example.bubbly.model.UserInfo;
@@ -69,6 +70,9 @@ public class Bottom4_Fragment extends Fragment {
     LinearLayout bt_modify_profile; //프로필 수정 버튼
 
     private static String uid;
+
+    // 게시글 작성 페이지로 이동
+    ImageView toCreate;
 
 
     @Nullable
@@ -167,6 +171,9 @@ public class Bottom4_Fragment extends Fragment {
         tv_follower = view.findViewById(R.id.tv_follower);
 
         bt_modify_profile = view.findViewById(R.id.bt_modify_profile);
+
+        // 게시글 작성
+        toCreate = view.findViewById(R.id.bottom4_toCreate);
     }
 
     //프로필데이터 가져와서 디스플레이하기
@@ -294,6 +301,15 @@ public class Bottom4_Fragment extends Fragment {
             }
         });
 
+        toCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent tocreating = new Intent(getContext(), Post_Create.class);
+                tocreating.putExtra("com_id", "0");
+                tocreating.putExtra("com_name", "내 피드");
+                startActivity(tocreating);
+            }
+        });
     }
 
 

@@ -55,12 +55,14 @@ public class Community_Info extends AppCompatActivity {
 
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        
-        if(!com_owner.equals(user_id)){
-            bt_edit.setVisibility(View.GONE);
-        }
+
 
         initialize();
+
+        if(!com_owner.equals(user_id)){
+            bt_edit.setVisibility(View.INVISIBLE);
+        }
+
         listeners();
         GetComInfo();
 
