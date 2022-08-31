@@ -173,7 +173,8 @@ public class Community_Home_Feeds extends AppCompatActivity {
                                 responseResult.get(i).getProfile_file_name(),
                                 responseResult.get(i).getCre_datetime(),
                                 responseResult.get(i).getCommunity_id(),
-                                responseResult.get(i).getMentioned_user_list()
+                                responseResult.get(i).getMentioned_user_list(),
+                                responseResult.get(i).getPost_type()
                         ));
                     }
                     post_adapter.notifyDataSetChanged();

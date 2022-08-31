@@ -39,7 +39,6 @@ import com.example.bubbly.retrofit.ApiInterface;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +51,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MM_Wallet extends AppCompatActivity {
+public class MM_Wallet_toNavi extends AppCompatActivity {
 
     // 뒤로가기 시간
     private long backKeyPressedTime = 0;
@@ -108,7 +107,7 @@ public class MM_Wallet extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_e_wallet);
+        setContentView(R.layout.main_e_wallet_include_navi);
 
         // 리소스 ID 선언
         initiallize();
@@ -138,6 +137,7 @@ public class MM_Wallet extends AppCompatActivity {
         toolbar = findViewById(R.id.wallet_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.wallet_navigation_view);
@@ -398,8 +398,8 @@ public class MM_Wallet extends AppCompatActivity {
         bt_exchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MM_Wallet.this).setTitle("Bubble-Nova 환전");
-                EditText input = new EditText(MM_Wallet.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MM_Wallet_toNavi.this).setTitle("Bubble-Nova 환전");
+                EditText input = new EditText(MM_Wallet_toNavi.this);
                 input.setPaddingRelative(100,100,100,100);
                 input.setBackground(null);
                 input.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -507,7 +507,7 @@ public class MM_Wallet extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home: {
                 // 왼쪽 상단 버튼 눌렀을 때
-                drawerLayout.openDrawer(GravityCompat.START);
+                finish();
                 return true;
             }
         }
@@ -685,6 +685,7 @@ public class MM_Wallet extends AppCompatActivity {
     public String getUid(){
         return uid;
     }
+
 
 
 }

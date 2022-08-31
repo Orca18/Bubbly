@@ -72,7 +72,7 @@ public class SS_Profile extends AppCompatActivity {
     ViewPager2 pager2;
     FragmentAdapter_SS adapter;
 
-    String uid;
+    public static String uid;
 
     //프로필 데이터 보여주기
     ImageView iv_user_image,iv_chat;
@@ -101,6 +101,7 @@ public class SS_Profile extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         uid = extras.getString("user_id");
         System.out.println("user_id in post"+uid);
+        Log.d("디버그태그", "user_id in post"+uid);
 
         // (기본) 리소스 ID 선언
         initiallize();
@@ -220,6 +221,7 @@ public class SS_Profile extends AppCompatActivity {
         pager2 = findViewById(R.id.profile_view_pager2);
 
         FragmentManager fm = getSupportFragmentManager();
+        Log.d("디버그태그", "user_id in post22"+uid);
         adapter = new FragmentAdapter_SS(fm, getLifecycle(), uid);
         pager2.setAdapter(adapter);
 

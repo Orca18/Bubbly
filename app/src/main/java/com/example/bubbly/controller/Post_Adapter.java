@@ -1,5 +1,7 @@
 package com.example.bubbly.controller;
 
+import android.app.Activity;
+import android.net.Uri;
 import android.view.Gravity;
 import android.widget.PopupMenu;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +34,10 @@ import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
 import com.example.bubbly.config.Config;
+import com.example.bubbly.kim_util_test.BottomSheetFragment;
+import com.example.bubbly.kim_util_test.BottomSheetFragment_ForAdapter;
+import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
+import com.example.bubbly.kim_util_test.BottomSheetFragment_owner_ForAdapter;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
@@ -39,6 +46,21 @@ import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
 import com.example.bubbly.retrofit.reply_Response;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,17 +77,20 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
     private Context context;
     private Context mContext;
-    private ArrayList<post_Response> lists;
+    public static ArrayList<post_Response> lists;
     //    private ItemClickListener itemClickListener;
     SharedPreferences preferences;
     String user_id;
+    String post_id;
 
+    Activity activiy;
 
-    public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext) {
+    public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext, Activity activity) {
         this.context = context;
         this.lists = lists;
 //        this.itemClickListener = itemClickListener;
         this.mContext = mContext; // 이미지 Context 를 활용해서 넣기 위해 추가
+        this.activiy = activity; // 이미지 Context 를 활용해서 넣기 위해 추가
 
     }
 
@@ -77,7 +102,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
     }
 
     public static Date getDate(String from) throws ParseException {
-// "yyyy-MM-dd HH:mm:ss"
+        // "yyyy-MM-dd HH:mm:ss"
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(from);
         return date;
     }
@@ -97,26 +122,56 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
         Log.i("파일 타입", "과연:" + post_response.getPost_type());
 
-
         Glide.with(mContext)
                 .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
                 .fitCenter()
                 .into(holder.iv_media);
 
 
-        if (post_response.getPost_type().equals("2")) {
-            holder.vd_media.setVideoPath("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names());
-        } else {
-            Log.i("파일 타입", "null");
+        String type = post_response.getPost_type();
+
+        String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names();
+        try {
+            Log.d("디버그태그", "try 전:"+type);
+            if(type.equals("2")){
+                // bandwisthmeter : 기본 대역폭 가져오기
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                // 기본 막대를 사용하는 동영상
+                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                // 트랙셀렉터 추가
+                ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+                // url 로 부터 Uri 파싱
+                Uri videouri = Uri.parse(videoURL);
+                // 엑소플레이어뷰
+                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                // 미디어 소스 생성
+                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                // 미디어 소스 생성
+                MediaSource mediaSource = new ExtractorMediaSource(videouri, dataSourceFactory, extractorsFactory, null, null);
+                // 엑소플레이어 넣기
+                holder.vd_media.setPlayer((SimpleExoPlayer) exoPlayer);
+                holder.vd_media.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+                // 미리 준비
+                exoPlayer.prepare(mediaSource);
+                // 준비 완료시 재생 여부
+                exoPlayer.setPlayWhenReady(false);
+                Log.d("디버그태그", "엑소플레이어2:"+type);
+            } if (type.equals("1")) {
+                holder.vd_media.setVisibility(View.GONE);
+                Log.d("디버그태그", "엑소플레이어1:"+type);
+                Glide.with(mContext)
+                        .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                        .fitCenter()
+                        .into(holder.iv_media);
+            } else {
+                Log.d("디버그태그", "엑소플레이어0:"+type);
+            }
+
+        } catch (Exception e) {
+            Log.e("TAG", "Error : " + e.toString());
         }
 
 
-        holder.vd_media.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                holder.vd_media.start();
-            }
-        });
 
 
         holder.tv_user_id.setText(post_response.getLogin_id());
@@ -133,7 +188,16 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         holder.iv_share_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "딥 링크 구현", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+
+                // tODO 링크 넣기 String으로 받아서 넣기
+                String sendMessage = "http://3.39.84.115/share/deep_community?id="+post_response.getPost_id();
+//                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
+                intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
+
+                Intent shareIntent = Intent.createChooser(intent, "share");
+                context.startActivity(shareIntent);
             }
         });
 
@@ -142,6 +206,19 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 .load(Config.cloudfront_addr + post_response.getFile_save_names())
                 .fitCenter()
                 .into(holder.iv_media);
+
+        if(post_response.getProfile_file_name().equals(null)){
+            Log.d("디버그태그", "null 이다");
+            Glide.with(mContext)
+                    .load(R.drawable.blank_profile)
+                    .into(holder.iv_user_image);
+        } else {
+            Log.d("디버그태그", "null 아니다");
+            Glide.with(mContext)
+                    .load(Config.cloudfront_addr + post_response.getProfile_file_name())
+                    .into(holder.iv_user_image);
+        }
+
 
         String a = null;
         try {
@@ -162,9 +239,9 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch (menuItem.getItemId()) {
-                                case R.id.action_a:
-                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
-                                    return true;
+//                                case R.id.action_a:
+//                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+//                                    return true;
 
                                 case R.id.action_b:
                                     ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
@@ -228,6 +305,21 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             }
         });
 
+//        holder.iv_options.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (user_id.equals(post_response.getPost_writer_id())) {
+//                    BottomSheetFragment_owner_ForAdapter bottomSheetFragment_owner = new BottomSheetFragment_owner_ForAdapter(context, post_id, position);
+//                    bottomSheetFragment_owner.show(((AppCompatActivity)activiy).getSupportFragmentManager(), bottomSheetFragment_owner.getTag());
+//                } else {
+//                    BottomSheetFragment_ForAdapter bottomSheetFragment = new BottomSheetFragment_ForAdapter(context, post_id);
+//                    bottomSheetFragment.show(((AppCompatActivity)activiy).getSupportFragmentManager(), bottomSheetFragment.getTag());
+//
+//                }
+//
+//            }
+//        });
 
         // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
 //        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
@@ -490,7 +582,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         ImageView iv_media, iv_options, iv_like_icon, iv_reply_icon, iv_retweet_icon, iv_share_icon;
         TextView tv_user_nick, tv_content, tv_like_count, tv_reply_count, tv_retweet_count, tv_time;
         TextView tv_user_id, tv_com_name;
-        VideoView vd_media;
+        SimpleExoPlayerView vd_media;
 
         CircleImageView iv_user_image;
 

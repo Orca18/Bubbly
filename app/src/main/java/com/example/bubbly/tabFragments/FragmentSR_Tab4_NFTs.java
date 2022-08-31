@@ -84,7 +84,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         postList = new ArrayList<>();
-        post_adapter = new Post_Adapter(getActivity().getApplicationContext() , postList,getActivity().getApplicationContext() );
+        post_adapter = new Post_Adapter(getActivity().getApplicationContext() , postList,getActivity().getApplicationContext(),getActivity() );
         recyclerView.setAdapter(post_adapter);
         post_adapter.notifyDataSetChanged();
 

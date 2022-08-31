@@ -101,7 +101,7 @@ dependencies {
 
     // 태그, 멘션
     implementation 'com.otaliastudios:autocomplete:1.1.0'
-
+    
     // 이미지 확대 및 다운로드 화면에서 사용
     implementation 'com.github.piasy:BigImageViewer:1.8.1'
 
@@ -117,4 +117,18 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.13.5'
     implementation 'com.amazonaws:aws-android-sdk-cognito:2.13.5'
     implementation 'com.amazonaws:aws-android-sdk-s3:2.13.5'
+
+    // dependency for exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
+// for core support in exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-core:r2.4.0'
+// for adding dash support in our exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-dash:r2.4.0'
+// for adding hls support in exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-hls:r2.4.0'
+// for smooth streaming of video in our exoplayer.
+    implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:r2.4.0'
+// for generating default ui of exoplayer
+    implementation 'com.google.android.exoplayer:exoplayer-ui:r2.4.0'
+
 }

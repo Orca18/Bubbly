@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -30,6 +31,21 @@ import com.example.bubbly.SS_Profile;
 import com.example.bubbly.config.Config;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,7 +84,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
     }
 
     public static Date getDate(String from) throws ParseException {
-// "yyyy-MM-dd HH:mm:ss"
+    // "yyyy-MM-dd HH:mm:ss"
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(from);
         return date;
     }
@@ -93,7 +109,6 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         // SNS 형식 시간
         holder.tv_time.setText(a);
 
-
         // TODO 유저 login_id & 커뮤니티 이름 뜨게 만들기
         holder.tv_user_id.setText(post_response.getPost_writer_id());
 
@@ -112,6 +127,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
             }
         });
+
 
 
         holder.tv_com_name.setOnClickListener(new View.OnClickListener() {
@@ -144,9 +160,9 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-                            case R.id.action_a:
-                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
-                                return true;
+//                            case R.id.action_a:
+//                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+//                                return true;
 
                             case R.id.action_b:
                                 ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
@@ -184,6 +200,19 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                 popup.show();
             }
         });
+
+
+        if(post_response.getProfile_file_name().equals(null)){
+            Log.d("디버그태그", "null 이다");
+            Glide.with(mContext)
+                    .load(R.drawable.blank_profile)
+                    .into(holder.iv_user_image);
+        } else {
+            Log.d("디버그태그", "null 아니다");
+            Glide.with(mContext)
+                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getProfile_file_name())
+                    .into(holder.iv_user_image);
+        }
 
 
         if (post_response.getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
@@ -333,6 +362,50 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
 
+        String type = post_response.getPost_type();
+
+        String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names();
+        try {
+            Log.d("디버그태그", "try 전:"+type);
+            if(type.equals("2")){
+                // bandwisthmeter : 기본 대역폭 가져오기
+                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                // 기본 막대를 사용하는 동영상
+                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                // 트랙셀렉터 추가
+                ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+                // url 로 부터 Uri 파싱
+                Uri videouri = Uri.parse(videoURL);
+                // 엑소플레이어뷰
+                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                // 미디어 소스 생성
+                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                // 미디어 소스 생성
+                MediaSource mediaSource = new ExtractorMediaSource(videouri, dataSourceFactory, extractorsFactory, null, null);
+                // 엑소플레이어 넣기
+                holder.vd_media.setPlayer((SimpleExoPlayer) exoPlayer);
+                holder.vd_media.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+                // 미리 준비
+                exoPlayer.prepare(mediaSource);
+                // 준비 완료시 재생 여부
+                exoPlayer.setPlayWhenReady(false);
+                Log.d("디버그태그", "엑소플레이어2:"+type);
+            } if (type.equals("1")) {
+                Log.d("디버그태그", "엑소플레이어1:"+type);
+                Glide.with(mContext)
+                        .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
+                        .fitCenter()
+                        .into(holder.iv_media);
+            } else {
+                Log.d("디버그태그", "엑소플레이어0:"+type);
+            }
+
+        } catch (Exception e) {
+            Log.e("TAG", "Error : " + e.toString());
+        }
+
+
+
     }
 
 
@@ -351,6 +424,8 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         TextView tv_user_id, tv_com_name;
 
         CircleImageView iv_user_image;
+
+        SimpleExoPlayerView vd_media;
 
         public PostViewHolder(@NonNull View view) {
             super(view);
@@ -375,7 +450,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
             tv_user_id = view.findViewById(R.id.feed_basic_userID);
             tv_com_name = view.findViewById(R.id.tv_com_name);
 
-
+            vd_media = view.findViewById(R.id.vd_media);
         }
 
     }

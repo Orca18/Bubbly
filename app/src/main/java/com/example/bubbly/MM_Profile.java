@@ -287,7 +287,7 @@ public class MM_Profile extends AppCompatActivity {
         myList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {

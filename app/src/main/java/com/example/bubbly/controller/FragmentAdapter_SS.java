@@ -1,5 +1,7 @@
 package com.example.bubbly.controller;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +20,9 @@ public class FragmentAdapter_SS extends FragmentStateAdapter {
     public FragmentAdapter_SS(@NonNull FragmentManager fragmentManager, @NonNull Lifecycle lifecycle, String uid) {
         super(fragmentManager, lifecycle);
         this.uid = uid;
+
+        Log.d("디버그태그", "user_id in post33"+uid);
+
     }
 
 

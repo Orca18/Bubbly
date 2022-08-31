@@ -31,7 +31,7 @@
             android:layout_height="50dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="14dp"
-            android:src="@color/white"
+            android:src="@drawable/profile"
             app:civ_border_color="@color/gray"
             app:civ_border_width="1dp" />
 
@@ -55,7 +55,7 @@
                     android:maxLines="1"
                     android:text="유저명"
                     android:textColor="@color/black"
-                    android:textSize="19dp"
+                    android:textSize="17dp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -64,7 +64,8 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:text="\u0040"
-                    android:textSize="16dp" />
+                    android:fontFamily="@font/spoqa_medium"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:gravity="center"
@@ -72,10 +73,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/spoqa_medium"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="사용자"
-                    android:textSize="16dp" />
+                    android:textSize="15dp" />
 
                 <View
                     android:layout_width="0dp"
@@ -99,12 +101,16 @@
                     android:text="11h"
                     android:textSize="15dp" />
 
+
+
+
                 <ImageView
                     android:id="@+id/iv_options"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_more_vert_24" />
+                    android:src="@drawable/ic_baseline_more_vert_24"
+                    app:tint="@color/blueblack" />
             </LinearLayout>
 
 
@@ -115,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:text="Bubble Text - 버블 내용\n간격 테스트"
                 android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:textSize="17dp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="280dp"
@@ -136,14 +142,10 @@
             </androidx.cardview.widget.CardView>
 
 
-            <VideoView
+            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/vd_media"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:maxHeight="180dp"
-                android:scaleType="center" />
-
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -165,8 +167,7 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
-                        android:src="@drawable/ic_outline_favorite_border_24"
-                        app:tint="@color/blueblack" />
+                        android:src="@drawable/ic_outline_favorite_border_24" />
 
                     <TextView
                         android:id="@+id/tv_like_count"
@@ -192,8 +193,7 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
-                        android:src="@drawable/ic_outline_chat_bubble_outline_24"
-                        app:tint="@color/blueblack" />
+                        android:src="@drawable/ic_outline_chat_bubble_outline_24"/>
 
                     <TextView
                         android:id="@+id/tv_reply_count"
@@ -221,8 +221,7 @@
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
                         android:src="@drawable/ic_outline_bubble_chart_24"
-                        android:transitionName="recycleimage"
-                        app:tint="@color/blueblack" />
+                        android:transitionName="recycleimage" />
 
 
                     <TextView

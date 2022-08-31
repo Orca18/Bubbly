@@ -71,6 +71,10 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    // 뒤로가기 시간
+    private long backKeyPressedTime = 0;
+    private Toast toast;
+
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private Bottom1_Fragment bottom1_fragment = new Bottom1_Fragment();
     private Bottom2_Fragment bottom2_fragment = new Bottom2_Fragment();
@@ -452,14 +456,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
+                Intent wallet = new Intent(getApplicationContext(), MM_Wallet.class);
+                startActivity(wallet);
             }
         });
         myList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {
@@ -805,5 +810,23 @@ public class MainActivity extends AppCompatActivity {
                 Log.e("채팅방 멤버리스트 조회 실패", t.getMessage());
             }
         });
+    }
+
+    //뒤로가기 했을 때
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finish();
+            toast.cancel();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -131,10 +132,12 @@ public class LL_Splash extends AppCompatActivity {
                                                             masterkey,
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-                                            String address = sharedPreferences.getString("address", "");
-                                            String mnemonic = sharedPreferences.getString("mnemonic", "");
-                                            Log.e("니모닉", mnemonic);
-                                            UserInfo.user_addr = address;
+                                            Map<String, ?> all = sharedPreferences.getAll();
+                                            System.out.println("모든값"+all.toString());
+                                            System.out.println("모든값"+all.values());
+                                            String address = sharedPreferences.getString("address","");
+                                            String mnemonic = sharedPreferences.getString("mnemonic","");
+                                            Log.e("니모닉",mnemonic);
                                             UserInfo.mnemonic = mnemonic;
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
@@ -187,7 +190,6 @@ public class LL_Splash extends AppCompatActivity {
                                 }
                             }
                         }
-
                         @Override
                         public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                             Log.e("로그인 에러", t.getMessage());

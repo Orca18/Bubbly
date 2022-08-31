@@ -90,13 +90,13 @@ public class Fragment_Tab1_AllPosts_ss extends Fragment {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         postList = new ArrayList<>();
-        post_adapter = new Post_Adapter(getActivity().getApplicationContext(), postList, getActivity().getApplicationContext() );
+        post_adapter = new Post_Adapter(getActivity().getApplicationContext(), postList, getActivity().getApplicationContext(),getActivity() );
         recyclerView.setAdapter(post_adapter);
         post_adapter.notifyDataSetChanged();
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
         ApiInterface selectPostUsingPostWriterId_api = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<post_Response>> call = selectPostUsingPostWriterId_api.selectPostUsingPostWriterId("10");
+        Call<List<post_Response>> call = selectPostUsingPostWriterId_api.selectPostUsingPostWriterId(uid);
         call.enqueue(new Callback<List<post_Response>>()
         {
             @Override
