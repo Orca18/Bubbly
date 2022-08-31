@@ -43,16 +43,10 @@ import retrofit2.Response;
  * 메시지 브로커(채팅서버)와 연결되고 채팅관련 처리를 담당한다.
 * */
 public class ChatService extends Service {
-    // 채팅상대 초대
-    public static final int INVITE = 1;
     // 채팅방 나가기
     public static final int EXIT = 2;
     // 텍스트 전송
     public static final int SEND_TEXT = 3;
-    // 이미지 전송
-    public static final int SEND_IMAGE = 4;
-    // 읽지 않은 사람수 업데이트
-    public static final int NOT_READ_USER_UPDATE = 5;
     // 홈 액티비티와 연결
     public static final int CONNECT_HOME_ACT = 6;
     // 채팅 액티비티와 연결
@@ -61,13 +55,11 @@ public class ChatService extends Service {
     public static final int DISCONNECTED_CHAT_ACT = 8;
     // 서버로부터 메시지 받음
     public static final int MSG_RECEIVE_FROM_SERVER = 10;
-    // 메시지의 마지막 인덱스 보내기
-    public static final int SEND_LAST_MSG = 11;
-    // 알림으로 채팅방 전송 => 채팅방리스트의 안읽은 메시지 없애주기위해 필요
-    public static final int NOTIFICATION = 12;
+    // 서비스와 재연결하기(noti클릭시)
+    public static final int RE_CONNECT_HOME_ACT = 11;
 
     // 서비스와 연결됐는지 여부
-    public static boolean IS_BOUND_MM_MESSAGE = false;
+    public static boolean IS_BOUND_MAIN_ACTIVITY = false;
     public static boolean IS_BOUND_CHATTING_ROOM = false;
 
     // 채팅서버 주소
@@ -113,9 +105,6 @@ public class ChatService extends Service {
 
                     Chat_Item exitMsgInfo = new Chat_Item(chatRoomId,userId,exitMsg,null, GetDate.getDateWithYMDAndWeekDay(),GetDate.getAmPmTime(),"",0);
 
-                    // 서버에 publish
-                    //chatUtil.publishChatMsg(exitMsgInfo, mqttClient);
-
                     // 해당 채팅방 구독 해제
                     try {
                         mqttClient.unsubscribe(chatRoomId);
@@ -133,62 +122,10 @@ public class ChatService extends Service {
 
                     chatUtil.publishChatMsg(chatItemStr, chatItemRoomId, mqttClient);
 
-                    // 서버에 publish
-                    /*new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                chatUtil.publishChatMsg(chatItemStr, chatItemRoomId, mqttClient);
-                            }
-                            catch (Exception e) {
-
-                            }
-                        }
-                    }).start();*/
-
-                    // FCM 서버에게 알림메시지 전송 요청
-                    /*ChatApiInterface chatApiInterface= ChatApiClient.getApiClient().create(ChatApiInterface.class);
-                    Call<String> call = chatApiInterface.broadcastFCMMessage(sendMsg);
-                    call.enqueue(new retrofit2.Callback<String>()
-                    {
-                        @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                        {
-                            if (response.isSuccessful() && response.body() != null)
-                            {
-                                Log.e("fcm notificaion 완료!", response.body());
-                            }else {
-                                Log.e("fcm notificaion 완료!", "지만 메시지 없음");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                        {
-                            Log.e("fcm notificaion 실패", t.getMessage());
-                        }
-                    });*/
-                    break;
-                // 정적파일 전송
-                case SEND_IMAGE:
-
-                    // 레트로핏
-                    // ChattingService service = retrofit.create(ChattingService.class);
-
-                    // http request 객체 생성
-                    //Call<ArrayList<String>> call = service.insertFileList(userIdReq, chatRoomIdReq, list);
-
-                    System.out.println("transferFileToServer들어옴");
-
-                    //new InsertFileInfo().execute(call);
-
                     break;
                 // 홈 액티비티와 연결
                 case CONNECT_HOME_ACT:
-                    IS_BOUND_MM_MESSAGE = true;
-
-                    // fcm토큰 가져오기
-                    FCMService.getToken();
+                    IS_BOUND_MAIN_ACTIVITY = true;
 
                     // 채팅방 관련 기능을 가지고 있는 util
                     chatUtil = new ChatUtil();
@@ -333,8 +270,9 @@ public class ChatService extends Service {
                     boolean isNew = msg.getData().getBoolean("isNew");
                     int lastReadMsgId = msg.getData().getInt("lastReadMsgId");
 
+
                     // 마지막으로 읽은 메시지id가 있다면
-                    if(lastReadMsgId != 99999999){
+                    /*if(lastReadMsgId != 99999999){
                         // 브로커에게 마지막으로 읽은 메시지의 id를 전달한다 => 이 메시지 다음 id부터 안읽은 사용자수 -1 을 해주기 위해서
                         sendLastReadIdToBroker(lastReadMsgId);
                     } else {
@@ -344,7 +282,8 @@ public class ChatService extends Service {
                             // 모든 메시지 업데이트 (서버에서 lastIdx + 1부터 업데이트 하기 때문에 -1을 보낸다!)
                             sendLastReadIdToBroker(-1);
                         }
-                    }
+                    }*/
+
 
                     break;
                 // 채팅 액티비티 - 서버 연결 해제
@@ -361,6 +300,11 @@ public class ChatService extends Service {
                     Log.e("채팅방 나갈 때 서비스와의 연결 제거 4-3. 메신저 제거!", "" + mActivityMessengerList.size());
 
                     break;
+                case RE_CONNECT_HOME_ACT:
+                    // 기존에 연결되어있던 메인 액트의 메신저 제거
+                    mActivityMessengerList.remove(0);
+                    // 새로운 액트의 메신저와 연결
+                    mActivityMessengerList.add(msg.replyTo);
             }
         }
     }
@@ -382,7 +326,7 @@ public class ChatService extends Service {
 
     /** 채팅방에 입장했을 때 다른 채팅방의 안읽은사용자수 -- 해주기위해 브로커에게 채팅방 id와 마지막 인덱스를 보내준다.
      */
-    public void sendLastReadIdToBroker(int lastIdx){
+    /*public void sendLastReadIdToBroker(int lastIdx){
         Chat_Item chatItem = new Chat_Item(chatRoomId, userId, "" + lastIdx,null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 3);
         String chatItemStr = chatUtil.chatItemToString(chatItem);
 
@@ -397,7 +341,7 @@ public class ChatService extends Service {
                 }
             }
         }).start();
-    }
+    }*/
 
 
     @Override

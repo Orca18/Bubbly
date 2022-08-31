@@ -24,6 +24,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -186,26 +187,35 @@ public class ChattingRoom extends AppCompatActivity {
                     // 안읽은 사용자 수 업데이트
                     if(read.getChatType() == 3) {
                         adapter.updateNotReadUserCount(Integer.parseInt(read.getChatText()));
+                        Log.d("스크롤","111");
+
+                        // 메시지 수신 후 0.1초 후에 스크롤을 이동시킨다.
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(0);
+                            }
+                        },100);
                         break;
                     }
 
                     // 내가보낸 메시지라면 안읽은 사용자만 업데이트
                     if(read.getChatUserId().equals(userId)){
                         adapter.updateNotReadUserCountOne(read);
+
+
                     } else {
                         // 수신한 메시지 리사이클러뷰에 표시
                         adapter.addChatMsgInfo(read);
-                        /*RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
-                            @Override protected int getVerticalSnapPreference() {
-                                return LinearSmoothScroller.SNAP_TO_END;
-                            }
-                        };
-
-                        smoothScroller.setTargetPosition( 0 ); //itemPosition - 이동시키고자 하는 Item의 Position
-                        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);*/
-
-                        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(0,0);
                     }
+
+                    // 메시지 수신 후 0.1초 후에 스크롤을 이동시킨다.
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(0);
+                        }
+                    },100);
 
                     // 메시지 출력
                     Log.e("ChattingRoomActivity - 서버로부터 메시지 수신", "1-1. 수신한 메시지 => " + read.getChatText());
@@ -283,17 +293,6 @@ public class ChattingRoom extends AppCompatActivity {
     private void loadrecycler(int pageNo) {
         // 쓰레드 http 요청 & run 데이터 넣기
         fillList(chatRoomId, pageNo);
-        /*RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
-            @Override protected int getVerticalSnapPreference() {
-                return LinearSmoothScroller.SNAP_TO_END;
-            }
-        };
-
-        smoothScroller.setTargetPosition( 0 ); //itemPosition - 이동시키고자 하는 Item의 Position
-        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);*/
-        //recyclerView.scrollToPosition(0);
-
-        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(0,0);
     }
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
@@ -321,6 +320,19 @@ public class ChattingRoom extends AppCompatActivity {
                         // 첫번째 페이지의 0번째 인덱스의 값이 최신 메시지이므로 SP에 저장한다.
                         if(page_no == 1){
                             saveLatestChatIdToSharedPreference(chatInfoList.get(0));
+
+                            // 마지막으로 읽은 메시지id가 있다면
+                            if(lastReadMsgId != 99999999){
+                                // 브로커에게 마지막으로 읽은 메시지의 id를 전달한다 => 이 메시지 다음 id부터 안읽은 사용자수 -1 을 해주기 위해서
+                                sendLastReadIdToBroker(lastReadMsgId);
+                            } else {
+                                // 마디막으로 읽은 메시지가 없다면 채팅방을 새로 만들거나 기존에 만들어진 채팅방에 처음 들어올 때이다.
+                                // 채팅방 생성시는 업데이트할 필요가 없고 기존에 있던 채팅방에 처음들어왔을 때만 업데이트 해주면 된다.
+                                if(!isNew) {
+                                    // 모든 메시지 업데이트 (서버에서 lastIdx + 1부터 업데이트 하기 때문에 -1을 보낸다!)
+                                    sendLastReadIdToBroker(-1);
+                                }
+                            }
                         }
                     }
                 }
@@ -353,6 +365,15 @@ public class ChattingRoom extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         recyclerView.addOnScrollListener(onScrollListener);
+
+        /*recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right,int bottom, int oldLeft, int oldTop,int oldRight, int oldBottom)
+            {
+                Log.d("레이아웃 변화 감지 bottom", "" + bottom);
+                recyclerView.scrollToPosition(0);
+            }
+        });*/
     }
 
     // 리사이클러뷰의 스크롤이 최상단에 도달했을 때 새로운 채팅 데이터를 가져오기 위함!
@@ -364,33 +385,15 @@ public class ChattingRoom extends AppCompatActivity {
             if(!recyclerView.canScrollVertically(-1)){
                 Log.d("맨위입니까?", "111");
 
-                pageNo++;
-                fillList(chatRoomId, pageNo);
-
-                 /*// 리사이클러뷰에서 눈에
-                int firstVisibleItemPos = ((LinearLayoutManager)recyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
-
-                Log.d("firstVisibleItemPos", "" + firstVisibleItemPos);
-                Log.d("pageNo", "" + pageNo);
-
-                // 페이지의 끝에 도달했다면 데이터 가져오기!
-                if(firstVisibleItemPos % 10 == 2){
+                if(pageNo == (chatItemList.size() / 10)){
                     pageNo++;
                     fillList(chatRoomId, pageNo);
-                }*/
+                    Log.d("페이징", "" + pageNo);
+                }
+
             }
         }
     };
-    /*private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (recyclerView.computeVerticalScrollOffset() == 0) {
-                // 최상단인 경우 페이징해서 메시지 가져오기
-                fillList(chatRoomId, (pageNo++));
-            }
-
-        }
-    };*/
 
     // 인텐트에서 받아온 값 세팅
     public void getIntentFromAct(){
@@ -606,19 +609,7 @@ public class ChattingRoom extends AppCompatActivity {
             adapter.addChatMsgInfo(chat_item);
         }
 
-
-        /*RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(ChattingRoom.this) {
-            @Override protected int getVerticalSnapPreference() {
-                return LinearSmoothScroller.SNAP_TO_END;
-            }
-        };
-
-        smoothScroller.setTargetPosition( 0 ); //itemPosition - 이동시키고자 하는 Item의 Position
-        recyclerView.getLayoutManager().startSmoothScroll(smoothScroller);*/
-
-        //recyclerView.scrollToPosition(newPosition);
-
-        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(0,0);
+        ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPosition(0);
 
         String chatItemRoomId = chat_item.getChatRoomId();
         String chatItemStr = chatUtil.chatItemToString(chat_item);
@@ -1016,5 +1007,24 @@ public class ChattingRoom extends AppCompatActivity {
         }
 
         return imageFile;
+    }
+
+    /** 채팅방에 입장했을 때 다른 채팅방의 안읽은사용자수 -- 해주기위해 브로커에게 채팅방 id와 마지막 인덱스를 보내준다.
+     */
+    public void sendLastReadIdToBroker(int lastIdx){
+        Chat_Item chatItem = new Chat_Item(chatRoomId, userId, "" + lastIdx,null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 3);
+        String chatItemStr = chatUtil.chatItemToString(chatItem);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    chatUtil.publishChatMsg(chatItemStr, chatRoomId, ChatService.mqttClient);
+                }
+                catch (Exception e) {
+
+                }
+            }
+        }).start();
     }
 }

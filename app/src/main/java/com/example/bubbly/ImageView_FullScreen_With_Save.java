@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -28,7 +31,7 @@ public class ImageView_FullScreen_With_Save extends AppCompatActivity {
     PhotoView img;
     PhotoViewAttacher photoViewAttacher;
     androidx.appcompat.widget.Toolbar toolbar;
-    Button download;
+    ImageView download;
     Bitmap imgBitmap;
 
     @Override

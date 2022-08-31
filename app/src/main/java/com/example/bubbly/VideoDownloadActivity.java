@@ -10,6 +10,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.auth.AWSCredentials;
@@ -35,11 +37,12 @@ import java.io.File;
 public class VideoDownloadActivity extends AppCompatActivity {
     androidx.appcompat.widget.Toolbar toolbar;
     ImageView thumbnail;
-    Button download;
+    ImageView download;
     ImageView platBtn;
     String thumbnailFileName;
     String videoFileName;
-
+    ProgressBar progressBar_download;
+    TextView download_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,9 @@ public class VideoDownloadActivity extends AppCompatActivity {
         platBtn = findViewById(R.id.play_btn);
         // 썸네일 이미지뷰
         thumbnail = findViewById(R.id.thumbnail);
+
+        progressBar_download = findViewById(R.id.progressBar_download);
+        download_text = findViewById(R.id.download_text);
 
         // 썸네일 파일명
         thumbnailFileName = getIntent().getStringExtra("thumbnailFileName");
@@ -123,9 +129,19 @@ public class VideoDownloadActivity extends AppCompatActivity {
                     downloadObserver.setTransferListener(new TransferListener() {
                         @Override
                         public void onStateChanged(int id, TransferState state) {
+                            if(state == TransferState.IN_PROGRESS){
+                                progressBar_download.setVisibility(View.VISIBLE);
+                                download_text.setVisibility(View.VISIBLE);
+                                platBtn.setVisibility(View.GONE);
+                            }
+
                             if (state == TransferState.COMPLETED) {
                                 // 저장 완료
                                 Log.d("저장 완료!", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/bubbly");
+
+                                progressBar_download.setVisibility(View.GONE);
+                                download_text.setVisibility(View.GONE);
+                                platBtn.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(VideoDownloadActivity.this, "저장 완료", Toast.LENGTH_LONG).show();
                             }

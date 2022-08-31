@@ -130,6 +130,11 @@ public interface ApiInterface {
     Call<String> login(@Field("login_id") String login_id,
                        @Field("password") String password);
 
+    // 로그아웃 api
+    @FormUrlEncoded
+    @POST("login/logout")
+    Call<String> logoutFromApiServer(@Field("user_id") String user_id);
+
     // todo 로그인과 관련된 api (끝 지점)
 
 

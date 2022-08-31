@@ -36,7 +36,13 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" />
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="FCM_NOTI_ACTIVITY" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Community_Info_Edit"
             android:exported="false" />
@@ -146,7 +152,7 @@
         <activity
             android:name=".ChattingRoom"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".LL_Register_A"
             android:exported="false" />
@@ -199,11 +205,6 @@
         <activity
             android:name=".MM_Message"
             android:exported="true">
-            <intent-filter>
-                <action android:name="FCM_NOTI_ACTIVITY" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ImageView_FullScreen_With_Save"

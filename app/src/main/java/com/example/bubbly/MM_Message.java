@@ -123,6 +123,7 @@ public class MM_Message extends AppCompatActivity {
     // 해당 사용자가 참여하고 있는 채팅방의 아이디와 사용자수를 관리하는 맵(메시지 수신 시 해당하는 채팅방이 있는지 여부를 쉽게 관리하기 위한 맵)
     private HashMap<String, Integer> chatRoomIdMap;
 
+
     // ChatMemberSelect화면으로 이동해서 채팅방 생성 시 다 시돌아와 채팅방을 생성하기 위한 객체
     private ActivityResultLauncher<Intent> startActResultForChatMemberSelect;
 
@@ -394,7 +395,7 @@ public class MM_Message extends AppCompatActivity {
     // 리소스 아이디 선언
     private void initiallize() {
         // 채팅서비스와 연결한다.
-        if(!ChatService.IS_BOUND_MM_MESSAGE) {
+        if(!ChatService.IS_BOUND_MAIN_ACTIVITY) {
             connectToService();
         }
 
@@ -457,7 +458,7 @@ public class MM_Message extends AppCompatActivity {
         observe();
 
         // 채팅서비스와 연결이 돼있다면
-        if(ChatService.IS_BOUND_MM_MESSAGE){
+        if(ChatService.IS_BOUND_MAIN_ACTIVITY){
             // 리사이클러뷰 데이터 가져오기
             loadrecycler();
         }
@@ -637,7 +638,7 @@ public class MM_Message extends AppCompatActivity {
                 mServiceMessenger = new Messenger(service);
                 Log.e("채팅서비스와 연결 - mServiceMessenger 생성", mServiceMessenger.toString());
 
-                Log.e("채팅서비스와 연결 - ChatService.IS_BOUND_MM_MESSAGE true로 변경", "" + ChatService.IS_BOUND_MM_MESSAGE);
+                Log.e("채팅서비스와 연결 - ChatService.IS_BOUND_MAIN_ACTIVITY true로 변경", "" + ChatService.IS_BOUND_MAIN_ACTIVITY);
 
                 try {
                     // 서비스에게 보낼 메시지를 생성한다.
@@ -670,7 +671,7 @@ public class MM_Message extends AppCompatActivity {
                 // 서비스의 메시지를 받는 메신저를 null로 변경
                 mServiceMessenger = null;
                 // 연결이 종료되었으므로 연결여부를 false로 봐꿔준다.
-                ChatService.IS_BOUND_MM_MESSAGE = false;
+                ChatService.IS_BOUND_MAIN_ACTIVITY = false;
             }
         };
 
@@ -800,10 +801,10 @@ public class MM_Message extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         // 리사이클러뷰의 위치를 저장하기 위한 값 => 화면전환 등의 상황에서 리사이클러뷰 스크롤의 위치를 저장해야 할 경우 사용할 수 있음!
-        recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
+        //recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();
 
         //위치 유지
-        recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+        //recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
     }
 
     // 결과값을 가지고 돌아오는 액티비티를 설정하기 휘한 함수

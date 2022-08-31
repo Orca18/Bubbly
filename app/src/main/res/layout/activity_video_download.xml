@@ -38,8 +38,10 @@
                 android:src="@drawable/profile"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageView
                 android:id="@+id/play_btn"
@@ -52,19 +54,44 @@
                 app:layout_constraintStart_toStartOf="@+id/thumbnail"
                 app:layout_constraintTop_toTopOf="@+id/thumbnail" />
 
+            <ProgressBar
+                android:id="@+id/progressBar_download"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/thumbnail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/thumbnail"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/download_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="다운로드중.."
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="@+id/thumbnail"
+                app:layout_constraintTop_toBottomOf="@+id/progressBar_download" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/download"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:backgroundTint="@color/black"
-        android:text="다운로드"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/image_full"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="2dp"
+        android:background="#ccc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/download"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/download"/>
+    </LinearLayout>
 </LinearLayout>

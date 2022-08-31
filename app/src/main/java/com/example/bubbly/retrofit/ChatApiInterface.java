@@ -51,4 +51,9 @@ public interface ChatApiInterface {
     @FormUrlEncoded
     @POST("/updateUserCountMap") //
     Call<String> updateUserCountMap(@Field("chat_room_id") String chatRoomId, @Field("update_div") int updateDiv, @Field("all_userCount") int allUserCount, @Field("user_id") String userId);
+
+    // 로그아웃
+    @FormUrlEncoded
+    @POST("/logout") //
+    Call<String> logoutFromChatServer(@Field("token") String token, @Field("user_id") String user_id);
 }

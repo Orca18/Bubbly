@@ -23,19 +23,21 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:transitionName="recycleimage" />
-
-    <Button
-        android:id="@+id/download"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:backgroundTint="@color/black"
-        android:text="다운로드"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/image_full"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_height="2dp"
+        android:background="#ccc" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/download"
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/download"/>
+    </LinearLayout>
 
 </LinearLayout>
