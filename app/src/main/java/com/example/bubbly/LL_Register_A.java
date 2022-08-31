@@ -296,24 +296,16 @@ public class LL_Register_A extends AppCompatActivity {
         tv_privacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayTermsWithWebView("개인정보처리방침","http://www.google.com");
-//                wv_privacyPolicy.loadUrl("http://www.google.com");
-//                wv_privacyPolicy.setVisibility(View.VISIBLE);
+                displayTermsWithWebView("개인정보처리방침","http://3.39.84.115:80/share/privacyPolicy");
             }
         });
 
         tv_termsToUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayTermsWithWebView("이용약관","http://www.google.com");
-//                wv_termsToUse.loadUrl("http://www.google.com");
-//                wv_termsToUse.setVisibility(View.VISIBLE);
+                displayTermsWithWebView("이용약관","http://3.39.84.115:80/share/termsToUse");
             }
         });
-
-
-
-
     } // onCreate 닫는곳
 
     public void displayTermsWithWebView (String title, String url){
