@@ -119,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
+                Intent wallet = new Intent(getApplicationContext(), MM_Wallet.class);
+                startActivity(wallet);
             }
         });
         myList.setOnClickListener(new View.OnClickListener() {

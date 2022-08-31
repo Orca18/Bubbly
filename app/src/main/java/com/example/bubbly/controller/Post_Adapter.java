@@ -1,5 +1,6 @@
 package com.example.bubbly.controller;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.view.Gravity;
 import android.widget.PopupMenu;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +33,10 @@ import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.kim_util_test.BottomSheetFragment;
+import com.example.bubbly.kim_util_test.BottomSheetFragment_ForAdapter;
+import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
+import com.example.bubbly.kim_util_test.BottomSheetFragment_owner_ForAdapter;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
@@ -70,17 +76,20 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
     private Context context;
     private Context mContext;
-    private ArrayList<post_Response> lists;
+    public static ArrayList<post_Response> lists;
     //    private ItemClickListener itemClickListener;
     SharedPreferences preferences;
     String user_id;
+    String post_id;
 
+    Activity activiy;
 
-    public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext) {
+    public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext, Activity activity) {
         this.context = context;
         this.lists = lists;
 //        this.itemClickListener = itemClickListener;
         this.mContext = mContext; // 이미지 Context 를 활용해서 넣기 위해 추가
+        this.activiy = activity; // 이미지 Context 를 활용해서 넣기 위해 추가
 
     }
 
@@ -143,6 +152,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 exoPlayer.setPlayWhenReady(false);
                 Log.d("디버그태그", "엑소플레이어2:"+type);
             } if (type.equals("1")) {
+                holder.vd_media.setVisibility(View.GONE);
                 Log.d("디버그태그", "엑소플레이어1:"+type);
                 Glide.with(mContext)
                         .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
@@ -286,6 +296,21 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             }
         });
 
+//        holder.iv_options.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                if (user_id.equals(post_response.getPost_writer_id())) {
+//                    BottomSheetFragment_owner_ForAdapter bottomSheetFragment_owner = new BottomSheetFragment_owner_ForAdapter(context, post_id, position);
+//                    bottomSheetFragment_owner.show(((AppCompatActivity)activiy).getSupportFragmentManager(), bottomSheetFragment_owner.getTag());
+//                } else {
+//                    BottomSheetFragment_ForAdapter bottomSheetFragment = new BottomSheetFragment_ForAdapter(context, post_id);
+//                    bottomSheetFragment.show(((AppCompatActivity)activiy).getSupportFragmentManager(), bottomSheetFragment.getTag());
+//
+//                }
+//
+//            }
+//        });
 
         // 아래는 콘텍스트 메뉴를 이용한 수정 삭제 버튼
 //        holder.iv_options.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
