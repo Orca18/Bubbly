@@ -124,12 +124,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
 
 
-            Glide.with(mContext)
-                   .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
-                   .fitCenter()
-                   .into(holder.iv_media);
-
-
 
 
 
