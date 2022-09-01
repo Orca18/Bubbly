@@ -67,14 +67,14 @@
 
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_user_image"
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:src="@drawable/profile"
+        android:src="@drawable/blank_profile"
         app:layout_constraintTop_toBottomOf="@+id/top" />
 
     <ImageButton

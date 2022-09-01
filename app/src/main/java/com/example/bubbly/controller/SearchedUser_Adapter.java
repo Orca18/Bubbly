@@ -65,16 +65,13 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         //사용자 로그인 id 나타남
         holder.tv_user_id.setText("@"+user_response.getLogin_id());
 
-        if(user_response.getProfile_file_name()!=null&&!user_response.getProfile_file_name().equals("")){
+        if(user_response.getProfile_file_name()!=null&&!user_response.getProfile_file_name().equals("")&&!user_response.getProfile_file_name().equals("null")){
             Glide.with(mContext)
                     .load("https://d2gf68dbj51k8e.cloudfront.net/"+user_response.getProfile_file_name())
                     .circleCrop()
                     .into(holder.iv_user_image);
         }else{
-            Glide.with(mContext)
-                    .load(R.drawable.blank_profile)
-                    .circleCrop()
-                    .into(holder.iv_user_image);
+            //아무런 조치도 취하지 않는다. default 이미지
         }
 
         holder.iv_user_image.setOnClickListener(new View.OnClickListener(){
@@ -155,7 +152,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
             }
         });
 
-        holder.bt_follow.setOnClickListener(new View.OnClickListener() {
+        holder.bt_unfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);

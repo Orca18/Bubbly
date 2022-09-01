@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.example.bubbly.MM_Home;
+import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.retrofit.ApiClient;
@@ -90,7 +91,10 @@ public class BottomSheetFragment_owner extends BottomSheetDialogFragment {
         nft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "NFT 신청하기", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "NFT 신청하기", Toast.LENGTH_SHORT).show();
+                Intent mIntent = new Intent(context.getApplicationContext(), Post_ApplyNFT_A.class);
+                mIntent.putExtra("post_id", SS_PostDetail.post_id);
+                context.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 dismiss();
             }
         });

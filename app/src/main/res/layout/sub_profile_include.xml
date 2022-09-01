@@ -22,7 +22,7 @@
                 android:id="@+id/iv_user_image_ss_profile"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/profile" />
+                android:src="@drawable/blank_profile" />
 
             <View
                 android:layout_width="0dp"
