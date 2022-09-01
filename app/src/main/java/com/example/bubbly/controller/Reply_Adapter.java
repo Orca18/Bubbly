@@ -27,13 +27,17 @@ import com.example.bubbly.R;
 import com.example.bubbly.ReplyModify;
 import com.example.bubbly.SS_Profile;
 import com.example.bubbly.config.Config;
+import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.reply_Response;
 import com.example.bubbly.retrofit.user_Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -101,8 +105,19 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
 
         holder.tv_user_nick.setText(reply_response.getNick_name());
         holder.tv_content.setText(reply_response.getComment_contents());
-        holder.tv_time.setText(reply_response.getCre_datetime_comment());
-        Log.d("디버그태그", "Cre_datetime: "+reply_response.getCre_datetime_comment());
+
+
+        String a = null;
+        try {
+            Log.d("디버그태그", "시간테스트2:"+reply_response.getCre_datetime_comment());
+            a = Kim_DateUtil.beforeTime_reply(getDate(reply_response.getCre_datetime_comment()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // SNS 형식 시간
+        holder.tv_time.setText(a);
+
+
 
 
         Glide.with(mContext)
@@ -254,6 +269,11 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
             }
         });
 
+    }
+    public static Date getDate(String from) throws ParseException {
+        // "yyyy-MM-dd HH:mm:ss"
+        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX").parse(from);
+        return date;
     }
 
     @Override

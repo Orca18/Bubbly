@@ -1,6 +1,7 @@
 package com.example.bubbly.controller;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.Gravity;
 import android.widget.PopupMenu;
@@ -117,16 +118,14 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         holder.tv_user_nick.setText(post_response.getNick_name());
         holder.tv_content.setText(post_response.getPost_contents());
         holder.tv_like_count.setText(post_response.getLike_count());
-        holder.tv_time.setText(post_response.getCre_datetime());
 
 
         Log.i("파일 타입", "과연:" + post_response.getPost_type());
 
-        Glide.with(mContext)
-                .load(Config.cloudfront_addr + post_response.getFile_save_names())
-                .fitCenter()
-                .into(holder.iv_media);
-
+//        Glide.with(mContext)
+//                .load((Bitmap) null)
+//                .fitCenter()
+//                .into(holder.iv_media);
 
         String type = post_response.getPost_type();
 
@@ -202,12 +201,9 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
-        Glide.with(mContext)
-                .load(Config.cloudfront_addr + post_response.getFile_save_names())
-                .fitCenter()
-                .into(holder.iv_media);
 
-        if(post_response.getProfile_file_name().equals(null)){
+
+        if(post_response.getProfile_file_name()==null){
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)
                     .load(R.drawable.blank_profile)
@@ -222,12 +218,19 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
         String a = null;
         try {
+            Log.d("디버그태그", "시간테스트:"+post_response.getCre_datetime());
             a = Kim_DateUtil.beforeTime(getDate(post_response.getCre_datetime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         // SNS 형식 시간
         holder.tv_time.setText(a);
+
+
+        // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
+        if(!user_id.equals(post_response.getPost_writer_id())){
+            holder.iv_options.setVisibility(View.GONE);
+        }
 
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -281,25 +284,28 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                     popup.setGravity(Gravity.RIGHT | Gravity.END);
 
                     popup.show();
-                } else {
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            switch (menuItem.getItemId()) {
-                                case R.id.action_a2:
-                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
-                                    return true;
+                }
 
-                                default:
-                                    return false;
-                            }
-
-                        }
-                    });
-                    popup.inflate(R.menu.main_liist_menu2);
-                    popup.setGravity(Gravity.RIGHT | Gravity.END);
-
-                    popup.show();
+                // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
+                else {
+//                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                        @Override
+//                        public boolean onMenuItemClick(MenuItem menuItem) {
+//                            switch (menuItem.getItemId()) {
+//                                case R.id.action_a2:
+//                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
+//                                    return true;
+//
+//                                default:
+//                                    return false;
+//                            }
+//
+//                        }
+//                    });
+//                    popup.inflate(R.menu.main_liist_menu2);
+//                    popup.setGravity(Gravity.RIGHT | Gravity.END);
+//
+//                    popup.show();
                 }
 
             }

@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Intent wallet = new Intent(getApplicationContext(), MM_Wallet.class);
+                Intent wallet = new Intent(getApplicationContext(), MM_Wallet_toNavi.class);
                 startActivity(wallet);
             }
         });
@@ -487,7 +487,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Toast.makeText(getApplicationContext(), "고객센터", Toast.LENGTH_SHORT).show();
+
+                Intent email = new Intent(Intent.ACTION_SEND);
+                email.setType("plain/Text");
+                email.putExtra(Intent.EXTRA_EMAIL, "유저 아이디: "+UserInfo.user_id);
+                email.putExtra(Intent.EXTRA_SUBJECT, "<" + getString(R.string.app_name) + " 문의>");
+                email.putExtra(Intent.EXTRA_TEXT, "기기명:\n안드로이드 OS:\n내용:\n");
+                email.setType("message/rfc822");
+                startActivity(email);
+
             }
         });
 

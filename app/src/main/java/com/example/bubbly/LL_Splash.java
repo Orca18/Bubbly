@@ -91,6 +91,7 @@ public class LL_Splash extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                Log.d("자동 로그인 확인", "쉐어드프리퍼런스 id:"+id+"pw:"+pw);
                 if (id.equals("") & pw.equals("")) {
                     //만약 쉐어드프리퍼런스에 저장된 사용자 정보가 없으면 로그인 페이지로 이동
                     startActivity(new Intent(LL_Splash.this, LL_Login.class));
