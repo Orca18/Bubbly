@@ -157,7 +157,7 @@
         android:layout_height="wrap_content"
         android:paddingVertical="4dp"
         android:fontFamily="@font/spoqa_regular"
-        android:text="고객센터"
+        android:text="문의 메일"
         android:textColor="@color/text_black"
         android:textSize="18dp" />
 
