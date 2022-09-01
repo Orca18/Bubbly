@@ -1,6 +1,9 @@
 package com.example.bubbly.Kim_Bottom;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,8 +24,12 @@ import androidx.fragment.app.Fragment;
 import com.example.bubbly.MainActivity;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_SearchMode;
+import com.example.bubbly.SS_SearchResult;
+import com.example.bubbly.chatting.util.GetDate;
 import com.example.bubbly.controller.Ranking_Adapter;
+import com.example.bubbly.controller.Searched_Adapter_Callback;
 import com.example.bubbly.model.Ranking_Item;
+import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 
@@ -31,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -52,6 +60,55 @@ public class Bottom2_Fragment extends Fragment {
     LinearLayout search;
 
 
+    Searched_Adapter_Callback callback = new Searched_Adapter_Callback() {
+        @Override
+        public void updateListRecentlySearched(String keyword) {
+            //검색 키워드 저장하기 - 서버
+            ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+            Call<String> call = api.createSerarchText(UserInfo.user_id,keyword);
+            call.enqueue(new Callback<String>()
+            {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                {
+                    if (response.isSuccessful() && response.body() != null)
+                    {
+                        ArrayList<String> recentlySearchedList = new ArrayList<String>();
+                        SharedPreferences preferences = getActivity().getSharedPreferences("novarand",MODE_PRIVATE);
+                        String recentlySearched = preferences.getString("recentlySearched", "");
+                        try {
+                            JSONArray jsonArray = new JSONArray(recentlySearched);
+                            for(int i=0;i<jsonArray.length();i++){
+                                String recentlySearchedItem = jsonArray.getString(i);
+                                recentlySearchedList.add(recentlySearchedItem);
+                            }
+                            //리스트뷰 역순으로 보이게 하기(최신 검색어가 맨 상위로)
+                            Collections.reverse(recentlySearchedList);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //역순으로 보여주었던 것을 저장시 올바른 순서로 저장하기 위해서 다시 역순(원래 순서)로 재배치
+                        Collections.reverse(recentlySearchedList);
+                        //검색 키워드 저장하기 - 로컬 (화면 이동 후 업데이트)
+                        //만약 동일 키워드가 이미 존재하면 해당 키워드를 지우고 새로 추가
+                        for(int i =0;i<recentlySearchedList.size();i++){
+                            if(recentlySearchedList.get(i).equals(keyword)){
+                                recentlySearchedList.remove(i);
+                            }
+                        }
+                        recentlySearchedList.add(keyword);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("recentlySearched", recentlySearchedList.toString());
+                        editor.commit();
+                    }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.e("에러", t.getMessage());
+                }
+            });
+        }
+    };
 
     @Nullable
     @Override
@@ -61,9 +118,6 @@ public class Bottom2_Fragment extends Fragment {
         initialize();
 
         clickListeners();
-
-
-
 
         return view;
     }
@@ -107,14 +161,12 @@ public class Bottom2_Fragment extends Fragment {
     private void RankingList() {
         rankingList = new ArrayList<Ranking_Item>();
         // 리스트뷰 어답터 - 리스트뷰 연결
-        final Ranking_Adapter adapter = new Ranking_Adapter(getContext(), rankingList);
+        final Ranking_Adapter adapter = new Ranking_Adapter(getContext(), rankingList, callback);
         listView.setAdapter(adapter);
 
         //실시간 트랜드 데이터 가져오기
         //현재시간
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Date now = new Date();
-        String strNow = sdfDate.format(now);
+        String strNow = GetDate.getTodayDateWithTime();
         ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
         Call<String> call = api.selectRealTimeTrends(strNow);
         call.enqueue(new Callback<String>()
@@ -147,7 +199,8 @@ public class Bottom2_Fragment extends Fragment {
                 Log.e("실시간 검색어 트랜드 에러", t.getMessage());
             }
         });
-
     }
+
+
 
 }

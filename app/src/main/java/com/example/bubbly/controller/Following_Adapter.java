@@ -3,6 +3,7 @@ package com.example.bubbly.controller;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
+import com.example.bubbly.SS_Profile;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -75,6 +77,16 @@ public class Following_Adapter extends RecyclerView.Adapter<Following_Adapter.Fo
         }else{
             //아무 처리도 하지 않는다. default 프로필 이미지 나타남.
         }
+        holder.iv_user_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(mContext, SS_Profile.class);
+                mIntent.putExtra("user_id",following_response.getFollowee_id());
+                mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+
 //        ApiInterface selectFollowerList_api = ApiClient.getApiClient().create(ApiInterface.class);
 //        Call<List<follower_Response>> call = selectFollowerList_api.selectFollowerList(user_id);
 //        call.enqueue(new Callback<List<follower_Response>>()

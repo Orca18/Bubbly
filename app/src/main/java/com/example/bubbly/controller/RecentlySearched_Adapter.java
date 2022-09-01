@@ -6,15 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bubbly.R;
-import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_SearchResult;
-import com.example.bubbly.model.Ranking_Item;
 
 import java.util.ArrayList;
 
@@ -23,9 +19,9 @@ public class RecentlySearched_Adapter extends BaseAdapter {
     Context mContext = null;
     LayoutInflater mLayoutInflater = null;
     ArrayList<String> keywordList;
-    RecentlySearched_Adapter_Callback callback;
+    Searched_Adapter_Callback callback;
 
-    public RecentlySearched_Adapter(Context context, ArrayList<String> data, RecentlySearched_Adapter_Callback callback) {
+    public RecentlySearched_Adapter(Context context, ArrayList<String> data, Searched_Adapter_Callback callback) {
         mContext = context;
         keywordList = data;
         mLayoutInflater = LayoutInflater.from(mContext);

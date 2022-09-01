@@ -43,6 +43,7 @@ public class Community_MainPage extends AppCompatActivity {
 
     String com_id;
     Toolbar toolbar;
+    ImageView bt_search;
     //////////////////////////////////////////////
     Kim_Post_Adapter post_adapter;
     ArrayList<Kim_Com_post_Response> postList;
@@ -246,6 +247,8 @@ public class Community_MainPage extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //서치버튼
+        bt_search = findViewById(R.id.bt_search_com);
         // 게시글
         recyclerView = findViewById(R.id.com_main_recyclerview);
         // 나머지
@@ -278,6 +281,13 @@ public class Community_MainPage extends AppCompatActivity {
 
 
     private void listeners() {
+
+        //툴바 서치 버튼
+        bt_search.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);
+            mIntent.putExtra("keyword", "");
+            startActivity(mIntent);
+        });
 
         rl_title.setOnClickListener(new View.OnClickListener() {
             @Override

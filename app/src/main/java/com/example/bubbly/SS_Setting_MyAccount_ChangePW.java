@@ -1,10 +1,12 @@
 package com.example.bubbly;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,12 +19,28 @@ import androidx.appcompat.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
 
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.regex.Pattern;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,8 +71,12 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
         bt_changePW_findID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //비밀번호 암호화
+                String pw =  et_password_check_findID.getText().toString();
+                String encryptedPW = encryption(pw);
+
                 ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-                Call<String> call = api.modifyPassword(user_id, et_password_check_findID.getText().toString());
+                Call<String> call = api.modifyPassword(user_id, encryptedPW);
                 call.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -63,6 +85,30 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "변경에 실패했습니다.",Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(getApplicationContext(), "성공적으로 변경했습니다.",Toast.LENGTH_SHORT).show();
+
+                                //자동로그인 : 쉐어드프리퍼런스에 저장한다.
+                                MasterKey masterKey = null;
+                                try {
+                                    masterKey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                                            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                                            .build(); //암호화 키 생성
+                                    SharedPreferences sharedPreferences = EncryptedSharedPreferences
+                                            .create(getApplicationContext(),
+                                                    "account",
+                                                    masterKey,
+                                                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, //key(name, 이경우 mnemonic) 암호화 방식
+                                                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM); //value 암호화 방식 선택
+
+                                    SharedPreferences.Editor spfEditor = sharedPreferences.edit();
+                                    spfEditor.putString("id", UserInfo.login_id);
+                                    spfEditor.putString("pw", encryptedPW);
+                                    spfEditor.commit();
+                                } catch (GeneralSecurityException e) {
+                                    e.printStackTrace();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
                                 Intent mIntent = new Intent(getApplicationContext(), SS_Setting.class);
                                 startActivity(mIntent);
                             }
@@ -147,5 +193,36 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private String encryption(String str) {
+        String result = "";
+        byte[] ivBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        String secretKey = "Novarand";
+        byte[] plaintext = new byte[0];
+        try {
+            plaintext = str.getBytes("UTF-8");
+            AlgorithmParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            SecretKeySpec newKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, newKey, ivSpec);
+            result = Base64.encodeToString(cipher.doFinal(plaintext), 0);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
 }

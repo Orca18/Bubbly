@@ -201,7 +201,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
-        if(post_response.getProfile_file_name().equals(null)){
+        if(post_response.getProfile_file_name()==null||post_response.getProfile_file_name().equals("")){
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)
                     .load(R.drawable.blank_profile)

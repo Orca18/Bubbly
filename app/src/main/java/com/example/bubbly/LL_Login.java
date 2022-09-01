@@ -8,6 +8,7 @@ import androidx.security.crypto.MasterKey;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -27,9 +28,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,9 +88,12 @@ public class LL_Login extends AppCompatActivity {
                 }else if(et_login_pw.getText().toString().equals("")||et_login_pw.getText().toString().equals(null)){
                     Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
                 }else{
+                    //비밀번호 암호화
+                    String pw =  et_login_pw.getText().toString();
+                    String encryptedPW = encryption(pw);
                     //둘다 빈칸이 아닐 경우 서버로 로그인을 요청한다.
                     ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
-                    Call<String> call = login_api.login(et_login_id.getText().toString(), et_login_pw.getText().toString());
+                    Call<String> call = login_api.login(et_login_id.getText().toString(),pw);
                     call.enqueue(new Callback<String>()
                     {
                         @Override
@@ -93,7 +111,6 @@ public class LL_Login extends AppCompatActivity {
 //                                    Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
 
                                     //자동로그인 : 쉐어드프리퍼런스에 저장한다.
-                                    String mnemonic = response.body().toString();
                                     MasterKey masterKey = null;
                                     try {
                                         masterKey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
@@ -108,7 +125,7 @@ public class LL_Login extends AppCompatActivity {
 
                                         SharedPreferences.Editor spfEditor = sharedPreferences.edit();
                                         spfEditor.putString("id", et_login_id.getText().toString());
-                                        spfEditor.putString("pw", et_login_pw.getText().toString());
+                                        spfEditor.putString("pw", pw);
                                         spfEditor.commit();
                                     } catch (GeneralSecurityException e) {
                                         e.printStackTrace();
@@ -227,4 +244,36 @@ public class LL_Login extends AppCompatActivity {
         });
 
     }
+
+    private String encryption(String str) {
+        String result = "";
+        byte[] ivBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        String secretKey = "Novarand";
+        byte[] plaintext = new byte[0];
+        try {
+            plaintext = str.getBytes("UTF-8");
+            AlgorithmParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            SecretKeySpec newKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, newKey, ivSpec);
+            result = Base64.encodeToString(cipher.doFinal(plaintext), 0);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+
 }
