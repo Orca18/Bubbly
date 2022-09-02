@@ -84,7 +84,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
     }
 
     public static Date getDate(String from) throws ParseException {
-    // "yyyy-MM-dd HH:mm:ss"
+        // "yyyy-MM-dd HH:mm:ss"
         Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(from);
         return date;
     }
@@ -109,6 +109,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         // SNS 형식 시간
         holder.tv_time.setText(a);
 
+
         // TODO 유저 login_id & 커뮤니티 이름 뜨게 만들기
         holder.tv_user_id.setText(post_response.getPost_writer_id());
 
@@ -129,7 +130,6 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
 
-
         holder.tv_com_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,14 +141,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
             }
         });
 
-        Glide.with(mContext)
-                .load(Config.cloudfront_addr + post_response.getProfile_file_name())
-                .into(holder.iv_user_image);
 
-        Glide.with(mContext)
-                .load(Config.cloudfront_addr + post_response.getFile_save_names())
-                .fitCenter()
-                .into(holder.iv_media);
 
 
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
@@ -202,7 +195,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
 
-        if(post_response.getProfile_file_name()==null){
+        if (post_response.getProfile_file_name() == null) {
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)
                     .load(R.drawable.blank_profile)
@@ -362,47 +355,59 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
 
+
+
+
         String type = post_response.getPost_type();
 
-        String videoURL = Config.cloudfront_addr + post_response.getFile_save_names();
-        try {
-            Log.d("디버그태그", "try 전:"+type);
-            if(type.equals("2")){
-                // bandwisthmeter : 기본 대역폭 가져오기
-                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                // 기본 막대를 사용하는 동영상
-                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-                // 트랙셀렉터 추가
-                ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
-                // url 로 부터 Uri 파싱
-                Uri videouri = Uri.parse(videoURL);
-                // 엑소플레이어뷰
-                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
-                // 미디어 소스 생성
-                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                // 미디어 소스 생성
-                MediaSource mediaSource = new ExtractorMediaSource(videouri, dataSourceFactory, extractorsFactory, null, null);
-                // 엑소플레이어 넣기
-                holder.vd_media.setPlayer((SimpleExoPlayer) exoPlayer);
-                holder.vd_media.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-                // 미리 준비
-                exoPlayer.prepare(mediaSource);
-                // 준비 완료시 재생 여부
-                exoPlayer.setPlayWhenReady(false);
-                Log.d("디버그태그", "엑소플레이어2:"+type);
-            } if (type.equals("1")) {
-                Log.d("디버그태그", "엑소플레이어1:"+type);
-                Glide.with(mContext)
-                        .load(Config.cloudfront_addr + post_response.getFile_save_names())
-                        .fitCenter()
-                        .into(holder.iv_media);
-            } else {
-                Log.d("디버그태그", "엑소플레이어0:"+type);
-            }
+        String media_url = "";
 
-        } catch (Exception e) {
-            Log.e("TAG", "Error : " + e.toString());
+        if(media_url == null){
+
+        }else{
+            Log.d("디버그태그", "뭔데진짜:"+media_url);
+            try {
+                media_url = Config.cloudfront_addr + post_response.getFile_save_names();
+                Log.d("디버그태그", "try 전:" + type);
+                if (type.equals("2")) {
+                    // bandwisthmeter : 기본 대역폭 가져오기
+                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                    // 기본 막대를 사용하는 동영상
+                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                    // 트랙셀렉터 추가
+                    ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+                    // url 로 부터 Uri 파싱
+                    Uri videouri = Uri.parse(media_url);
+                    // 엑소플레이어뷰
+                    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                    // 미디어 소스 생성
+                    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                    // 미디어 소스 생성
+                    MediaSource mediaSource = new ExtractorMediaSource(videouri, dataSourceFactory, extractorsFactory, null, null);
+                    // 엑소플레이어 넣기
+                    holder.vd_media.setPlayer((SimpleExoPlayer) exoPlayer);
+                    holder.vd_media.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+                    // 미리 준비
+                    exoPlayer.prepare(mediaSource);
+                    // 준비 완료시 재생 여부
+                    exoPlayer.setPlayWhenReady(false);
+                    Log.d("디버그태그", "엑소플레이어2:" + type);
+                }
+                if (type.equals("1")) {
+                    Log.d("디버그태그", "엑소플레이어1:" + type);
+                    Glide.with(mContext)
+                            .load(Config.cloudfront_addr + media_url)
+                            .fitCenter()
+                            .into(holder.iv_media);
+                } else {
+                    Log.d("디버그태그", "엑소플레이어0:" + type);
+                }
+
+            } catch (Exception e) {
+                Log.e("TAG", "Error : " + e.toString());
+            }
         }
+
 
 
 
