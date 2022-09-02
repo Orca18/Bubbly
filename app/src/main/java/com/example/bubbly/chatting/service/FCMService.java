@@ -1,5 +1,6 @@
 package com.example.bubbly.chatting.service;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,6 +23,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FCMService extends FirebaseMessagingService{
+    private static Context context;
+
     public FCMService() {}
 
     private Handler handler;    // for toast UI
@@ -30,6 +33,7 @@ public class FCMService extends FirebaseMessagingService{
     public void onCreate() {
         super.onCreate();
         handler = new Handler();
+        context = getApplicationContext();
     }
 
     private void _runOnUiThread(Runnable runnable) {
@@ -53,7 +57,7 @@ public class FCMService extends FirebaseMessagingService{
             @Override
             public void run()
             {
-                Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "remoteMessage.getFrom()", Toast.LENGTH_LONG).show();
             }
         }, 0);
 
@@ -100,7 +104,7 @@ public class FCMService extends FirebaseMessagingService{
                          * 서버에 토큰 리프레시 요청
                          * */
                         // 레트로핏 구현체 가져오기
-                        ChatApiInterface chatApiInterface= ChatApiClient.getApiClient().create(ChatApiInterface.class);
+                        ChatApiInterface chatApiInterface= ChatApiClient.getApiClient(context).create(ChatApiInterface.class);
                         Call<String> call = chatApiInterface.refreshToken(token,userId);
                         call.enqueue(new Callback<String>()
                         {

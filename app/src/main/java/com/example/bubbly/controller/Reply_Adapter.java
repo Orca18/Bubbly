@@ -76,7 +76,7 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         preferences = context.getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        ApiInterface select_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface select_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
         Call<List<user_Response>> call_userInfo = select_api.selectUserInfo(user_id);
         call_userInfo.enqueue(new Callback<List<user_Response>>()
         {
@@ -138,7 +138,7 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch(menuItem.getItemId()){
                                 case R.id.menu_reply_delete:
-                                    ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                    ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                                     // 코멘트 아이디를 통해서 삭제
                                     Call<String> call = deletePost_api.deleteComment(reply_response.getComment_id());
                                     call.enqueue(new Callback<String>()
@@ -205,7 +205,7 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.delete:
-                                ApiInterface deleteComment_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                ApiInterface deleteComment_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                                 Call<String> call = deleteComment_api.deleteComment("13");
                                 call.enqueue(new Callback<String>()
                                 {

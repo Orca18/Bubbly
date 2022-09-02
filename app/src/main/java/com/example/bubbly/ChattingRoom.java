@@ -130,7 +130,7 @@ public class ChattingRoom extends AppCompatActivity {
     // 서비스의 상태에 따라 콜백 함수를 호출하는 객체.
     private ServiceConnection conn;
 
-    private ChatUtil chatUtil = new ChatUtil();
+    private ChatUtil chatUtil = new ChatUtil(this);
 
     // 채팅데이터 페이지
     private int pageNo = 1;
@@ -297,7 +297,7 @@ public class ChattingRoom extends AppCompatActivity {
 
     // loadrecycler 에서 요청/응답 받은 데이터 채워넣기
     private void fillList(String chatRoomId, int page_no) {
-        ChatApiInterface chatApiClient = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+        ChatApiInterface chatApiClient = ChatApiClient.getApiClient(ChattingRoom.this).create(ChatApiInterface.class);
         Call<ArrayList<Chat_Item>> call = chatApiClient.selectChatData(chatRoomId, page_no, pagingSize);
         call.enqueue(new Callback<ArrayList<Chat_Item>>()
         {
@@ -644,7 +644,7 @@ public class ChattingRoom extends AppCompatActivity {
         // 새로 생성됐고 메시지 전송을 한번이라도 한 경우 뒤로가기를 했을 때 MM_Message의 뷰모델에게 정보 전달!
         if(isNew && isMsgTransfered){
             // 뒤로가기 시 새로 생성된 방 정보 보내기
-            ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface apiClient = ApiClient.getApiClient(ChattingRoom.this).create(ApiInterface.class);
             Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomInfo(chatRoomId);
 
             SyncGetChatInfo t = new SyncGetChatInfo(call);
@@ -703,7 +703,7 @@ public class ChattingRoom extends AppCompatActivity {
         if(isNew && !isMsgTransfered){
             Log.e("채팅방이 새로 생성되고 메시지를 전송하지 않은채로 파괴되어 db저장정보 삭제!", "isNew: " + ChatService.IS_BOUND_CHATTING_ROOM + "isMsgTransfered: " + isMsgTransfered);
 
-            ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface apiClient = ApiClient.getApiClient(ChattingRoom.this).create(ApiInterface.class);
             Call<String> call = apiClient.deleteChatRoom(chatRoomId);
             call.enqueue(new Callback<String>()
             {
@@ -719,11 +719,11 @@ public class ChattingRoom extends AppCompatActivity {
                         // 브로커에게 채팅방 정보 publish
                         // 채팅방 삭제(1)
                         chatRoomCreOrDel.setMsgType(1);
-                        new ChatUtil().publishChatCreOrDelMsg(chatRoomCreOrDel, ChatService.mqttClient);
+                        new ChatUtil(ChattingRoom.this).publishChatCreOrDelMsg(chatRoomCreOrDel, ChatService.mqttClient);
 
                         // FCM서버에게 구독 해지요청
                         // FCM 서버에게 구독요청을 하기 위한 데이터
-                        ChatApiInterface chatApiClient = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+                        ChatApiInterface chatApiClient = ChatApiClient.getApiClient(ChattingRoom.this).create(ChatApiInterface.class);
                         Call<String> call2 = chatApiClient.unsubscribeChatMemberToFCMServer(chatMemberFcmTokenList);
                         call2.enqueue(new Callback<String>()
                         {
@@ -859,7 +859,7 @@ public class ChattingRoom extends AppCompatActivity {
         }
 
         // 파일을 저장하고 파일저장명 리스트를 가져온다.
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(ChattingRoom.this).create(ApiInterface.class);
         Call<String> call = apiClient.saveChatFiles(parts);
         call.enqueue(new Callback<String>() {
             @Override
@@ -901,7 +901,7 @@ public class ChattingRoom extends AppCompatActivity {
         parts.add(prepareFilePart("video", videoUri, 2)); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
 
         // 파일을 저장하고 파일저장명 리스트를 가져온다.
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(ChattingRoom.this).create(ApiInterface.class);
         Call<String> call = apiClient.saveChatFiles(parts);
         call.enqueue(new Callback<String>() {
             @Override

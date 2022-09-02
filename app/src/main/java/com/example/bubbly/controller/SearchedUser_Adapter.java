@@ -84,7 +84,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
 
          //이미 팔로우한 사람을 중복 팔로우하지 않게 기존 팔로우 목록을 가져와서 저장한다.
         //followee id가 follower목록에 존재하면 맞팔로우버튼을 숨긴다.
-        ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectFolloweeList_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
         Call<List<following_Response>> call = selectFolloweeList_api.selectFolloweeList(user_id);
         call.enqueue(new Callback<List<following_Response>>()
         {
@@ -128,7 +128,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         holder.bt_follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface createFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface createFollowing_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                 Call<String> call = createFollowing_api.createFollowing(user_response.getUser_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {
@@ -154,7 +154,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         holder.bt_follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deleteFollowing_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                 Call<String> call = deleteFollowing_api.deleteFollowing(user_response.getUser_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {

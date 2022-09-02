@@ -173,7 +173,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     private void LikeToDislike() {
-        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface dislike_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<String> call = dislike_api.dislike(post_id, user_id);
         call.enqueue(new Callback<String>() {
             @Override
@@ -193,7 +193,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     private void DislikeToLike() {
-        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface like_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<String> call = like_api.like(post_id, user_id);
         call.enqueue(new Callback<String>() {
             @Override
@@ -318,7 +318,7 @@ public class SS_PostDetail extends AppCompatActivity {
         recyclerView.setAdapter(reply_adapter);
         reply_adapter.notifyDataSetChanged();
 
-        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<List<reply_Response>> call = selectCommentUsingPostId_api.selectCommentUsingPostId(post_id);
         call.enqueue(new Callback<List<reply_Response>>() {
             @Override
@@ -350,7 +350,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     public void createComment() { // 댓글 생성
-        ApiInterface createComment_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface createComment_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<String> call = createComment_api.createComment(post_id, "1", user_id, et_reply.getText().toString(), "!");
         call.enqueue(new Callback<String>() {
             @Override
@@ -372,7 +372,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     public void selectPostUsingPostId() { // 게시글 아이디로 조회
-        ApiInterface selectPostUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectPostUsingPostId_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<List<post_Response>> call = selectPostUsingPostId_api.selectPostUsingPostId(post_id, user_id);
         call.enqueue(new Callback<List<post_Response>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)

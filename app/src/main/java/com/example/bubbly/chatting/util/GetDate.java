@@ -31,10 +31,11 @@ public class GetDate {
         return date;
     }
 
-    // 오늘날짜 출력 yyyy-MM-dd HH:mm:ss:
+    // 오늘날짜 출력 yyyy-MM-dd HH:mm
     public static String getTodayDateWithTime(){
-        String pattern = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String pattern = "yyyy-MM-dd HH:mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.KOREA);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 
         String date = simpleDateFormat.format(new Date());
         return date;

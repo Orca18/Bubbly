@@ -90,7 +90,7 @@ public class FragmentSR_Tab5_Community extends Fragment {
         adapter.notifyDataSetChanged();
 
 
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<Kim_JoinedCom_Response>> call = api.selectCommunitySearchResultList(keyword);
         call.enqueue(new Callback<List<Kim_JoinedCom_Response>>()
         {

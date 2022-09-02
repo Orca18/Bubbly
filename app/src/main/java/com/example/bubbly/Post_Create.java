@@ -266,7 +266,7 @@ public class Post_Create extends AppCompatActivity {
     }
 
     private void GetJoinedComList() {
-        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient(Post_Create.this).create(Kim_ApiInterface.class);
         Call<List<Kim_JoinedCom_Response>> call = api.selectCommunityListUsingUserId(user_id);
         call.enqueue(new Callback<List<Kim_JoinedCom_Response>>()
         {
@@ -370,7 +370,7 @@ public class Post_Create extends AppCompatActivity {
             RequestBody size = createPartFromString("" + parts.size());
 
             user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-            ApiInterface createPost_api = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface createPost_api = ApiClient.getApiClient(Post_Create.this).create(ApiInterface.class);
             Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", category_com_id, "1", post_type);
             call.enqueue(new Callback<String>() {
                 @Override
@@ -404,7 +404,7 @@ public class Post_Create extends AppCompatActivity {
             }
         }
         RequestBody size = createPartFromString("" + parts.size());
-        ApiInterface updatePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface updatePost_api = ApiClient.getApiClient(Post_Create.this).create(ApiInterface.class);
         Call<String> call = updatePost_api.updatePost(post_id, et_content.getText().toString(), size, parts, post_mention, post_mention);
         call.enqueue(new Callback<String>() {
             @Override

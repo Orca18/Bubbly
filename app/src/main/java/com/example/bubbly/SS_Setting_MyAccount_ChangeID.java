@@ -50,7 +50,7 @@ public class SS_Setting_MyAccount_ChangeID extends AppCompatActivity {
         bt_changeID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(SS_Setting_MyAccount_ChangeID.this).create(ApiInterface.class);
                 Call<String> call = api.changeLoginId(et_id.getText().toString(),UserInfo.user_id);
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -90,7 +90,7 @@ public class SS_Setting_MyAccount_ChangeID extends AppCompatActivity {
                 if(pattern.matcher(et_id.getText().toString()).matches()){
                     tv_id_check.setText("아이디 규칮에 맞습니다.");
                     //아이디 중복 체크
-                    ApiInterface selectIsExistingId_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface selectIsExistingId_api = ApiClient.getApiClient(SS_Setting_MyAccount_ChangeID.this).create(ApiInterface.class);
                     Call<String> call = selectIsExistingId_api.selectIsExistingId(et_id.getText().toString());
                     call.enqueue(new Callback<String>()
                     {

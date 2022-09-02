@@ -67,7 +67,7 @@ public class NFTSell_Adapter extends RecyclerView.Adapter<NFTSell_Adapter.ViewHo
                 builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface api = ApiClient.getApiClient(context).create(ApiInterface.class);
                         System.out.println(UserInfo.mnemonic+"nftid"+lists.get(position).getNft_id()+UserInfo.user_id);
                         Call<String> call = api.nftBuy(lists.get(position).getNovaland_account_addr(),UserInfo.mnemonic,lists.get(position).getNft_id(),lists.get(position).getApp_id(),lists.get(position).getSell_price(),UserInfo.user_id);
                         call.enqueue(new Callback<String>() {

@@ -77,7 +77,7 @@ public class LL_Login extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "비밀번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
                 }else{
                     //둘다 빈칸이 아닐 경우 서버로 로그인을 요청한다.
-                    ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface login_api = ApiClient.getApiClient(LL_Login.this).create(ApiInterface.class);
                     Call<String> call = login_api.login(et_login_id.getText().toString(), et_login_pw.getText().toString());
                     call.enqueue(new Callback<String>()
                     {

@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import com.example.bubbly.MainActivity;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_SearchMode;
+import com.example.bubbly.chatting.util.GetDate;
 import com.example.bubbly.controller.Ranking_Adapter;
 import com.example.bubbly.model.Ranking_Item;
 import com.example.bubbly.retrofit.ApiClient;
@@ -112,10 +113,14 @@ public class Bottom2_Fragment extends Fragment {
 
         //실시간 트랜드 데이터 가져오기
         //현재시간
-        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        /*SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date now = new Date();
-        String strNow = sdfDate.format(now);
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        String strNow = sdfDate.format(now);*/
+
+        Log.d("ddd","ddd");
+
+        String strNow = GetDate.getTodayDateWithTime();
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<String> call = api.selectRealTimeTrends(strNow);
         call.enqueue(new Callback<String>()
         {

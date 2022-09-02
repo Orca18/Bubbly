@@ -5,10 +5,6 @@
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
         android:resource="@drawable/skeleton" />
-    <!--
- 메시지 기본 색상 Set color used with incoming notification messages. This is used when no color is set for the incoming
-         notification message. See README(https://goo.gl/6BKBk7) for more.
-    -->
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_color"
         android:resource="@color/black" /> <!-- 알림 채널의 데이터가 없다면 아래 값을 디폴트로 사용한다. -->
@@ -32,11 +28,14 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Interceptor_Test"
+            android:exported="false" />
+        <activity
             android:name=".VideoDownloadActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="FCM_NOTI_ACTIVITY" />
 
@@ -67,6 +66,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -111,14 +111,13 @@
         <activity
             android:name=".Community_Joined_List"
             android:exported="false" />
-
         <activity
             android:name=".SS_PostDetail"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -126,12 +125,7 @@
                     android:host="3.39.84.115"
                     android:scheme="bubbly1" />
             </intent-filter>
-
-
         </activity>
-
-
-
         <activity
             android:name=".Post_Create"
             android:exported="false"
@@ -209,8 +203,7 @@
             android:exported="false" />
         <activity
             android:name=".MM_Message"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".ImageView_FullScreen_With_Save"
             android:exported="false" />

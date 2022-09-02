@@ -180,7 +180,7 @@ public class Community_Joined_List extends AppCompatActivity {
 
         String user_id;
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient(Community_Joined_List.this).create(Kim_ApiInterface.class);
         Call<List<Kim_JoinedCom_Response>> call = api.selectCommunityListUsingUserId(user_id);
         call.enqueue(new Callback<List<Kim_JoinedCom_Response>>()
         {

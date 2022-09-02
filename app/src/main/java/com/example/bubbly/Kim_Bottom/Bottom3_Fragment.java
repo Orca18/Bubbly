@@ -102,7 +102,7 @@ public class Bottom3_Fragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         chattingRoomViewModel = new ViewModelProvider(requireActivity()).get(ChattingRoomViewModel.class);
-        chatUtil = new ChatUtil();
+        chatUtil = new ChatUtil(requireActivity());
 
         // 채팅방리스트 변화할 때마다 업데이트 해줌
         observe();
@@ -327,7 +327,7 @@ public class Bottom3_Fragment extends Fragment {
                 String chatRoomId = chatRoomInfo.getChatRoomId();
 
                 // 채팅방 나가기
-                ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface apiClient = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
                 Call<String> call = apiClient.deleteChatParticipant(UserInfo.user_id, chatRoomId);
                 call.enqueue(new Callback<String>()
                 {

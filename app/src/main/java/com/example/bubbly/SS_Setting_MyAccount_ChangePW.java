@@ -53,7 +53,7 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
         bt_changePW_findID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(SS_Setting_MyAccount_ChangePW.this).create(ApiInterface.class);
                 Call<String> call = api.modifyPassword(user_id, et_password_check_findID.getText().toString());
                 call.enqueue(new Callback<String>() {
                     @Override

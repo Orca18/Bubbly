@@ -94,7 +94,7 @@ public class FragmentSR_Tab3_Users extends Fragment {
         adapter.notifyDataSetChanged();
 
 
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<String> call = api.selectUserSearchResultList(UserInfo.user_id,keyword);
         call.enqueue(new Callback<String>()
         {

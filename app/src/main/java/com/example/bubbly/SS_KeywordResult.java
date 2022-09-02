@@ -116,7 +116,7 @@ public class SS_KeywordResult extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
         recyclerView.addOnScrollListener(onScrollListener);
         //판매중인 nft 목록 가져오기
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<NFTSell_Item>> call = api.selectAllSelledNftList();
         call.enqueue(new Callback<List<NFTSell_Item>>() {
             @Override

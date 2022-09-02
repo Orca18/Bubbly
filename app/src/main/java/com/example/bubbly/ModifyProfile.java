@@ -131,7 +131,7 @@ public class ModifyProfile extends AppCompatActivity {
             String user_id = UserInfo.user_id;
             String self_info = UserInfo.self_info;
 
-            ApiInterface updateUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface updateUserInfo_api = ApiClient.getApiClient(this).create(ApiInterface.class);
             Call<String> call = updateUserInfo_api.updateUserInfo(login_id, email_addr, phone_num, nick_name, "test",parts, user_id, self_info);
             call.enqueue(new Callback<String>()
             {
@@ -239,7 +239,7 @@ public class ModifyProfile extends AppCompatActivity {
                         }
 
                         //updateUserProfile http 요청
-                        ApiInterface selectUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface selectUserInfo_api = ApiClient.getApiClient(ModifyProfile.this).create(ApiInterface.class);
                         Call<String> call = selectUserInfo_api.updateUserProfile(parts,UserInfo.user_id);
                         call.enqueue(new Callback<String>()
                         {

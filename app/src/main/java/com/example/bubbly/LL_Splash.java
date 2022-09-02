@@ -98,7 +98,7 @@ public class LL_Splash extends AppCompatActivity {
                     finish();
                 } else {
                     //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
-                    ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface login_api = ApiClient.getApiClient(LL_Splash.this).create(ApiInterface.class);
                     Call<String> call = login_api.login(id, pw);
                     call.enqueue(new Callback<String>() {
                         @Override

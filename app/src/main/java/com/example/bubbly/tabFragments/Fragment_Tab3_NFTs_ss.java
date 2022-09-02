@@ -91,7 +91,7 @@ public class Fragment_Tab3_NFTs_ss extends Fragment {
         adapter.notifyDataSetChanged();
 
         //판매중인 nft 목록 가져오기
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId(uid);
         call.enqueue(new Callback<List<NFTSell_Item>>() {
             @Override

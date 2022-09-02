@@ -104,7 +104,7 @@ public class Following_Adapter extends RecyclerView.Adapter<Following_Adapter.Fo
         holder.bt_unfollowing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deleteFollowing_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                 Call<String> call = deleteFollowing_api.deleteFollowing(following_response.getFollowee_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {

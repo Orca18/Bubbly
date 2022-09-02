@@ -169,7 +169,7 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
             @Override
             public void onClick(View view) {
                 // 채팅멤버리스트 정보 가져오기 
-                ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface apiClient = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                 Call<ArrayList<OtherUserInfo>> call = apiClient.selectChatParticipantUsingChatRoomId(currentItem.getChatRoomId());
                 call.enqueue(new Callback<ArrayList<OtherUserInfo>>()
                 {
