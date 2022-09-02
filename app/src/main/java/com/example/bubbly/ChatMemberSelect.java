@@ -240,7 +240,7 @@ public class ChatMemberSelect extends AppCompatActivity {
                     Log.d("ChatRoomCre데이터 확인: ", chatRoomCre.toString());
                 } else if(chatMemberList.size() == 2){ // 개인 채팅
                     // 이미 생성된 채팅방이 있는지 조회한다.
-                    ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface apiClient = ApiClient.getApiClient(ChatMemberSelect.this).create(ApiInterface.class);
                     Call<String> call = apiClient.selectExistingChatRoomId(chatMemberList.get(0).getUser_id(), chatMemberList.get(1).getUser_id());
 
                     call.enqueue(new Callback<String>()
@@ -299,7 +299,7 @@ public class ChatMemberSelect extends AppCompatActivity {
 
     // 채팅에 참여할 사용자 검색 - 내가 팔로잉한 사람, 나를 팔로잉한 사람, 그 외 모든 사람 순서대로 출력
     public void selectSearchedUserList(String user_id, String searchText){
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(ChatMemberSelect.this).create(ApiInterface.class);
         Call<ArrayList<OtherUserInfo>> call = apiClient.selectSearchedUserList(user_id, searchText);
         call.enqueue(new Callback<ArrayList<OtherUserInfo>>()
         {
@@ -374,7 +374,7 @@ public class ChatMemberSelect extends AppCompatActivity {
     // 새로운 채팅방을 만든다.
     public void createNewChatRoom(Chat_Room_Cre_Or_Del chatRoomCre, ArrayList<OtherUserInfo> chatMemberList){
         // 4. 서버로 전송
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(ChatMemberSelect.this).create(ApiInterface.class);
         Call<String> call = apiClient.createChatRoom(chatRoomCre);
         call.enqueue(new Callback<String>()
         {
@@ -394,7 +394,7 @@ public class ChatMemberSelect extends AppCompatActivity {
                     chatRoomCre.setMsgType(0);
 
                     // 브로커에게 채팅방 정보 publish
-                    new ChatUtil().publishChatCreOrDelMsg(chatRoomCre, ChatService.mqttClient);
+                    new ChatUtil(ChatMemberSelect.this).publishChatCreOrDelMsg(chatRoomCre, ChatService.mqttClient);
 
                     // FCM서버에게 구독요청
                     // fcm_token list
@@ -413,7 +413,7 @@ public class ChatMemberSelect extends AppCompatActivity {
                     chatMemberFcmSub.setTopic("/topics/" + chatRoomId);
                     chatMemberFcmSub.setTokenList(tokenList);
 
-                    ChatApiInterface chatApiClient = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+                    ChatApiInterface chatApiClient = ChatApiClient.getApiClient(ChatMemberSelect.this).create(ChatApiInterface.class);
                     Call<String> call2 = chatApiClient.subscribeChatMemberToFCMServer(chatMemberFcmSub);
                     call2.enqueue(new Callback<String>()
                     {

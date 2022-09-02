@@ -146,7 +146,7 @@ public class Community_Info_Edit extends AppCompatActivity {
 
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        Kim_ApiInterface kim_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface kim_api = Kim_ApiClient.getApiClient(Community_Info_Edit.this).create(Kim_ApiInterface.class);
         Call<String> call = kim_api.updateCommunity(et_com_title.getText().toString(), et_com_desc.getText().toString(),null, com_id, file, et_com_rule.getText().toString());
         call.enqueue(new Callback<String>() {
             @Override
@@ -219,7 +219,7 @@ public class Community_Info_Edit extends AppCompatActivity {
 
 
     private void GetComInfo() {
-        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient(Community_Info_Edit.this).create(Kim_ApiInterface.class);
         Call<List<Kim_Com_Info_Response>> call = api.selectCommunityUsingCommunityId(com_id);
         call.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
             @Override

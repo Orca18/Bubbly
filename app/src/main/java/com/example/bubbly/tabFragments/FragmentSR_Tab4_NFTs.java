@@ -89,7 +89,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
         post_adapter.notifyDataSetChanged();
 
 
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<post_Response>> call = api.selectPostUsingPostContents(keyword, UserInfo.user_id);
         call.enqueue(new Callback<List<post_Response>>()
         {

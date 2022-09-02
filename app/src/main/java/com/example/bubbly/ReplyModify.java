@@ -62,7 +62,7 @@ public class ReplyModify extends AppCompatActivity {
 
 
     public void updateComment(){
-        ApiInterface updateComment_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface updateComment_api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<String> call = updateComment_api.updateComment("13",et_reply_modify.getText().toString(),comment_mention,comment_mention,comment_mention);
         call.enqueue(new Callback<String>()
         {

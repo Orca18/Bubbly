@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // 이 메시지와 동일한 채팅방 아이디를 가지는 채팅방이 없음 => 새로 생성!
                     if(latestMsgId == null) {
-                        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                         Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomInfo(chatRoomId);
                         call.enqueue(new retrofit2.Callback<ArrayList<Chat_Room_Info>>() {
                             @Override
@@ -242,8 +242,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-
-
             // 서비스와 연결이 되어있다면 즉, 백그라운드에서 noti를 클릭해서 MainAct를 다시 시작했다면
             // 이전 메인 액티비티-서비스와의 연결을 끊고 새로운 메인액티비티-서비스 연결을 만들어 준다.
             if(ChatService.IS_BOUND_MAIN_ACTIVITY){
@@ -279,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }else{
                 //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
-                ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface login_api = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                 Call<String> call = login_api.login(id,pw);
                 String finalChatRoomId = chatRoomId;
                 call.enqueue(new Callback<String>()
@@ -382,6 +380,7 @@ public class MainActivity extends AppCompatActivity {
         // 채팅서비스와 연결한다.
         if(!ChatService.IS_BOUND_MAIN_ACTIVITY) {
             connectToService();
+            Toast.makeText(MainActivity.this, "서비스와 연결", Toast.LENGTH_SHORT).show();
         }
         chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
 
@@ -503,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 로그아웃 시 api 서버의 모든 토큰정보를 지워준다.
-                ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                 Call<String> call = apiClient.logoutFromApiServer(userId);
                 call.enqueue(new Callback<String>()
                 {
@@ -515,7 +514,7 @@ public class MainActivity extends AppCompatActivity {
                         {
                             if(response.body().equals("logout success")){
                                 // 로그아웃 시 채팅 서버의 모든 토큰정보를 지워준다.
-                                ChatApiInterface chatApiInterface = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+                                ChatApiInterface chatApiInterface = ChatApiClient.getApiClient(MainActivity.this).create(ChatApiInterface.class);
                                 Call<String> call2 = chatApiInterface.logoutFromChatServer(UserInfo.token, userId);
                                 call2.enqueue(new Callback<String>()
                                 {
@@ -683,7 +682,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 서버에서 채팅방 리스트 정보 가져오기
     private void fillList() {
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
         Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomListUsingUserId(userId);
         call.enqueue(new Callback<ArrayList<Chat_Room_Info>>()
         {
@@ -741,7 +740,7 @@ public class MainActivity extends AppCompatActivity {
     // 채팅방으로 이동!
     public void moveToChattingRoom(String chatRoomId){
         // 채팅방으로 이동
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
         Call<ArrayList<OtherUserInfo>> call = apiClient.selectChatParticipantUsingChatRoomId(chatRoomId);
         call.enqueue(new Callback<ArrayList<OtherUserInfo>>()
         {
@@ -753,7 +752,7 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<OtherUserInfo> chatMemberList = response.body();
 
                     // 채팅방 정보 가져오기
-                    ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                     Call<ArrayList<Chat_Room_Info>> call2 = apiClient.selectChatRoomInfo(chatRoomId);
                     call2.enqueue(new Callback<ArrayList<Chat_Room_Info>>()
                     {
@@ -831,6 +830,16 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
             return;
         } else if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            Message msg = Message.obtain(null, ChatService.DISCONNECTED_HOME_ACT);
+
+            try {
+                mServiceMessenger.send(msg);
+                Log.e("앱 종료 했을 때 ChatService와 연결 제거 - 서비스로 메시지 전송", msg.toString());
+
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+
             finish();
             toast.cancel();
         } else {

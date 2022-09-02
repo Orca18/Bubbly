@@ -96,7 +96,7 @@ public class JoinedCom_Adapter extends RecyclerView.Adapter<JoinedCom_Adapter.Jo
 
 
         // 1. 레트로핏 빌드 & 인터페이스 지정?
-        Kim_ApiInterface take = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface take = Kim_ApiClient.getApiClient(mContext).create(Kim_ApiInterface.class);
         // 2. Response = 인터페이스내함수 // user_id 보내서 원하는 response 기다림
         Call<List<Kim_Com_Members_Response>> call = take.selectCommunityParticipantList(response.getCommunity_id());
         // 3. 선언한 call 을 게시글용 DTO

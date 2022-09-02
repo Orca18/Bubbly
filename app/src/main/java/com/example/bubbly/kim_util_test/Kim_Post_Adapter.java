@@ -115,7 +115,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
 
         // TODO 커뮤니티 이름 가져오긴 하는데, 성능 저하 문제는 나중에 고려
-        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient(mContext).create(Kim_ApiInterface.class);
         Call<List<Kim_Com_Info_Response>> call = api.selectCommunityUsingCommunityId(post_response.getCommunity_id());
         call.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
             @Override
@@ -158,7 +158,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 //                                return true;
 
                             case R.id.action_b:
-                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                                 Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
                                 call.enqueue(new Callback<String>() {
                                     @Override
@@ -256,7 +256,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
                         // TODO 좋아요 추가 api
-                        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface like_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -280,7 +280,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
                         // TODO 좋아요 감소 api
-                        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface dislike_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -307,7 +307,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
                         // TODO 좋아요 감소 api
-                        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface dislike_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -332,7 +332,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
                         // TODO 좋아요 추가 api
-                        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface like_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override

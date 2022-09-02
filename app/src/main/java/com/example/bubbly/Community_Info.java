@@ -105,7 +105,7 @@ public class Community_Info extends AppCompatActivity {
 
 
     private void GetComInfo() {
-        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient(Community_Info.this).create(Kim_ApiInterface.class);
         Call<List<Kim_Com_Info_Response>> call = api.selectCommunityUsingCommunityId(com_id);
         call.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
             @Override

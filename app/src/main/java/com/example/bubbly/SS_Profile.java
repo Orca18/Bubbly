@@ -115,7 +115,7 @@ public class SS_Profile extends AppCompatActivity {
     //프로필데이터 가져와서 디스플레이하기
     private void setProfileData(){
         //회원정보를 요청한다.
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
         Call<List<user_Response>> call_userInfo = api.selectUserInfo(uid);
         call_userInfo.enqueue(new Callback<List<user_Response>>()
         {
@@ -164,7 +164,7 @@ public class SS_Profile extends AppCompatActivity {
                 tv_title.setText(user_nick);
 
                 //팔로워리스트 가져오기
-                ApiInterface selectFollowerList_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface selectFollowerList_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<List<follower_Response>> call_follower = selectFollowerList_api.selectFollowerList(user_id);
                 call_follower.enqueue(new Callback<List<follower_Response>>() {
                     @Override
@@ -191,7 +191,7 @@ public class SS_Profile extends AppCompatActivity {
                 });
 
                 //팔로잉 리스트 가져오기
-                ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface selectFolloweeList_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<List<following_Response>> call_following = selectFolloweeList_api.selectFolloweeList(user_id);
                 call_following.enqueue(new Callback<List<following_Response>>() {
                     @Override
@@ -294,7 +294,7 @@ public class SS_Profile extends AppCompatActivity {
         bt_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface createFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface createFollowing_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<String> call = createFollowing_api.createFollowing(uid,UserInfo.user_id);
                 call.enqueue(new Callback<String>()
                 {
@@ -324,7 +324,7 @@ public class SS_Profile extends AppCompatActivity {
         bt_unfollowing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deleteFollowing_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<String> call = deleteFollowing_api.deleteFollowing(uid,UserInfo.user_id);
                 call.enqueue(new Callback<String>()
                 {
@@ -372,7 +372,7 @@ public class SS_Profile extends AppCompatActivity {
 
                 // 두사람의 아이디로 만들어진 채팅방 있는지 조회
                 // 이미 생성된 채팅방이 있는지 조회한다.
-                ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface apiClient = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<String> call = apiClient.selectExistingChatRoomId(chatMemberList.get(0).getUser_id(), chatMemberList.get(1).getUser_id());
 
                 call.enqueue(new Callback<String>()
@@ -494,7 +494,7 @@ public class SS_Profile extends AppCompatActivity {
     // 새로운 채팅방을 만든다.
     public void createNewChatRoom(Chat_Room_Cre_Or_Del chatRoomCre, ArrayList<OtherUserInfo> chatMemberList){
         // 4. 서버로 전송
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
         Call<String> call = apiClient.createChatRoom(chatRoomCre);
         call.enqueue(new Callback<String>()
         {
@@ -514,7 +514,7 @@ public class SS_Profile extends AppCompatActivity {
                     chatRoomCre.setMsgType(0);
 
                     // 브로커에게 채팅방 정보 publish
-                    new ChatUtil().publishChatCreOrDelMsg(chatRoomCre, ChatService.mqttClient);
+                    new ChatUtil(SS_Profile.this).publishChatCreOrDelMsg(chatRoomCre, ChatService.mqttClient);
 
                     // FCM서버에게 구독요청
                     // fcm_token list
@@ -533,7 +533,7 @@ public class SS_Profile extends AppCompatActivity {
                     chatMemberFcmSub.setTopic("/topics/" + chatRoomId);
                     chatMemberFcmSub.setTokenList(tokenList);
 
-                    ChatApiInterface chatApiClient = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+                    ChatApiInterface chatApiClient = ChatApiClient.getApiClient(SS_Profile.this).create(ChatApiInterface.class);
                     Call<String> call2 = chatApiClient.subscribeChatMemberToFCMServer(chatMemberFcmSub);
                     call2.enqueue(new Callback<String>()
                     {

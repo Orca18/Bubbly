@@ -96,7 +96,7 @@ public class Fragment_Tab2_Replies_ss extends Fragment {
         recyclerView.setAdapter(reply_adapter);
         reply_adapter.notifyDataSetChanged();
 
-        ApiInterface selectCommentUsingCommentWriterId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectCommentUsingCommentWriterId_api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<reply_Response>> call = selectCommentUsingCommentWriterId_api.selectCommentUsingCommentWriterId(uid);
         call.enqueue(new Callback<List<reply_Response>>()
         {

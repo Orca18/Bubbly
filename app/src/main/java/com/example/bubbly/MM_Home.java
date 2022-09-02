@@ -216,7 +216,7 @@ public class MM_Home extends AppCompatActivity {
 
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        ApiInterface selectPostMeAndFolloweeAndCommunity_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectPostMeAndFolloweeAndCommunity_api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<post_Response>> call = selectPostMeAndFolloweeAndCommunity_api.selectPostMeAndFolloweeAndCommunity(user_id);
         call.enqueue(new Callback<List<post_Response>>() {
             @Override

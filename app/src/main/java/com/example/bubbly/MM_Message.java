@@ -144,7 +144,7 @@ public class MM_Message extends AppCompatActivity {
     // 서비스의 상태에 따라 콜백 함수를 호출하는 객체.
     private ServiceConnection conn;
 
-    private ChatUtil chatUtil = new ChatUtil();
+    private ChatUtil chatUtil = new ChatUtil(this);
 
     // 서비스로부터 받은 메시지를 처리할 핸들러
     class ActivityHandler extends Handler {
@@ -173,7 +173,7 @@ public class MM_Message extends AppCompatActivity {
                     
                     // 이 메시지와 동일한 채팅방 아이디를 가지는 채팅방이 없음 => 새로 생성!
                     if(latestMsgId == null) {
-                        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface apiClient = ApiClient.getApiClient(MM_Message.this).create(ApiInterface.class);
                         Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomInfo(chatRoomId);
                         call.enqueue(new retrofit2.Callback<ArrayList<Chat_Room_Info>>() {
                             @Override
@@ -297,7 +297,7 @@ public class MM_Message extends AppCompatActivity {
                 finish();
             }else{
                 //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
-                ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface login_api = ApiClient.getApiClient(MM_Message.this).create(ApiInterface.class);
                 Call<String> call = login_api.login(id,pw);
                 call.enqueue(new Callback<String>()
                 {
@@ -735,7 +735,7 @@ public class MM_Message extends AppCompatActivity {
 
     // 서버에서 채팅방 리스트 정보 가져오기
     private void fillList() {
-        ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface apiClient = ApiClient.getApiClient(MM_Message.this).create(ApiInterface.class);
         Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomListUsingUserId(userId);
         call.enqueue(new Callback<ArrayList<Chat_Room_Info>>()
         {
@@ -921,7 +921,7 @@ public class MM_Message extends AppCompatActivity {
                 String chatRoomId = chatRoomInfo.getChatRoomId();
 
                 // 채팅방 나가기
-                ApiInterface apiClient = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface apiClient = ApiClient.getApiClient(MM_Message.this).create(ApiInterface.class);
                 Call<String> call = apiClient.deleteChatParticipant(UserInfo.user_id, chatRoomId);
                 call.enqueue(new Callback<String>()
                 {

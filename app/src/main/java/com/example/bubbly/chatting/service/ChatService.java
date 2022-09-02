@@ -2,6 +2,7 @@ package com.example.bubbly.chatting.service;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -45,8 +46,6 @@ import retrofit2.Response;
 public class ChatService extends Service {
     // 채팅방 나가기
     public static final int EXIT = 2;
-    // 텍스트 전송
-    public static final int SEND_TEXT = 3;
     // 홈 액티비티와 연결
     public static final int CONNECT_HOME_ACT = 6;
     // 채팅 액티비티와 연결
@@ -57,6 +56,8 @@ public class ChatService extends Service {
     public static final int MSG_RECEIVE_FROM_SERVER = 10;
     // 서비스와 재연결하기(noti클릭시)
     public static final int RE_CONNECT_HOME_ACT = 11;
+    // ChatService 종료
+    public static final int DISCONNECTED_HOME_ACT = 12;
 
     // 서비스와 연결됐는지 여부
     public static boolean IS_BOUND_MAIN_ACTIVITY = false;
@@ -72,6 +73,8 @@ public class ChatService extends Service {
 
     // 채팅방 아이디
     private String chatRoomId;
+
+    //private Context context;
 
     // 액티비티가 보낸 메시지를 처리하는 메신저
     // 직접 처리하는 것은 Incoming Handler이며 액티비티와 핸들어의 연결을 위해 사용한다.
@@ -113,22 +116,12 @@ public class ChatService extends Service {
                     }
 
                     break;
-                // 문자열 전송
-                case SEND_TEXT:
-                    Chat_Item chatItem = (Chat_Item) msg.getData().getSerializable("sendMsg");
-
-                    String chatItemRoomId = chatItem.getChatRoomId();
-                    String chatItemStr = chatUtil.chatItemToString(chatItem);
-
-                    chatUtil.publishChatMsg(chatItemStr, chatItemRoomId, mqttClient);
-
-                    break;
                 // 홈 액티비티와 연결
                 case CONNECT_HOME_ACT:
                     IS_BOUND_MAIN_ACTIVITY = true;
 
                     // 채팅방 관련 기능을 가지고 있는 util
-                    chatUtil = new ChatUtil();
+                    chatUtil = new ChatUtil(getApplicationContext());
 
                     userId = msg.getData().getString("userId");
 
@@ -300,6 +293,11 @@ public class ChatService extends Service {
                     Log.e("채팅방 나갈 때 서비스와의 연결 제거 4-3. 메신저 제거!", "" + mActivityMessengerList.size());
 
                     break;
+                case DISCONNECTED_HOME_ACT:
+                    IS_BOUND_MAIN_ACTIVITY = false;
+                    stopSelf();
+                    Log.d("서비스 종료","11");
+                    break;
                 case RE_CONNECT_HOME_ACT:
                     // 기존에 연결되어있던 메인 액트의 메신저 제거
                     mActivityMessengerList.remove(0);
@@ -310,6 +308,7 @@ public class ChatService extends Service {
     }
 
     public ChatService() {
+        //this.context = getApplicationContext();
     }
 
     /** 메시지 수신 시 SharedPreference에 메시지 정보 저장*/

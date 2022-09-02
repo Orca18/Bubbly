@@ -83,7 +83,7 @@ public class Community_MainPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_mainpage);
 
-        api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        api = Kim_ApiClient.getApiClient(Community_MainPage.this).create(Kim_ApiInterface.class);
 
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");

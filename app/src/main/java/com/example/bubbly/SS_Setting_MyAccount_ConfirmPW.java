@@ -76,7 +76,7 @@ public class SS_Setting_MyAccount_ConfirmPW extends AppCompatActivity {
         bt_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface login_api = ApiClient.getApiClient(SS_Setting_MyAccount_ConfirmPW.this).create(ApiInterface.class);
                 Call<String> call = login_api.login(UserInfo.login_id, et_password.getText().toString());
                 call.enqueue(new Callback<String>()
                 {

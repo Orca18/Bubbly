@@ -400,4 +400,8 @@ public interface ApiInterface {
     Call<String> transactionHistory(@Header("x-api-key") String token,
                                     @Path(value = "address", encoded = true) String address,
                                     @Query("limit") int limit, @Query("next") String nextToken);
+
+    // todo 액세스 토큰 갱신
+    @GET("login/reIssueAccessToken")
+    Call<String> reIssueAccessToken(@Query("token") String refreshToken);
 }

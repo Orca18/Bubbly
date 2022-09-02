@@ -84,7 +84,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
     }
 
     private void selectPost(){
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<post_Response>> call = api.selectPostUsingPostId(post_id,UserInfo.user_id);
         call.enqueue(new Callback<List<post_Response>>() {
             @Override
@@ -198,7 +198,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                 System.out.println("니모닉"+UserInfo.mnemonic+et_assetName.getText().toString()+uri+post_id+parts.get(0).body());
 
                 //파일 전송
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(Post_ApplyNFT_A.this).create(ApiInterface.class);
                 Call<String> call = api.nftCreation(UserInfo.mnemonic,et_assetName.getText().toString(),"",UserInfo.user_id,post_id,parts);
                 call.enqueue(new Callback<String>() {
                     @Override

@@ -77,7 +77,7 @@ public class Community_Create extends AppCompatActivity {
         imageList = new ArrayList<>();
 
 
-        kim_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        kim_api = Kim_ApiClient.getApiClient(Community_Create.this).create(Kim_ApiInterface.class);
 
         initialize();
         linsteners();

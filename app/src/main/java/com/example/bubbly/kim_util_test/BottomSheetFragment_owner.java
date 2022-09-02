@@ -58,7 +58,7 @@ public class BottomSheetFragment_owner extends BottomSheetDialogFragment {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deletePost_api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
                 Call<String> call = deletePost_api.deletePost(SS_PostDetail.post_id);//아이디 가져오기ㅔ
                 call.enqueue(new Callback<String>()
                 {

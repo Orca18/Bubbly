@@ -150,7 +150,7 @@ public class Bottom1_Fragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<post_Response>> call = api.selectPostMeAndFolloweeAndCommunity(user_id);
         call.enqueue(new Callback<List<post_Response>>() {
             @Override

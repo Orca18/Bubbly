@@ -72,7 +72,7 @@ public class test_CreateAccount extends AppCompatActivity {
     public void createNewAccount() {
         preferences = getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        ApiInterface createAddrToBlockchain_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface createAddrToBlockchain_api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<String> call = createAddrToBlockchain_api.createAddrToBlockchain(user_id);
         call.enqueue(new Callback<String>()
         {
