@@ -39,7 +39,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MM_Profile extends AppCompatActivity {
+public class
+MM_Profile extends AppCompatActivity {
 
     // 뒤로가기 시간
     private long backKeyPressedTime = 0;
