@@ -411,7 +411,7 @@ public class MM_Wallet extends AppCompatActivity {
                 builder.setPositiveButton("환전", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ApiInterface api = ApiClient.getApiClientTest("http://10.0.2.2:3000/").create(ApiInterface.class);
+                        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
                         Call<String> call = api.exchange(address,UserInfo.mnemonic,input.getText().toString());
                         call.enqueue(new Callback<String>()
                         {
