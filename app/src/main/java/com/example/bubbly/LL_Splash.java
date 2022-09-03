@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.AccessAndRefreshToken;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -44,6 +45,15 @@ public class LL_Splash extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
+
+        // 설정파일 가져오기
+        try {
+            new Config(getApplicationContext()).getConfigData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
         // 툴바
@@ -81,6 +91,7 @@ public class LL_Splash extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                Log.d("자동 로그인 확인", "쉐어드프리퍼런스 id:"+id+"pw:"+pw);
                 if (id.equals("") & pw.equals("")) {
                     //만약 쉐어드프리퍼런스에 저장된 사용자 정보가 없으면 로그인 페이지로 이동
                     startActivity(new Intent(LL_Splash.this, LL_Login.class));
@@ -88,7 +99,7 @@ public class LL_Splash extends AppCompatActivity {
                     finish();
                 } else {
                     //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
-                    ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface login_api = ApiClient.getApiClient(LL_Splash.this).create(ApiInterface.class);
                     Call<String> call = login_api.login(id, pw);
                     call.enqueue(new Callback<String>() {
                         @Override
@@ -150,8 +161,9 @@ public class LL_Splash extends AppCompatActivity {
                                                 UserInfo.user_nick = responseResult.get(0).getUser_nick();
                                                 UserInfo.self_info = responseResult.get(0).getSelf_info();
                                                 UserInfo.token = responseResult.get(0).getToken();
-                                                if (responseResult.get(0).getProfile_file_name() != null && !responseResult.get(0).getProfile_file_name().equals("")) {
-                                                    UserInfo.profile_file_name = "https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getProfile_file_name();
+
+                                                if(responseResult.get(0).getProfile_file_name()!=null && !responseResult.get(0).getProfile_file_name().equals("")){
+                                                    UserInfo.profile_file_name = Config.cloudfront_addr+responseResult.get(0).getProfile_file_name();
                                                 }
                                             }
 

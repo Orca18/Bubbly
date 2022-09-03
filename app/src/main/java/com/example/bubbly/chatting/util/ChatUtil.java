@@ -1,5 +1,6 @@
 package com.example.bubbly.chatting.util;
 
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
@@ -42,12 +43,17 @@ public class ChatUtil {
     // int형의 변수가 사용할 기본값
     private int defaultInt = 9999999;
     
+    private Context context;
+    
+    public ChatUtil(Context context) {
+        this.context = context;
+    }
     /**
     * MQTT 클라이언트 연결 => 앱이 새로 시작될 때마다 실행되야 한다.
     * */
     public MqttClient getMqttClient(String userId, String serverIp){
         // 채팅서버와 통신하기 위한 인터페이스 구현체
-        ChatApiInterface chatApi = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+        ChatApiInterface chatApi = ChatApiClient.getApiClient(context).create(ChatApiInterface.class);
         // 통신 객체 -> 해당 사용자의 mqtt client 아이디를 가져온다.
         Call<String> call = chatApi.selectMqttClientUsingUserId(userId);
         String clientId = null;
@@ -186,7 +192,7 @@ public class ChatUtil {
      * FCM 토큰 서버에게 전송 - 로그인할 때마다 전송해야 한다.
      * */
     public void sendFCMTokenToServer(String token, String user_id){
-        ChatApiInterface chatApi = ChatApiClient.getApiClient().create(ChatApiInterface.class);
+        ChatApiInterface chatApi = ChatApiClient.getApiClient(context).create(ChatApiInterface.class);
         Call<String> call = chatApi.sendTokenToServer(token, user_id);
         call.enqueue(new Callback<String>()
         {
@@ -346,9 +352,9 @@ public class ChatUtil {
     }
 
     // 서버의 사용자수맵 업데이트
-    public void updateUserCountMap(String chatRoomId, int updateDiv, int allUserCount){
-        ChatApiInterface chatApiClient = ChatApiClient.getApiClient().create(ChatApiInterface.class);
-        Call<String> call2 = chatApiClient.updateUserCountMap(chatRoomId, updateDiv, allUserCount);
+    public void updateUserCountMap(String chatRoomId, int updateDiv, int allUserCount, String userId){
+        ChatApiInterface chatApiClient = ChatApiClient.getApiClient(context).create(ChatApiInterface.class);
+        Call<String> call2 = chatApiClient.updateUserCountMap(chatRoomId, updateDiv, allUserCount, userId);
         call2.enqueue(new Callback<String>()
         {
             @Override

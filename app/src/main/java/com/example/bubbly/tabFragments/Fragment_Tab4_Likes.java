@@ -98,7 +98,7 @@ public class Fragment_Tab4_Likes extends Fragment {
         post_adapter.notifyDataSetChanged();
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        ApiInterface selectLikedPostUsingUserId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectLikedPostUsingUserId_api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<post_Response>> call = selectLikedPostUsingUserId_api.selectLikedPostUsingUserId(user_id);
         call.enqueue(new Callback<List<post_Response>>()
         {

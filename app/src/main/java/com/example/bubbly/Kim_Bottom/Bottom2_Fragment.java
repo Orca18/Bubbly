@@ -26,6 +26,7 @@ import com.example.bubbly.R;
 import com.example.bubbly.SS_SearchMode;
 import com.example.bubbly.SS_SearchResult;
 import com.example.bubbly.chatting.util.GetDate;
+import com.example.bubbly.chatting.util.GetDate;
 import com.example.bubbly.controller.Ranking_Adapter;
 import com.example.bubbly.controller.Searched_Adapter_Callback;
 import com.example.bubbly.model.Ranking_Item;
@@ -64,7 +65,7 @@ public class Bottom2_Fragment extends Fragment {
         @Override
         public void updateListRecentlySearched(String keyword) {
             //검색 키워드 저장하기 - 서버
-            ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
             Call<String> call = api.createSerarchText(UserInfo.user_id,keyword);
             call.enqueue(new Callback<String>()
             {
@@ -167,7 +168,7 @@ public class Bottom2_Fragment extends Fragment {
         //실시간 트랜드 데이터 가져오기
         //현재시간
         String strNow = GetDate.getTodayDateWithTime();
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<String> call = api.selectRealTimeTrends(strNow);
         call.enqueue(new Callback<String>()
         {

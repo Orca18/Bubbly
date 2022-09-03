@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
@@ -83,7 +84,7 @@ public class Community_MainPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community_mainpage);
 
-        api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        api = Kim_ApiClient.getApiClient(Community_MainPage.this).create(Kim_ApiInterface.class);
 
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
@@ -326,7 +327,8 @@ public class Community_MainPage extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_community?id="+com_id;
+                String sendMessage = Config.api_server_addr + "/share/deep_community?id="+com_id;
+
 //                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
@@ -369,7 +371,7 @@ public class Community_MainPage extends AppCompatActivity {
                 com_owner = response.body().get(0).getCommunity_owner_id();
                 title_name.setText(com_name);
                 Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/"+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
+                        .load(Config.cloudfront_addr+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
                         .centerCrop()
                         .into(title_image);
 

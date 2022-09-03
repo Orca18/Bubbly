@@ -2,6 +2,7 @@ package com.example.bubbly.chatting.service;
 
 import android.app.Activity;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -43,16 +44,8 @@ import retrofit2.Response;
  * 메시지 브로커(채팅서버)와 연결되고 채팅관련 처리를 담당한다.
 * */
 public class ChatService extends Service {
-    // 채팅상대 초대
-    public static final int INVITE = 1;
     // 채팅방 나가기
     public static final int EXIT = 2;
-    // 텍스트 전송
-    public static final int SEND_TEXT = 3;
-    // 이미지 전송
-    public static final int SEND_IMAGE = 4;
-    // 읽지 않은 사람수 업데이트
-    public static final int NOT_READ_USER_UPDATE = 5;
     // 홈 액티비티와 연결
     public static final int CONNECT_HOME_ACT = 6;
     // 채팅 액티비티와 연결
@@ -61,10 +54,14 @@ public class ChatService extends Service {
     public static final int DISCONNECTED_CHAT_ACT = 8;
     // 서버로부터 메시지 받음
     public static final int MSG_RECEIVE_FROM_SERVER = 10;
-    // 메시지의 마지막 인덱스 보내기
-    public static final int SEND_LAST_MSG = 11;
-    // 알림으로 채팅방 전송 => 채팅방리스트의 안읽은 메시지 없애주기위해 필요
-    public static final int NOTIFICATION = 12;
+    // 서비스와 재연결하기(noti클릭시)
+    public static final int RE_CONNECT_HOME_ACT = 11;
+    // ChatService 종료
+    public static final int DISCONNECTED_HOME_ACT = 12;
+
+    // 서비스와 연결됐는지 여부
+    public static boolean IS_BOUND_MAIN_ACTIVITY = false;
+    public static boolean IS_BOUND_CHATTING_ROOM = false;
 
     // 채팅서버 주소
     private String ServerIP = "tcp://43.200.189.111:1883";
@@ -76,6 +73,8 @@ public class ChatService extends Service {
 
     // 채팅방 아이디
     private String chatRoomId;
+
+    //private Context context;
 
     // 액티비티가 보낸 메시지를 처리하는 메신저
     // 직접 처리하는 것은 Incoming Handler이며 액티비티와 핸들어의 연결을 위해 사용한다.
@@ -109,9 +108,6 @@ public class ChatService extends Service {
 
                     Chat_Item exitMsgInfo = new Chat_Item(chatRoomId,userId,exitMsg,null, GetDate.getDateWithYMDAndWeekDay(),GetDate.getAmPmTime(),"",0);
 
-                    // 서버에 publish
-                    //chatUtil.publishChatMsg(exitMsgInfo, mqttClient);
-
                     // 해당 채팅방 구독 해제
                     try {
                         mqttClient.unsubscribe(chatRoomId);
@@ -120,72 +116,12 @@ public class ChatService extends Service {
                     }
 
                     break;
-                // 문자열 전송
-                case SEND_TEXT:
-                    Chat_Item chatItem = (Chat_Item) msg.getData().getSerializable("sendMsg");
-
-                    String chatItemRoomId = chatItem.getChatRoomId();
-                    String chatItemStr = chatUtil.chatItemToString(chatItem);
-
-                    chatUtil.publishChatMsg(chatItemStr, chatItemRoomId, mqttClient);
-
-                    // 서버에 publish
-                    /*new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                chatUtil.publishChatMsg(chatItemStr, chatItemRoomId, mqttClient);
-                            }
-                            catch (Exception e) {
-
-                            }
-                        }
-                    }).start();*/
-
-                    // FCM 서버에게 알림메시지 전송 요청
-                    /*ChatApiInterface chatApiInterface= ChatApiClient.getApiClient().create(ChatApiInterface.class);
-                    Call<String> call = chatApiInterface.broadcastFCMMessage(sendMsg);
-                    call.enqueue(new retrofit2.Callback<String>()
-                    {
-                        @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                        {
-                            if (response.isSuccessful() && response.body() != null)
-                            {
-                                Log.e("fcm notificaion 완료!", response.body());
-                            }else {
-                                Log.e("fcm notificaion 완료!", "지만 메시지 없음");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                        {
-                            Log.e("fcm notificaion 실패", t.getMessage());
-                        }
-                    });*/
-                    break;
-                // 정적파일 전송
-                case SEND_IMAGE:
-
-                    // 레트로핏
-                    // ChattingService service = retrofit.create(ChattingService.class);
-
-                    // http request 객체 생성
-                    //Call<ArrayList<String>> call = service.insertFileList(userIdReq, chatRoomIdReq, list);
-
-                    System.out.println("transferFileToServer들어옴");
-
-                    //new InsertFileInfo().execute(call);
-
-                    break;
                 // 홈 액티비티와 연결
                 case CONNECT_HOME_ACT:
-                    // fcm토큰 가져오기
-                    FCMService.getToken();
+                    IS_BOUND_MAIN_ACTIVITY = true;
 
                     // 채팅방 관련 기능을 가지고 있는 util
-                    chatUtil = new ChatUtil();
+                    chatUtil = new ChatUtil(getApplicationContext());
 
                     userId = msg.getData().getString("userId");
 
@@ -238,19 +174,28 @@ public class ChatService extends Service {
                                             saveLatestChatIdToSharedPreference(chatItem);
                                         }
 
-                                        // 안읽은 메시지를 업데이트 해야하거나 내가 보낸 메시지가 아니라면 채팅방으로 전송
-                                        if(!chatItem.getChatUserId().equals(userId)){
-                                            Log.e("액티비티로 메시지 전송: ", " 6. 채팅방이 활성화되어있고 동일한 채팅방에서 메시지 전송 시 ChattingRoom로 전송 시작");
-                                            Message tempMsg2 = new Message();
-                                            tempMsg2.copyFrom(msg);
-                                            mActivityMessengerList.get(1).send(tempMsg2);
-                                        }
+                                        Log.e("액티비티로 메시지 전송: ", " 6. 채팅방이 활성화되어있고 동일한 채팅방에서 메시지 전송 시 ChattingRoom로 전송 시작");
+
+                                        Message tempMsg2 = new Message();
+                                        tempMsg2.copyFrom(msg);
+                                        mActivityMessengerList.get(1).send(tempMsg2);
                                     }
                                 } else if(chatItem.getChatType() == 3 ) { // 안읽은 메시지수 업데이트하기 위해 채팅방에 포함된 모두에게 메시지 전송!
+                                    Message msg2 = Message.obtain(null, ChatService.MSG_RECEIVE_FROM_SERVER);
+                                    Bundle bundle = msg2.getData();
+                                    bundle.putSerializable("message",chatItem);
+
+                                    Log.e("액티비티로 메시지 전송 - 안읽은 사람수 ", chatItem.toString());
+
                                     // 채팅방이 활성화돼있고 해당 채팅방의 메시지라면!
+                                    Log.d("isChattingRoomivityActive: " , "" + isChattingRoomivityActive);
+                                    Log.d("chatItem.getChatRoomId(): " + "" , chatItem.getChatRoomId());
+                                    //Log.d("chatRoomId: " + "" , chatRoomId);
+
                                     if (isChattingRoomivityActive && chatItem.getChatRoomId().equals(chatRoomId)) {
+                                        Log.e("액티비티로 메시지 전송 완료!!", chatItem.toString());
                                         Message tempMsg3 = new Message();
-                                        tempMsg3.copyFrom(msg);
+                                        tempMsg3.copyFrom(msg2);
                                         mActivityMessengerList.get(1).send(tempMsg3);
                                     }
                                 }
@@ -306,6 +251,7 @@ public class ChatService extends Service {
                     break;
                 // 채팅 액티비티와 연결
                 case CONNECT_CHAT_ACT:
+                    IS_BOUND_CHATTING_ROOM = true;
                     // 액티비티와 연결된 경우 그것과 통신할 수 있는 메신저를 저장한다.
                     mActivityMessengerList.add(msg.replyTo);
                     Log.e("ChattingRoom과 연결 메신저리스트에 새로운 메신저 추가 ","" + mActivityMessengerList.size());
@@ -314,9 +260,23 @@ public class ChatService extends Service {
 
                     chatRoomId = msg.getData().getString("chatRoomId");
                     userId = msg.getData().getString("userId");
+                    boolean isNew = msg.getData().getBoolean("isNew");
+                    int lastReadMsgId = msg.getData().getInt("lastReadMsgId");
 
-                    // 채팅방 클릭 시 구독
-                    //chatUtil.enterChatRoom(mqttClient, chatRoomId);
+
+                    // 마지막으로 읽은 메시지id가 있다면
+                    /*if(lastReadMsgId != 99999999){
+                        // 브로커에게 마지막으로 읽은 메시지의 id를 전달한다 => 이 메시지 다음 id부터 안읽은 사용자수 -1 을 해주기 위해서
+                        sendLastReadIdToBroker(lastReadMsgId);
+                    } else {
+                        // 마디막으로 읽은 메시지가 없다면 채팅방을 새로 만들거나 기존에 만들어진 채팅방에 처음 들어올 때이다.
+                        // 채팅방 생성시는 업데이트할 필요가 없고 기존에 있던 채팅방에 처음들어왔을 때만 업데이트 해주면 된다.
+                        if(!isNew) {
+                            // 모든 메시지 업데이트 (서버에서 lastIdx + 1부터 업데이트 하기 때문에 -1을 보낸다!)
+                            sendLastReadIdToBroker(-1);
+                        }
+                    }*/
+
 
                     break;
                 // 채팅 액티비티 - 서버 연결 해제
@@ -333,11 +293,22 @@ public class ChatService extends Service {
                     Log.e("채팅방 나갈 때 서비스와의 연결 제거 4-3. 메신저 제거!", "" + mActivityMessengerList.size());
 
                     break;
+                case DISCONNECTED_HOME_ACT:
+                    IS_BOUND_MAIN_ACTIVITY = false;
+                    stopSelf();
+                    Log.d("서비스 종료","11");
+                    break;
+                case RE_CONNECT_HOME_ACT:
+                    // 기존에 연결되어있던 메인 액트의 메신저 제거
+                    mActivityMessengerList.remove(0);
+                    // 새로운 액트의 메신저와 연결
+                    mActivityMessengerList.add(msg.replyTo);
             }
         }
     }
 
     public ChatService() {
+        //this.context = getApplicationContext();
     }
 
     /** 메시지 수신 시 SharedPreference에 메시지 정보 저장*/
@@ -352,6 +323,24 @@ public class ChatService extends Service {
         Log.e("수신한 메시지 쉐어드에 저장: ", "" + sp.getInt(chatItem.getChatRoomId(),999999));
     }
 
+    /** 채팅방에 입장했을 때 다른 채팅방의 안읽은사용자수 -- 해주기위해 브로커에게 채팅방 id와 마지막 인덱스를 보내준다.
+     */
+    /*public void sendLastReadIdToBroker(int lastIdx){
+        Chat_Item chatItem = new Chat_Item(chatRoomId, userId, "" + lastIdx,null, GetDate.getDateWithYMDAndWeekDay(), GetDate.getAmPmTime(), UserInfo.user_nick, 3);
+        String chatItemStr = chatUtil.chatItemToString(chatItem);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    chatUtil.publishChatMsg(chatItemStr, chatRoomId, ChatService.mqttClient);
+                }
+                catch (Exception e) {
+
+                }
+            }
+        }).start();
+    }*/
 
 
     @Override

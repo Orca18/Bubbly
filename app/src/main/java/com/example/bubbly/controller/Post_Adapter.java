@@ -1,6 +1,7 @@
 package com.example.bubbly.controller;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.Gravity;
 import android.widget.PopupMenu;
@@ -33,6 +34,7 @@ import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_ForAdapter;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
@@ -116,60 +118,65 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         holder.tv_user_nick.setText(post_response.getNick_name());
         holder.tv_content.setText(post_response.getPost_contents());
         holder.tv_like_count.setText(post_response.getLike_count());
-        holder.tv_time.setText(post_response.getCre_datetime());
 
 
         Log.i("파일 타입", "과연:" + post_response.getPost_type());
 
-        Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
-                .fitCenter()
-                .into(holder.iv_media);
-
+//        Glide.with(mContext)
+//                .load((Bitmap) null)
+//                .fitCenter()
+//                .into(holder.iv_media);
 
         String type = post_response.getPost_type();
 
-        String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names();
-        try {
-            Log.d("디버그태그", "try 전:"+type);
-            if(type.equals("2")){
-                // bandwisthmeter : 기본 대역폭 가져오기
-                BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                // 기본 막대를 사용하는 동영상
-                TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-                // 트랙셀렉터 추가
-                ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
-                // url 로 부터 Uri 파싱
-                Uri videouri = Uri.parse(videoURL);
-                // 엑소플레이어뷰
-                DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
-                // 미디어 소스 생성
-                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                // 미디어 소스 생성
-                MediaSource mediaSource = new ExtractorMediaSource(videouri, dataSourceFactory, extractorsFactory, null, null);
-                // 엑소플레이어 넣기
-                holder.vd_media.setPlayer((SimpleExoPlayer) exoPlayer);
-                holder.vd_media.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-                // 미리 준비
-                exoPlayer.prepare(mediaSource);
-                // 준비 완료시 재생 여부
-                exoPlayer.setPlayWhenReady(false);
-                Log.d("디버그태그", "엑소플레이어2:"+type);
-            } if (type.equals("1")) {
-                holder.vd_media.setVisibility(View.GONE);
-                Log.d("디버그태그", "엑소플레이어1:"+type);
-                Glide.with(mContext)
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names())
-                        .fitCenter()
-                        .into(holder.iv_media);
-            } else {
-                Log.d("디버그태그", "엑소플레이어0:"+type);
+        String media_url = "";
+
+        if(media_url == null){
+            //
+        }else{
+            Log.d("디버그태그", "뭔데진짜:"+media_url);
+            try {
+                media_url = Config.cloudfront_addr + post_response.getFile_save_names();
+                Log.d("디버그태그", "try 전:" + type);
+                if (type.equals("1")) {
+                    Log.d("디버그태그", "엑소플레이어1:" + type);
+                    Glide.with(mContext)
+                            .load(Config.cloudfront_addr + media_url)
+                            .fitCenter()
+                            .into(holder.iv_media);
+                }
+                if (type.equals("2")) {
+                    // bandwisthmeter : 기본 대역폭 가져오기
+                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                    // 기본 막대를 사용하는 동영상
+                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                    // 트랙셀렉터 추가
+                    ExoPlayer exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector);
+                    // url 로 부터 Uri 파싱
+                    Uri videouri = Uri.parse(media_url);
+                    // 엑소플레이어뷰
+                    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+                    // 미디어 소스 생성
+                    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                    // 미디어 소스 생성
+                    MediaSource mediaSource = new ExtractorMediaSource(videouri, dataSourceFactory, extractorsFactory, null, null);
+                    // 엑소플레이어 넣기
+                    holder.vd_media.setPlayer((SimpleExoPlayer) exoPlayer);
+                    holder.vd_media.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+                    // 미리 준비
+                    exoPlayer.prepare(mediaSource);
+                    // 준비 완료시 재생 여부
+                    exoPlayer.setPlayWhenReady(false);
+                    Log.d("디버그태그", "엑소플레이어2:" + type);
+                }
+                else {
+                    Log.d("디버그태그", "엑소플레이어0:" + type);
+                }
+
+            } catch (Exception e) {
+                Log.e("TAG", "Error : " + e.toString());
             }
-
-        } catch (Exception e) {
-            Log.e("TAG", "Error : " + e.toString());
         }
-
 
 
 
@@ -191,7 +198,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_community?id="+post_response.getPost_id();
+                String sendMessage = Config.api_server_addr + "/share/deep_community?id="+post_response.getPost_id();
 //                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
@@ -201,7 +208,8 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
-        if(post_response.getProfile_file_name()==null||post_response.getProfile_file_name().equals("")){
+
+        if(post_response.getProfile_file_name() == null){
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)
                     .load(R.drawable.blank_profile)
@@ -209,20 +217,26 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         } else {
             Log.d("디버그태그", "null 아니다");
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getProfile_file_name())
+                    .load(Config.cloudfront_addr + post_response.getProfile_file_name())
                     .into(holder.iv_user_image);
         }
 
 
-
         String a = null;
         try {
+            Log.d("디버그태그", "시간테스트:"+post_response.getCre_datetime());
             a = Kim_DateUtil.beforeTime(getDate(post_response.getCre_datetime()));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         // SNS 형식 시간
         holder.tv_time.setText(a);
+
+
+        // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
+        if(!user_id.equals(post_response.getPost_writer_id())){
+            holder.iv_options.setVisibility(View.GONE);
+        }
 
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -239,7 +253,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 //                                    return true;
 
                                 case R.id.action_b:
-                                    ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                    ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                                     Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
                                     call.enqueue(new Callback<String>() {
                                         @Override
@@ -276,25 +290,28 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                     popup.setGravity(Gravity.RIGHT | Gravity.END);
 
                     popup.show();
-                } else {
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-                            switch (menuItem.getItemId()) {
-                                case R.id.action_a2:
-                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
-                                    return true;
+                }
 
-                                default:
-                                    return false;
-                            }
-
-                        }
-                    });
-                    popup.inflate(R.menu.main_liist_menu2);
-                    popup.setGravity(Gravity.RIGHT | Gravity.END);
-
-                    popup.show();
+                // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
+                else {
+//                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                        @Override
+//                        public boolean onMenuItemClick(MenuItem menuItem) {
+//                            switch (menuItem.getItemId()) {
+//                                case R.id.action_a2:
+//                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
+//                                    return true;
+//
+//                                default:
+//                                    return false;
+//                            }
+//
+//                        }
+//                    });
+//                    popup.inflate(R.menu.main_liist_menu2);
+//                    popup.setGravity(Gravity.RIGHT | Gravity.END);
+//
+//                    popup.show();
                 }
 
             }
@@ -327,7 +344,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 //                    public boolean onMenuItemClick(MenuItem item) {
 //                        switch (item.getItemId()) {
 //                            case R.id.delete:
-//                                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+//                                ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
 //                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
 //                                call.enqueue(new Callback<String>()
 //                                {
@@ -393,7 +410,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, ImageView_FullScreen.class);
-                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + post_response.getFile_save_names());
+                intent.putExtra("img_url", Config.cloudfront_addr + post_response.getFile_save_names());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -424,7 +441,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
                         // TODO 좋아요 추가 api
-                        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface like_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -448,7 +465,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
                         // TODO 좋아요 감소 api
-                        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface dislike_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -475,7 +492,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
                         // TODO 좋아요 감소 api
-                        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface dislike_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -500,7 +517,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
                         // TODO 좋아요 추가 api
-                        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface like_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
                             @Override
@@ -523,7 +540,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         });
 
 
-        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
         Call<List<reply_Response>> call = selectCommentUsingPostId_api.selectCommentUsingPostId(post_response.getPost_id());
         call.enqueue(new Callback<List<reply_Response>>() {
             @Override
@@ -543,7 +560,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
 
         // TODO 커뮤니티 이름 가져오긴 하는데, 성능 저하 문제는 나중에 고려
-        Kim_ApiInterface api2 = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api2 = Kim_ApiClient.getApiClient(mContext).create(Kim_ApiInterface.class);
         Call<List<Kim_Com_Info_Response>> call2 = api2.selectCommunityUsingCommunityId(post_response.getCommunity_id());
         call2.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
             @Override

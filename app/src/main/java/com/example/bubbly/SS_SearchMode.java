@@ -48,7 +48,7 @@ public class SS_SearchMode extends AppCompatActivity {
         @Override
         public void updateListRecentlySearched(String keyword) {
             //검색 키워드 저장하기 - 서버
-            ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface api = ApiClient.getApiClient(SS_SearchMode.this).create(ApiInterface.class);
             Call<String> call = api.createSerarchText(user_id,keyword);
             call.enqueue(new Callback<String>()
             {
@@ -145,7 +145,7 @@ public class SS_SearchMode extends AppCompatActivity {
 
 
                 //검색 키워드 저장하기 - 서버
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(this).create(ApiInterface.class);
                 Call<String> call = api.createSerarchText(user_id,keyword);
                 call.enqueue(new Callback<String>()
                 {

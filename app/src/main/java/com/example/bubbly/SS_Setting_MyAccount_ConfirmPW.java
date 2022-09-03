@@ -92,7 +92,7 @@ public class SS_Setting_MyAccount_ConfirmPW extends AppCompatActivity {
                 //비밀번호 암호화
                 String pw =  et_password.getText().toString();
                 String encryptedPW = encryption(pw);
-                ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface login_api = ApiClient.getApiClient(getApplicationContext()).create(ApiInterface.class);
                 Call<String> call = login_api.login(UserInfo.login_id, encryptedPW);
                 call.enqueue(new Callback<String>()
                 {

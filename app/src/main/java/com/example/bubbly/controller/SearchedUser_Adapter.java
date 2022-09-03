@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.bubbly.Community_MainPage;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.SearchedUser_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -67,7 +68,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
 
         if(user_response.getProfile_file_name()!=null&&!user_response.getProfile_file_name().equals("")&&!user_response.getProfile_file_name().equals("null")){
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+user_response.getProfile_file_name())
+                    .load(Config.cloudfront_addr+user_response.getProfile_file_name())
                     .circleCrop()
                     .into(holder.iv_user_image);
         }else{
@@ -85,7 +86,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
 
          //이미 팔로우한 사람을 중복 팔로우하지 않게 기존 팔로우 목록을 가져와서 저장한다.
         //followee id가 follower목록에 존재하면 맞팔로우버튼을 숨긴다.
-        ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectFolloweeList_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
         Call<List<following_Response>> call = selectFolloweeList_api.selectFolloweeList(user_id);
         call.enqueue(new Callback<List<following_Response>>()
         {
@@ -129,7 +130,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         holder.bt_follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface createFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface createFollowing_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                 Call<String> call = createFollowing_api.createFollowing(user_response.getUser_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {
@@ -155,7 +156,7 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         holder.bt_unfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deleteFollowing_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                 Call<String> call = deleteFollowing_api.deleteFollowing(user_response.getUser_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {

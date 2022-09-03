@@ -95,7 +95,7 @@ public class Fragment_Tab1_AllPosts_ss extends Fragment {
         post_adapter.notifyDataSetChanged();
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        ApiInterface selectPostUsingPostWriterId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectPostUsingPostWriterId_api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<post_Response>> call = selectPostUsingPostWriterId_api.selectPostUsingPostWriterId(uid);
         call.enqueue(new Callback<List<post_Response>>()
         {

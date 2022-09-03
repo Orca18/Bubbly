@@ -102,6 +102,22 @@ dependencies {
 
     // 태그, 멘션
     implementation 'com.otaliastudios:autocomplete:1.1.0'
+    
+    // 이미지 확대 및 다운로드 화면에서 사용
+    implementation 'com.github.piasy:BigImageViewer:1.8.1'
+
+    // load with glide
+    implementation 'com.github.piasy:GlideImageLoader:1.8.1'
+
+    // progress pie indicator
+    implementation 'com.github.piasy:ProgressPieIndicator:1.8.1'
+
+    // support thumbnail and gif with Glide
+    implementation 'com.github.piasy:GlideImageViewFactory:1.8.1'
+
+    implementation 'com.amazonaws:aws-android-sdk-mobile-client:2.13.5'
+    implementation 'com.amazonaws:aws-android-sdk-cognito:2.13.5'
+    implementation 'com.amazonaws:aws-android-sdk-s3:2.13.5'
 
     // 이미지 확대 및 다운로드 화면에서 사용
     implementation 'com.github.piasy:BigImageViewer:1.8.1'
@@ -131,5 +147,4 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-smoothstreaming:r2.4.0'
 // for generating default ui of exoplayer
     implementation 'com.google.android.exoplayer:exoplayer-ui:r2.4.0'
-
 }

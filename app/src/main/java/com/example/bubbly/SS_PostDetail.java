@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.controller.Reply_Adapter;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_owner;
@@ -61,6 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
 public class SS_PostDetail extends AppCompatActivity {
 
@@ -171,7 +173,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     private void LikeToDislike() {
-        ApiInterface dislike_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface dislike_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<String> call = dislike_api.dislike(post_id, user_id);
         call.enqueue(new Callback<String>() {
             @Override
@@ -191,7 +193,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     private void DislikeToLike() {
-        ApiInterface like_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface like_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<String> call = like_api.like(post_id, user_id);
         call.enqueue(new Callback<String>() {
             @Override
@@ -257,6 +259,11 @@ public class SS_PostDetail extends AppCompatActivity {
         final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
         final BottomSheetFragment_owner bottomSheetFragment_owner = new BottomSheetFragment_owner(getApplicationContext());
 
+
+        if (!user_id.equals(owner_id)) {
+            iv_options.setVisibility(View.GONE);
+        }
+
         iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -264,7 +271,7 @@ public class SS_PostDetail extends AppCompatActivity {
                 if (user_id.equals(owner_id)) {
                     bottomSheetFragment_owner.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 } else {
-                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+//                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 }
             }
         });
@@ -273,7 +280,7 @@ public class SS_PostDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ImageView_FullScreen.class);
-                intent.putExtra("img_url", "https://d2gf68dbj51k8e.cloudfront.net/" + media_link);
+                intent.putExtra("img_url", Config.cloudfront_addr + media_link);
                 startActivity(intent);
             }
         });
@@ -294,7 +301,7 @@ public class SS_PostDetail extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = "http://3.39.84.115/share/deep_post?id=" + post_id;
+                String sendMessage = Config.api_server_addr + "/share/deep_post?id=" + post_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
                 Intent shareIntent = Intent.createChooser(intent, "share");
@@ -316,7 +323,7 @@ public class SS_PostDetail extends AppCompatActivity {
         recyclerView.setAdapter(reply_adapter);
         reply_adapter.notifyDataSetChanged();
 
-        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<List<reply_Response>> call = selectCommentUsingPostId_api.selectCommentUsingPostId(post_id);
         call.enqueue(new Callback<List<reply_Response>>() {
             @Override
@@ -348,7 +355,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     public void createComment() { // 댓글 생성
-        ApiInterface createComment_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface createComment_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<String> call = createComment_api.createComment(post_id, "1", user_id, et_reply.getText().toString(), "!");
         call.enqueue(new Callback<String>() {
             @Override
@@ -370,24 +377,24 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     public void selectPostUsingPostId() { // 게시글 아이디로 조회
-        ApiInterface selectPostUsingPostId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectPostUsingPostId_api = ApiClient.getApiClient(SS_PostDetail.this).create(ApiInterface.class);
         Call<List<post_Response>> call = selectPostUsingPostId_api.selectPostUsingPostId(post_id, user_id);
         call.enqueue(new Callback<List<post_Response>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onResponse(@NonNull Call<List<post_Response>> call, @NonNull Response<List<post_Response>> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    List<post_Response> responseResult = response.body();
+                    List<post_Response> responseResultpost = response.body();
 
 
-                    owner_id = responseResult.get(0).getPost_writer_id();
+                    owner_id = responseResultpost.get(0).getPost_writer_id();
                     tv_user_id.setText(login_id);
-                    tv_user_nick.setText(responseResult.get(0).getNick_name());
-                    tv_content.setText(responseResult.get(0).getPost_contents());
-                    likes = Integer.parseInt(responseResult.get(0).getLike_count());
+                    tv_user_nick.setText(responseResultpost.get(0).getNick_name());
+                    tv_content.setText(responseResultpost.get(0).getPost_contents());
+                    likes = Integer.parseInt(responseResultpost.get(0).getLike_count());
                     tv_like_count.setText("" + likes);
 
-                    if (responseResult.get(0).getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
+                    if (responseResultpost.get(0).getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
                         iv_like.setImageResource(R.drawable.ic_baseline_favorite_24);
                         like_check = true;
                         like_yn = "y";
@@ -397,14 +404,18 @@ public class SS_PostDetail extends AppCompatActivity {
 
 
                     try {
-                        tv_time.setText(Kim_DateUtil_Cre.creTime(responseResult.get(0).getCre_datetime()));
+                        tv_time.setText(Kim_DateUtil_Cre.creTime(responseResultpost.get(0).getCre_datetime()));
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-                    String videoURL = "https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names();
+                    Glide.with(SS_PostDetail.this)
+                            .load(Config.cloudfront_addr + responseResultpost.get(0).getFile_save_names())
+                            .into(iv_media);
 
-                    if (responseResult.get(0).getPost_type().equals("2")) {  // 동영상
+                    String videoURL = Config.cloudfront_addr + responseResultpost.get(0).getFile_save_names();
+
+                    if (responseResultpost.get(0).getPost_type().equals("2")) {  // 동영상
                         vd_media.setVisibility(View.VISIBLE);
                         // bandwisthmeter : 기본 대역폭 가져오기
                         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -429,18 +440,27 @@ public class SS_PostDetail extends AppCompatActivity {
                         exoPlayer.setPlayWhenReady(false);
                     } else { // 이미지 또는 텍스트
                         Glide.with(SS_PostDetail.this)
-                                .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getFile_save_names())
+                                .load(Config.cloudfront_addr + responseResultpost.get(0).getFile_save_names())
                                 .into(iv_media);
                     }
 
+                    if(responseResultpost.get(0).getProfile_file_name()==null){
+                        Log.d("디버그태그", "null 이다");
+                        Glide.with(mContext)
+                                .load(R.drawable.blank_profile)
+                                .into(iv_user_image);
+                    } else {
+                        Glide.with(SS_PostDetail.this)
+                                .load(Config.cloudfront_addr + responseResultpost.get(0).getProfile_file_name())
+                                .into(iv_user_image);
+                    }
 
-                    Glide.with(SS_PostDetail.this)
-                            .load("https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getProfile_file_name())
-                            .into(iv_user_image);
 
-                    SetDate(responseResult.get(0).getCre_datetime());
 
-                    media_link = responseResult.get(0).getFile_save_names();
+
+                    SetDate(responseResultpost.get(0).getCre_datetime());
+
+                    media_link = responseResultpost.get(0).getFile_save_names();
                 }
             }
 

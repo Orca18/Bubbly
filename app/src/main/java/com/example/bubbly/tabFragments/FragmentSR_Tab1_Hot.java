@@ -105,7 +105,7 @@ public class FragmentSR_Tab1_Hot extends Fragment {
         System.out.println("recyclerView.setAdapter(post_adapter);"+keyword);
 
 
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<post_Response>> call = api.selectPostUsingPostContentsOrderBylike(UserInfo.user_id,keyword);
         call.enqueue(new Callback<List<post_Response>>()
         {

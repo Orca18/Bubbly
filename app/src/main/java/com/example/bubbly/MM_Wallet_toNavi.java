@@ -182,7 +182,7 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
 
     //블록체인 계정 정보 요청
     private void selectWalletInfo(){
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<String> call = api.selectAddrUsingUserId(UserInfo.user_id);
         call.enqueue(new Callback<String>()
         {
@@ -411,7 +411,7 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
                 builder.setPositiveButton("환전", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface api = ApiClient.getApiClient(MM_Wallet_toNavi.this).create(ApiInterface.class);
                         Call<String> call = api.exchange(address,UserInfo.mnemonic,input.getText().toString());
                         call.enqueue(new Callback<String>()
                         {

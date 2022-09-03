@@ -84,7 +84,7 @@ public class Following extends AppCompatActivity {
             }
         } );
         recyclerView.setAdapter(following_adapter);
-        ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectFolloweeList_api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<following_Response>> call = selectFolloweeList_api.selectFolloweeList(UserInfo.user_id);
         call.enqueue(new Callback<List<following_Response>>()
         {

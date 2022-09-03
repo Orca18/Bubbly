@@ -54,7 +54,7 @@ public class LL_FindID_A extends AppCompatActivity {
         bt_send_findID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(LL_FindID_A.this).create(ApiInterface.class);
                 Call<String> call = api.sendPhoneCertificationNumForFind(et_phone_findID.getText().toString());
                 call.enqueue(new Callback<String>() {
                     @Override

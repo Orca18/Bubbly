@@ -103,7 +103,7 @@ public class LL_Register_B extends AppCompatActivity {
                     //클라이언트 비밀번호 암호화
                     String pw =  et_password.getText().toString();
                     String encryptedPW = encryption(pw);
-                    ApiInterface createUserInfo_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface createUserInfo_api = ApiClient.getApiClient(LL_Register_B.this).create(ApiInterface.class);
                     Call<String> call = createUserInfo_api.createUserInfo(et_id.getText().toString(), encryptedPW, user_email, user_phone, et_nick.getText().toString());
                     call.enqueue(new Callback<String>()
                     {
@@ -116,7 +116,7 @@ public class LL_Register_B extends AppCompatActivity {
                                 if(response.body().toString().equals("success")){
                                     Toast.makeText(getApplicationContext(), "희원가입 성공",Toast.LENGTH_SHORT).show();
                                     //현 시점에서 userID 알수 없어, 로그인해서 userID 가져오기
-                                    ApiInterface login_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                    ApiInterface login_api = ApiClient.getApiClient(LL_Register_B.this).create(ApiInterface.class);
                                     Call<String> call_login = login_api.login(et_id.getText().toString(), encryptedPW);
                                     call_login.enqueue(new Callback<String>()
                                     {
@@ -152,7 +152,7 @@ public class LL_Register_B extends AppCompatActivity {
                                                                 UserInfo.user_id = responseResult.get(0).getUser_id();
 
                                                                 //블록체인 계정생성 요청
-                                                                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                                                                ApiInterface api = ApiClient.getApiClient(LL_Register_B.this).create(ApiInterface.class);
                                                                 Call<String> call_mnemonic = api.createAddrToBlockchain(UserInfo.user_id);
                                                                 call_mnemonic.enqueue(new Callback<String>()
                                                                 {
@@ -274,7 +274,7 @@ public class LL_Register_B extends AppCompatActivity {
                     String idRex = "^([A-Za-z0-9]*)$";  //영숫자만 가능, 띄어쓰기 불가
                     Pattern pattern = Pattern.compile(idRex);
                     if(pattern.matcher(et_id.getText().toString()).matches()){
-                        ApiInterface selectIsExistingId_api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface selectIsExistingId_api = ApiClient.getApiClient(LL_Register_B.this).create(ApiInterface.class);
                         Call<String> call = selectIsExistingId_api.selectIsExistingId(et_id.getText().toString());
                         call.enqueue(new Callback<String>()
                         {

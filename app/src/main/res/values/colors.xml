@@ -24,6 +24,8 @@
     <color name="yellow">#FFD400</color>
 
     <color name="grey">#BDBDBD</color>
+    <color name="light_grey">#EDEDED</color>
+    <color name="light_grey2">#C9C9C9</color>
     <color name="skyblue_bold">#0055FF</color>
     <color name="skyblue_light">#00AAFF</color>
     <color name="skyblue_medium">#006AFF</color>

@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
@@ -104,7 +105,7 @@ public class Community_Info extends AppCompatActivity {
 
 
     private void GetComInfo() {
-        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient(Community_Info.this).create(Kim_ApiInterface.class);
         Call<List<Kim_Com_Info_Response>> call = api.selectCommunityUsingCommunityId(com_id);
         call.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
             @Override
@@ -118,7 +119,7 @@ public class Community_Info extends AppCompatActivity {
                 tv_desc.setText(com_desc);
                 tv_name.setText(com_name);
                 Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
-                        .load("https://d2gf68dbj51k8e.cloudfront.net/"+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
+                        .load(Config.cloudfront_addr+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
                         .centerCrop()
                         .into(iv_title);
 

@@ -97,7 +97,7 @@ public class Fragment_Tab2_Replies extends Fragment {
         reply_adapter.notifyDataSetChanged();
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        ApiInterface selectCommentUsingCommentWriterId_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectCommentUsingCommentWriterId_api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<reply_Response>> call = selectCommentUsingCommentWriterId_api.selectCommentUsingCommentWriterId(user_id);
         call.enqueue(new Callback<List<reply_Response>>()
         {

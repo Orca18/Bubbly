@@ -78,7 +78,7 @@ public class Follower extends AppCompatActivity {
         follower_adapter.notifyDataSetChanged();
 //        user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        ApiInterface selectFollowerList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectFollowerList_api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<follower_Response>> call = selectFollowerList_api.selectFollowerList(UserInfo.user_id);
         call.enqueue(new Callback<List<follower_Response>>()
         {

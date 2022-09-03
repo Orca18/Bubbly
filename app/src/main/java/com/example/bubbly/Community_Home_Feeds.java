@@ -78,7 +78,7 @@ public class Community_Home_Feeds extends AppCompatActivity {
     }
 
     private void initialize() {
-        api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        api = Kim_ApiClient.getApiClient(Community_Home_Feeds.this).create(Kim_ApiInterface.class);
 
         // 툴바
         toolbar = findViewById(R.id.community_home_toolbar);

@@ -39,7 +39,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MM_Profile extends AppCompatActivity {
+public class
+MM_Profile extends AppCompatActivity {
 
     // 뒤로가기 시간
     private long backKeyPressedTime = 0;
@@ -222,7 +223,7 @@ public class MM_Profile extends AppCompatActivity {
         }
 
         //팔로워리스트 가져오기
-        ApiInterface selectFollowerList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectFollowerList_api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<follower_Response>> call_follower = selectFollowerList_api.selectFollowerList(UserInfo.user_id);
         call_follower.enqueue(new Callback<List<follower_Response>>()
         {
@@ -244,7 +245,7 @@ public class MM_Profile extends AppCompatActivity {
         });
 
         //팔로잉 리스트 가져오기
-        ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface selectFolloweeList_api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<following_Response>> call_following = selectFolloweeList_api.selectFolloweeList(UserInfo.user_id);
         call_following.enqueue(new Callback<List<following_Response>>()
         {

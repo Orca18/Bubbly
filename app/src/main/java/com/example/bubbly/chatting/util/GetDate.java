@@ -7,21 +7,35 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class GetDate {
     // 오늘날짜 출력 yyyymmdd
     public static String getTodayDate(){
         String pattern = "yyyyMMdd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.KOREA);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 
         String date = simpleDateFormat.format(new Date());
         return date;
     }
 
-    // 오늘날짜 출력 yyyy-MM-dd HH:mm:ss:
+    // 오늘날짜 출력 yyyymmdd
+    public static String getTodayDateWithSlash(){
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.KOREA);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+
+        String date = simpleDateFormat.format(new Date());
+        return date;
+    }
+
+    // 오늘날짜 출력 yyyy-MM-dd HH:mm
     public static String getTodayDateWithTime(){
-        String pattern = "yyyy-MM-dd HH:mm:ss";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String pattern = "yyyy-MM-dd HH:mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.KOREA);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
 
         String date = simpleDateFormat.format(new Date());
         return date;
@@ -100,19 +114,9 @@ public class GetDate {
         return dayOfWeek;
     }
 
-    /**
-     * 오전, 오후 시간 구하기
-     * */
-    public static String getAmPmTime(){
-        String time;
-        String timehhmm = null;
-        try {
-            timehhmm = getCurrentTime(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        String[] timeArr = timehhmm.split(":");
+    public static String getAmPmTime(String hhmm){
+        String[] timeArr = hhmm.split(":");
+        String time = null;
 
         String hourStr = timeArr[0];
         String minStr = timeArr[1];
@@ -139,9 +143,26 @@ public class GetDate {
         return time;
     }
 
+    /**
+     * 오전, 오후 시간 구하기
+     * */
+    public static String getAmPmTime(){
+        String time;
+        String timehhmm = null;
+        try {
+            timehhmm = getCurrentTime(false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return getAmPmTime(timehhmm);
+    }
+
     // 현재시간 구하기
     public static String getCurrentTime(boolean isLaterTime) throws Exception {
-        SimpleDateFormat format2 = new SimpleDateFormat( "HH:mm");
+        SimpleDateFormat format2 = new SimpleDateFormat( "HH:mm",Locale.KOREA);
+        format2.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+
         Date today = new Date();
         String time = format2.format(today);
 

@@ -1,12 +1,16 @@
 package com.example.bubbly.chatting.service;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.bubbly.controller.Custom_Toast;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ChatApiClient;
 import com.example.bubbly.retrofit.ChatApiInterface;
@@ -21,6 +25,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FCMService extends FirebaseMessagingService{
+    private static Context context;
+
     public FCMService() {}
 
     private Handler handler;    // for toast UI
@@ -29,6 +35,7 @@ public class FCMService extends FirebaseMessagingService{
     public void onCreate() {
         super.onCreate();
         handler = new Handler();
+        context = getApplicationContext();
     }
 
     private void _runOnUiThread(Runnable runnable) {
@@ -52,9 +59,12 @@ public class FCMService extends FirebaseMessagingService{
             @Override
             public void run()
             {
-                Toast.makeText(getApplicationContext(), "", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "remoteMessage.getFrom()", Toast.LENGTH_LONG).show();
             }
         }, 0);
+
+        //새로운 게시글이 있을 경우 알림수신 -> 핸들러로 메세지 보냄
+        handler.sendEmptyMessage(0);
 
         /*_runOnUiThread(new Runnable() {
             public void run() {
@@ -99,7 +109,7 @@ public class FCMService extends FirebaseMessagingService{
                          * 서버에 토큰 리프레시 요청
                          * */
                         // 레트로핏 구현체 가져오기
-                        ChatApiInterface chatApiInterface= ChatApiClient.getApiClient().create(ChatApiInterface.class);
+                        ChatApiInterface chatApiInterface= ChatApiClient.getApiClient(context).create(ChatApiInterface.class);
                         Call<String> call = chatApiInterface.refreshToken(token,userId);
                         call.enqueue(new Callback<String>()
                         {
@@ -146,5 +156,10 @@ public class FCMService extends FirebaseMessagingService{
                         Log.w("가져온 토큰", token);
                     }
                 });
+    }
+
+    @Override
+    public void handleIntent(Intent intent) {
+        super.handleIntent(intent);
     }
 }

@@ -130,6 +130,11 @@ public interface ApiInterface {
     Call<String> login(@Field("login_id") String login_id,
                        @Field("password") String password);
 
+    // 로그아웃 api
+    @FormUrlEncoded
+    @POST("login/logout")
+    Call<String> logoutFromApiServer(@Field("user_id") String user_id);
+
     // todo 로그인과 관련된 api (끝 지점)
 
 
@@ -369,6 +374,20 @@ public interface ApiInterface {
 
     // todo community 관련 api (끝 지점)
 
+    // todo 채팅 관련 api (시작 지점)
+
+    // 채팅 파일 저장
+    @Multipart
+    @POST("chat/saveChatFiles")
+    Call<String> saveChatFiles(@Part List<MultipartBody.Part> files);
+
+    // 기존에 존재하는 채팅방여부 조회
+    @GET("chat/selectExistingChatRoomId")
+    Call<String> selectExistingChatRoomId(@Query("chatMember1") String chatMember1, @Query("chatMember2") String chatMember2);
+
+
+    // todo 채팅 관련api (끝 지점)
+
     //todo wallet 관련 api
     @FormUrlEncoded
     @POST("wallet/exchange")
@@ -381,4 +400,8 @@ public interface ApiInterface {
     Call<String> transactionHistory(@Header("x-api-key") String token,
                                     @Path(value = "address", encoded = true) String address,
                                     @Query("limit") int limit, @Query("next") String nextToken);
+
+    // todo 액세스 토큰 갱신
+    @GET("login/reIssueAccessToken")
+    Call<String> reIssueAccessToken(@Query("token") String refreshToken);
 }

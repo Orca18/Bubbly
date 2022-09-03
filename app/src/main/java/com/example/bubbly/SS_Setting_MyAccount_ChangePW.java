@@ -75,7 +75,7 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
                 String pw =  et_password_check_findID.getText().toString();
                 String encryptedPW = encryption(pw);
 
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(SS_Setting_MyAccount_ChangePW.this).create(ApiInterface.class);
                 Call<String> call = api.modifyPassword(user_id, encryptedPW);
                 call.enqueue(new Callback<String>() {
                     @Override

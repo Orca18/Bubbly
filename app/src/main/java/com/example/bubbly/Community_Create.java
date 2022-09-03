@@ -77,7 +77,7 @@ public class Community_Create extends AppCompatActivity {
         imageList = new ArrayList<>();
 
 
-        kim_api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        kim_api = Kim_ApiClient.getApiClient(Community_Create.this).create(Kim_ApiInterface.class);
 
         initialize();
         linsteners();
@@ -89,7 +89,7 @@ public class Community_Create extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // 조건이 맞을 때만 업로드
-                // TODO API 36. 커뮤니티 정보 저장 http://3.39.84.115:80/community/createCommunity
+                // TODO API 36. 커뮤니티 정보 저장 Config.api_server_addr + "/share:80/community/createCommunity
                 //"Multipart
                 //community_owner_id,
                 //writer_name,

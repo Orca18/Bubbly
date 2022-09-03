@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -71,7 +72,7 @@ public class Following_Adapter extends RecyclerView.Adapter<Following_Adapter.Fo
         System.out.println("filename"+following_response.getProfile_file_name());
         if(following_response.getProfile_file_name()!=null&&!following_response.getProfile_file_name().equals("")){
             Glide.with(mContext)
-                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+following_response.getProfile_file_name())
+                    .load(Config.cloudfront_addr+following_response.getProfile_file_name())
                     .circleCrop()
                     .into(holder.iv_user_image);
         }else{
@@ -115,7 +116,7 @@ public class Following_Adapter extends RecyclerView.Adapter<Following_Adapter.Fo
         holder.bt_unfollowing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deleteFollowing_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                 Call<String> call = deleteFollowing_api.deleteFollowing(following_response.getFollowee_id(),user_id);
                 call.enqueue(new Callback<String>()
                 {

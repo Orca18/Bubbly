@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.controller.Custom_Toast;
 import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.model.UserInfo;
@@ -83,7 +84,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
     }
 
     private void selectPost(){
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<List<post_Response>> call = api.selectPostUsingPostId(post_id,UserInfo.user_id);
         call.enqueue(new Callback<List<post_Response>>() {
             @Override
@@ -93,7 +94,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                     for (int i = 0; i < responseResult.size(); i++) {
                         if(responseResult.get(i).getProfile_file_name()!=null&&!responseResult.get(i).getProfile_file_name().equals("")){
                             Glide.with(getApplicationContext())
-                                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(i).getProfile_file_name())
+                                    .load(Config.cloudfront_addr+responseResult.get(i).getProfile_file_name())
                                     .into(iv_user_image);
                         }
                         if(responseResult.get(i).getNick_name()!=null&&!responseResult.get(i).getNick_name().equals("")){
@@ -139,7 +140,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                         tv_contents.setText(responseResult.get(i).getPost_contents());
                         if(responseResult.get(i).getFile_save_names()!=null&&!responseResult.get(i).getFile_save_names().equals("")){
                             Glide.with(getApplicationContext())
-                                    .load("https://d2gf68dbj51k8e.cloudfront.net/"+responseResult.get(i).getFile_save_names())
+                                    .load(Config.cloudfront_addr+responseResult.get(i).getFile_save_names())
                                     .into(iv_media);
                         }
                     }
@@ -197,7 +198,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                 System.out.println("니모닉"+UserInfo.mnemonic+et_assetName.getText().toString()+uri+post_id+parts.get(0).body());
 
                 //파일 전송
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(Post_ApplyNFT_A.this).create(ApiInterface.class);
                 Call<String> call = api.nftCreation(UserInfo.mnemonic,et_assetName.getText().toString(),"",UserInfo.user_id,post_id,parts);
                 call.enqueue(new Callback<String>() {
                     @Override

@@ -69,7 +69,7 @@ public class LL_FindID_D extends AppCompatActivity {
                 //비밀번호 암호화
                 String pw =  et_password_check_findID.getText().toString();
                 String encryptedPW = encryption(pw);
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(getApplicationContext()).create(ApiInterface.class);
                 Call<String> call = api.modifyPassword(user_id, encryptedPW);
                 call.enqueue(new Callback<String>() {
                     @Override

@@ -36,7 +36,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -80,7 +83,7 @@ public class MM_Issue extends AppCompatActivity {
         @Override
         public void updateListRecentlySearched(String keyword) {
             //검색 키워드 저장하기 - 서버
-            ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface api = ApiClient.getApiClient(getApplicationContext()).create(ApiInterface.class);
             Call<String> call = api.createSerarchText(UserInfo.user_id,keyword);
             call.enqueue(new Callback<String>()
             {
@@ -435,7 +438,8 @@ public class MM_Issue extends AppCompatActivity {
         SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date now = new Date();
         String strNow = sdfDate.format(now);
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+
+        ApiInterface api = ApiClient.getApiClient(this).create(ApiInterface.class);
         Call<String> call = api.selectRealTimeTrends(strNow);
         call.enqueue(new Callback<String>()
         {

@@ -5,10 +5,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -37,6 +40,7 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.controller.Custom_Toast;
 import com.example.bubbly.controller.DialogRecyclerAdapter;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
@@ -98,6 +102,7 @@ public class Post_Create extends AppCompatActivity {
     CircleImageView cv_profile;
 
     String post_type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,15 +133,14 @@ public class Post_Create extends AppCompatActivity {
         }
 
 
-
 // 수정 할 때 사용
 //        System.out.println("post_file" + post_file);
 //        if (post_file != null) {
-//            imageList.add(Uri.parse("https://d2gf68dbj51k8e.cloudfront.net/" + post_file));
+//            imageList.add(Uri.parse(Config.cloudfront_addr + post_file));
 //            r_thumb.setVisibility(View.GONE);
 //            r_img.setVisibility(View.VISIBLE);
 //            Glide.with(Post_Create.this)
-//                    .load("https://d2gf68dbj51k8e.cloudfront.net/" + post_file)
+//                    .load(Config.cloudfront_addr + post_file)
 //                    .into(my_image);
 //        }
 
@@ -174,7 +178,7 @@ public class Post_Create extends AppCompatActivity {
         cv_profile = findViewById(R.id.posting_create_profile);
 
         // 프로파일 이미지
-        if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")) {
+        if (UserInfo.profile_file_name != null && !UserInfo.profile_file_name.equals("")) {
             Glide.with(getApplicationContext())
                     .load(UserInfo.profile_file_name)
                     .circleCrop()
@@ -266,28 +270,25 @@ public class Post_Create extends AppCompatActivity {
     }
 
     private void GetJoinedComList() {
-        Kim_ApiInterface api = Kim_ApiClient.getApiClient().create(Kim_ApiInterface.class);
+        Kim_ApiInterface api = Kim_ApiClient.getApiClient(Post_Create.this).create(Kim_ApiInterface.class);
         Call<List<Kim_JoinedCom_Response>> call = api.selectCommunityListUsingUserId(user_id);
-        call.enqueue(new Callback<List<Kim_JoinedCom_Response>>()
-        {
+        call.enqueue(new Callback<List<Kim_JoinedCom_Response>>() {
             @Override
-            public void onResponse(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Response<List<Kim_JoinedCom_Response>> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
+            public void onResponse(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Response<List<Kim_JoinedCom_Response>> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     List<Kim_JoinedCom_Response> responseResult = response.body();
 
-                    Log.d("디버그태그", "테스트 사이즈:"+responseResult.size());
+                    Log.d("디버그태그", "테스트 사이즈:" + responseResult.size());
 
-                    text = new String[responseResult.size()+1];
-                    ids = new String[responseResult.size()+1];
+                    text = new String[responseResult.size() + 1];
+                    ids = new String[responseResult.size() + 1];
                     text[0] = "내 피드";
                     ids[0] = "0";
-                    for(int i=0; i<responseResult.size(); i++){
-                        text[i+1] = responseResult.get(i).getCommunity_name();
-                        ids[i+1] = responseResult.get(i).getCommunity_id();
+                    for (int i = 0; i < responseResult.size(); i++) {
+                        text[i + 1] = responseResult.get(i).getCommunity_name();
+                        ids[i + 1] = responseResult.get(i).getCommunity_id();
 
-                        Log.d("디버그태그", "테스트 커뮤 아이디스:"+responseResult.get(i).getCommunity_id());
+                        Log.d("디버그태그", "테스트 커뮤 아이디스:" + responseResult.get(i).getCommunity_id());
                     }
                 }
 
@@ -296,8 +297,7 @@ public class Post_Create extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<List<Kim_JoinedCom_Response>> call, @NonNull Throwable t) {
                 Log.e("게시물 아이디로 게시물 조회", t.getMessage());
             }
         });
@@ -316,11 +316,11 @@ public class Post_Create extends AppCompatActivity {
         View dialogView = inf.inflate(R.layout.dialog_layout, null);
         // Dialog layout 선언
 
-        Log.d("디버그태그", "Categories Test : "+text);
+        Log.d("디버그태그", "Categories Test : " + text);
 
         lp.copyFrom(dialog.getWindow().getAttributes());
         int width = size.x;
-        lp.width = width * 80 / 100; // 사용자 화면의 80%
+        lp.width = width * 100 / 100; // 사용자 화면의 80% (예제를 위해 남겨둠)
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT; // 높이는 내용 전체 높이만큼
         dialog.setContentView(dialogView); // Dialog에 선언했던 layout 적용
         dialog.setCanceledOnTouchOutside(true); // 외부 touch 시 Dialog 종료
@@ -335,19 +335,27 @@ public class Post_Create extends AppCompatActivity {
         3. adapter에 topic Array 넘겨서 출력되게끔 전달
         4. adapter 적용
         */
-        dialogRecyclerView = (RecyclerView) dialogView.findViewById(R.id.dialogRecyclerView);
+        dialogRecyclerView = dialogView.findViewById(R.id.dialogRecyclerView);
         dialogRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         DialogRecyclerAdapter adapter = new DialogRecyclerAdapter(arrayList);
         dialogRecyclerView.setAdapter(adapter);
+
+        if(dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            dialog.getWindow().setGravity(Gravity.BOTTOM);
+//            dialog.setCancelable(false);
+        }
+
         dialog.show(); // Dialog 출력
     }
 
 
     public void createPost() {
-        
-        
-        if(et_content.getText().length()==0){
-            Toast.makeText(getApplicationContext(), "내용을 입력해주세요",Toast.LENGTH_SHORT).show();
+
+
+        if (et_content.getText().length() == 0) {
+            Toast.makeText(getApplicationContext(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
         } else {
             List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
             //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
@@ -370,13 +378,19 @@ public class Post_Create extends AppCompatActivity {
             RequestBody size = createPartFromString("" + parts.size());
 
             user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-            ApiInterface createPost_api = ApiClient.getApiClient().create(ApiInterface.class);
+            ApiInterface createPost_api = ApiClient.getApiClient(Post_Create.this).create(ApiInterface.class);
             Call<String> call = createPost_api.createPost(user_id, et_content.getText().toString(), size, parts, "n", category_com_id, "1", post_type);
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        finish();
+                        if(response.body().equals("success")){
+                            Log.e("게시글 수정", response.body().toString());
+                            setResult(RESULT_OK);
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
@@ -386,11 +400,8 @@ public class Post_Create extends AppCompatActivity {
                 }
             });
         }
-        
-        
-        
-        
-        
+
+
     }
 
 
@@ -404,7 +415,7 @@ public class Post_Create extends AppCompatActivity {
             }
         }
         RequestBody size = createPartFromString("" + parts.size());
-        ApiInterface updatePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface updatePost_api = ApiClient.getApiClient(Post_Create.this).create(ApiInterface.class);
         Call<String> call = updatePost_api.updatePost(post_id, et_content.getText().toString(), size, parts, post_mention, post_mention);
         call.enqueue(new Callback<String>() {
             @Override

@@ -92,7 +92,7 @@ public class LL_Register_A extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "이메일 형식에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show();
                 } else {
                     //정규식 확인 완료 후 서버에 요청
-                    ApiInterface sendEmailCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface sendEmailCertificationNum_api = ApiClient.getApiClient(LL_Register_A.this).create(ApiInterface.class);
                     Call<String> call = sendEmailCertificationNum_api.sendEmailCertificationNum(et_email.getText().toString());
                     call.enqueue(new Callback<String>()
                     {
@@ -127,7 +127,7 @@ public class LL_Register_A extends AppCompatActivity {
        tv_authentication_num_check.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               ApiInterface verifyEmailCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+               ApiInterface verifyEmailCertificationNum_api = ApiClient.getApiClient(LL_Register_A.this).create(ApiInterface.class);
                Call<String> call = verifyEmailCertificationNum_api.verifyEmailCertificationNum(et_email.getText().toString(),et_authentication_num.getText().toString());
                call.enqueue(new Callback<String>()
                {
@@ -172,7 +172,7 @@ public class LL_Register_A extends AppCompatActivity {
                 if(et_phone.getText().toString().contains("-")){
                     Toast.makeText(getApplicationContext(), "숫자만 입력해주세요.",Toast.LENGTH_SHORT).show();
                 }else {
-                    ApiInterface sendPhoneCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+                    ApiInterface sendPhoneCertificationNum_api = ApiClient.getApiClient(LL_Register_A.this).create(ApiInterface.class);
                     Call<String> call = sendPhoneCertificationNum_api.sendPhoneCertificationNum(et_phone.getText().toString());
                     call.enqueue(new Callback<String>() {
                         @Override
@@ -202,7 +202,7 @@ public class LL_Register_A extends AppCompatActivity {
         tv_et_authentication_phonenum_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface verifyPhoneCertificationNum_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface verifyPhoneCertificationNum_api = ApiClient.getApiClient(LL_Register_A.this).create(ApiInterface.class);
                 Call<String> call = verifyPhoneCertificationNum_api.verifyPhoneCertificationNum(et_phone.getText().toString(),et_authentication_phonenum.getText().toString());
                 call.enqueue(new Callback<String>()
                 {

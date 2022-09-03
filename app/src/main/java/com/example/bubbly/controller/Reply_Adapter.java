@@ -26,13 +26,18 @@ import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
 import com.example.bubbly.ReplyModify;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.config.Config;
+import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.reply_Response;
 import com.example.bubbly.retrofit.user_Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -75,7 +80,7 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         preferences = context.getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
-        ApiInterface select_api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface select_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
         Call<List<user_Response>> call_userInfo = select_api.selectUserInfo(user_id);
         call_userInfo.enqueue(new Callback<List<user_Response>>()
         {
@@ -100,12 +105,23 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
 
         holder.tv_user_nick.setText(reply_response.getNick_name());
         holder.tv_content.setText(reply_response.getComment_contents());
-        holder.tv_time.setText(reply_response.getCre_datetime_comment());
-        Log.d("디버그태그", "Cre_datetime: "+reply_response.getCre_datetime_comment());
+
+
+        String a = null;
+        try {
+            Log.d("디버그태그", "시간테스트2:"+reply_response.getCre_datetime_comment());
+            a = Kim_DateUtil.beforeTime_reply(getDate(reply_response.getCre_datetime_comment()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        // SNS 형식 시간
+        holder.tv_time.setText(a);
+
+
 
 
         Glide.with(mContext)
-                .load("https://d2gf68dbj51k8e.cloudfront.net/"+reply_response.getProfile_file_name())
+                .load(Config.cloudfront_addr+reply_response.getProfile_file_name())
                 .circleCrop()
                 .into(holder.iv_user_image);
 
@@ -137,7 +153,7 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch(menuItem.getItemId()){
                                 case R.id.menu_reply_delete:
-                                    ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                    ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                                     // 코멘트 아이디를 통해서 삭제
                                     Call<String> call = deletePost_api.deleteComment(reply_response.getComment_id());
                                     call.enqueue(new Callback<String>()
@@ -204,7 +220,7 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.delete:
-                                ApiInterface deleteComment_api = ApiClient.getApiClient().create(ApiInterface.class);
+                                ApiInterface deleteComment_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                                 Call<String> call = deleteComment_api.deleteComment("13");
                                 call.enqueue(new Callback<String>()
                                 {
@@ -253,6 +269,11 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
             }
         });
 
+    }
+    public static Date getDate(String from) throws ParseException {
+        // "yyyy-MM-dd HH:mm:ss"
+        Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX").parse(from);
+        return date;
     }
 
     @Override

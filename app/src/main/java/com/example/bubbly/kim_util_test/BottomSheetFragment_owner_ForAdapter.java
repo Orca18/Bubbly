@@ -47,20 +47,20 @@ public class BottomSheetFragment_owner_ForAdapter extends BottomSheetDialogFragm
 
         View view = inflater.inflate(R.layout.bottom_sheet_dialog_layout_owner, container, false);
 
-        LinearLayout main = view.findViewById(R.id.sheet_main);
-        main.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "내 대표 게시글 지정", Toast.LENGTH_SHORT).show();
-                dismiss();
-            }
-        });
+//        LinearLayout main = view.findViewById(R.id.sheet_main);
+//        main.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(context, "내 대표 게시글 지정", Toast.LENGTH_SHORT).show();
+//                dismiss();
+//            }
+//        });
 
         LinearLayout delete = view.findViewById(R.id.sheet_delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface deletePost_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deletePost_api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
                 Call<String> call = deletePost_api.deletePost(SS_PostDetail.post_id);//아이디 가져오기ㅔ
                 call.enqueue(new Callback<String>()
                 {

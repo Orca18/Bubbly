@@ -1,5 +1,6 @@
 package com.example.bubbly;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,16 +21,25 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.example.bubbly.chatting.service.ChatService;
+import com.example.bubbly.chatting.util.ChatUtil;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.controller.FragmentAdapter_SS;
+import com.example.bubbly.model.Chat_Member_FCM_Sub;
+import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
+import com.example.bubbly.model.OtherUserInfo;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
+import com.example.bubbly.retrofit.ChatApiClient;
+import com.example.bubbly.retrofit.ChatApiInterface;
 import com.example.bubbly.retrofit.follower_Response;
 import com.example.bubbly.retrofit.following_Response;
 import com.example.bubbly.retrofit.user_Response;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -68,6 +78,18 @@ public class SS_Profile extends AppCompatActivity {
     ImageView iv_user_image,iv_chat;
     TextView tv_user_nick, tv_user_id, tv_user_intro, tv_following,tv_follower;
     LinearLayout bt_following, bt_unfollowing; //팔로잉 버튼
+    
+    // 사용자 정보
+    String user_id ;
+    String login_id;
+    String email_addr;
+    String novaland_account_addr;
+    String phone_num;
+    String user_nick;
+    String self_info;
+    String token;
+    String profile_file_name;
+    String profile_file_name_for_chat;
 
 
     @Override
@@ -93,7 +115,7 @@ public class SS_Profile extends AppCompatActivity {
     //프로필데이터 가져와서 디스플레이하기
     private void setProfileData(){
         //회원정보를 요청한다.
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
         Call<List<user_Response>> call_userInfo = api.selectUserInfo(uid);
         call_userInfo.enqueue(new Callback<List<user_Response>>()
         {
@@ -101,17 +123,18 @@ public class SS_Profile extends AppCompatActivity {
             public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response) {
                 System.out.println(response.body());
                 List<user_Response> responseResult = response.body();
-                String user_id = responseResult.get(0).getUser_id();
-                String login_id = responseResult.get(0).getLogin_id();
-                String email_addr = responseResult.get(0).getEmail_addr();
-                String novaland_account_addr = responseResult.get(0).getNovaland_account_addr();
-                String phone_num = responseResult.get(0).getPhone_num();
-                String user_nick = responseResult.get(0).getUser_nick();
-                String self_info = responseResult.get(0).getSelf_info();
-                String token = responseResult.get(0).getToken();
-                String profile_file_name = "";
+                user_id = responseResult.get(0).getUser_id();
+                login_id = responseResult.get(0).getLogin_id();
+                email_addr = responseResult.get(0).getEmail_addr();
+                novaland_account_addr = responseResult.get(0).getNovaland_account_addr();
+                phone_num = responseResult.get(0).getPhone_num();
+                user_nick = responseResult.get(0).getUser_nick();
+                self_info = responseResult.get(0).getSelf_info();
+                token = responseResult.get(0).getToken();
+                profile_file_name_for_chat = responseResult.get(0).getProfile_file_name();
+                profile_file_name = "";
                 if (responseResult.get(0).getProfile_file_name() != null && !responseResult.get(0).getProfile_file_name().equals("")) {
-                    profile_file_name = "https://d2gf68dbj51k8e.cloudfront.net/" + responseResult.get(0).getProfile_file_name();
+                    profile_file_name = Config.cloudfront_addr + responseResult.get(0).getProfile_file_name();
                 }
                 System.out.println(uid);
                 //이미지. 닉네임, id, 자기소개, 팔로잉, 팔로워
@@ -141,7 +164,7 @@ public class SS_Profile extends AppCompatActivity {
                 tv_title.setText(user_nick);
 
                 //팔로워리스트 가져오기
-                ApiInterface selectFollowerList_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface selectFollowerList_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<List<follower_Response>> call_follower = selectFollowerList_api.selectFollowerList(user_id);
                 call_follower.enqueue(new Callback<List<follower_Response>>() {
                     @Override
@@ -168,7 +191,7 @@ public class SS_Profile extends AppCompatActivity {
                 });
 
                 //팔로잉 리스트 가져오기
-                ApiInterface selectFolloweeList_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface selectFolloweeList_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<List<following_Response>> call_following = selectFolloweeList_api.selectFolloweeList(user_id);
                 call_following.enqueue(new Callback<List<following_Response>>() {
                     @Override
@@ -271,7 +294,7 @@ public class SS_Profile extends AppCompatActivity {
         bt_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface createFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface createFollowing_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<String> call = createFollowing_api.createFollowing(uid,UserInfo.user_id);
                 call.enqueue(new Callback<String>()
                 {
@@ -301,7 +324,7 @@ public class SS_Profile extends AppCompatActivity {
         bt_unfollowing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ApiInterface deleteFollowing_api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface deleteFollowing_api = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
                 Call<String> call = deleteFollowing_api.deleteFollowing(uid,UserInfo.user_id);
                 call.enqueue(new Callback<String>()
                 {
@@ -329,7 +352,81 @@ public class SS_Profile extends AppCompatActivity {
         iv_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //채팅요청
+                // 사용자와 채팅을 요청하는 사람의 아이디 가져오기
+                ArrayList<OtherUserInfo> chatMemberList = new ArrayList<>();
+
+                // 채팅방 생성자 정보 생성
+                OtherUserInfo creator = new OtherUserInfo(UserInfo.user_id, UserInfo.login_id,
+                        UserInfo.email_addr, UserInfo.phone_num, UserInfo.novaland_account_addr,
+                        UserInfo.profile_file_name, UserInfo.user_nick, UserInfo.self_info, UserInfo.token);
+                
+                chatMemberList.add(creator);
+                
+                // 채팅 요청자 정보 생성
+                OtherUserInfo other = new OtherUserInfo(user_id, login_id, email_addr, phone_num, novaland_account_addr, profile_file_name_for_chat, user_nick, self_info, token);
+
+                chatMemberList.add(other);
+
+                // 채팅방 정보 저장할 객체
+                Chat_Room_Cre_Or_Del chatRoomCre = new Chat_Room_Cre_Or_Del();
+
+                // 두사람의 아이디로 만들어진 채팅방 있는지 조회
+                // 이미 생성된 채팅방이 있는지 조회한다.
+                ApiInterface apiClient = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
+                Call<String> call = apiClient.selectExistingChatRoomId(chatMemberList.get(0).getUser_id(), chatMemberList.get(1).getUser_id());
+
+                call.enqueue(new Callback<String>()
+                {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            // 채팅방 아이디
+                            String chatRoomId = response.body();
+
+                            // 두 참여자가 참여하고 있는 채팅방이 존재한다면
+                            if(!chatRoomId.equals("null")) {
+                                chatRoomCre.setChatRoomNameCreator(chatMemberList.get(1).getUser_nick());
+                                // 기존 채팅방으로 이동!
+                                moveToChatListAct(chatRoomId, chatRoomCre, chatMemberList, null, false);
+                            } else { // 두 참여자가 참여하고 있는 채팅방이 존재하지 않는다면
+                                OtherUserInfo other = chatMemberList.get(1);
+                                // 1-1. 채팅방 생성자 채팅방명 만들기(채팅상대의 닉네임)
+                                chatRoomCre.setChatRoomNameCreator(other.getUser_nick());
+                                // 1-2. 다른사람 채팅방명 만들기(채팅방 생성자의 닉네임)
+                                chatRoomCre.setChatRoomNameOther(UserInfo.user_nick);
+
+                                // 2-1. 채팅방 생성자의 아이디 - 프로필 사진 조회위해 필요
+                                chatRoomCre.setChatCreatorId(UserInfo.user_id);
+                                // 2-2. 다른사람 채팅방 프로필 - 프로필 사진 조회위해 필요
+                                chatRoomCre.setChatOtherId(other.getUser_id());
+
+                                // 3. 채팅 참여자들 user_id 리스트 만들기
+                                ArrayList<String> list = new ArrayList<>();
+                                list.add(UserInfo.user_id);
+                                list.add(other.getUser_id());
+                                chatRoomCre.setChatRoomMemberList(list);
+
+                                // 새로운 채팅방 생성
+                                createNewChatRoom(chatRoomCre, chatMemberList);
+                            }
+                        } else {
+                            Log.e("채팅방 정보 저장 성공 했지만 데이터 없음: ", "1111");
+                        }
+                        return;
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                    {
+                        Log.e("채팅방 정보 저장 실패", t.getMessage());
+                        return;
+                    }
+                });
+
+                // 있다면 기존 채팅방으로 이동
+                // 없다면 채팅방 생성
             }
         });
 
@@ -351,6 +448,128 @@ public class SS_Profile extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
+    }
+
+    // 채팅방리스트 화면으로 다시 이동한다.
+    public void moveToChatListAct(String chatRoomId, Chat_Room_Cre_Or_Del chatRoomCre, ArrayList<OtherUserInfo> chatMemberList, Chat_Member_FCM_Sub chatMemberFcmSub, boolean isNew) {
+        // 채팅방 액티비티로 이동
+        Intent mIntent = new Intent(getApplicationContext(), ChattingRoom.class);
+        mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+
+        // 채팅방 아이디
+        mIntent.putExtra("chatRoomId",chatRoomId);
+        Log.d("chatRoomId",chatRoomId);
+
+        // 채팅방 명
+        mIntent.putExtra("chatRoomName",chatRoomCre.getChatRoomNameCreator());
+        Log.d("chatRoomName",chatRoomCre.getChatRoomNameCreator());
+
+        // 새로 생성된 채팅방인지 여부
+        mIntent.putExtra("isNew",isNew);
+        Log.d("chatRoomId","" + isNew);
+
+        // 메시지 전송여부 - 메시지가 전송되지 않고 채팅방이 제거되면 MQTT와 FCM 구독을 해지해야 함
+        if(isNew){
+            mIntent.putExtra("isMsgTransfered",false);
+        } else {
+            mIntent.putExtra("isMsgTransfered",true);
+        }
+
+        // 채팅멤버 리스트
+        mIntent.putExtra("chatMemberList", chatMemberList);
+        Log.d("chatMemberList","" + chatMemberList.size());
+
+        // FCM 토큰리스트
+        mIntent.putExtra("chatMemberFcmTokenList", chatMemberFcmSub);
+        //Log.d("chatMemberFcmTokenList", chatMemberFcmSub.toString());
+
+        // 채팅방 생성 혹은 파괴 객체정보
+        mIntent.putExtra("chatRoomCreOrDel", chatRoomCre);
+        //Log.d("chatRoomCreOrDel",chatRoomCre.toString());
+
+        // ChattingRoom화면으로 이동
+        startActivity(mIntent);
+    }
+
+    // 새로운 채팅방을 만든다.
+    public void createNewChatRoom(Chat_Room_Cre_Or_Del chatRoomCre, ArrayList<OtherUserInfo> chatMemberList){
+        // 4. 서버로 전송
+        ApiInterface apiClient = ApiClient.getApiClient(SS_Profile.this).create(ApiInterface.class);
+        Call<String> call = apiClient.createChatRoom(chatRoomCre);
+        call.enqueue(new Callback<String>()
+        {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+            {
+                if (response.isSuccessful() && response.body() != null)
+                {
+                    // 채팅방 아이디
+                    String chatRoomId = response.body();
+
+                    Log.e("채팅방 정보 저장 성공 - 채팅방 아이디: ", chatRoomId);
+
+                    // chatRoomCre에 채팅방 아이디 저장
+                    chatRoomCre.setChatRoomId(chatRoomId);
+                    // 채팅방 생성 메시지: 0
+                    chatRoomCre.setMsgType(0);
+
+                    // 브로커에게 채팅방 정보 publish
+                    new ChatUtil(SS_Profile.this).publishChatCreOrDelMsg(chatRoomCre, ChatService.mqttClient);
+
+                    // FCM서버에게 구독요청
+                    // fcm_token list
+                    ArrayList<String> tokenList = new ArrayList<>();
+                    for(int i = 0; i < chatMemberList.size(); i++){
+                        tokenList.add(chatMemberList.get(i).getToken());
+                    }
+
+                    // 토큰 정보 찍어보기
+                    for(int i = 0; i < tokenList.size(); i++){
+                        System.out.println("토큰" + i + ": " + tokenList.get(i)); ;
+                    }
+
+                    // FCM 서버에게 구독요청을 하기 위한 데이터
+                    Chat_Member_FCM_Sub chatMemberFcmSub = new Chat_Member_FCM_Sub();
+                    chatMemberFcmSub.setTopic("/topics/" + chatRoomId);
+                    chatMemberFcmSub.setTokenList(tokenList);
+
+                    ChatApiInterface chatApiClient = ChatApiClient.getApiClient(SS_Profile.this).create(ChatApiInterface.class);
+                    Call<String> call2 = chatApiClient.subscribeChatMemberToFCMServer(chatMemberFcmSub);
+                    call2.enqueue(new Callback<String>()
+                    {
+                        @Override
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                        {
+                            if (response.isSuccessful() && response.body().equals("success")){
+                                //
+                                String responseResult = response.body();
+                                Log.d("채팅멤버 FCM 구독 완료",responseResult);
+
+                                // 채팅리스트 액티비티로 이동한다.
+                                moveToChatListAct(chatRoomId, chatRoomCre, chatMemberList, chatMemberFcmSub,true);
+
+                            } else {
+                                Log.d("채팅멤버 FCM 구독 완료 결과: ", response.body());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                        {
+                            Log.e("채팅방 멤버 FCM 등록 실패", t.getMessage());
+                        }
+                    });
+                } else {
+                    Log.e("채팅방 정보 저장 성공 했지만 데이터 없음: ", "1111");
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+            {
+                Log.e("채팅방 정보 저장 실패", t.getMessage());
+            }
+        });
     }
 
 

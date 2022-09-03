@@ -2,8 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:layout_marginLeft="100dp"
     android:gravity="right">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_weight="1"></View>
 
     <TextView
         android:id="@+id/chat_chat_test"
@@ -14,7 +20,7 @@
         android:background="@drawable/chat"
         android:fontFamily="@font/spoqa_medium"
         android:padding="10dp"
-        android:text="ㅎㅎㅎ"
+        android:text="안녕"
         android:textColor="@color/white"
         android:textSize="14dp" />
 

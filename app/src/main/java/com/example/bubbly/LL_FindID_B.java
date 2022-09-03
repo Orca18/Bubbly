@@ -60,7 +60,7 @@ public class LL_FindID_B extends AppCompatActivity {
         bt_confirm_findID.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(LL_FindID_B.this).create(ApiInterface.class);
                 Call<String> call = api.verifyPhoneNumAndGetLoginId(user_phone, et_authentication_phonenum_findID.getText().toString());
                 call.enqueue(new Callback<String>() {
                     @Override

@@ -1,5 +1,11 @@
 package com.example.bubbly.Kim_Bottom;
+import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -14,9 +20,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,11 +38,14 @@ import com.example.bubbly.MainActivity;
 import com.example.bubbly.Option_Notice_List;
 import com.example.bubbly.Post_Create;
 import com.example.bubbly.R;
+import com.example.bubbly.controller.Custom_Toast;
+import com.example.bubbly.controller.NewPost_CustomToast_Callback;
 import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +61,7 @@ public class Bottom1_Fragment extends Fragment {
     // 툴바
     androidx.appcompat.widget.Toolbar toolbar;
     // 툴바 안에 버튼 목록 (사이드메뉴 - 알림, 작성)
-    ImageView sidemenu, alarm, creating;
+    ImageView sidemenu, creating;
     // 현재 유저 uid
     SharedPreferences preferences;
     String user_id;
@@ -79,7 +93,6 @@ public class Bottom1_Fragment extends Fragment {
 
         sidemenu = view.findViewById(R.id.home_sidemenu);
         creating = view.findViewById(R.id.home_creating);
-        alarm = view.findViewById(R.id.home_alarm);
 
         swipeRefreshLayout = view.findViewById(R.id.home_refresh);
         recyclerView = view.findViewById(R.id.home_recyclerView);
@@ -99,16 +112,7 @@ public class Bottom1_Fragment extends Fragment {
                 Intent tocreating = new Intent(getContext(), Post_Create.class);
                 tocreating.putExtra("com_id", "0");
                 tocreating.putExtra("com_name", "내 피드");
-                startActivity(tocreating);
-            }
-        });
-
-        // 알림
-        alarm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent alarm = new Intent(getContext(), Option_Notice_List.class);
-                startActivity(alarm);
+                startActivityResult.launch(new Intent(getContext(), Post_Create.class));
             }
         });
 
@@ -150,7 +154,7 @@ public class Bottom1_Fragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         Call<List<post_Response>> call = api.selectPostMeAndFolloweeAndCommunity(user_id);
         call.enqueue(new Callback<List<post_Response>>() {
             @Override
@@ -190,6 +194,60 @@ public class Bottom1_Fragment extends Fragment {
         });
     }
 
+    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Snackbar snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "새 게시글이 있습니다.", Snackbar.LENGTH_LONG);
+                        snack.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.black));
+                        snack.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+                        snack.setAction("보기", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                selectPost_Followee_Communit();
+                                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+                            }
+                        });
+                        View snackView = snack.getView();
+                        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+                        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                        params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
+                        snackView.setLayoutParams(params);
+                        snack.show();
+                    }
+                }
+            });
+
+    //새게시글 등록 시 FCMService에서 sendEmptyMessage로 수신한 0에 대해서 토스트 알림
+    final Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg){
+            switch (msg.what) {
+                case 0:
+                    Snackbar snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "새 게시글이 있습니다.", Snackbar.LENGTH_LONG);
+                    snack.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.black));
+                    snack.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+                    snack.setAction("보기", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            selectPost_Followee_Communit();
+                            linearLayoutManager.scrollToPositionWithOffset(0, 0);
+                        }
+                    });
+                    View snackView = snack.getView();
+                    FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+                    params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+                    params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
+                    snackView.setLayoutParams(params);
+                    snack.show();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
 }
 

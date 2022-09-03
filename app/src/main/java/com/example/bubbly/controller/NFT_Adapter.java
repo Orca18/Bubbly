@@ -76,7 +76,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
         }
 
         //이미 판매중인 nft목록 가져오기 (만약 판매중이라면 Cancel로 버튼 표시 변경 위함)
-        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+        ApiInterface api = ApiClient.getApiClient(context).create(ApiInterface.class);
         Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId(UserInfo.user_id);
         call.enqueue(new Callback<List<NFTSell_Item>>() {
             @Override
@@ -121,7 +121,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                 builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface api = ApiClient.getApiClient(context).create(ApiInterface.class);
                         System.out.println(UserInfo.mnemonic+"nftid"+lists.get(position).getNft_id()+lists.get(position).getSell_price()+UserInfo.user_id);
                         Call<String> call = api.nftStopSell(UserInfo.mnemonic,lists.get(position).getNft_id(),lists.get(position).getApp_id(),lists.get(position).getSell_price());
                         call.enqueue(new Callback<String>() {
@@ -179,7 +179,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                     public void onClick(DialogInterface dialog, int which) {
 
                         String amount = input.getText().toString();
-                        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
+                        ApiInterface api = ApiClient.getApiClient(context).create(ApiInterface.class);
                         System.out.println(UserInfo.mnemonic+"nftid"+lists.get(position).getNft_id()+amount+UserInfo.user_id);
                         Call<String> call = api.nftSell(UserInfo.mnemonic,lists.get(position).getNft_id(),amount,UserInfo.user_id,"");
                         call.enqueue(new Callback<String>() {
