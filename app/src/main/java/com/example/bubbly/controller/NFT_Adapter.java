@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,13 +26,10 @@ import com.example.bubbly.model.NFT_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
-import com.example.bubbly.retrofit.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,7 +39,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
     private Context context;
     private ArrayList<NFT_Item> lists;
     private Activity activity;
-    private Custom_Toast toast;
+    private SnackAndToast toast;
     private ViewGroup v;
 
     public NFT_Adapter(Context context, ArrayList<NFT_Item> lists, Activity activity, ViewGroup v) {
@@ -128,14 +122,14 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    new Custom_Toast().createToast(context,v,"NFT 판매가 취소되었습니다.");
+                                    new SnackAndToast().createToast(context,"NFT 판매가 취소되었습니다.");
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
                                 Log.e("nft 판매 취소 실패", t.getMessage());
-                                new Custom_Toast().createToast(context,v,"NFT 판매 취소에 실패하였습니다.");
+                                new SnackAndToast().createToast(context,"NFT 판매 취소에 실패하였습니다.");
                             }
                         });
 
@@ -186,14 +180,14 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    new Custom_Toast().createToast(context,v,"NFT 판매가 등록되었습니다.");
+                                    new SnackAndToast().createToast(context,"NFT 판매가 등록되었습니다.");
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
                                 Log.e("nft 판매 실패", t.getMessage());
-                                new Custom_Toast().createToast(context,v,"NFT 판매 등록에 실패했습니다.");
+                                new SnackAndToast().createToast(context,"NFT 판매 등록에 실패했습니다.");
                             }
                         });
 

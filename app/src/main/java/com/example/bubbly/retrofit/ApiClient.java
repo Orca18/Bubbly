@@ -202,10 +202,7 @@ public class ApiClient {
             }
         });
 
-        OkHttpClient okHttpClient = clientBuilder.connectTimeout(100, TimeUnit.SECONDS)
-                .readTimeout(100, TimeUnit.SECONDS)
-                .writeTimeout(100, TimeUnit.SECONDS)
-                .build();
+        OkHttpClient okHttpClient = clientBuilder.build();
 
 
         Gson gson = new GsonBuilder()
@@ -227,9 +224,9 @@ public class ApiClient {
     public static Retrofit getApiClientWithUrlInput(String url)
     {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-        OkHttpClient okHttpClient = clientBuilder.connectTimeout(40, TimeUnit.SECONDS)
-                                                 .readTimeout(40, TimeUnit.SECONDS)
-                                                 .writeTimeout(40, TimeUnit.SECONDS)
+        OkHttpClient okHttpClient = clientBuilder.connectTimeout(100, TimeUnit.SECONDS)
+                                                 .readTimeout(100, TimeUnit.SECONDS)
+                                                 .writeTimeout(100, TimeUnit.SECONDS)
                                                  .build();
 
         Gson gson = new GsonBuilder()

@@ -223,6 +223,9 @@
             android:name=".Video_Play"
             android:exported="false" />
         <activity
+            android:name=".MM_Wallet_toNavi"
+            android:exported="false" />
+        <activity
             android:name=".MM_Wallet"
             android:exported="false" /> <!-- FCM 서비스 -->
         <service

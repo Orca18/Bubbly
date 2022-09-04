@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Message;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.bubbly.controller.Custom_Toast;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ChatApiClient;
 import com.example.bubbly.retrofit.ChatApiInterface;

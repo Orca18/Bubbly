@@ -40,7 +40,6 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
-import com.example.bubbly.controller.Custom_Toast;
 import com.example.bubbly.controller.DialogRecyclerAdapter;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;

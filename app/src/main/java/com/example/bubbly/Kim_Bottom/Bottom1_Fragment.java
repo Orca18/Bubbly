@@ -5,8 +5,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -15,7 +13,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -35,16 +32,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.bubbly.MainActivity;
-import com.example.bubbly.Option_Notice_List;
 import com.example.bubbly.Post_Create;
 import com.example.bubbly.R;
-import com.example.bubbly.controller.Custom_Toast;
-import com.example.bubbly.controller.NewPost_CustomToast_Callback;
 import com.example.bubbly.controller.Post_Adapter;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.post_Response;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -200,22 +193,7 @@ public class Bottom1_Fragment extends Fragment {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        Snackbar snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "새 게시글이 있습니다.", Snackbar.LENGTH_LONG);
-                        snack.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.black));
-                        snack.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-                        snack.setAction("보기", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                selectPost_Followee_Communit();
-                                linearLayoutManager.scrollToPositionWithOffset(0, 0);
-                            }
-                        });
-                        View snackView = snack.getView();
-                        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
-                        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                        params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
-                        snackView.setLayoutParams(params);
-                        snack.show();
+                        showSnackBar();
                     }
                 }
             });
@@ -226,22 +204,7 @@ public class Bottom1_Fragment extends Fragment {
         public void handleMessage(Message msg){
             switch (msg.what) {
                 case 0:
-                    Snackbar snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "새 게시글이 있습니다.", Snackbar.LENGTH_LONG);
-                    snack.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.black));
-                    snack.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-                    snack.setAction("보기", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            selectPost_Followee_Communit();
-                            linearLayoutManager.scrollToPositionWithOffset(0, 0);
-                        }
-                    });
-                    View snackView = snack.getView();
-                    FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
-                    params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-                    params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
-                    snackView.setLayoutParams(params);
-                    snack.show();
+                    showSnackBar();
                     break;
                 default:
                     break;
@@ -249,6 +212,25 @@ public class Bottom1_Fragment extends Fragment {
         }
     };
 
+
+    private void showSnackBar(){
+        Snackbar snack = Snackbar.make(requireActivity().findViewById(android.R.id.content), "새 게시글이 있습니다.", Snackbar.LENGTH_LONG);
+        snack.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.black));
+        snack.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+        snack.setAction("보기", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectPost_Followee_Communit();
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+            }
+        });
+        View snackView = snack.getView();
+        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
+        snackView.setLayoutParams(params);
+        snack.show();
+    }
 }
 
 

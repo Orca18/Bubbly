@@ -12,25 +12,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import com.example.bubbly.R;
+import com.google.android.material.snackbar.Snackbar;
 
-public class Custom_Toast {
+public class SnackAndToast {
 
-    public void createToast(Context context, ViewGroup v, String msg){
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View layout = inflater.inflate(R.layout.custom_toast, v, false);
+    public void createToast(Context context, String msg){
+//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+//        View layout = inflater.inflate(R.layout.custom_toast, v, false);
+//        TextView tv_msg = (TextView) layout.findViewById(R.id.tv_msg);
+//        tv_msg.setText(msg);
+
+        View layout = LayoutInflater.from(context).inflate(R.layout.custom_toast, null);
         TextView tv_msg = (TextView) layout.findViewById(R.id.tv_msg);
         tv_msg.setText(msg);
-
         Toast toast = new Toast(context);
+        toast.setView(layout);
         toast.setGravity(Gravity.TOP, 0, 160);
         toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
         toast.show();
     }
 
@@ -52,6 +58,19 @@ public class Custom_Toast {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
+    }
+
+
+    public void createSnack(Context context, View view, String msg){
+        Snackbar snack = Snackbar.make(view.findViewById(android.R.id.content), msg, Snackbar.LENGTH_LONG);
+        snack.setBackgroundTint(ContextCompat.getColor(context, R.color.black));
+        snack.setActionTextColor(ContextCompat.getColor(context, R.color.white));
+        View snackView = snack.getView();
+        FrameLayout.LayoutParams params =(FrameLayout.LayoutParams)snackView.getLayoutParams();
+        params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+        params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
+        snackView.setLayoutParams(params);
+        snack.show();
     }
 
 }
