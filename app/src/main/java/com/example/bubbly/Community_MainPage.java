@@ -88,11 +88,6 @@ public class Community_MainPage extends AppCompatActivity {
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
 
-        // TODO 인텐트로 온 경우, 예외처리하기
-        if(intent.getData() != null){
-            com_id = intent.getDataString().replace("bubbly2://3.39.84.115/","");
-        }
-
         preferences = getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 

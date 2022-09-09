@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private Bottom3_Fragment bottom3_fragment = new Bottom3_Fragment();
     private Bottom4_Fragment bottom4_fragment = new Bottom4_Fragment();
 
+    // 딥링크 데이터
+    String deep_type, deep_id;
 
     // 내비뷰 메뉴 레이아웃에 직접 구현
     CircleImageView myAccount;
@@ -230,6 +232,9 @@ public class MainActivity extends AppCompatActivity {
 
         initialize();
 
+        // 딥링크로 왔다면 액티비티 띄우기
+        deeplink();
+
         // noti를 클릭해서 MainAct로 왔다면 채팅방으로 이동
         if (getIntent().getExtras() != null) {
             String chatRoomId = null;
@@ -371,6 +376,46 @@ public class MainActivity extends AppCompatActivity {
         } else {
             FCMService.refreshToken(userId);
         }
+    }
+
+    private void deeplink() {
+        Bundle extras = getIntent().getExtras();
+        deep_type = "";
+        deep_id = "";
+        if(!(deep_type+deep_id).equals("")) {
+            deep_type = extras.getString("type");
+            deep_id = extras.getString("id");
+        }
+
+        // 딥링크가 존재
+        if( 0 < (deep_type+deep_id).length() ){
+            // 타입 (커뮤니티, 게시물, 프로필) 어떤거로 이동할지 선택
+            // 쿠팡 참고 결과 → 액티비티 스택 모두 제거함 ⇒ 스플래시에서 넘어올 때, 다 없앰 = 그냥 하면 됨
+            switch(deep_type){
+                case "community":
+                    Intent com = new Intent(getApplicationContext(), Community_MainPage.class);
+                    com.putExtra("com_id", deep_id);
+                    startActivity(com);
+                break;
+
+                case "profile":
+                    Intent profile = new Intent(getApplicationContext(), SS_Profile.class);
+                    profile.putExtra("user_id", deep_id);
+                    startActivity(profile);
+                    break;
+
+                case "post":
+                    Intent post = new Intent(getApplicationContext(), SS_PostDetail.class);
+                    post.putExtra("post_id", deep_id);
+                    startActivity(post);
+                    break;
+
+              default:
+                break;
+            }
+
+       }
+
     }
 
     public void initialize(){

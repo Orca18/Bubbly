@@ -67,17 +67,7 @@
             android:exported="false" />
         <activity
             android:name=".Community_MainPage"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="3.39.84.115"
-                    android:scheme="bubbly2" />
-            </intent-filter>
+            android:exported="false">
         </activity>
         <activity
             android:name=".ReplyModify"
@@ -117,18 +107,8 @@
             android:exported="false" />
         <activity
             android:name=".SS_PostDetail"
-            android:exported="true"
+            android:exported="false"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="3.39.84.115"
-                    android:scheme="bubbly1" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -193,6 +173,15 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
+<!--                <action android:name="android.intent.action.VIEW" />-->
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="deep"
+                    android:scheme="bubbly" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

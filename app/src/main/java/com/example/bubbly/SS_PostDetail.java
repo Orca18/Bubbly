@@ -223,11 +223,6 @@ public class SS_PostDetail extends AppCompatActivity {
         post_id = intent.getStringExtra("post_id");
         login_id = intent.getStringExtra("login_id");
 
-        if (intent.getData() != null) {
-            post_id = intent.getDataString().replace("bubbly1://3.39.84.115/", "");
-            Log.d("디버그태그", "리플레이스: " + post_id);
-        }
-
         iv_user_image = findViewById(R.id.iv_user_image);
         iv_media = findViewById(R.id.iv_media);
         vd_media = findViewById(R.id.vd_media);
