@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         } else {
-            //FCMService.refreshToken(userId);
+            FCMService.refreshToken(userId);
         }
 
     }
