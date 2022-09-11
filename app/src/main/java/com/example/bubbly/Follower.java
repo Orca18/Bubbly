@@ -35,7 +35,6 @@ public class Follower extends AppCompatActivity {
 //    FollowingFragmentAdapter adapter;
 
     String uid;
-    ImageView iv_back;
     TextView tv_user_nick;
 
     Follower_Adapter follower_adapter;
@@ -53,15 +52,9 @@ public class Follower extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follower);
 
-        iv_back = findViewById(R.id.iv_back);
         tv_user_nick = findViewById(R.id.tv_user_nick);
 
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+
 
         recyclerView = findViewById(R.id.tab_recyclerview);
         linearLayoutManager = new LinearLayoutManager(Follower.this);

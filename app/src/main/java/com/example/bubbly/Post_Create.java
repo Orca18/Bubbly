@@ -122,6 +122,11 @@ public class Post_Create extends AppCompatActivity {
         category_com_id = intent.getStringExtra("com_id");
         category_com_name = intent.getStringExtra("com_name");
 
+        if(category_com_id == null){
+            category_com_id = "0";
+            category_com_name = "내 피드";
+        }
+
         com.setText(category_com_name);
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값

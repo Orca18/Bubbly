@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,7 +53,7 @@ import retrofit2.http.Multipart;
 public class ModifyProfile extends AppCompatActivity {
 
     ImageButton bt_change_user_image;
-    ImageView iv_back,iv_user_image;
+    ImageView iv_user_image;
     EditText et_nick_modify, et_self_info_modify;
     Button bt_add;
 
@@ -61,12 +63,18 @@ public class ModifyProfile extends AppCompatActivity {
 
     //String user_id,getEmail_addr,getLogin_id,getPhone_num,update_user_image;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_profile);
 
-        iv_back = findViewById(R.id.iv_back);
+        toolbar = findViewById(R.id.modify_profile_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         bt_change_user_image = findViewById(R.id.bt_change_user_image);
         iv_user_image = findViewById(R.id.iv_user_image);
         et_nick_modify = findViewById(R.id.et_nick_modify);
@@ -83,14 +91,6 @@ public class ModifyProfile extends AppCompatActivity {
             }
         });
 
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent mIntent = new Intent(getApplicationContext(), MM_Profile.class);
-                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(mIntent);
-            }
-        });
 
         bt_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,6 +328,18 @@ public class ModifyProfile extends AppCompatActivity {
 
     private interface callback{
         void updateUserInfo();
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

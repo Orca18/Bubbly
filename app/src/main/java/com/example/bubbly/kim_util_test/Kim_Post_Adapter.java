@@ -460,5 +460,14 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
 }
