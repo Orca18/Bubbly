@@ -32,6 +32,9 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Video_FullScreen"
+            android:exported="false" />
+        <activity
             android:name=".Interceptor_Test"
             android:exported="false" />
         <activity
@@ -67,8 +70,7 @@
             android:exported="false" />
         <activity
             android:name=".Community_MainPage"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".ReplyModify"
             android:exported="false" />
@@ -108,9 +110,7 @@
         <activity
             android:name=".SS_PostDetail"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-
+            android:windowSoftInputMode="adjustPan"></activity>
         <activity
             android:name=".Post_Create"
             android:exported="false"
@@ -173,9 +173,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-<!--                <action android:name="android.intent.action.VIEW" />-->
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -197,7 +195,7 @@
             android:exported="false" />
         <activity
             android:name=".MM_Message"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ImageView_FullScreen_With_Save"
             android:exported="false" />
@@ -206,6 +204,9 @@
             android:exported="false" />
         <activity
             android:name=".MM_Wallet"
+            android:exported="false" /> <!-- FCM 서비스 -->
+        <activity
+            android:name=".MM_Wallet_toNavi"
             android:exported="false" /> <!-- FCM 서비스 -->
         <service
             android:name=".chatting.service.FCMService"

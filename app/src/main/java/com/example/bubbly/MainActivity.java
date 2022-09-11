@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 채팅서비스 연결 로직
-     * */
+     */
     // 서비스와 통신하기 위한 메신저
     private Messenger mServiceMessenger = null;
 
@@ -121,12 +121,12 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             // msg.what에는 메시지 종류가 들어있음(서비스에서 설정)
-            switch(msg.what){
+            switch (msg.what) {
                 // 메시지 수신
                 case ChatService.MSG_RECEIVE_FROM_SERVER:
                     // 서비스로부터 받은 수신한 메시지 객체
                     Bundle bundle = msg.getData();
-                    Chat_Item read = (Chat_Item)bundle.getSerializable("message");
+                    Chat_Item read = (Chat_Item) bundle.getSerializable("message");
 
                     String chatRoomId = read.getChatRoomId();
 
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("MM_Message에서 관리하고 있는 채팅방인지 여부 null이면 없는 채팅방!: ", latestMsgId != null ? latestMsgId.toString() : "null");
 
                     // 이 메시지와 동일한 채팅방 아이디를 가지는 채팅방이 없음 => 새로 생성!
-                    if(latestMsgId == null) {
+                    if (latestMsgId == null) {
                         ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                         Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomInfo(chatRoomId);
                         call.enqueue(new retrofit2.Callback<ArrayList<Chat_Room_Info>>() {
@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     Log.d("새로운 채팅방 생성전 사이즈: ", "" + chatRoomList.size());
 
-                                    chatRoomList.add(0,chatRoomInfo);
+                                    chatRoomList.add(0, chatRoomInfo);
 
                                     chattingRoomViewModel.getChatRoomList().setValue(chatRoomList);
 
@@ -178,10 +178,10 @@ public class MainActivity extends AppCompatActivity {
                         ArrayList<Chat_Room_Info> chatRoomList = chattingRoomViewModel.getChatRoomList().getValue();
                         Log.e("이미 있는 채팅방 => 갱신전", "" + chatRoomList.get(0).getLatestMsg());
 
-                        for(int i = 0; i < chatRoomList.size(); i++){
+                        for (int i = 0; i < chatRoomList.size(); i++) {
                             Chat_Room_Info chatRoomInfo = chatRoomList.get(i);
 
-                            if(chatRoomInfo.getChatRoomId().equals(chatRoomId)){
+                            if (chatRoomInfo.getChatRoomId().equals(chatRoomId)) {
                                 chatRoomInfo.setLatestMsg(read.getChatText());
                                 chatRoomInfo.setLatestMsgId(read.getChatId());
 
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                                 // 해당 위치의 아이템 삭제
                                 chatRoomList.remove(i);
                                 // 가장 최근에 메시지를 받았으므로 0번쨰 인덱스로 이동!
-                                chatRoomList.add(0,chatRoomInfo);
+                                chatRoomList.add(0, chatRoomInfo);
 
                                 Log.e("이미 있는 채팅방 => 갱신 후", "" + chatRoomList.get(0).getLatestMsg());
 
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 스플래시 화면을 거치지 않고 채팅 리스트 화면으로 왔다면 설정파일의 데이터를 가져온다.
-        if(Config.api_server_addr == null){
+        if (Config.api_server_addr == null) {
             try {
                 new Config(getApplicationContext()).getConfigData();
             } catch (IOException e) {
@@ -235,14 +235,22 @@ public class MainActivity extends AppCompatActivity {
         // 딥링크로 왔다면 액티비티 띄우기
         deeplink();
 
-        // noti를 클릭해서 MainAct로 왔다면 채팅방으로 이동
+        // noti를 클릭해서 MainAct로 왔다면
         if (getIntent().getExtras() != null) {
             String chatRoomId = null;
+            String postWriterId = null;
+
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
                 Log.d("MainActivity: ", "Key: " + key + " Value: " + value);
+
                 if(key.contains("chatRoomId")){
                     chatRoomId = (String)value;
+                    break;
+                }
+
+                if(key.contains("postWriterId")){
+                    postWriterId = (String)value;
                     break;
                 }
             }
@@ -285,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                 ApiInterface login_api = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                 Call<String> call = login_api.login(id,pw);
                 String finalChatRoomId = chatRoomId;
+                String finalPostWriterId = postWriterId;
                 call.enqueue(new Callback<String>()
                 {
                     @Override
@@ -348,11 +357,15 @@ public class MainActivity extends AppCompatActivity {
                                                 UserInfo.profile_file_name = Config.cloudfront_addr+responseResult.get(0).getProfile_file_name();
                                             }
 
-
-                                            // 채팅방으로 이동
-                                            moveToChattingRoom(finalChatRoomId);
-
-
+                                            // 채팅방 알림 클릭 시
+                                            if(finalChatRoomId != null && !finalChatRoomId.equals("")){
+                                                // 채팅방으로 이동
+                                                moveToChattingRoom(finalChatRoomId);
+                                            } else if(finalPostWriterId != null && !finalPostWriterId.equals("")) {
+                                                // 게시물 작성 알림 클릭해서 들어온거라면
+                                                Log.d("게시물 노티 클릭해서 들어옴!","11");
+                                                moveToPostDetail(finalPostWriterId);
+                                            }
                                         }
                                         @Override
                                         public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
@@ -376,27 +389,31 @@ public class MainActivity extends AppCompatActivity {
         } else {
             FCMService.refreshToken(userId);
         }
+
+    }
+
+    private void moveToPostDetail(String finalPostWriterId) {
+        Intent post = new Intent(getApplicationContext(), SS_PostDetail.class);
+        post.putExtra("post_id", finalPostWriterId);
+        startActivity(post);
     }
 
     private void deeplink() {
         Bundle extras = getIntent().getExtras();
-        deep_type = "";
-        deep_id = "";
-        if(!(deep_type+deep_id).equals("")) {
-            deep_type = extras.getString("type");
-            deep_id = extras.getString("id");
-        }
+        deep_type = extras.getString("deep_type", "");
+        deep_id = extras.getString("deep_id", "");
+
 
         // 딥링크가 존재
-        if( 0 < (deep_type+deep_id).length() ){
+        if (!(deep_type + deep_id).equals("")) {
             // 타입 (커뮤니티, 게시물, 프로필) 어떤거로 이동할지 선택
             // 쿠팡 참고 결과 → 액티비티 스택 모두 제거함 ⇒ 스플래시에서 넘어올 때, 다 없앰 = 그냥 하면 됨
-            switch(deep_type){
+            switch (deep_type) {
                 case "community":
                     Intent com = new Intent(getApplicationContext(), Community_MainPage.class);
                     com.putExtra("com_id", deep_id);
                     startActivity(com);
-                break;
+                    break;
 
                 case "profile":
                     Intent profile = new Intent(getApplicationContext(), SS_Profile.class);
@@ -410,26 +427,26 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(post);
                     break;
 
-              default:
-                break;
+                default:
+                    break;
             }
 
-       }
+        }
 
     }
 
-    public void initialize(){
-        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+    public void initialize() {
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         userId = preferences.getString("user_id", "");
 
         // 채팅서비스와 연결한다.
-        if(!ChatService.IS_BOUND_MAIN_ACTIVITY) {
+        if (!ChatService.IS_BOUND_MAIN_ACTIVITY) {
             connectToService();
             Toast.makeText(MainActivity.this, "서비스와 연결", Toast.LENGTH_SHORT).show();
         }
         chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
 
-        FragmentTransaction transaction =  fragmentManager.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.home_frame, bottom1_fragment).commitAllowingStateLoss();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.home_bottom);
@@ -453,12 +470,12 @@ public class MainActivity extends AppCompatActivity {
         NaviTouch();
     }
 
-    private class ItemSelecedListener2 implements BottomNavigationView.OnNavigationItemSelectedListener{
+    private class ItemSelecedListener2 implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-            switch(item.getItemId()){
+            switch (item.getItemId()) {
                 case R.id.mm_home:
                     transaction.replace(R.id.home_frame, bottom1_fragment).commitAllowingStateLoss();
 
@@ -534,7 +551,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent email = new Intent(Intent.ACTION_SEND);
                 email.setType("plain/Text");
-                email.putExtra(Intent.EXTRA_EMAIL, "유저 아이디: "+UserInfo.user_id);
+                email.putExtra(Intent.EXTRA_EMAIL, "유저 아이디: " + UserInfo.user_id);
                 email.putExtra(Intent.EXTRA_SUBJECT, "<" + getString(R.string.app_name) + " 문의>");
                 email.putExtra(Intent.EXTRA_TEXT, "기기명:\n안드로이드 OS:\n내용:\n");
                 email.setType("message/rfc822");
@@ -547,69 +564,69 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 로그아웃 시 api 서버의 모든 토큰정보를 지워준다.
-                ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
-                Call<String> call = apiClient.logoutFromApiServer(userId);
-                call.enqueue(new Callback<String>()
-                {
-                    @RequiresApi(api = Build.VERSION_CODES.O)
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                    {
-                        if (response.isSuccessful() && response.body() != null)
-                        {
-                            if(response.body().equals("logout success")){
-                                // 로그아웃 시 채팅 서버의 모든 토큰정보를 지워준다.
-                                ChatApiInterface chatApiInterface = ChatApiClient.getApiClient(MainActivity.this).create(ChatApiInterface.class);
-                                Call<String> call2 = chatApiInterface.logoutFromChatServer(UserInfo.token, userId);
-                                call2.enqueue(new Callback<String>()
-                                {
-                                    @RequiresApi(api = Build.VERSION_CODES.O)
-                                    @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                                    {
-                                        if (response.isSuccessful() && response.body() != null)
-                                        {
-                                            if(response.body().equals("logout success")){
-                                                drawerLayout.closeDrawers();
-                                                Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
-                                                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                                                startActivity(toLogin);
-                                                finish();
-                                                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Log.e("채팅 서버 로그아웃 데이터 ", response.body());
-                                            }
-                                        } else {
-                                            Log.e("채팅 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
-                                        }
-                                    }
+//                ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
+//                Call<String> call = apiClient.logoutFromApiServer(userId);
+//                call.enqueue(new Callback<String>()
+//                {
+//                    @RequiresApi(api = Build.VERSION_CODES.O)
+//                    @Override
+//                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+//                    {
+//                        if (response.isSuccessful() && response.body() != null)
+//                        {
+//                            if(response.body().equals("logout success")){
+//                                // 로그아웃 시 채팅 서버의 모든 토큰정보를 지워준다.
+//                                ChatApiInterface chatApiInterface = ChatApiClient.getApiClient(MainActivity.this).create(ChatApiInterface.class);
+//                                Call<String> call2 = chatApiInterface.logoutFromChatServer(UserInfo.token, userId);
+//                                call2.enqueue(new Callback<String>()
+//                                {
+//                                    @RequiresApi(api = Build.VERSION_CODES.O)
+//                                    @Override
+//                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+//                                    {
+//                                        if (response.isSuccessful() && response.body() != null)
+//                                        {
+//                                            if(response.body().equals("logout success")){
+                drawerLayout.closeDrawers();
+                Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
+                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                startActivity(toLogin);
+                finish();
+                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
+//                                            } else {
+//                                                Log.e("채팅 서버 로그아웃 데이터 ", response.body());
+//                                            }
+//                                        } else {
+//                                            Log.e("채팅 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
+//                                        }
+//                                    }
 
-                                    @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                                    {
-                                        Log.e("채팅서버 로그아웃 시실패: ", "1111");
-                                    }
-                                });
-                            } else {
-                                    Log.e("api 서버 로그아웃 데이터 ", response.body());
-                            }
-                        } else {
-                            Log.e("api 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
-                        }
-                    }
+//                                    @Override
+//                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+//                                    {
+//                                        Log.e("채팅서버 로그아웃 시실패: ", "1111");
+//                                    }
+//                                });
+//                            } else {
+//                                    Log.e("api 서버 로그아웃 데이터 ", response.body());
+//                            }
+//                        } else {
+//                            Log.e("api 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
+//                        }
+//                    }
 
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                    {
-                        Log.e("api 서버 로그아웃 시실패: ", "1111");
-                    }
-                });
+//                    @Override
+//                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+//                    {
+//                        Log.e("api 서버 로그아웃 시실패: ", "1111");
+//                    }
+//                });
             }
         });
     }
 
     // 채팅서비스와 연결한다.
-    public void connectToService(){
+    public void connectToService() {
         // 서비스 커넥션 생성
         conn = new ServiceConnection() {
             // 서비스와 연결된 경우 호출
@@ -666,7 +683,7 @@ public class MainActivity extends AppCompatActivity {
         getApplicationContext().bindService(intent1, conn, Context.BIND_AUTO_CREATE);
     }
 
-    public void bindToService(){
+    public void bindToService() {
         // 서비스 커넥션 생성
         conn = new ServiceConnection() {
             // 서비스와 연결된 경우 호출
@@ -729,20 +746,17 @@ public class MainActivity extends AppCompatActivity {
     private void fillList() {
         ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
         Call<ArrayList<Chat_Room_Info>> call = apiClient.selectChatRoomListUsingUserId(userId);
-        call.enqueue(new Callback<ArrayList<Chat_Room_Info>>()
-        {
+        call.enqueue(new Callback<ArrayList<Chat_Room_Info>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
-            public void onResponse(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Response<ArrayList<Chat_Room_Info>> response)
-            {
-                if (response.isSuccessful() && response.body() != null)
-                {
+            public void onResponse(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Response<ArrayList<Chat_Room_Info>> response) {
+                if (response.isSuccessful() && response.body() != null) {
                     // 채팅방 리스트 - latestMsg에 들어있는 문자열은 마지막 채팅 메시지를 바이너리 형태로 저장한 것이다. 따라서 이것을 Chat_Item 형태로 변경해줘야 한다.
                     ArrayList<Chat_Room_Info> chatRoomList = response.body();
                     Log.e("채팅방 리스트 조회 성공: ", "1111");
 
                     //
-                    for(int i = 0; i < chatRoomList.size(); i++) {
+                    for (int i = 0; i < chatRoomList.size(); i++) {
                         // 채팅방 정보
                         Chat_Room_Info chatRoomInfo = chatRoomList.get(i);
 
@@ -754,7 +768,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("채팅 텍스트로 latestMsg 세팅(chatRoomId - " + chatRoomInfo.getChatRoomId() + "): ", latestMsg);
 
                         try {
-                            ChatService.mqttClient.subscribe("/topics/" + chatRoomInfo.getChatRoomId(),2);
+                            ChatService.mqttClient.subscribe("/topics/" + chatRoomInfo.getChatRoomId(), 2);
                         } catch (MqttException e) {
                             e.printStackTrace();
                         }
@@ -766,7 +780,7 @@ public class MainActivity extends AppCompatActivity {
                     chatRoomIdMap = new HashMap<>();
 
                     // chatRoomIdMap에 모든 채팅방 아이디와 마지막 메시지 아이디 넣어서 관리 => 채팅방 아이디, 마지막 메시지 아이디
-                    for(Chat_Room_Info chatRoomInfo : chatRoomList){
+                    for (Chat_Room_Info chatRoomInfo : chatRoomList) {
                         chatRoomIdMap.put(chatRoomInfo.getChatRoomId(), chatRoomInfo.getLatestMsgId());
                     }
                 } else {
@@ -775,23 +789,20 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Throwable t) {
                 Log.e("채팅방 리스트 조회 실패: ", "1111");
             }
         });
     }
 
     // 채팅방으로 이동!
-    public void moveToChattingRoom(String chatRoomId){
+    public void moveToChattingRoom(String chatRoomId) {
         // 채팅방으로 이동
         ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
         Call<ArrayList<OtherUserInfo>> call = apiClient.selectChatParticipantUsingChatRoomId(chatRoomId);
-        call.enqueue(new Callback<ArrayList<OtherUserInfo>>()
-        {
+        call.enqueue(new Callback<ArrayList<OtherUserInfo>>() {
             @Override
-            public void onResponse(@NonNull Call<ArrayList<OtherUserInfo>> call, @NonNull Response<ArrayList<OtherUserInfo>> response)
-            {
+            public void onResponse(@NonNull Call<ArrayList<OtherUserInfo>> call, @NonNull Response<ArrayList<OtherUserInfo>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     // 채팅방 아이디
                     ArrayList<OtherUserInfo> chatMemberList = response.body();
@@ -799,11 +810,9 @@ public class MainActivity extends AppCompatActivity {
                     // 채팅방 정보 가져오기
                     ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                     Call<ArrayList<Chat_Room_Info>> call2 = apiClient.selectChatRoomInfo(chatRoomId);
-                    call2.enqueue(new Callback<ArrayList<Chat_Room_Info>>()
-                    {
+                    call2.enqueue(new Callback<ArrayList<Chat_Room_Info>>() {
                         @Override
-                        public void onResponse(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Response<ArrayList<Chat_Room_Info>> response)
-                        {
+                        public void onResponse(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Response<ArrayList<Chat_Room_Info>> response) {
                             if (response.isSuccessful() && response.body() != null) {
                                 // 채팅방 아이디
                                 ArrayList<Chat_Room_Info> chatRoomInfoList = response.body();
@@ -820,19 +829,19 @@ public class MainActivity extends AppCompatActivity {
                                 intent.putExtra("chatRoomId", chatRoomId);
 
                                 // 내가 생성자라면
-                                if(chatCreator.equals(userId)){
+                                if (chatCreator.equals(userId)) {
                                     // 채팅방 명
-                                    intent.putExtra("chatRoomName",chatRoomInfo.getChatRoomNameCreator());
+                                    intent.putExtra("chatRoomName", chatRoomInfo.getChatRoomNameCreator());
                                 } else { // 생성자가 아니라면
                                     // 채팅방 명
-                                    intent.putExtra("chatRoomName",chatRoomInfo.getChatRoomNameOther());
+                                    intent.putExtra("chatRoomName", chatRoomInfo.getChatRoomNameOther());
                                 }
 
                                 // 새로 생성된 채팅방
-                                intent.putExtra("isNew",false);
+                                intent.putExtra("isNew", false);
 
                                 // 메시지 전송여부 - 기존에 생성된 채팅방이기 떄문에 메시지 전송은 한번이상 이뤄짐 따라서 true!
-                                intent.putExtra("isMsgTransfered",true);
+                                intent.putExtra("isMsgTransfered", true);
 
                                 // 채팅멤버 리스트
                                 intent.putExtra("chatMemberList", chatMemberList);
@@ -846,8 +855,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onFailure(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Throwable t)
-                        {
+                        public void onFailure(@NonNull Call<ArrayList<Chat_Room_Info>> call, @NonNull Throwable t) {
                             Log.e("채팅방 조회 실패", t.getMessage());
                         }
                     });
@@ -857,8 +865,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull Call<ArrayList<OtherUserInfo>> call, @NonNull Throwable t)
-            {
+            public void onFailure(@NonNull Call<ArrayList<OtherUserInfo>> call, @NonNull Throwable t) {
                 Log.e("채팅방 멤버리스트 조회 실패", t.getMessage());
             }
         });

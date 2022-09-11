@@ -82,7 +82,7 @@ public class MM_Issue extends AppCompatActivity {
 
         // 리소스 ID 선언
         initiallize();
-        // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
+        // 바텀 메뉴 - 스택 X 액티비티 이동
         bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();

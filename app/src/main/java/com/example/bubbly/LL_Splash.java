@@ -1,5 +1,7 @@
 package com.example.bubbly;
 
+import static android.content.Intent.ACTION_VIEW;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.security.crypto.EncryptedSharedPreferences;
@@ -7,6 +9,7 @@ import androidx.security.crypto.MasterKey;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -72,6 +75,13 @@ public class LL_Splash extends AppCompatActivity {
 
         lottieAnimationView.animate().setStartDelay(0);
 
+
+        Uri uri = this.getIntent().getData();
+
+        if (uri != null) {
+            deep_data = uri.toString();
+            checkDeep();
+        }
 
         // 딥링크를 받지 않는거라면...
         handler.postDelayed(new Runnable() {
@@ -196,22 +206,19 @@ public class LL_Splash extends AppCompatActivity {
 //                                    startActivity(new Intent(LL_Splash.this, MM_Home.class));
 
 
-
-
                                     Intent intent = new Intent(LL_Splash.this, MainActivity.class);
-                                    if(deep_data != null){
-                                        checkDeep(); // 딥링크 정보 확인 - deep_type & deep_id 설정함
-                                    }
-                                    intent.putExtra("deep_type", deep_type);
-                                    intent.putExtra("deep_id", deep_id);
+
+                                    intent.putExtra("deep_type", "" + deep_type);
+                                    intent.putExtra("deep_id", "" + deep_id);
+
                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                                     finishAffinity();
 
                                     // 만약 딥링크로 들어왔다면, 즉시 핸들러 종료하기
-                                    if(deep_data != null){
-                                        handler.removeMessages(0);
+                                      if (uri != null) {
+                                        handler.removeCallbacksAndMessages(0);
                                     }
 
 
@@ -232,11 +239,11 @@ public class LL_Splash extends AppCompatActivity {
 
     private void checkDeep() {
         // 딥링크 (type & id 파싱)
-        Intent intent = getIntent();
-        deep_data = null;
-        deep_data = intent.getDataString().replace("bubbly://deep/", "");
-        String[] typeid = deep_data.split("&");
+//        Intent intent = getIntent();
+        deep_data = deep_data.replace("bubbly://deep/", "");
+        String[] typeid = deep_data.split("_");
         deep_type = typeid[0]; // 타입 - 프로필, 커뮤니티, 게시물...
         deep_id = typeid[1]; // 아이디
+        Log.d("딥링크 테스트:", "딥링크 테스트:" + deep_type + "_" + deep_id);
     }
 }

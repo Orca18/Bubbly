@@ -198,7 +198,6 @@ public class LL_Login extends AppCompatActivity {
                                     editor.putString("user_id",splitId);
                                     editor.commit();
 
-                                    // TODO MM_액티비티 없애고, MainActivity로 변경
 //                                    startActivity(new Intent(LL_Login.this, MM_Home.class));
                                     startActivity(new Intent(LL_Login.this, MainActivity.class));
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);

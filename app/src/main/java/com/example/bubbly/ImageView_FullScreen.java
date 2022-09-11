@@ -36,10 +36,13 @@ public class ImageView_FullScreen extends AppCompatActivity {
         Intent intent = getIntent();
         String url = intent.getStringExtra("img_url");
 
+
         Glide.with(this)
                 .load(url)
                 .into(img);
+
         photoViewAttacher = new PhotoViewAttacher(img);
+
 
 
     }

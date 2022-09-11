@@ -21,7 +21,6 @@ import retrofit2.Response;
 
 public class ReplyModify extends AppCompatActivity {
 
-    ImageView iv_back;
     TextView tv_add;
     EditText et_reply_modify;
 
@@ -32,7 +31,6 @@ public class ReplyModify extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reply_modify);
 
-        iv_back = findViewById(R.id.iv_back);
         tv_add = findViewById(R.id.tv_add);
         et_reply_modify = findViewById(R.id.et_reply_modify);
 
@@ -44,12 +42,6 @@ public class ReplyModify extends AppCompatActivity {
 
         et_reply_modify.setText(comment_content);
 
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         tv_add.setOnClickListener(new View.OnClickListener() {
             @Override

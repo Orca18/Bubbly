@@ -141,7 +141,7 @@ public interface Kim_ApiInterface {
 
     // 커뮤니티 가입 여부
     @GET("community/selectCommunityJoinYn")
-    Call<List<Kim_Com_JoinYn_Response>> selectCommunityJoinYn(
+    Call<String> selectCommunityJoinYn(
             @Query("community_id") String community_id,
             @Query("user_id") String user_id
     );
