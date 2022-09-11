@@ -1,5 +1,7 @@
 package com.example.bubbly.kim_util_test;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,14 +21,25 @@ public class Kim_DateUtil {
 
 //        초       분   시
 //        1000    60  60
-        gap = (long) (gap / 1000);
+        gap = (long) (gap / 1000); //
+        long day = gap / 86400;
         long hour = gap / 3600;
         gap = gap % 3600;
         long min = gap / 60;
         long sec = gap % 60;
 
         if (hour > 24) {
-            ret = new SimpleDateFormat("HH").format(date);
+            ret = day + "d";
+            Log.d("시간", "time day"+ret);
+            
+//            if (day > 30){
+            //// 몇달전
+//            if () {
+                //// 몇년전
+//            }
+//            }
+            
+            
         } else if (hour > 0) {
             ret = hour + "h";
         } else if (min > 0) {
@@ -36,6 +49,7 @@ public class Kim_DateUtil {
         } else {
             ret = new SimpleDateFormat("HH").format(date);
         }
+        Log.d("dateutil","dateutil: "+ret);
         return ret;
 
     }
@@ -58,13 +72,15 @@ public class Kim_DateUtil {
 //        초       분   시
 //        1000    60  60
         gap = (long) (gap / 1000);
+        long day = gap / 86400;
         long hour = gap / 3600;
         gap = gap % 3600;
         long min = gap / 60;
         long sec = gap % 60;
 
         if (hour > 24) {
-            ret = new SimpleDateFormat("HH").format(date);
+            ret = day + "d";
+            Log.d("시간", "time day"+ret);
         } else if (hour > 0) {
             ret = hour + "h";
         } else if (min > 0) {

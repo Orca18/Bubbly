@@ -214,11 +214,20 @@ public class LL_Login extends AppCompatActivity {
                                     editor.putString("user_id",splitId);
                                     editor.commit();
 
-                                    // TODO MM_액티비티 없애고, MainActivity로 변경
 //                                    startActivity(new Intent(LL_Login.this, MM_Home.class));
-                                    startActivity(new Intent(LL_Login.this, MainActivity.class));
+
+
+
+                                    Intent intent = new Intent(LL_Login.this, MainActivity.class);
+
+                                    intent.putExtra("deep_type", "");
+                                    intent.putExtra("deep_id", "");
+
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                                    finish();
+                                    finishAffinity();
+
                                 }
                             }
                         }

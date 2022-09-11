@@ -34,6 +34,7 @@ import com.example.bubbly.Post_ApplyNFT_A;
 import com.example.bubbly.R;
 import com.example.bubbly.SS_PostDetail;
 import com.example.bubbly.SS_Profile;
+import com.example.bubbly.Video_FullScreen;
 import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.BottomSheetFragment;
 import com.example.bubbly.kim_util_test.BottomSheetFragment_ForAdapter;
@@ -95,6 +96,13 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
     }
 
+
+    @Override
+    public void onViewRecycled(@NonNull PostViewHolder holder) {
+        super.onViewRecycled(holder);
+        Log.d("onViewRecycled", "onViewRecycled 작동~~");
+    }
+
     @NonNull
     @Override
     public Post_Adapter.PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -131,17 +139,43 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
         String media_url = "";
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if(media_url == null){
-            //
+//
         }else{
             Log.d("디버그태그", "뭔데진짜:"+media_url);
-            try {
+                // TODO 타입별 미디어 View
                 media_url = Config.cloudfront_addr + post_response.getFile_save_names();
                 Log.d("디버그태그", "try 전:" + type);
                 if (type.equals("1")) {
                     Log.d("디버그태그", "엑소플레이어1:" + type);
                     Glide.with(mContext)
-                            .load(Config.cloudfront_addr + media_url)
+                            .load(media_url)
                             .fitCenter()
                             .into(holder.iv_media);
                 }
@@ -173,15 +207,21 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                     Log.d("디버그태그", "엑소플레이어0:" + type);
                 }
 
-            } catch (Exception e) {
-                Log.e("TAG", "Error : " + e.toString());
-            }
         }
+
+        // TODO 전체화면
+//        holder.vd_media.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent mIntent = new Intent(context, Video_FullScreen.class);
+//                context.startActivity(mIntent);
+//            }
+//        });
 
 
 
         holder.tv_user_id.setText(post_response.getLogin_id());
-//        holder.tv_com_name.setText(post_response.getCommunity_id());
+        holder.tv_com_name.setText(post_response.getCommunity_id());
 
 
         holder.iv_retweet_icon.setOnClickListener(new View.OnClickListener() {
@@ -198,8 +238,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = Config.api_server_addr + "/share/deep_community?id="+post_response.getPost_id();
-//                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
+                String sendMessage = Config.api_server_addr + "/share/?data=post_"+post_response.getPost_id();
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
                 Intent shareIntent = Intent.createChooser(intent, "share");
@@ -440,7 +479,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         Log.i("정보태그", "변경 좋아요 수 : " + like_count);
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
-                        // TODO 좋아요 추가 api
                         ApiInterface like_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
@@ -464,7 +502,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         Log.i("정보태그", "변경 좋아요 수 : " + like_count);
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
-                        // TODO 좋아요 감소 api
                         ApiInterface dislike_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
@@ -491,7 +528,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         Log.i("정보태그", "변경 좋아요 수 : " + like_count);
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = true;
-                        // TODO 좋아요 감소 api
                         ApiInterface dislike_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = dislike_api.dislike(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
@@ -516,7 +552,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                         Log.i("정보태그", "변경 좋아요 수 : " + like_count);
                         holder.tv_like_count.setText("" + like_count);
                         holder.like_check = false;
-                        // TODO 좋아요 추가 api
                         ApiInterface like_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
                         Call<String> call = like_api.like(post_response.getPost_id(), user_id);
                         call.enqueue(new Callback<String>() {
@@ -640,4 +675,14 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 //        void onItemClick(View view, int position);
 //    }
 
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

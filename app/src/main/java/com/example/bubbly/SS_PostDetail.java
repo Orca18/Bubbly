@@ -99,6 +99,7 @@ public class SS_PostDetail extends AppCompatActivity {
     String deep_parm;
 
     int likes;
+    String videoURL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +123,16 @@ public class SS_PostDetail extends AppCompatActivity {
                 createComment();
             }
         });
+
+        // TODO 전체화면으로
+//        vd_media.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent fullvd = new Intent(getApplicationContext(), Video_FullScreen.class);
+//                fullvd.putExtra("url", videoURL);
+//                startActivity(fullvd);
+//            }
+//        });
 
         selectCommentUsingPostId(); // 게시글 아이디로 댓글 조회
         selectPostUsingPostId(); // 게시글 아이디로 조회
@@ -221,12 +232,7 @@ public class SS_PostDetail extends AppCompatActivity {
 
         Intent intent = getIntent();
         post_id = intent.getStringExtra("post_id");
-        login_id = intent.getStringExtra("login_id");
-
-        if (intent.getData() != null) {
-            post_id = intent.getDataString().replace("bubbly1://3.39.84.115/", "");
-            Log.d("디버그태그", "리플레이스: " + post_id);
-        }
+//        login_id = intent.getStringExtra("login_id");
 
         iv_user_image = findViewById(R.id.iv_user_image);
         iv_media = findViewById(R.id.iv_media);
@@ -290,7 +296,7 @@ public class SS_PostDetail extends AppCompatActivity {
             public void onClick(View view) {
                 ClipboardManager cm = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 cm.setText(tv_content.getText());
-                Toast.makeText(getApplicationContext(), "복사", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "클립보드에 복사되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -301,7 +307,7 @@ public class SS_PostDetail extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = Config.api_server_addr + "/share/deep_post?id=" + post_id;
+                String sendMessage = Config.api_server_addr + "/share/?data=post_" + post_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
 
                 Intent shareIntent = Intent.createChooser(intent, "share");
@@ -388,7 +394,7 @@ public class SS_PostDetail extends AppCompatActivity {
 
 
                     owner_id = responseResultpost.get(0).getPost_writer_id();
-                    tv_user_id.setText(login_id);
+                    tv_user_id.setText(responseResultpost.get(0).getLogin_id());
                     tv_user_nick.setText(responseResultpost.get(0).getNick_name());
                     tv_content.setText(responseResultpost.get(0).getPost_contents());
                     likes = Integer.parseInt(responseResultpost.get(0).getLike_count());
@@ -413,7 +419,7 @@ public class SS_PostDetail extends AppCompatActivity {
                             .load(Config.cloudfront_addr + responseResultpost.get(0).getFile_save_names())
                             .into(iv_media);
 
-                    String videoURL = Config.cloudfront_addr + responseResultpost.get(0).getFile_save_names();
+                    videoURL = Config.cloudfront_addr + responseResultpost.get(0).getFile_save_names();
 
                     if (responseResultpost.get(0).getPost_type().equals("2")) {  // 동영상
                         vd_media.setVisibility(View.VISIBLE);
@@ -438,6 +444,7 @@ public class SS_PostDetail extends AppCompatActivity {
                         exoPlayer.prepare(mediaSource);
                         // 준비 완료시 재생 여부
                         exoPlayer.setPlayWhenReady(false);
+                        iv_media.setVisibility(View.GONE);
                     } else { // 이미지 또는 텍스트
                         Glide.with(SS_PostDetail.this)
                                 .load(Config.cloudfront_addr + responseResultpost.get(0).getFile_save_names())

@@ -51,9 +51,8 @@ import retrofit2.Response;
 import retrofit2.http.Multipart;
 
 public class ModifyProfile extends AppCompatActivity {
-    Toolbar toolbar;
     ImageButton bt_change_user_image;
-    ImageView iv_back,iv_user_image;
+    ImageView iv_user_image;
     EditText et_nick_modify, et_self_info_modify;
     Button bt_add;
 
@@ -63,17 +62,18 @@ public class ModifyProfile extends AppCompatActivity {
 
     //String user_id,getEmail_addr,getLogin_id,getPhone_num,update_user_image;
 
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_profile);
-        // 툴바
-        toolbar = findViewById(R.id.toolbar_modifyProfile);
+
+        toolbar = findViewById(R.id.modify_profile_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        iv_back = findViewById(R.id.iv_back);
         bt_change_user_image = findViewById(R.id.bt_change_user_image);
         iv_user_image = findViewById(R.id.iv_user_image);
         et_nick_modify = findViewById(R.id.et_nick_modify);
@@ -90,14 +90,6 @@ public class ModifyProfile extends AppCompatActivity {
             }
         });
 
-//        iv_back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent mIntent = new Intent(getApplicationContext(), MM_Profile.class);
-//                mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                startActivity(mIntent);
-//            }
-//        });
 
         bt_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +145,9 @@ public class ModifyProfile extends AppCompatActivity {
                                 @Override
                                 public void updateUserInfo() {
                                     Toast.makeText(getApplicationContext(), "회원 정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    Intent mIntent = new Intent(getApplicationContext(), MM_Profile.class);
+                                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                    startActivity(mIntent);
                                 }
                             });
                         }else{
@@ -346,4 +340,5 @@ public class ModifyProfile extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }
