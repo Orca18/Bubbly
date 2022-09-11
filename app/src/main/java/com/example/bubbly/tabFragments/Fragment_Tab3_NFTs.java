@@ -83,7 +83,7 @@ public class Fragment_Tab3_NFTs extends Fragment {
     private void selectNFT(){
         //nft결과값 customer toast로 띄우기 위해 adapter로 viewgroup 넘겨줌
         ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
-
+        recyclerView.setHasFixedSize(false); //nft마다 크기가 달라서 매번 다시 레이아웃 계산하도록 추가
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지

@@ -61,7 +61,7 @@ public class FCMService extends FirebaseMessagingService{
         }, 0);
 
         //새로운 게시글이 있을 경우 알림수신 -> 핸들러로 메세지 보냄
-        handler.sendEmptyMessage(0);
+        handler.sendEmptyMessage(100);
 
         /*_runOnUiThread(new Runnable() {
             public void run() {

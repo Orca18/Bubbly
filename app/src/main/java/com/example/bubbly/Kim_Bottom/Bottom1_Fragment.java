@@ -203,7 +203,7 @@ public class Bottom1_Fragment extends Fragment {
         @Override
         public void handleMessage(Message msg){
             switch (msg.what) {
-                case 0:
+                case 100:
                     showSnackBar();
                     break;
                 default:
