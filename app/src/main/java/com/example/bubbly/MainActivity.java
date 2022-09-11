@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
-                Log.d("MainActivity: ", "Key: " + key + " Value: " + value);
+                Log.d("MainActivity 확인확인: ", "Key: " + key + " Value: " + value);
 
 
                 if (key.contains("chatRoomId")) {
