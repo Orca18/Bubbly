@@ -219,6 +219,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("리프레시 토큰", "00-4");
+
 
         // 스플래시 화면을 거치지 않고 채팅 리스트 화면으로 왔다면 설정파일의 데이터를 가져온다.
         if (Config.api_server_addr == null) {
@@ -237,8 +239,12 @@ public class MainActivity extends AppCompatActivity {
         // 딥링크로 왔다면 액티비티 띄우기
         deeplink();
 
+        Log.d("리프레시 토큰", "00-3");
+
         // noti를 클릭해서 MainAct로 왔다면
-        if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras().get("chatRoomId") != null || getIntent().getExtras().get("postWriterId") != null) {
+            Log.d("리프레시 토큰", "00-1");
+
             String chatRoomId = null;
             String postWriterId = null;
 
@@ -249,11 +255,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if (key.contains("chatRoomId")) {
                     chatRoomId = (String) value;
-                    break;
-                }
-
-                if (key.contains("postWriterId")) {
-                    postWriterId = (String) value;
                     break;
                 }
 
@@ -390,7 +391,10 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         } else {
-            //FCMService.refreshToken(userId);
+            Log.d("리프레시 토큰", "00");
+
+            FCMService.refreshToken(userId);
+
         }
 
     }

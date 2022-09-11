@@ -89,6 +89,8 @@ public class FCMService extends FirebaseMessagingService{
 
     // FCM 토큰정보 갱신하기
     public static void refreshToken(String userId){
+        Log.d("리프레시 토큰", "11");
+
         // 토큰 정보 가져오기
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -98,6 +100,7 @@ public class FCMService extends FirebaseMessagingService{
                             Log.w("토큰 가져오기 실패", "Fetching FCM registration token failed", task.getException());
                             return;
                         }
+                        Log.d("리프레시 토큰", "22");
 
                         // Get new FCM registration token
                         String token = task.getResult();
@@ -123,6 +126,8 @@ public class FCMService extends FirebaseMessagingService{
                                         Log.e("새로운 토큰 저장완료!", response.body());
 
                                     }
+                                } else {
+                                    Log.e("토큰 갱신 완료!","지만 데이터 없음");
                                 }
                             }
 
