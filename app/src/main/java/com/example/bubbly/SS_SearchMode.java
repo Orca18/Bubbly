@@ -15,10 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.bubbly.controller.Ranking_Adapter;
 import com.example.bubbly.controller.RecentlySearched_Adapter;
-import com.example.bubbly.controller.RecentlySearched_Adapter_Callback;
-import com.example.bubbly.model.Ranking_Item;
+import com.example.bubbly.controller.Searched_Adapter_Callback;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
@@ -46,22 +44,47 @@ public class SS_SearchMode extends AppCompatActivity {
     SharedPreferences preferences;
     String user_id;
 
-    RecentlySearched_Adapter_Callback callback = new RecentlySearched_Adapter_Callback() {
+    Searched_Adapter_Callback callback = new Searched_Adapter_Callback() {
         @Override
         public void updateListRecentlySearched(String keyword) {
-            //역순으로 보여주었던 것을 저장시 올바른 순서로 저장하기 위해서 다시 역순(원래 순서)로 재배치
-            Collections.reverse(recentlySearchedList);
-            //검색 키워드 저장하기 - 로컬 (화면 이동 후 업데이트)
-            //만약 동일 키워드가 이미 존재하면 해당 키워드를 지우고 새로 추가
-            for(int i =0;i<recentlySearchedList.size();i++){
-                if(recentlySearchedList.get(i).equals(keyword)){
-                    recentlySearchedList.remove(i);
+            //검색 키워드 저장하기 - 서버
+            ApiInterface api = ApiClient.getApiClient(SS_SearchMode.this).create(ApiInterface.class);
+            Call<String> call = api.createSerarchText(user_id,keyword);
+            call.enqueue(new Callback<String>()
+            {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                {
+                    if (response.isSuccessful() && response.body() != null)
+                    {
+                        //검색 결과 페이지 이동
+                        Intent mIntent = new Intent(getApplicationContext(), SS_SearchResult.class);
+                        mIntent.putExtra("keyword", keyword);
+                        Log.i("정보태그", keyword);
+                        startActivity(mIntent);
+                        finish();
+
+                        //역순으로 보여주었던 것을 저장시 올바른 순서로 저장하기 위해서 다시 역순(원래 순서)로 재배치
+                        Collections.reverse(recentlySearchedList);
+                        //검색 키워드 저장하기 - 로컬 (화면 이동 후 업데이트)
+                        //만약 동일 키워드가 이미 존재하면 해당 키워드를 지우고 새로 추가
+                        for(int i =0;i<recentlySearchedList.size();i++){
+                            if(recentlySearchedList.get(i).equals(keyword)){
+                                recentlySearchedList.remove(i);
+                            }
+                        }
+                        recentlySearchedList.add(keyword);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("recentlySearched", recentlySearchedList.toString());
+                        editor.commit();
+                    }
+
                 }
-            }
-            recentlySearchedList.add(keyword);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("recentlySearched", recentlySearchedList.toString());
-            editor.commit();
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.e("에러", t.getMessage());
+                }
+            });
         }
     };
 

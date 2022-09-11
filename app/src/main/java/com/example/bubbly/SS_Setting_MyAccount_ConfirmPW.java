@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -28,7 +29,19 @@ import com.example.bubbly.retrofit.ApiInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.regex.Pattern;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,8 +89,11 @@ public class SS_Setting_MyAccount_ConfirmPW extends AppCompatActivity {
         bt_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiInterface login_api = ApiClient.getApiClient(SS_Setting_MyAccount_ConfirmPW.this).create(ApiInterface.class);
-                Call<String> call = login_api.login(UserInfo.login_id, et_password.getText().toString());
+                //비밀번호 암호화
+                String pw =  et_password.getText().toString();
+                String encryptedPW = encryption(pw);
+                ApiInterface login_api = ApiClient.getApiClient(getApplicationContext()).create(ApiInterface.class);
+                Call<String> call = login_api.login(UserInfo.login_id, encryptedPW);
                 call.enqueue(new Callback<String>()
                 {
                     @Override
@@ -165,6 +181,36 @@ public class SS_Setting_MyAccount_ConfirmPW extends AppCompatActivity {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String encryption(String str) {
+        String result = "";
+        byte[] ivBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        String secretKey = "Novarand";
+        byte[] plaintext = new byte[0];
+        try {
+            plaintext = str.getBytes("UTF-8");
+            AlgorithmParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            SecretKeySpec newKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, newKey, ivSpec);
+            result = Base64.encodeToString(cipher.doFinal(plaintext), 0);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

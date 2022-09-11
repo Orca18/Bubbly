@@ -51,7 +51,6 @@ import retrofit2.Response;
 import retrofit2.http.Multipart;
 
 public class ModifyProfile extends AppCompatActivity {
-
     ImageButton bt_change_user_image;
     ImageView iv_user_image;
     EditText et_nick_modify, et_self_info_modify;

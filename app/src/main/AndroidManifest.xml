@@ -107,6 +107,7 @@
         <activity
             android:name=".Community_Joined_List"
             android:exported="false" />
+
         <activity
             android:name=".SS_PostDetail"
             android:exported="false"

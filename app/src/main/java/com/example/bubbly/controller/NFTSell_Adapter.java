@@ -5,13 +5,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,13 +21,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
 import com.example.bubbly.model.NFTSell_Item;
-import com.example.bubbly.model.NFT_Item;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -74,7 +70,7 @@ public class NFTSell_Adapter extends RecyclerView.Adapter<NFTSell_Adapter.ViewHo
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    new Custom_Toast().createToast(context,v,"NFT 구매가 완료되었습니다.");
+                                    new SnackAndToast().createToast(context,"NFT 구매가 완료되었습니다.");
 
                                 }
                             }
@@ -82,7 +78,7 @@ public class NFTSell_Adapter extends RecyclerView.Adapter<NFTSell_Adapter.ViewHo
                             @Override
                             public void onFailure(Call<String> call, Throwable t) {
                                 Log.e("nft 구매 실패", t.getMessage());
-                                new Custom_Toast().createToast(context,v,"NFT 구매에 실패하였습니다.");
+                                new SnackAndToast().createToast(context,"NFT 구매에 실패하였습니다.");
                             }
                         });
 

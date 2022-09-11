@@ -388,7 +388,13 @@ public class Post_Create extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        finish();
+                        if(response.body().equals("success")){
+                            Log.e("게시글 수정", response.body().toString());
+                            setResult(RESULT_OK);
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 

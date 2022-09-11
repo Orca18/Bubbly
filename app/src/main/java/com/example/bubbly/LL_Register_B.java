@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
@@ -31,10 +32,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.AlgorithmParameterSpec;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -84,8 +100,11 @@ public class LL_Register_B extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(tv_id_check.getText().toString().equals("사용가능한 아이디입니다.") && tv_pw_check.getText().toString().equals("비밀번호가 일치합니다.")){
+                    //클라이언트 비밀번호 암호화
+                    String pw =  et_password.getText().toString();
+                    String encryptedPW = encryption(pw);
                     ApiInterface createUserInfo_api = ApiClient.getApiClient(LL_Register_B.this).create(ApiInterface.class);
-                    Call<String> call = createUserInfo_api.createUserInfo(et_id.getText().toString(), et_password.getText().toString(), user_email, user_phone, et_nick.getText().toString());
+                    Call<String> call = createUserInfo_api.createUserInfo(et_id.getText().toString(), encryptedPW, user_email, user_phone, et_nick.getText().toString());
                     call.enqueue(new Callback<String>()
                     {
                         @Override
@@ -98,7 +117,7 @@ public class LL_Register_B extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "희원가입 성공",Toast.LENGTH_SHORT).show();
                                     //현 시점에서 userID 알수 없어, 로그인해서 userID 가져오기
                                     ApiInterface login_api = ApiClient.getApiClient(LL_Register_B.this).create(ApiInterface.class);
-                                    Call<String> call_login = login_api.login(et_id.getText().toString(), et_password_check.getText().toString());
+                                    Call<String> call_login = login_api.login(et_id.getText().toString(), encryptedPW);
                                     call_login.enqueue(new Callback<String>()
                                     {
                                         @Override
@@ -419,6 +438,37 @@ public class LL_Register_B extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+
+    private String encryption(String str) {
+        String result = "";
+        byte[] ivBytes = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        String secretKey = "Novarand";
+        byte[] plaintext = new byte[0];
+        try {
+            plaintext = str.getBytes("UTF-8");
+            AlgorithmParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            SecretKeySpec newKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, newKey, ivSpec);
+            result = Base64.encodeToString(cipher.doFinal(plaintext), 0);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }

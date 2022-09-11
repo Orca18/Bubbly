@@ -85,6 +85,7 @@ public class Fragment_Tab3_NFTs_ss extends Fragment {
         ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
         list = new ArrayList<>();
         adapter = new NFTSell_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
+        recyclerView.setHasFixedSize(false);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);

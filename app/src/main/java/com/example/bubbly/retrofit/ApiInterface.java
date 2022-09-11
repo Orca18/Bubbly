@@ -349,7 +349,7 @@ public interface ApiInterface {
                          @Field("nftID") String nftID,
                          @Field("appID") String appID,
                          @Field("buyPrice") String buyPrice,
-                         @Field("buyer_id") String buyer_id);
+                         @Field("buyerId") String buyerId);
 
     @GET("nft/selectNftUsingNftId") // nft id로 정보 조회
     Call<String> selectNftUsingNftId(@Query("nft_id") String nft_id);
