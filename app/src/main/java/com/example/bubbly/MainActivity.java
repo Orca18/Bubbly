@@ -230,14 +230,22 @@ public class MainActivity extends AppCompatActivity {
 
         initialize();
 
-        // noti를 클릭해서 MainAct로 왔다면 채팅방으로 이동
+        // noti를 클릭해서 MainAct로 왔다면
         if (getIntent().getExtras() != null) {
             String chatRoomId = null;
+            String postWriterId = null;
+
             for (String key : getIntent().getExtras().keySet()) {
                 Object value = getIntent().getExtras().get(key);
                 Log.d("MainActivity: ", "Key: " + key + " Value: " + value);
+
                 if(key.contains("chatRoomId")){
                     chatRoomId = (String)value;
+                    break;
+                }
+
+                if(key.contains("postWriterId")){
+                    postWriterId = (String)value;
                     break;
                 }
             }
@@ -280,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
                 ApiInterface login_api = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                 Call<String> call = login_api.login(id,pw);
                 String finalChatRoomId = chatRoomId;
+                String finalPostWriterId = postWriterId;
                 call.enqueue(new Callback<String>()
                 {
                     @Override
@@ -343,11 +352,14 @@ public class MainActivity extends AppCompatActivity {
                                                 UserInfo.profile_file_name = Config.cloudfront_addr+responseResult.get(0).getProfile_file_name();
                                             }
 
-
-                                            // 채팅방으로 이동
-                                            moveToChattingRoom(finalChatRoomId);
-
-
+                                            // 채팅방 알림 클릭 시
+                                            if(finalChatRoomId != null && !finalChatRoomId.equals("")){
+                                                // 채팅방으로 이동
+                                                moveToChattingRoom(finalChatRoomId);
+                                            } else if(finalPostWriterId != null && !finalPostWriterId.equals("")) {
+                                                // 게시물 작성 알림 클릭해서 들어온거라면
+                                                Log.d("게시물 노티 클릭해서 들어옴!","11");
+                                            }
                                         }
                                         @Override
                                         public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
@@ -369,7 +381,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         } else {
-            FCMService.refreshToken(userId);
+            //FCMService.refreshToken(userId);
         }
     }
 
