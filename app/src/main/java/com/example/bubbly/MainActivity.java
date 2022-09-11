@@ -68,6 +68,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.HEAD;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -232,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
         initialize();
 
+
         // 딥링크로 왔다면 액티비티 띄우기
         deeplink();
 
@@ -244,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
                 Object value = getIntent().getExtras().get(key);
                 Log.d("MainActivity: ", "Key: " + key + " Value: " + value);
 
+
                 if (key.contains("chatRoomId")) {
                     chatRoomId = (String) value;
                     break;
@@ -251,6 +254,11 @@ public class MainActivity extends AppCompatActivity {
 
                 if (key.contains("postWriterId")) {
                     postWriterId = (String) value;
+                    break;
+                }
+
+                if(key.contains("postWriterId")){
+                    postWriterId = (String)value;
                     break;
                 }
             }
@@ -294,7 +302,8 @@ public class MainActivity extends AppCompatActivity {
                 Call<String> call = login_api.login(id, pw);
                 String finalChatRoomId = chatRoomId;
                 String finalPostWriterId = postWriterId;
-                call.enqueue(new Callback<String>() {
+                call.enqueue(new Callback<String>()
+                {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful() && response.body() != null) {
@@ -381,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         } else {
-            FCMService.refreshToken(userId);
+            //FCMService.refreshToken(userId);
         }
 
     }
