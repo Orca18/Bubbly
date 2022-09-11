@@ -40,7 +40,6 @@ public class Following extends AppCompatActivity {
 //    FollowingFragmentAdapter adapter;
 
     String uid;
-    ImageView iv_back;
     TextView tv_user_nick;
 
     Following_Adapter following_adapter;
@@ -55,15 +54,7 @@ public class Following extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
 
-        iv_back = findViewById(R.id.iv_back);
         tv_user_nick = findViewById(R.id.tv_user_nick);
-
-        iv_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         recyclerView = findViewById(R.id.tab_recyclerview);
         linearLayoutManager = new LinearLayoutManager(Following.this);

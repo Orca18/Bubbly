@@ -23,7 +23,7 @@
                 android:id="@+id/iv_user_image"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@drawable/profile" />
+                android:src="@drawable/blank_profile" />
 
 
             <View
@@ -160,7 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/spoqa_medium"
-            android:text="팔로잉" />
+            android:text="팔로우" />
 
         <View
             android:layout_width="16dp"

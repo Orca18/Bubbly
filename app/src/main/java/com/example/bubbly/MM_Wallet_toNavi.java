@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.bubbly.controller.SnackAndToast;
 import com.example.bubbly.controller.TransactionHistory_Adapter;
 import com.example.bubbly.model.TransactionHistory_Item;
 import com.example.bubbly.model.UserInfo;
@@ -58,7 +59,7 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
     private Toast toast;
 
     // 바텀 메뉴
-    LinearLayout bthome, btissue, btwallet, btmessage, btprofile;
+//    LinearLayout bthome, btissue, btwallet, btmessage, btprofile;
 
     // 툴바, 사이드 메뉴
     androidx.appcompat.widget.Toolbar toolbar;
@@ -107,14 +108,14 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_e_wallet_include_navi);
+        setContentView(R.layout.main_e_wallet_navi);
 
         // 리소스 ID 선언
         initiallize();
         //리사이클러뷰 설정
         setRecyclerView();
         // 바텀 메뉴 - 스택 X 액티비티 이동 (TODO 바텀 내비게이션으로 변경하는 작업)
-        bottomNavi();
+//        bottomNavi();
         // 클릭 리스너 모음 - 스택 O
         clickListeners();
         // 내비 터치
@@ -155,11 +156,11 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
         logout = view.findViewById(R.id.navi_header_logout);
 
         // 바텀 메뉴
-        bthome = findViewById(R.id.wallet_tohome);
-        btissue = findViewById(R.id.wallet_toissue);
-        btmessage = findViewById(R.id.wallet_tomessage);
-        btprofile = findViewById(R.id.wallet_toprofile);
-        btwallet = findViewById(R.id.wallet_towallet);
+//        bthome = findViewById(R.id.wallet_tohome);
+//        btissue = findViewById(R.id.wallet_toissue);
+//        btmessage = findViewById(R.id.wallet_tomessage);
+//        btprofile = findViewById(R.id.wallet_toprofile);
+//        btwallet = findViewById(R.id.wallet_towallet);
 
         //지갑 정보 보여주기
         bt_copy = findViewById(R.id.bt_copy_address_wallet);
@@ -225,55 +226,55 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
 
 
     // 바텀 메뉴 클릭
-    private void bottomNavi() {
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.wallet_tohome:
-                        Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
-                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent1);
-                        finish();
-                        break;
+//    private void bottomNavi() {
+//        View.OnClickListener clickListener = new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                switch (v.getId()) {
+//                    case R.id.wallet_tohome:
+//                        Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
+//                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(mIntent1);
+//                        finish();
+//                        break;
+//
+//                    case R.id.wallet_toissue:
+//                        Intent mIntent2 = new Intent(getApplicationContext(), MM_Issue.class);
+//                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(mIntent2);
+//                        finish();
+//                        break;
+//
+//                    case R.id.wallet_tomessage:
+//                        Intent mIntent3 = new Intent(getApplicationContext(), MM_Message.class);
+//                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(mIntent3);
+//                        finish();
+//                        break;
+//
+//                    case R.id.wallet_toprofile:
+//                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Profile.class);
+//                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                        startActivity(mIntent4);
+//                        finish();
+//                        break;
+//
+//                    case R.id.wallet_towallet:
+//                        break;
+//
+//                    default:
+//                        break;
+//                }
+//            }
+//        };
 
-                    case R.id.wallet_toissue:
-                        Intent mIntent2 = new Intent(getApplicationContext(), MM_Issue.class);
-                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent2);
-                        finish();
-                        break;
+//        bthome.setOnClickListener(clickListener);
+//        btissue.setOnClickListener(clickListener);
+//        btwallet.setOnClickListener(clickListener);
+//        btmessage.setOnClickListener(clickListener);
+//        btprofile.setOnClickListener(clickListener);
 
-                    case R.id.wallet_tomessage:
-                        Intent mIntent3 = new Intent(getApplicationContext(), MM_Message.class);
-                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent3);
-                        finish();
-                        break;
-
-                    case R.id.wallet_toprofile:
-                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Profile.class);
-                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        startActivity(mIntent4);
-                        finish();
-                        break;
-
-                    case R.id.wallet_towallet:
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        };
-
-        bthome.setOnClickListener(clickListener);
-        btissue.setOnClickListener(clickListener);
-        btwallet.setOnClickListener(clickListener);
-        btmessage.setOnClickListener(clickListener);
-        btprofile.setOnClickListener(clickListener);
-
-    }
+//    }
 
     // 내비 터치치
     private void NaviTouch() {
@@ -411,7 +412,7 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
                 builder.setPositiveButton("환전", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ApiInterface api = ApiClient.getApiClientTest("http://10.0.2.2:3000/").create(ApiInterface.class);
+                        ApiInterface api = ApiClient.getApiClient(MM_Wallet_toNavi.this).create(ApiInterface.class);
                         Call<String> call = api.exchange(address,UserInfo.mnemonic,input.getText().toString());
                         call.enqueue(new Callback<String>()
                         {

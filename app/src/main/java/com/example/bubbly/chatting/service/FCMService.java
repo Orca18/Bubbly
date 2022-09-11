@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -57,9 +56,12 @@ public class FCMService extends FirebaseMessagingService{
             @Override
             public void run()
             {
-                Toast.makeText(getApplicationContext(), "remoteMessage.getFrom()", Toast.LENGTH_LONG).show();
+//                Toast.makeText(getApplicationContext(), "remoteMessage.getFrom()", Toast.LENGTH_LONG).show();
             }
         }, 0);
+
+        //새로운 게시글이 있을 경우 알림수신 -> 핸들러로 메세지 보냄
+        handler.sendEmptyMessage(100);
 
         /*_runOnUiThread(new Runnable() {
             public void run() {

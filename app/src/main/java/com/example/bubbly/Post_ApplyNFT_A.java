@@ -21,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.config.Config;
-import com.example.bubbly.controller.Custom_Toast;
+import com.example.bubbly.controller.SnackAndToast;
 import com.example.bubbly.kim_util_test.Kim_DateUtil;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -29,15 +29,10 @@ import com.example.bubbly.retrofit.ApiInterface;
 import com.example.bubbly.retrofit.FileUtils;
 import com.example.bubbly.retrofit.post_Response;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -198,7 +193,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                 System.out.println("니모닉"+UserInfo.mnemonic+et_assetName.getText().toString()+uri+post_id+parts.get(0).body());
 
                 //파일 전송
-                ApiInterface api = ApiClient.getApiClient(Post_ApplyNFT_A.this).create(ApiInterface.class);
+                ApiInterface api = ApiClient.getApiClient(getApplicationContext()).create(ApiInterface.class);
                 Call<String> call = api.nftCreation(UserInfo.mnemonic,et_assetName.getText().toString(),"",UserInfo.user_id,post_id,parts);
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -207,7 +202,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                             if(response.body().equals("success")){
                                 //임시 저장 파일 삭제
                                 ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
-                                new Custom_Toast().createToast(getApplicationContext(),view,"NFT가 생성되었습니다.");
+                                new SnackAndToast().createToast(getApplicationContext(),"NFT가 생성되었습니다.");
                             }else{
                                 Log.e("nft 생성 실패","response fail");
                             }
@@ -219,7 +214,7 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                         Log.e("nft 생성 실패", t.getMessage());
                         file.delete();
                         ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
-                        new Custom_Toast().createToast(getApplicationContext(),view,"NFT 생성에 실패하었습니다.");
+                        new SnackAndToast().createToast(getApplicationContext(),"NFT 생성에 실패하었습니다.");
 
                     }
                 });

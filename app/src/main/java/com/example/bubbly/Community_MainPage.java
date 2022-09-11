@@ -1,4 +1,5 @@
 package com.example.bubbly;
+
 import androidx.annotation.NonNull;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -10,13 +11,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -27,7 +33,6 @@ import com.example.bubbly.config.Config;
 import com.example.bubbly.kim_util_test.Kim_ApiClient;
 import com.example.bubbly.kim_util_test.Kim_ApiInterface;
 import com.example.bubbly.kim_util_test.Kim_Com_Info_Response;
-import com.example.bubbly.kim_util_test.Kim_Com_JoinYn_Response;
 import com.example.bubbly.kim_util_test.Kim_Com_post_Response;
 import com.example.bubbly.kim_util_test.Kim_Post_Adapter;
 import com.example.bubbly.model.UserInfo;
@@ -44,6 +49,7 @@ public class Community_MainPage extends AppCompatActivity {
 
     String com_id;
     Toolbar toolbar;
+    ImageView bt_search;
     //////////////////////////////////////////////
     Kim_Post_Adapter post_adapter;
     ArrayList<Kim_Com_post_Response> postList;
@@ -78,6 +84,8 @@ public class Community_MainPage extends AppCompatActivity {
 
     String str_join_yn_truefalse;
 
+    Dialog dialog01;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,12 +96,7 @@ public class Community_MainPage extends AppCompatActivity {
         Intent intent = getIntent();
         com_id = intent.getStringExtra("com_id");
 
-        // TODO 인텐트로 온 경우, 예외처리하기
-        if(intent.getData() != null){
-            com_id = intent.getDataString().replace("bubbly2://3.39.84.115/","");
-        }
-
-        preferences = getSharedPreferences("novarand",MODE_PRIVATE);
+        preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
 
 
@@ -111,70 +114,42 @@ public class Community_MainPage extends AppCompatActivity {
 
     private void GetUserStatus() {
 
-        Log.d("디버그태그", "com_owner/user_id:"+com_owner+user_id);
-        if(com_owner.equals(user_id)){
+        Log.d("디버그태그", "com_owner/user_id:" + com_owner + user_id);
+        if (com_owner.equals(user_id)) {
             ll_join.setClickable(false);
             tv_join_yn.setText("관리자"); // 적당한 아이콘 찾아보기
             iv_join_yn.setImageResource(R.drawable.user_circle);
         } else {
-            Call<List<Kim_Com_JoinYn_Response>> call = api.selectCommunityJoinYn(com_id,user_id);
-            call.enqueue(new Callback<List<Kim_Com_JoinYn_Response>>() {
+
+
+            Call<String> call = api.selectCommunityJoinYn(com_id, user_id);
+            call.enqueue(new Callback<String>() {
                 @Override
-                public void onResponse(Call<List<Kim_Com_JoinYn_Response>> call, Response<List<Kim_Com_JoinYn_Response>> response) {
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        List<Kim_Com_JoinYn_Response> responseResult = response.body();
-                        str_join_yn_truefalse = responseResult.get(0).getJoin_yn();
+                        str_join_yn_truefalse = response.body();
                         setJoinButton();
                     }
                 }
+
                 @Override
-                public void onFailure(Call<List<Kim_Com_JoinYn_Response>> call, Throwable t) {
-                    Log.e("오류태그", "리스폰스 실패_joinyn");
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    Log.e("게시글 생성 에러", t.getMessage());
                 }
             });
-        };
-        
+        }
     }
 
-    private void setJoinButton() {
+    private void setJoinButton() { // 유저 가입 상태에 따라, TextView와 ImageView를 세팅한다.
+        // 가입 상태면 탈퇴 신청 (y/n) 다이얼로그 띄우기 ==> 어차피 처음에는 가입함으로 뜸
+        if (str_join_yn_truefalse.equals("true")) {
+            tv_join_yn.setText("참가중");
+            iv_join_yn.setImageResource(R.drawable.user_check);
+        }
         if (str_join_yn_truefalse.equals("false")) {        // 아직 회원이 아니라면, 가입 신청 버튼 띄우기
             tv_join_yn.setText("가입 신청"); // 적당한 아이콘 찾아보기
             iv_join_yn.setImageResource(R.drawable.user_plus);
-        } // 가입 상태면 탈퇴 신청 (y/n) 다이얼로그 띄우기 ==> 어차피 처음에는 가입함으로 뜸
-        
-        ll_join.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (str_join_yn_truefalse.equals("false")) {
-                    JoinComRequest(); // 가입 신청
-                } else { // 가입중이라, 탈퇴
-//                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            switch (which) {
-//                                case DialogInterface.BUTTON_POSITIVE:
-//                                    //Yes 버튼을 클릭했을때 처리 == 탈퇴하고, 가입 상태 n으로 변경
-                    ExitCom(); // 탈퇴
-                    str_join_yn_truefalse = "n";
-//                                    break;
-//
-//                                case DialogInterface.BUTTON_NEGATIVE:
-//                                    //No 버튼을 클릭했을때 처리
-//                                    break;
-//                            }
-//                        }
-//                    };
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-//                    builder.setMessage("탈퇴하시겠습니까?").setPositiveButton("예", dialogClickListener)
-//                            .setNegativeButton("아니요", dialogClickListener).show();
-
-
-                }
-
-            }
-        });
+        }
     }
 
 
@@ -185,7 +160,7 @@ public class Community_MainPage extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(getApplicationContext(), "가입 신청 보냄", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "가입 신청 보냄", Toast.LENGTH_SHORT).show();
 
                     JoinComReqestAuto();// 일단은 자동 승인
 
@@ -206,8 +181,9 @@ public class Community_MainPage extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(getApplicationContext(), "탈퇴 완료", Toast.LENGTH_SHORT).show();
-                    tv_join_yn.setText("가입 신청");
+                    str_join_yn_truefalse = "false";
+                    setJoinButton();
+//                    Toast.makeText(getApplicationContext(), "탈퇴 완료", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -225,10 +201,9 @@ public class Community_MainPage extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(getApplicationContext(), "가입 승인", Toast.LENGTH_SHORT).show();
-                    tv_join_yn.setText("가입됨");
-                    str_join_yn_truefalse = "y";
-                    iv_join_yn.setImageResource(R.drawable.user_check);
+                    str_join_yn_truefalse = "true";
+                    setJoinButton();
+//                    Toast.makeText(getApplicationContext(), "가입 승인", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -240,13 +215,14 @@ public class Community_MainPage extends AppCompatActivity {
     }
 
 
-
     private void initialize() {
         // 툴바
         toolbar = findViewById(R.id.com_main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //서치버튼
+        bt_search = findViewById(R.id.bt_search_com);
         // 게시글
         recyclerView = findViewById(R.id.com_main_recyclerview);
         // 나머지
@@ -265,6 +241,7 @@ public class Community_MainPage extends AppCompatActivity {
 
         swipeRefreshLayout = findViewById(R.id.com_main_refresh);
 
+
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -274,29 +251,47 @@ public class Community_MainPage extends AppCompatActivity {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
-        
+
     }
 
 
     private void listeners() {
 
+        //툴바 서치 버튼
+        bt_search.setOnClickListener(v -> {
+            Intent mIntent = new Intent(getApplicationContext(), SS_SearchMode.class);
+            mIntent.putExtra("keyword", "");
+            startActivity(mIntent);
+        });
+
+
         rl_title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(getApplicationContext(), Community_Info.class);
-                mIntent.putExtra("com_id",com_id);
-                mIntent.putExtra("com_name",com_name);
-                mIntent.putExtra("com_owner",com_owner);
+                mIntent.putExtra("com_id", com_id);
+                mIntent.putExtra("com_name", com_name);
+                mIntent.putExtra("com_owner", com_owner);
                 startActivity(mIntent);
             }
         });
 
+
+
+
         ll_join.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경
+            public void onClick(View v) {
+                if(str_join_yn_truefalse.equals("true")) { // 가입 중인 상태이므로, 탈퇴 신청하게 됨
+                    ExitDialog(); // 다이얼로그 보여주기
+
+                }
+                if(str_join_yn_truefalse.equals("false")){
+                    JoinComRequest();
+                }
             }
         });
+
 
         // 멤버 목록 보여주기
         ll_member.setOnClickListener(new View.OnClickListener() {
@@ -317,7 +312,7 @@ public class Community_MainPage extends AppCompatActivity {
                 intent.setType("text/plain");
 
                 // tODO 링크 넣기 String으로 받아서 넣기
-                String sendMessage = Config.api_server_addr + "/share/deep_community?id="+com_id;
+                String sendMessage = Config.api_server_addr + "/share/?data=community_" + com_id;
 
 //                String sendMessage = "10.0.2.2:3000/community?id="+com_id;
                 intent.putExtra(Intent.EXTRA_TEXT, sendMessage);
@@ -350,6 +345,33 @@ public class Community_MainPage extends AppCompatActivity {
         });
     }
 
+    private void ExitDialog() {
+        // 다이얼로그 초기화, 탙이틀 제거, xml 레이아웃 뷰
+        dialog01 = new Dialog(Community_MainPage.this);
+        dialog01.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog01.setContentView(R.layout.dialog01);
+
+        dialog01.show();
+        dialog01.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        Button noBtn = dialog01.findViewById(R.id.noBtn);
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), "아뇨", Toast.LENGTH_SHORT).show();
+                dialog01.dismiss();
+            }
+        });
+        dialog01.findViewById(R.id.yesBtn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ExitCom(); // 탈퇴 실행
+//                Toast.makeText(getApplicationContext(), "네",Toast.LENGTH_SHORT).show();
+                dialog01.dismiss();
+            }
+        });
+    }
+
 
     private void GetComInfo() {
         Call<List<Kim_Com_Info_Response>> call = api.selectCommunityUsingCommunityId(com_id);
@@ -357,16 +379,25 @@ public class Community_MainPage extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Kim_Com_Info_Response>> call, Response<List<Kim_Com_Info_Response>> response) {
 
+
                 com_name = response.body().get(0).getCommunity_name();
                 com_owner = response.body().get(0).getCommunity_owner_id();
-                title_name.setText(com_name);
-                Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
-                        .load(Config.cloudfront_addr+response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
-                        .centerCrop()
-                        .into(title_image);
 
-                // 커뮤니티 내 본인 정보 가져오기 (가입 상태)
-                GetUserStatus();
+                if (com_name == null) {
+                    Toast.makeText(getApplicationContext(), "존재하지 않는 커뮤니티입니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    title_name.setText(com_name);
+                    Glide.with(getApplicationContext()) //해당 환경의 Context나 객체 입력
+                            .load(Config.cloudfront_addr + response.body().get(0).getProfile_file_name()) //URL, URI 등등 이미지를 받아올 경로
+                            .centerCrop()
+                            .into(title_image);
+
+                    // 커뮤니티 내 본인 정보 가져오기 (가입 상태)
+                    GetUserStatus();
+                }
+
+
 
             }
 
@@ -377,16 +408,13 @@ public class Community_MainPage extends AppCompatActivity {
         });
 
 
-
         // 프로파일 이미지
-        if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
+        if (UserInfo.profile_file_name != null && !UserInfo.profile_file_name.equals("")) {
             Glide.with(getApplicationContext())
                     .load(UserInfo.profile_file_name)
                     .circleCrop()
                     .into(cv_profile);
         }
-
-
 
 
     }

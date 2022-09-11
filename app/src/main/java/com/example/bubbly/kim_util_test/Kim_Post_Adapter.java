@@ -195,7 +195,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
 
-        if (post_response.getProfile_file_name() == null) {
+        if(post_response.getProfile_file_name()==null){
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)
                     .load(R.drawable.blank_profile)
@@ -460,5 +460,14 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
 }

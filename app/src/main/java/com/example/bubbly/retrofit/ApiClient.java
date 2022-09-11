@@ -41,7 +41,6 @@ public class ApiClient {
     private static Retrofit retrofit;
     private static Retrofit retrofit2;
     private static Retrofit retrofit_pure_stake;
-    private static Retrofit retrofit_test;
 
     /*public static Retrofit getApiClient()
     {
@@ -203,10 +202,7 @@ public class ApiClient {
             }
         });
 
-        OkHttpClient okHttpClient = clientBuilder.connectTimeout(100, TimeUnit.SECONDS)
-                .readTimeout(100, TimeUnit.SECONDS)
-                .writeTimeout(100, TimeUnit.SECONDS)
-                .build();
+        OkHttpClient okHttpClient = clientBuilder.build();
 
 
         Gson gson = new GsonBuilder()
@@ -228,9 +224,9 @@ public class ApiClient {
     public static Retrofit getApiClientWithUrlInput(String url)
     {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
-        OkHttpClient okHttpClient = clientBuilder.connectTimeout(40, TimeUnit.SECONDS)
-                                                 .readTimeout(40, TimeUnit.SECONDS)
-                                                 .writeTimeout(40, TimeUnit.SECONDS)
+        OkHttpClient okHttpClient = clientBuilder.connectTimeout(100, TimeUnit.SECONDS)
+                                                 .readTimeout(100, TimeUnit.SECONDS)
+                                                 .writeTimeout(100, TimeUnit.SECONDS)
                                                  .build();
 
         Gson gson = new GsonBuilder()
@@ -247,30 +243,5 @@ public class ApiClient {
         }
         return retrofit_pure_stake;
     }
-
-    public static Retrofit getApiClientTest(String url)
-    {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
-
-
-        // timeout setting 해주기
-        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .connectTimeout(40, TimeUnit.SECONDS)
-                .readTimeout(40, TimeUnit.SECONDS)
-                .writeTimeout(40, TimeUnit.SECONDS)
-                .build();
-        if (retrofit_test == null) {
-            retrofit_test = new Retrofit.Builder()
-                    .baseUrl(url)
-                    .addConverterFactory(ScalarsConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .client(okHttpClient)
-                    .build();
-        }
-        return retrofit_test;
-    }
-
 
 }

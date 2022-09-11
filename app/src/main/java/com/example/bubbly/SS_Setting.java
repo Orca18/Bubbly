@@ -36,9 +36,9 @@ public class SS_Setting extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myaccount = findViewById(R.id.setting_option_myaccount);
-        accountsecure = findViewById(R.id.setting_option_myaccountsecurity);
-        myactive = findViewById(R.id.setting_option_myactivity);
-        security = findViewById(R.id.setting_option_security);
+//        accountsecure = findViewById(R.id.setting_option_myaccountsecurity);
+//        myactive = findViewById(R.id.setting_option_myactivity);
+//        security = findViewById(R.id.setting_option_security);
         notify = findViewById(R.id.setting_option_notify);
 
     }
@@ -54,29 +54,29 @@ public class SS_Setting extends AppCompatActivity {
             }
         });
 
-        accountsecure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasting();
-
-            }
-        });
-
-        myactive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasting();
-
-            }
-        });
-
-        security.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toasting();
-
-            }
-        });
+//        accountsecure.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toasting();
+//
+//            }
+//        });
+//
+//        myactive.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toasting();
+//
+//            }
+//        });
+//
+//        security.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toasting();
+//
+//            }
+//        });
 
         notify.setOnClickListener(new View.OnClickListener() {
             @Override

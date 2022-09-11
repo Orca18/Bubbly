@@ -58,6 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
                 android:orientation="horizontal"
+                android:background="@color/white"
                 android:padding="6dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -66,7 +67,7 @@
                     android:layout_height="54dp"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="14dp"
-                    android:src="@drawable/profile" />
+                    android:src="@drawable/blank_profile" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

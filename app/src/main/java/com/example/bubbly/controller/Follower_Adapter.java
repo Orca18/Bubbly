@@ -1,6 +1,7 @@
 package com.example.bubbly.controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.bubbly.R;
+import com.example.bubbly.SS_Profile;
 import com.example.bubbly.config.Config;
 import com.example.bubbly.model.UserInfo;
 import com.example.bubbly.retrofit.ApiClient;
@@ -69,6 +71,16 @@ public class Follower_Adapter extends RecyclerView.Adapter<Follower_Adapter.Foll
         }else{
             //아무 처리도 하지 않는다. default 프로필 이미지 나타남.
         }
+
+        holder.iv_user_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(mContext, SS_Profile.class);
+                mIntent.putExtra("user_id",follower_response.getFollower_id());
+                mContext.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
         //이미 팔로우한 사람을 중복 팔로우하지 않게 기존 팔로우 목록을 가져와서 저장한다.
         //followee id가 follower목록에 존재하면 맞팔로우버튼을 숨긴다.
         ApiInterface selectFolloweeList_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);

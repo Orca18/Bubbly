@@ -122,6 +122,11 @@ public class Post_Create extends AppCompatActivity {
         category_com_id = intent.getStringExtra("com_id");
         category_com_name = intent.getStringExtra("com_name");
 
+        if(category_com_id == null){
+            category_com_id = "0";
+            category_com_name = "내 피드";
+        }
+
         com.setText(category_com_name);
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
@@ -383,7 +388,13 @@ public class Post_Create extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        finish();
+                        if(response.body().equals("success")){
+                            Log.e("게시글 수정", response.body().toString());
+                            setResult(RESULT_OK);
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "게시글 등록에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 

@@ -84,123 +84,123 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-        <LinearLayout
-            android:id="@+id/wallet_bottom_menu"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom"
-            android:orientation="vertical">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/wallet_bottom_menu"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:orientation="vertical">-->
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.6dp"
-                android:background="#ccc" />
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0.6dp"-->
+<!--                android:background="#ccc" />-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@color/white"
-                android:paddingHorizontal="10dp">
-
-
-                <LinearLayout
-                    android:id="@+id/wallet_tohome"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@null"
-                        android:src="@drawable/ic_outline_home_24"
-                        app:tint="@color/black" />
-
-                </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:background="@color/white"-->
+<!--                android:paddingHorizontal="10dp">-->
 
 
-                <LinearLayout
-                    android:id="@+id/wallet_toissue"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/wallet_tohome"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:clickable="true"-->
+<!--                    android:orientation="vertical">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@null"
-                        android:src="@drawable/ic_outline_search_24"
-                        app:tint="@color/black" />
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@null"-->
+<!--                        android:src="@drawable/ic_outline_home_24"-->
+<!--                        app:tint="@color/black" />-->
 
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/wallet_towallet"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@null"
-                        android:src="@drawable/ic_baseline_account_balance_wallet_24"
-                        app:tint="@color/black" />
-
-                </LinearLayout>
+<!--                </LinearLayout>-->
 
 
-                <LinearLayout
-                    android:id="@+id/wallet_tomessage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/wallet_toissue"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:clickable="true"-->
+<!--                    android:orientation="vertical">-->
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@null"
-                        android:src="@drawable/ic_baseline_mail_outline_24"
-                        app:tint="@color/black" />
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@null"-->
+<!--                        android:src="@drawable/ic_outline_search_24"-->
+<!--                        app:tint="@color/black" />-->
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/wallet_toprofile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@null"
-                        android:src="@drawable/ic_outline_person_24"
-                        app:tint="@color/black" />
-
-                </LinearLayout>
+<!--                </LinearLayout>-->
 
 
-            </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/wallet_towallet"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:clickable="true"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@null"-->
+<!--                        android:src="@drawable/ic_baseline_account_balance_wallet_24"-->
+<!--                        app:tint="@color/black" />-->
+
+<!--                </LinearLayout>-->
 
 
-        </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/wallet_tomessage"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:clickable="true"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@null"-->
+<!--                        android:src="@drawable/ic_baseline_mail_outline_24"-->
+<!--                        app:tint="@color/black" />-->
+
+<!--                </LinearLayout>-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/wallet_toprofile"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:clickable="true"-->
+<!--                    android:orientation="vertical">-->
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:background="@null"-->
+<!--                        android:src="@drawable/ic_outline_person_24"-->
+<!--                        app:tint="@color/black" />-->
+
+<!--                </LinearLayout>-->
+
+
+<!--            </LinearLayout>-->
+
+
+<!--        </LinearLayout>-->
     </FrameLayout>
 
 </LinearLayout>
