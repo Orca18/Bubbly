@@ -85,6 +85,7 @@
                     <include layout="@layout/bottom4_frame_include" />
 
                     <!--                </androidx.core.widget.NestedScrollView>-->
+
                 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
             </RelativeLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>

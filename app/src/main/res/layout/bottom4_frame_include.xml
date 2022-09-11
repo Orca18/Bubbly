@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:layout_marginTop="6dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -144,43 +145,60 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
-            android:textSize="16dp"
-            android:id="@+id/tv_following"
-            android:textColor="@color/text_black"
+        <LinearLayout
+            android:id="@+id/ll_toFollow"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spoqa_bold"
-            android:paddingHorizontal="4dp"
-            android:text="0" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:textSize="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spoqa_medium"
-            android:text="팔로우" />
+            <TextView
+                android:textSize="16dp"
+                android:id="@+id/tv_following"
+                android:textColor="@color/text_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/spoqa_bold"
+                android:paddingHorizontal="4dp"
+                android:text="0" />
+
+            <TextView
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="팔로우" />
+        </LinearLayout>
+
+
 
         <View
             android:layout_width="16dp"
             android:layout_height="0dp"/>
 
-        <TextView
-            android:textSize="16dp"
-            android:id="@+id/tv_follower"
-            android:textColor="@color/text_black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spoqa_bold"
-            android:paddingHorizontal="4dp"
-            android:text="0" />
 
-        <TextView
-            android:textSize="16dp"
+        <LinearLayout
+            android:id="@+id/ll_toFollower"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/spoqa_medium"
-            android:text="팔로워" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="16dp"
+                android:id="@+id/tv_follower"
+                android:textColor="@color/text_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/spoqa_bold"
+                android:paddingHorizontal="4dp"
+                android:text="0" />
+
+            <TextView
+                android:textSize="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/spoqa_medium"
+                android:text="팔로워" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 

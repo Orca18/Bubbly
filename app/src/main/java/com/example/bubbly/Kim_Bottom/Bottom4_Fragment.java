@@ -74,6 +74,8 @@ public class Bottom4_Fragment extends Fragment {
     // 게시글 작성 페이지로 이동
     ImageView toCreate;
 
+    LinearLayout ll_following, ll_follower;
+
 
     @Nullable
     @Override
@@ -174,6 +176,10 @@ public class Bottom4_Fragment extends Fragment {
 
         // 게시글 작성
         toCreate = view.findViewById(R.id.bottom4_toCreate);
+
+
+        ll_following = view.findViewById(R.id.ll_toFollow);
+        ll_follower = view.findViewById(R.id.ll_toFollower);
     }
 
     //프로필데이터 가져와서 디스플레이하기
@@ -273,7 +279,7 @@ public class Bottom4_Fragment extends Fragment {
 
 
         //팔로잉 보기 (인텐트로 넘기지 않고 Following class에서 svr로 새로 요청해서 받을 것)
-        tv_following.setOnClickListener(new View.OnClickListener() {
+        ll_following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent mIntent = new Intent(getContext(), Following.class);
@@ -282,7 +288,7 @@ public class Bottom4_Fragment extends Fragment {
         });
 
         //팔로워 보기
-        tv_follower.setOnClickListener(new View.OnClickListener() {
+        ll_follower.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent mIntent = new Intent(getContext(), Follower.class);
