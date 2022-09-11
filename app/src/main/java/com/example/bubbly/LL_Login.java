@@ -199,9 +199,19 @@ public class LL_Login extends AppCompatActivity {
                                     editor.commit();
 
 //                                    startActivity(new Intent(LL_Login.this, MM_Home.class));
-                                    startActivity(new Intent(LL_Login.this, MainActivity.class));
+
+
+
+                                    Intent intent = new Intent(LL_Login.this, MainActivity.class);
+
+                                    intent.putExtra("deep_type", "");
+                                    intent.putExtra("deep_id", "");
+
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
                                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                                    finish();
+                                    finishAffinity();
+
                                 }
                             }
                         }

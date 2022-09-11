@@ -244,27 +244,27 @@ public class MainActivity extends AppCompatActivity {
                 Object value = getIntent().getExtras().get(key);
                 Log.d("MainActivity: ", "Key: " + key + " Value: " + value);
 
-                if(key.contains("chatRoomId")){
-                    chatRoomId = (String)value;
+                if (key.contains("chatRoomId")) {
+                    chatRoomId = (String) value;
                     break;
                 }
 
-                if(key.contains("postWriterId")){
-                    postWriterId = (String)value;
+                if (key.contains("postWriterId")) {
+                    postWriterId = (String) value;
                     break;
                 }
             }
 
             // 서비스와 연결이 되어있다면 즉, 백그라운드에서 noti를 클릭해서 MainAct를 다시 시작했다면
             // 이전 메인 액티비티-서비스와의 연결을 끊고 새로운 메인액티비티-서비스 연결을 만들어 준다.
-            if(ChatService.IS_BOUND_MAIN_ACTIVITY){
+            if (ChatService.IS_BOUND_MAIN_ACTIVITY) {
                 // 서비스가 이미 실행중이라면 다시 binde만 시켜준다!
                 bindToService();
             }
 
             //쉐어드프리퍼런스에서 로그인정보 가져오기
-            String id="";
-            String pw="";
+            String id = "";
+            String pw = "";
             MasterKey masterkey = null;
             try {
                 masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
@@ -276,37 +276,33 @@ public class MainActivity extends AppCompatActivity {
                                 masterkey,
                                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-                id = sharedPreferences.getString("id","");
-                pw = sharedPreferences.getString("pw","");
+                id = sharedPreferences.getString("id", "");
+                pw = sharedPreferences.getString("pw", "");
             } catch (GeneralSecurityException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(id.equals("")&pw.equals("")){
+            if (id.equals("") & pw.equals("")) {
                 //만약 쉐어드프리퍼런스에 저장된 사용자 정보가 없으면 로그인 페이지로 이동
                 startActivity(new Intent(MainActivity.this, LL_Login.class));
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 finish();
-            }else{
+            } else {
                 //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
                 ApiInterface login_api = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
-                Call<String> call = login_api.login(id,pw);
+                Call<String> call = login_api.login(id, pw);
                 String finalChatRoomId = chatRoomId;
                 String finalPostWriterId = postWriterId;
-                call.enqueue(new Callback<String>()
-                {
+                call.enqueue(new Callback<String>() {
                     @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                    {
-                        if (response.isSuccessful() && response.body() != null)
-                        {
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.isSuccessful() && response.body() != null) {
                             Log.e("로그인 데이터", response.body().toString());
-                            if(response.body().toString().equals("fail")){
-                                Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
-                            }
-                            else{
-                                Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
+                            if (response.body().toString().equals("fail")) {
+                                Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "로그인 성공", Toast.LENGTH_SHORT).show();
                                 //수신한 데이터를 json으로 파싱한다.
                                 JSONObject json = null;
                                 try {
@@ -327,8 +323,8 @@ public class MainActivity extends AppCompatActivity {
                                                         masterkey,
                                                         EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
-                                        String mnemonic = sharedPreferences.getString("mnemonic","");
-                                        Log.e("니모닉",mnemonic);
+                                        String mnemonic = sharedPreferences.getString("mnemonic", "");
+                                        Log.e("니모닉", mnemonic);
                                         UserInfo.mnemonic = mnemonic;
                                     } catch (GeneralSecurityException e) {
                                         e.printStackTrace();
@@ -336,12 +332,10 @@ public class MainActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                     //회원정보를 요청한다.
-                                    Call<List<user_Response>> call_userInfo = login_api.selectUserInfo(""+user_id);
-                                    call_userInfo.enqueue(new Callback<List<user_Response>>()
-                                    {
+                                    Call<List<user_Response>> call_userInfo = login_api.selectUserInfo("" + user_id);
+                                    call_userInfo.enqueue(new Callback<List<user_Response>>() {
                                         @Override
-                                        public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response)
-                                        {
+                                        public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response) {
                                             System.out.println(response.body());
                                             //수신한 회원정보를 스태틱으로 저장한다.
                                             List<user_Response> responseResult = response.body();
@@ -353,23 +347,23 @@ public class MainActivity extends AppCompatActivity {
                                             UserInfo.user_nick = responseResult.get(0).getUser_nick();
                                             UserInfo.self_info = responseResult.get(0).getSelf_info();
                                             UserInfo.token = responseResult.get(0).getToken();
-                                            if(responseResult.get(0).getProfile_file_name()!=null && !responseResult.get(0).getProfile_file_name().equals("")){
-                                                UserInfo.profile_file_name = Config.cloudfront_addr+responseResult.get(0).getProfile_file_name();
+                                            if (responseResult.get(0).getProfile_file_name() != null && !responseResult.get(0).getProfile_file_name().equals("")) {
+                                                UserInfo.profile_file_name = Config.cloudfront_addr + responseResult.get(0).getProfile_file_name();
                                             }
 
                                             // 채팅방 알림 클릭 시
-                                            if(finalChatRoomId != null && !finalChatRoomId.equals("")){
+                                            if (finalChatRoomId != null && !finalChatRoomId.equals("")) {
                                                 // 채팅방으로 이동
                                                 moveToChattingRoom(finalChatRoomId);
-                                            } else if(finalPostWriterId != null && !finalPostWriterId.equals("")) {
+                                            } else if (finalPostWriterId != null && !finalPostWriterId.equals("")) {
                                                 // 게시물 작성 알림 클릭해서 들어온거라면
-                                                Log.d("게시물 노티 클릭해서 들어옴!","11");
+                                                Log.d("게시물 노티 클릭해서 들어옴!", "11");
                                                 moveToPostDetail(finalPostWriterId);
                                             }
                                         }
+
                                         @Override
-                                        public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
-                                        {
+                                        public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t) {
                                             Log.e("에러", t.getMessage());
                                         }
                                     });
@@ -379,9 +373,9 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                     }
+
                     @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                    {
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                         Log.e("로그인 에러", t.getMessage());
                     }
                 });
@@ -399,15 +393,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void deeplink() {
+
         Bundle extras = getIntent().getExtras();
         deep_type = extras.getString("deep_type", "");
         deep_id = extras.getString("deep_id", "");
 
 
         // 딥링크가 존재
-        if (!(deep_type + deep_id).equals("")) {
+        if (deep_type != null) {
             // 타입 (커뮤니티, 게시물, 프로필) 어떤거로 이동할지 선택
             // 쿠팡 참고 결과 → 액티비티 스택 모두 제거함 ⇒ 스플래시에서 넘어올 때, 다 없앰 = 그냥 하면 됨
+
             switch (deep_type) {
                 case "community":
                     Intent com = new Intent(getApplicationContext(), Community_MainPage.class);
