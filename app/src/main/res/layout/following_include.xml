@@ -38,7 +38,7 @@
             </ScrollView>
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/wallet_toolbar"
+                android:id="@+id/following_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
