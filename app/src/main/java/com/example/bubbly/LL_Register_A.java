@@ -20,9 +20,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bubbly.config.Config;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 import retrofit2.Call;
@@ -296,14 +300,32 @@ public class LL_Register_A extends AppCompatActivity {
         tv_privacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayTermsWithWebView("개인정보처리방침","http://3.39.84.115:80/share/privacyPolicy");
+                if(Config.api_server_addr == null){
+                    try {
+                        new Config(getApplicationContext()).getConfigData();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                displayTermsWithWebView("개인정보처리방침",Config.api_server_addr+"share/privacyPolicy");
             }
         });
 
         tv_termsToUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayTermsWithWebView("이용약관","http://3.39.84.115:80/share/termsToUse");
+                if(Config.api_server_addr == null){
+                    try {
+                        new Config(getApplicationContext()).getConfigData();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                displayTermsWithWebView("이용약관",Config.api_server_addr+"share/termsToUse");
             }
         });
     } // onCreate 닫는곳
