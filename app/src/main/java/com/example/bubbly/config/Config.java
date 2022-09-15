@@ -29,9 +29,12 @@ public class Config {
     public void getConfigData() throws IOException, JSONException {
         AssetManager assetManager= context.getAssets();
 
-        // 테섭, 실섭에 따라 다르게 하기
+        // 테스트 서버 접속 시
         //InputStream is= assetManager.open("config.json");
+
+        // 실서버 접속 시
         InputStream is= assetManager.open("config_prod.json");
+
         InputStreamReader isr= new InputStreamReader(is);
         BufferedReader reader= new BufferedReader(isr);
 
