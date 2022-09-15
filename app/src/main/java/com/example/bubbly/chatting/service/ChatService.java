@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 
 import com.example.bubbly.chatting.util.ChatUtil;
 import com.example.bubbly.chatting.util.GetDate;
+import com.example.bubbly.config.Config;
 import com.example.bubbly.model.Chat_Item;
 import com.example.bubbly.model.Chat_Room_Cre_Or_Del;
 import com.example.bubbly.model.UserInfo;
@@ -64,7 +65,7 @@ public class ChatService extends Service {
     public static boolean IS_BOUND_CHATTING_ROOM = false;
 
     // 채팅서버 주소
-    private String ServerIP = "tcp://43.200.189.111:1883";
+    private String ServerIP = Config.mqtt_server;
 
     // 채팅서버(메시지 브로커)와 연결할 MQTT 클라이언트 객체
     public static MqttClient mqttClient = null;
@@ -345,7 +346,7 @@ public class ChatService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        Toast.makeText(getApplicationContext(), "binding", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "binding", Toast.LENGTH_SHORT).show();
 
         // 메신저의 매개변수로 핸들러를 받는 구나
         mServiceMessenger = new Messenger(new IncomingHandler()); // 매신저의 매개변수로 핸들러

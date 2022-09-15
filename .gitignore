@@ -156,4 +156,6 @@ fabric.properties
 
 app/src/main/assets/config.json
 
+app/src/main/assets/config_prod.json
+
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,java
