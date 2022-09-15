@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
         // 채팅서비스와 연결한다.
         if (!ChatService.IS_BOUND_MAIN_ACTIVITY) {
             connectToService();
-            Toast.makeText(MainActivity.this, "서비스와 연결", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "서비스와 연결", Toast.LENGTH_SHORT).show();
         }
         chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
 

@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bubbly.config.Config;
 import com.example.bubbly.retrofit.ApiClient;
 import com.example.bubbly.retrofit.ApiInterface;
 
@@ -296,14 +297,14 @@ public class LL_Register_A extends AppCompatActivity {
         tv_privacyPolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayTermsWithWebView("개인정보처리방침","http://3.39.84.115:80/share/privacyPolicy");
+                displayTermsWithWebView("개인정보처리방침", Config.api_server_addr + "/share/privacyPolicy");
             }
         });
 
         tv_termsToUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayTermsWithWebView("이용약관","http://3.39.84.115:80/share/termsToUse");
+                displayTermsWithWebView("이용약관",Config.api_server_addr + "/share/termsToUse");
             }
         });
     } // onCreate 닫는곳
