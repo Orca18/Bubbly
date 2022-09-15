@@ -2,6 +2,7 @@ package com.example.bubbly;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -49,11 +50,18 @@ public class Following extends AppCompatActivity {
     RecyclerView recyclerView;
     private Parcelable recyclerViewState;
 
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_following);
+
+
+        toolbar = findViewById(R.id.following_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         tv_user_nick = findViewById(R.id.tv_user_nick);
 

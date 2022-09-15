@@ -19,6 +19,8 @@ public class Config {
     public static String aws_access_key = null;
     public static String aws_secret_key = null;
     public static String cloudfront_addr = null;
+    public static String mqtt_server = null;
+    public static String s3_bucket_name = null;
 
     public Config(Context context) throws IOException, JSONException {
         this.context = context;
@@ -27,7 +29,12 @@ public class Config {
     public void getConfigData() throws IOException, JSONException {
         AssetManager assetManager= context.getAssets();
 
-        InputStream is= assetManager.open("config.json");
+        // 테스트 서버 접속 시
+        //InputStream is= assetManager.open("config.json");
+
+        // 실서버 접속 시
+        InputStream is= assetManager.open("config_prod.json");
+
         InputStreamReader isr= new InputStreamReader(is);
         BufferedReader reader= new BufferedReader(isr);
 
@@ -47,5 +54,7 @@ public class Config {
         aws_access_key = jsonObj.getString("aws_access_key");
         aws_secret_key = jsonObj.getString("aws_secret_key");
         cloudfront_addr = jsonObj.getString("cloudfront_addr");
+        mqtt_server = jsonObj.getString("mqtt_server");
+        s3_bucket_name = jsonObj.getString("s3_bucket_name");
     }
 }

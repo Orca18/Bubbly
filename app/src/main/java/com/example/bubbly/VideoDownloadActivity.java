@@ -105,7 +105,7 @@ public class VideoDownloadActivity extends AppCompatActivity {
                 // 동영상 확장자
                 String extension = videoFileName.substring(videoFileName.indexOf("."));
 
-                String videoFileName = GetDate.getTodayDateWithTime().replace(":", "-").replace(" ", "") + extension;
+                String videoFileName2 = GetDate.getTodayDateWithTime().replace(":", "-").replace(" ", "") + extension;
 
                 File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                         + "/bubbly");
@@ -116,14 +116,14 @@ public class VideoDownloadActivity extends AppCompatActivity {
                 }
 
                 if (success) {
-                    File videoFile = new File(storageDir, videoFileName);
+                    File videoFile = new File(storageDir, videoFileName2);
                     try {
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    TransferObserver downloadObserver = transferUtility.download("bubbly-s3", "aca6ebcc2fd5831b419bc1399ec200e9.mp4"
+                    TransferObserver downloadObserver = transferUtility.download(Config.s3_bucket_name, videoFileName
                             , videoFile);
 
                     downloadObserver.setTransferListener(new TransferListener() {

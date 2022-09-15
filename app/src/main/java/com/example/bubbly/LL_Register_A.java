@@ -309,7 +309,7 @@ public class LL_Register_A extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                displayTermsWithWebView("개인정보처리방침",Config.api_server_addr+"share/privacyPolicy");
+                displayTermsWithWebView("개인정보처리방침",Config.api_server_addr+"/share/privacyPolicy");
             }
         });
 
@@ -325,7 +325,7 @@ public class LL_Register_A extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-                displayTermsWithWebView("이용약관",Config.api_server_addr+"share/termsToUse");
+                displayTermsWithWebView("이용약관",Config.api_server_addr+"/share/termsToUse");
             }
         });
     } // onCreate 닫는곳
