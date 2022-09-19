@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Community_MainPage">
+    tools:context="com.mainnet.bubbly.Community_MainPage">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/com_main_toolbar"

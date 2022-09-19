@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1071920047558:android:ba8af63afd8e1157dabec7",
         "android_client_info": {
-          "package_name": "com.example.bubbly"
+          "package_name": "com.mainnet.bubbly"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "1071920047558-88ugd57fpamive89bqel8k4svpj2aoik.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.bubbly",
+            "package_name": "com.mainnet.bubbly",
             "certificate_hash": "16e2811d1801c516969adfa8bdb38e4338a82643"
           }
         },

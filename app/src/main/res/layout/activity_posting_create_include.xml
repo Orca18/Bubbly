@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingHorizontal="10dp"
-    tools:context=".Post_Create">
+    tools:context="com.mainnet.bubbly.Post_Create">
 
 
     <LinearLayout
