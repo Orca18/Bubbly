@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ImageView_FullScreen_Download"
+    tools:context="com.mainnet.bubbly.ImageView_FullScreen_Download"
     android:orientation="vertical">
 
 

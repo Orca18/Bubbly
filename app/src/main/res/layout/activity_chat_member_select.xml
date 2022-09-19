@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Community_Home_Feeds">
+    tools:context="com.mainnet.bubbly.Community_Home_Feeds">
 
     <!-- 상단 레이아웃 -->
     <com.google.android.material.appbar.AppBarLayout

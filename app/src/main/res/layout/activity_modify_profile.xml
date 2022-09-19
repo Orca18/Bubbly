@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ModifyProfile"
+    tools:context="com.mainnet.bubbly.ModifyProfile"
     android:orientation="vertical">
 
 
