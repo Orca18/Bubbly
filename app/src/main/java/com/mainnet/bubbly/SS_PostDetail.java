@@ -66,6 +66,8 @@ import retrofit2.Response;
 
 public class SS_PostDetail extends AppCompatActivity {
 
+    public static String action_type;
+
     SharedPreferences preferences;
     public static String user_id, post_id;
 
@@ -109,6 +111,7 @@ public class SS_PostDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_details);
 
+        action_type = "update";
 
         initialize();
 
@@ -265,22 +268,18 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     private void listeners() {
-        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
+        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext(), owner_id, user_id, tv_content.getText().toString());
         final BottomSheetFragment_owner bottomSheetFragment_owner = new BottomSheetFragment_owner(getApplicationContext());
 
 
-        if (!user_id.equals(owner_id)) {
-            iv_options.setVisibility(View.GONE);
-        }
 
         iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (user_id.equals(owner_id)) {
                     bottomSheetFragment_owner.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 } else {
-//                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 }
             }
         });

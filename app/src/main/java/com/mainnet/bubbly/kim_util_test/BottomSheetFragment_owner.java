@@ -65,6 +65,7 @@ public class BottomSheetFragment_owner extends BottomSheetDialogFragment {
                     {
                         if (response.isSuccessful() && response.body() != null)
                         {
+                            SS_PostDetail.action_type = "delete";
                             // 삭제 완료 후, 화면 끄기
                             activity.finish();
 

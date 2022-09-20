@@ -35,6 +35,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.mainnet.bubbly.MainActivity;
 import com.mainnet.bubbly.Post_Create;
 import com.mainnet.bubbly.R;
+import com.mainnet.bubbly.SS_PostDetail;
 import com.mainnet.bubbly.controller.Post_Adapter;
 import com.mainnet.bubbly.retrofit.ApiClient;
 import com.mainnet.bubbly.retrofit.ApiInterface;
@@ -238,10 +239,7 @@ public class Bottom1_Fragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
         post_adapter.notifyItemChanged(click_position,"update");
-
-        Toast.makeText(getContext(), "onResume"+click_position,Toast.LENGTH_LONG).show();
     }
 }
 
