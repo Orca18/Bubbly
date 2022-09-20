@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/main_e_wallet_include"/>
+    <include layout="@layout/main_e_wallet_include_navi"/>
 
 
     <com.google.android.material.navigation.NavigationView

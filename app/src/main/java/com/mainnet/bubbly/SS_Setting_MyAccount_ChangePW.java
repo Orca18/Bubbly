@@ -110,7 +110,7 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
 
-                                Intent mIntent = new Intent(getApplicationContext(), SS_Setting.class);
+                                Intent mIntent = new Intent(getApplicationContext(), SS_Setting_MyAccount.class);
                                 startActivity(mIntent);
                             }
                         }

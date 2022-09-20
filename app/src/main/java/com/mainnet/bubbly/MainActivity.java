@@ -545,7 +545,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                Intent settingIntent = new Intent(getApplicationContext(), SS_Setting.class);
+                Intent settingIntent = new Intent(getApplicationContext(), SS_Setting_MyAccount.class);
                 startActivity(settingIntent);
             }
         });

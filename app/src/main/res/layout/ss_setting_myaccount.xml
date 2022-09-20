@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/spoqa_bold"
-            android:text="계정"
+            android:text="계정 관리"
             android:textColor="@color/black"
             android:textSize="20dp" />
 
