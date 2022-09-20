@@ -60,7 +60,7 @@ public class SS_Setting_MyAccount_ChangeID extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "변경에 실패했습니다.",Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(getApplicationContext(), "성공적으로 변경했습니다.",Toast.LENGTH_SHORT).show();
-                                Intent mIntent = new Intent(getApplicationContext(), SS_Setting.class);
+                                Intent mIntent = new Intent(getApplicationContext(), SS_Setting_MyAccount.class);
                                 startActivity(mIntent);
                             }
                         }

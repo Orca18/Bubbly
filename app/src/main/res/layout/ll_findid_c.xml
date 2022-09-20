@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="44dp"
-                android:text="Bubbly"
+                android:text=""
                 android:textSize="18dp"
                 android:textColor="@color/black" />
 

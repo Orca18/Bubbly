@@ -79,7 +79,7 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-                <include layout="@layout/main_e_wallet_include_scrollview" />
+                <include layout="@layout/main_e_wallet_include_scrollview_navi" />
 
 
             </ScrollView>
