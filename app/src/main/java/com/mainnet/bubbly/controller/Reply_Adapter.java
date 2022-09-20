@@ -1,6 +1,9 @@
 package com.mainnet.bubbly.controller;
 import static android.content.Context.MODE_PRIVATE;
 
+import static com.mainnet.bubbly.SS_PostDetail.reply_count;
+import static com.mainnet.bubbly.SS_PostDetail.tv_reply_count;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -164,6 +167,9 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
                                             {
                                                 lists.remove(position);
                                                 notifyItemRemoved(position);
+
+                                                reply_count = reply_count - 1;
+                                                tv_reply_count.setText(""+reply_count);
                                             }
                                         }
 

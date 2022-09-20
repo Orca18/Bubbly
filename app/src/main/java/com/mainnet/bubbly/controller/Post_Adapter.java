@@ -2,11 +2,14 @@ package com.mainnet.bubbly.controller;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.Build;
 import android.view.Gravity;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
+
+import static com.mainnet.bubbly.Kim_Bottom.Bottom1_Fragment.click_position;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +39,7 @@ import com.mainnet.bubbly.kim_util_test.Kim_ApiClient;
 import com.mainnet.bubbly.kim_util_test.Kim_ApiInterface;
 import com.mainnet.bubbly.kim_util_test.Kim_Com_Info_Response;
 import com.mainnet.bubbly.kim_util_test.Kim_DateUtil;
+import com.mainnet.bubbly.kim_util_test.Kim_DateUtil_Cre;
 import com.mainnet.bubbly.retrofit.ApiClient;
 import com.mainnet.bubbly.retrofit.ApiInterface;
 import com.mainnet.bubbly.retrofit.post_Response;
@@ -78,6 +83,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
     Activity activiy;
 
+
     public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext, Activity activity) {
         this.context = context;
         this.lists = lists;
@@ -107,8 +113,75 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         return date;
     }
 
+
+    @Override
+    public void onBindViewHolder(@NonNull PostViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if(payloads.isEmpty()){
+            super.onBindViewHolder(holder, position, payloads);
+        }else{
+            for (Object payload : payloads){
+
+                post_Response post_response = lists.get(position);
+
+                preferences = context.getSharedPreferences("novarand", MODE_PRIVATE);
+                user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
+                // 하트 / 좋아요수 / 댓글 수
+                // 1) 포스트 아이디를 통해서, 게시물의 좋아요 여부와 카운트 가져오기
+                ApiInterface selectPostUsingPostId_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
+                Call<List<post_Response>> call2 = selectPostUsingPostId_api.selectPostUsingPostId(post_response.getPost_id(), user_id);
+                call2.enqueue(new Callback<List<post_Response>>() {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onResponse(@NonNull Call<List<post_Response>> call2, @NonNull Response<List<post_Response>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<post_Response> responseResultpost = response.body();
+                            if (responseResultpost.get(0).getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
+                                holder.iv_like_icon.setImageResource(R.drawable.ic_baseline_favorite_24);
+                            } else {
+                                holder.iv_like_icon.setImageResource(R.drawable.ic_outline_favorite_border_24);
+                            }
+
+                            // 2)
+                            holder.tv_like_count.setText(responseResultpost.get(0).getLike_count());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<post_Response>> call, @NonNull Throwable t) {
+                        Log.e("에러", t.getMessage());
+                    }
+                });
+
+
+                // ===================================================================================================================
+                // 3) 포스트 아이디를 통해서 게시물의 댓글 수 조회
+                ApiInterface selectCommentUsingPostId_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
+                Call<List<reply_Response>> call = selectCommentUsingPostId_api.selectCommentUsingPostId(post_response.getPost_id());
+                call.enqueue(new Callback<List<reply_Response>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<reply_Response>> call, @NonNull Response<List<reply_Response>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<reply_Response> responseResult = response.body();
+                            holder.tv_reply_count.setText(String.valueOf(responseResult.size()));
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<reply_Response>> call, @NonNull Throwable t) {
+                        Log.e("게시물 아이디로 게시물 조회", t.getMessage());
+                    }
+                });
+            }
+        }
+
+    }
+
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder, @SuppressLint("RecyclerView") int position) {
+
+        Log.d("holder::::", "holder::::"+holder);
 
         post_Response post_response = lists.get(position);
         preferences = context.getSharedPreferences("novarand", MODE_PRIVATE);
@@ -129,29 +202,6 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         String type = post_response.getPost_type();
 
         String media_url = "";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -431,6 +481,8 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 Intent intent = new Intent(context, SS_PostDetail.class);
                 intent.putExtra("post_id", post_response.getPost_id());
                 intent.putExtra("login_id", post_response.getLogin_id());
+                intent.putExtra("position", position);
+                click_position = position;
                 Log.d("디버그태그", "Login_+id: " + post_response.getLogin_id());
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }

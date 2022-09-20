@@ -97,7 +97,7 @@ public class Memberlists_Adapter extends RecyclerView.Adapter<Memberlists_Adapte
             ll = itemView.findViewById(R.id.item_com_member_ll);
             cv_profile = itemView.findViewById(R.id.item_com_member_profile);
             tv_name = itemView.findViewById(R.id.item_com_member_name);
-            tv_id = itemView.findViewById(R.id.item_com_member_id);
+            tv_id = itemView.findViewById(R.id.item_com_info_ownerid);
             iv_follow = itemView.findViewById(R.id.item_com_member_add);
 
         }

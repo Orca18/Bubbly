@@ -254,8 +254,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
-                if(key.contains("postWriterId")){
-                    postWriterId = (String)value;
+                if (key.contains("postWriterId")) {
+                    postWriterId = (String) value;
                     break;
                 }
             }
@@ -299,8 +299,7 @@ public class MainActivity extends AppCompatActivity {
                 Call<String> call = login_api.login(id, pw);
                 String finalChatRoomId = chatRoomId;
                 String finalPostWriterId = postWriterId;
-                call.enqueue(new Callback<String>()
-                {
+                call.enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful() && response.body() != null) {
@@ -560,7 +559,11 @@ public class MainActivity extends AppCompatActivity {
                 email.putExtra(Intent.EXTRA_SUBJECT, "<" + getString(R.string.app_name) + " 문의>");
                 email.putExtra(Intent.EXTRA_TEXT, "기기명:\n안드로이드 OS:\n내용:\n");
                 email.setType("message/rfc822");
-                startActivity(email);
+                try {
+                    startActivity(email);
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "이메일 관련 앱이 존재하지 않습니다.",Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
