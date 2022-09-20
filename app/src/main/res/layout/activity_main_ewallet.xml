@@ -4,6 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MM_Wallet">
+    tools:context="com.mainnet.bubbly.MM_Wallet">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

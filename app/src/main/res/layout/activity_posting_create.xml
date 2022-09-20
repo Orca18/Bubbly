@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Post_Create">
+    tools:context="com.mainnet.bubbly.Post_Create">
 
 
     <androidx.appcompat.widget.Toolbar
