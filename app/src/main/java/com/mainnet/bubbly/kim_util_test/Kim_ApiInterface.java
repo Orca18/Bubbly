@@ -147,4 +147,14 @@ public interface Kim_ApiInterface {
 
 
 
+    //신고하기
+    @FormUrlEncoded
+    @POST("util/report")
+    Call<String> report(
+            @Field("reportType") String reportType, // 신고 타입 0)게시글 / 1)댓글 / 2)계정
+            @Field("reportRefId") String reportRefId, // 신고당한 아이디
+            @Field("reportUesrId") String reportUesrId, // 신고자 아이디
+            @Field("reportContents") String reportContents // 신고 내용 텍스트
+
+    );
 }

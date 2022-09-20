@@ -268,7 +268,7 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     private void listeners() {
-        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
+        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext(), owner_id, user_id, tv_content.getText().toString());
         final BottomSheetFragment_owner bottomSheetFragment_owner = new BottomSheetFragment_owner(getApplicationContext());
 
 

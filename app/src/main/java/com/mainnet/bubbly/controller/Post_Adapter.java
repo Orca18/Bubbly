@@ -82,6 +82,7 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
     String post_id;
 
     Activity activiy;
+    Kim_ApiInterface api = Kim_ApiClient.getApiClient(mContext).create(Kim_ApiInterface.class);
 
 
     public Post_Adapter(Context context, ArrayList<post_Response> lists, Context mContext, Activity activity) {
@@ -321,10 +322,10 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
         holder.tv_time.setText(a);
 
 
-        // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
-        if (!user_id.equals(post_response.getPost_writer_id())) {
-            holder.iv_options.setVisibility(View.GONE);
-        }
+//        // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
+//        if (!user_id.equals(post_response.getPost_writer_id())) {
+//            holder.iv_options.setVisibility(View.GONE);
+//        }
 
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -332,9 +333,9 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
                 PopupMenu popup = new PopupMenu(holder.iv_options.getContext(), holder.itemView);
 
                 if (user_id.equals(post_response.getPost_writer_id())) {
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                @Override
+                                public boolean onMenuItemClick(MenuItem menuItem) {
                             switch (menuItem.getItemId()) {
 //                                case R.id.action_a:
 //                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
@@ -382,24 +383,38 @@ public class Post_Adapter extends RecyclerView.Adapter<Post_Adapter.PostViewHold
 
                 // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
                 else {
-//                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                        @Override
-//                        public boolean onMenuItemClick(MenuItem menuItem) {
-//                            switch (menuItem.getItemId()) {
-//                                case R.id.action_a2:
-//                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
-//                                    return true;
-//
-//                                default:
-//                                    return false;
-//                            }
-//
-//                        }
-//                    });
-//                    popup.inflate(R.menu.main_liist_menu2);
-//                    popup.setGravity(Gravity.RIGHT | Gravity.END);
-//
-//                    popup.show();
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.action_a2:
+                                    // Todo 신고 기능
+                                    Call<String> call = api.report("0", post_response.getPost_writer_id(), user_id, post_response.getPost_contents());
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                Toast.makeText(context, "신고 완료", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                            Log.e("게시글 생성 에러", t.getMessage());
+                                        }
+                                    });
+                                    return true;
+
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                    popup.inflate(R.menu.main_liist_menu2);
+                    popup.setGravity(Gravity.RIGHT | Gravity.END);
+
+                    popup.show();
                 }
 
             }
