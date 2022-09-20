@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/menu_reply2_report"
+    <item android:id="@+id/menu_reply2_report2"
         android:title="신고" />
 
 
