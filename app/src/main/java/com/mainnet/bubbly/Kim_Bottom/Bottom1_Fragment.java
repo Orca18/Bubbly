@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -65,6 +66,8 @@ public class Bottom1_Fragment extends Fragment {
     LinearLayoutManager linearLayoutManager;
     private Parcelable recyclerViewState; // 위치
     SwipeRefreshLayout swipeRefreshLayout; // 새로고침
+
+    public static int click_position;
 
     @Nullable
     @Override
@@ -230,6 +233,15 @@ public class Bottom1_Fragment extends Fragment {
         params.width = FrameLayout.LayoutParams.WRAP_CONTENT;
         snackView.setLayoutParams(params);
         snack.show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        post_adapter.notifyItemChanged(click_position,"update");
+
+        Toast.makeText(getContext(), "onResume"+click_position,Toast.LENGTH_LONG).show();
     }
 }
 
