@@ -449,7 +449,7 @@ public class SS_Profile extends AppCompatActivity {
                 });
     }
 
-    // 채팅방리스트 화면으로 다시 이동한다.
+    // 채팅방 화면으로 다시 이동한다.
     public void moveToChatListAct(String chatRoomId, Chat_Room_Cre_Or_Del chatRoomCre, ArrayList<OtherUserInfo> chatMemberList, Chat_Member_FCM_Sub chatMemberFcmSub, boolean isNew) {
         // 채팅방 액티비티로 이동
         Intent mIntent = new Intent(getApplicationContext(), ChattingRoom.class);
@@ -544,7 +544,7 @@ public class SS_Profile extends AppCompatActivity {
                                 String responseResult = response.body();
                                 Log.d("채팅멤버 FCM 구독 완료",responseResult);
 
-                                // 채팅리스트 액티비티로 이동한다.
+                                // 채팅방 액티비티로 이동한다.
                                 moveToChatListAct(chatRoomId, chatRoomCre, chatMemberList, chatMemberFcmSub,true);
 
                             } else {
