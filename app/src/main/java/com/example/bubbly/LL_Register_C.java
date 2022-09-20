@@ -111,7 +111,7 @@ public class LL_Register_C extends AppCompatActivity {
         bt_share_wallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String unicornWalletPackageName = "com.example.unicornWallet";
+                String unicornWalletPackageName = "com.mainnet.unicornWallet";
                 if(isAppInstalled(unicornWalletPackageName)){
                     Intent intent = new Intent();
                     intent.setComponent(new ComponentName(unicornWalletPackageName,unicornWalletPackageName+".MainActivity"));
@@ -120,10 +120,7 @@ public class LL_Register_C extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.addCategory(Intent.CATEGORY_DEFAULT);
-                    intent.setData(Uri.parse("market://details?id="+unicornWalletPackageName));
-                    startActivity(intent);
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+unicornWalletPackageName)));
                 }
             }
         });
