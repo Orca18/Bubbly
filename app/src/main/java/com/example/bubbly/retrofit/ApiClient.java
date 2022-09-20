@@ -110,6 +110,9 @@ public class ApiClient {
             public Response intercept(Interceptor.Chain chain) throws
                     IOException {
                 Request original = chain.request();
+
+                Log.d("original.url()", original.url().toString());
+
                 Request request = original.newBuilder()
                         .header("Authorization", "Bearer " + AccessAndRefreshToken.accessToken)
                         .method(original.method(), original.body())
