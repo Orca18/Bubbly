@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".test_CreateAccount"
+    tools:context="com.mainnet.bubbly.test_CreateAccount"
     android:padding="10dp">
 
     <TextView

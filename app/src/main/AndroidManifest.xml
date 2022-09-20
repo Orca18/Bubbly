@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bubbly">
+    package="com.mainnet.bubbly">
 
     <meta-data
         android:name="com.google.firebase.messaging.default_notification_icon"
@@ -32,16 +32,16 @@
         android:theme="@style/Theme.Bubbly.NoActionBar"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Video_FullScreen"
+            android:name="com.mainnet.bubbly.Video_FullScreen"
             android:exported="false" />
         <activity
-            android:name=".Interceptor_Test"
+            android:name="com.mainnet.bubbly.Interceptor_Test"
             android:exported="false" />
         <activity
-            android:name=".VideoDownloadActivity"
+            android:name="com.mainnet.bubbly.VideoDownloadActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.mainnet.bubbly.MainActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="FCM_NOTI_ACTIVITY" />
@@ -50,167 +50,167 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Community_Info_Edit"
+            android:name="com.mainnet.bubbly.Community_Info_Edit"
             android:exported="false" />
         <activity
-            android:name=".ChatMemberSelect"
+            android:name="com.mainnet.bubbly.ChatMemberSelect"
             android:exported="false" />
         <activity
-            android:name=".Community_Info"
+            android:name="com.mainnet.bubbly.Community_Info"
             android:exported="false" />
         <activity
-            android:name=".Community_Memberlist"
+            android:name="com.mainnet.bubbly.Community_Memberlist"
             android:exported="false" />
         <activity
-            android:name=".Community_Create"
+            android:name="com.mainnet.bubbly.Community_Create"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ImageView_FullScreen"
+            android:name="com.mainnet.bubbly.ImageView_FullScreen"
             android:exported="false" />
         <activity
-            android:name=".Community_MainPage"
+            android:name="com.mainnet.bubbly.Community_MainPage"
             android:exported="false"></activity>
         <activity
-            android:name=".ReplyModify"
+            android:name="com.mainnet.bubbly.ReplyModify"
             android:exported="false" />
         <activity
-            android:name=".UnUsed_Add_Posting_Modify"
+            android:name="com.mainnet.bubbly.UnUsed_Add_Posting_Modify"
             android:exported="false" />
         <activity
-            android:name=".Post_ApplyNFT_A"
+            android:name="com.mainnet.bubbly.Post_ApplyNFT_A"
             android:exported="false" />
         <activity
-            android:name=".ModifyProfile"
+            android:name="com.mainnet.bubbly.ModifyProfile"
             android:exported="false" />
         <activity
-            android:name=".Following"
+            android:name="com.mainnet.bubbly.Following"
             android:exported="false" />
         <activity
-            android:name=".Follower"
+            android:name="com.mainnet.bubbly.Follower"
             android:exported="false" />
         <activity
-            android:name=".test_CreateAccount"
+            android:name="com.mainnet.bubbly.test_CreateAccount"
             android:exported="false" />
         <activity
-            android:name=".SS_SearchMode"
+            android:name="com.mainnet.bubbly.SS_SearchMode"
             android:exported="false" />
         <activity
-            android:name=".SS_SearchResult"
+            android:name="com.mainnet.bubbly.SS_SearchResult"
             android:exported="false" />
         <activity
-            android:name=".SS_KeywordResult"
+            android:name="com.mainnet.bubbly.SS_KeywordResult"
             android:exported="false" />
         <activity
-            android:name=".Community_Home_Feeds"
+            android:name="com.mainnet.bubbly.Community_Home_Feeds"
             android:exported="false" />
         <activity
-            android:name=".Community_Joined_List"
+            android:name="com.mainnet.bubbly.Community_Joined_List"
             android:exported="false" />
 
         <activity
-            android:name=".SS_PostDetail"
+            android:name="com.mainnet.bubbly.SS_PostDetail"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name=".Post_Create"
+            android:name="com.mainnet.bubbly.Post_Create"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".SS_Setting"
+            android:name="com.mainnet.bubbly.SS_Setting"
             android:exported="false" />
         <activity
-            android:name=".SS_Setting_MyAccount"
+            android:name="com.mainnet.bubbly.SS_Setting_MyAccount"
             android:exported="false" />
         <activity
-            android:name=".SS_Setting_MyAccount_AccountInfo"
+            android:name="com.mainnet.bubbly.SS_Setting_MyAccount_AccountInfo"
             android:exported="false" />
         <activity
-            android:name=".SS_Setting_MyAccount_ConfirmPW"
+            android:name="com.mainnet.bubbly.SS_Setting_MyAccount_ConfirmPW"
             android:exported="false" />
         <activity
-            android:name=".SS_Setting_MyAccount_ChangeID"
+            android:name="com.mainnet.bubbly.SS_Setting_MyAccount_ChangeID"
             android:exported="false" />
         <activity
-            android:name=".SS_Setting_MyAccount_ChangePW"
+            android:name="com.mainnet.bubbly.SS_Setting_MyAccount_ChangePW"
             android:exported="false" />
         <activity
-            android:name=".ChattingRoom"
+            android:name="com.mainnet.bubbly.ChattingRoom"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".LL_Register_A"
+            android:name="com.mainnet.bubbly.LL_Register_A"
             android:exported="false" />
         <activity
-            android:name=".SS_Profile"
+            android:name="com.mainnet.bubbly.SS_Profile"
             android:exported="false" />
         <activity
-            android:name=".Option_Notice_List"
+            android:name="com.mainnet.bubbly.Option_Notice_List"
             android:exported="false" />
         <activity
-            android:name=".LL_Register_B"
+            android:name="com.mainnet.bubbly.LL_Register_B"
             android:exported="false" />
         <activity
-            android:name=".LL_Register_C"
+            android:name="com.mainnet.bubbly.LL_Register_C"
             android:exported="false" />
         <activity
-            android:name=".LL_Login"
+            android:name="com.mainnet.bubbly.LL_Login"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".LL_FindID_A"
+            android:name="com.mainnet.bubbly.LL_FindID_A"
             android:exported="false" />
         <activity
-            android:name=".LL_FindID_B"
+            android:name="com.mainnet.bubbly.LL_FindID_B"
             android:exported="false" />
         <activity
-            android:name=".LL_FindID_C"
+            android:name="com.mainnet.bubbly.LL_FindID_C"
             android:exported="false" />
         <activity
-            android:name=".LL_FindID_D"
+            android:name="com.mainnet.bubbly.LL_FindID_D"
             android:exported="false" />
         <activity
-            android:name=".LL_Splash"
+            android:name="com.mainnet.bubbly.LL_Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="deep"
                     android:scheme="bubbly" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".MM_Home"
+            android:name="com.mainnet.bubbly.MM_Home"
             android:exported="false" />
         <activity
-            android:name=".MM_Issue"
+            android:name="com.mainnet.bubbly.MM_Issue"
             android:exported="false" />
         <activity
-            android:name=".MM_Profile"
+            android:name="com.mainnet.bubbly.MM_Profile"
             android:exported="false" />
         <activity
-            android:name=".MM_Message"
+            android:name="com.mainnet.bubbly.MM_Message"
             android:exported="true" />
         <activity
-            android:name=".ImageView_FullScreen_With_Save"
+            android:name="com.mainnet.bubbly.ImageView_FullScreen_With_Save"
             android:exported="false" />
         <activity
-            android:name=".Video_Play"
+            android:name="com.mainnet.bubbly.Video_Play"
             android:exported="false" />
         <activity
-            android:name=".MM_Wallet"
+            android:name="com.mainnet.bubbly.MM_Wallet"
             android:exported="false" /> <!-- FCM 서비스 -->
         <activity
-            android:name=".MM_Wallet_toNavi"
+            android:name="com.mainnet.bubbly.MM_Wallet_toNavi"
             android:exported="false" /> <!-- FCM 서비스 -->
         <service
-            android:name=".chatting.service.FCMService"
+            android:name="com.mainnet.bubbly.chatting.service.FCMService"
             android:directBootAware="true"
             android:exported="false">
             <intent-filter>
@@ -218,7 +218,7 @@
             </intent-filter>
         </service> <!-- 채팅 서비스 -->
         <service
-            android:name=".chatting.service.ChatService"
+            android:name="com.mainnet.bubbly.chatting.service.ChatService"
             android:enabled="true"
             android:exported="true" />
         <service

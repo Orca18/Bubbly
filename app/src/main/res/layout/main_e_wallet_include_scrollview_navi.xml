@@ -34,7 +34,7 @@
                 android:textAlignment="center"
                 android:layout_marginRight="20dp"
                 android:fontFamily="@font/spoqa_bold"
-                android:text="Bubbly"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="11dp" />
         </LinearLayout>
@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/spoqa_bold"
-                android:text="Bubbly"
+                android:text="0"
                 android:layout_weight="1"
                 android:textColor="@color/black"
                 android:textSize="35dp" />
@@ -89,7 +89,7 @@
             android:layout_marginLeft="20dp"
             android:layout_gravity="center"
             android:fontFamily="@font/spoqa_medium"
-            android:text="Bubbly" />
+            android:text="0" />
 
         <TextView
             android:layout_width="wrap_content"
