@@ -30,6 +30,8 @@ import com.mainnet.bubbly.R;
 import com.mainnet.bubbly.ReplyModify;
 import com.mainnet.bubbly.SS_Profile;
 import com.mainnet.bubbly.config.Config;
+import com.mainnet.bubbly.kim_util_test.Kim_ApiClient;
+import com.mainnet.bubbly.kim_util_test.Kim_ApiInterface;
 import com.mainnet.bubbly.kim_util_test.Kim_DateUtil;
 import com.mainnet.bubbly.retrofit.ApiClient;
 import com.mainnet.bubbly.retrofit.ApiInterface;
@@ -56,6 +58,7 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
 
     SharedPreferences preferences;
     String user_id;
+    Kim_ApiInterface api = Kim_ApiClient.getApiClient(mContext).create(Kim_ApiInterface.class);
 
 
     public Reply_Adapter(Context context, ArrayList<reply_Response> lists, Context mContext)
@@ -198,7 +201,20 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch(menuItem.getItemId()){
                                 case R.id.menu_reply2_report:
-                                    Toast.makeText(context, "신고", Toast.LENGTH_SHORT).show();
+                                    Call<String> call = api.report("1", reply_response.getComment_writer_id(), user_id, reply_response.getComment_contents());
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                Toast.makeText(context, "신고 완료", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                            Log.e("게시글 생성 에러", t.getMessage());
+                                        }
+                                    });
                                     return true;
 
                                 default:
@@ -321,7 +337,6 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
             iv_option = view.findViewById(R.id.iv_option);
             iv_share_icon = view.findViewById(R.id.iv_share_icon);
 
-            iv_option.setVisibility(View.INVISIBLE);
 
 
         }
