@@ -142,60 +142,96 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
 
-
-
         holder.iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(holder.iv_options.getContext(), holder.itemView);
+                if (user_id.equals(post_response.getPost_writer_id())) {
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()) {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
 //                            case R.id.action_a:
 //                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
 //                                return true;
 
-                            case R.id.action_b:
-                                ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
-                                Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
-                                call.enqueue(new Callback<String>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                        if (response.isSuccessful() && response.body() != null) {
-                                            //Log.e("delete", String.valueOf(position));
-                                            lists.remove(position);
-                                            notifyItemRemoved(position);
+                                case R.id.action_b:
+                                    ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
+                                    Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                //Log.e("delete", String.valueOf(position));
+                                                lists.remove(position);
+                                                notifyItemRemoved(position);
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                        Log.e("에러", t.getMessage());
-                                    }
-                                });
-                                return true;
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                            Log.e("에러", t.getMessage());
+                                        }
+                                    });
+                                    return true;
 
-                            case R.id.action_c:
-                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
-                                return true;
+                                case R.id.action_c:
+                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+                                    return true;
 
-                            default:
-                                return false;
+                                default:
+                                    return false;
+                            }
+
                         }
+                    });
+                    popup.inflate(R.menu.main_liist_menu);
+                    popup.setGravity(Gravity.RIGHT | Gravity.END);
 
-                    }
-                });
-                popup.inflate(R.menu.main_liist_menu);
-                popup.setGravity(Gravity.RIGHT | Gravity.END);
+                    popup.show();
+                } else                // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
+                {
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+                                case R.id.action_a2:
+                                    // Todo 신고 기능
+                                    Call<String> call = api.report("0", post_response.getPost_writer_id(), user_id, post_response.getPost_contents());
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                Toast.makeText(context, "신고 완료", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
 
-                popup.show();
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                            Log.e("게시글 생성 에러", t.getMessage());
+                                        }
+                                    });
+                                    return true;
+
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                    popup.inflate(R.menu.main_liist_menu2);
+                    popup.setGravity(Gravity.RIGHT | Gravity.END);
+
+                    popup.show();
+                }
             }
+
+
         });
 
 
-        if(post_response.getProfile_file_name()==null){
+        if (post_response.getProfile_file_name() == null) {
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)
                     .load(R.drawable.blank_profile)
@@ -355,17 +391,14 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         });
 
 
-
-
-
         String type = post_response.getPost_type();
 
         String media_url = "";
 
-        if(media_url == null){
+        if (media_url == null) {
 
-        }else{
-            Log.d("디버그태그", "뭔데진짜:"+media_url);
+        } else {
+            Log.d("디버그태그", "뭔데진짜:" + media_url);
             try {
                 media_url = Config.cloudfront_addr + post_response.getFile_save_names();
                 Log.d("디버그태그", "try 전:" + type);
@@ -407,8 +440,6 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
                 Log.e("TAG", "Error : " + e.toString());
             }
         }
-
-
 
 
     }

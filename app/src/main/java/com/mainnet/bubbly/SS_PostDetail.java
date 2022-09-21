@@ -66,12 +66,14 @@ import retrofit2.Response;
 
 public class SS_PostDetail extends AppCompatActivity {
 
+    public static String action_type;
+
     SharedPreferences preferences;
     public static String user_id, post_id;
 
     ImageView iv_media, iv_options;
     CircleImageView iv_user_image;
-    TextView tv_user_nick, tv_user_id, tv_content, tv_time, tv_like_count, tv_reply_count, tv_retweet_count;
+    TextView tv_user_nick, tv_user_id, tv_content, tv_time, tv_like_count,  tv_retweet_count;
     EditText et_reply;
     LinearLayout bt_reply_add;
     Toolbar toolbar;
@@ -101,11 +103,15 @@ public class SS_PostDetail extends AppCompatActivity {
     int likes;
     String videoURL;
 
+    public static TextView tv_reply_count;
+    public static int reply_count;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.post_details);
 
+        action_type = "update";
 
         initialize();
 
@@ -262,22 +268,18 @@ public class SS_PostDetail extends AppCompatActivity {
     }
 
     private void listeners() {
-        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext());
+        final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext(), owner_id, user_id, tv_content.getText().toString());
         final BottomSheetFragment_owner bottomSheetFragment_owner = new BottomSheetFragment_owner(getApplicationContext());
 
 
-        if (!user_id.equals(owner_id)) {
-            iv_options.setVisibility(View.GONE);
-        }
 
         iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (user_id.equals(owner_id)) {
                     bottomSheetFragment_owner.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 } else {
-//                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 }
             }
         });
@@ -350,6 +352,11 @@ public class SS_PostDetail extends AppCompatActivity {
                     }
                     reply_adapter.notifyDataSetChanged();
 
+
+                    reply_count = responseResult.size();
+                    Log.d("디버그태그", "Replycount:"+reply_count);
+                    tv_reply_count.setText(""+reply_count);
+
                 }
             }
 
@@ -371,6 +378,8 @@ public class SS_PostDetail extends AppCompatActivity {
                     selectCommentUsingPostId();
                     et_reply.setText("");
 
+                    reply_count = reply_count + 1;
+                    tv_reply_count.setText(""+reply_count);
                     imm.hideSoftInputFromWindow(et_reply.getWindowToken(), 0);
                 }
             }
@@ -399,6 +408,7 @@ public class SS_PostDetail extends AppCompatActivity {
                     tv_content.setText(responseResultpost.get(0).getPost_contents());
                     likes = Integer.parseInt(responseResultpost.get(0).getLike_count());
                     tv_like_count.setText("" + likes);
+
 
                     if (responseResultpost.get(0).getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
                         iv_like.setImageResource(R.drawable.ic_baseline_favorite_24);
