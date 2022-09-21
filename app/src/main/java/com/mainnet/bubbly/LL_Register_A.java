@@ -73,7 +73,7 @@ public class LL_Register_A extends AppCompatActivity {
         wv_privacyPolicy = findViewById(R.id.wv_privacyPolicy);
         wv_termsToUse = findViewById(R.id.wv_termsToUse);
 
-        //next.setEnabled(false); // 초기 다음버튼 비활성화
+        next.setEnabled(false); // 초기 다음버튼 비활성화
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +92,7 @@ public class LL_Register_A extends AppCompatActivity {
             public void onClick(View v) {
                 //이메일 정규식 확인
                 Pattern pattern = android.util.Patterns.EMAIL_ADDRESS;
-                if(pattern.matcher(et_email.getText().toString()).matches()){
+                if(!pattern.matcher(et_email.getText().toString()).matches()){
                     Toast.makeText(getApplicationContext(), "이메일 형식에 맞게 입력해주세요.",Toast.LENGTH_SHORT).show();
                 } else {
                     //정규식 확인 완료 후 서버에 요청
