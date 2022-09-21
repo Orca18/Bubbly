@@ -30,7 +30,7 @@ public class Config {
         AssetManager assetManager= context.getAssets();
 
         // 테스트 서버 접속 시
-//        InputStream is= assetManager.open("config.json");
+        //InputStream is= assetManager.open("config.json");
 
         // 실서버 접속 시
         InputStream is= assetManager.open("config_prod.json");
