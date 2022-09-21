@@ -385,9 +385,7 @@ public class LL_Register_B extends AppCompatActivity {
                 tv_done.setTextColor(Color.parseColor("#737373"));
                 done.setEnabled(false);
                 done.setBackgroundColor(Color.parseColor("#eeeeee"));
-                if(et_nick.getText().toString()!=null&&!et_nick.getText().toString().equals("")){
-                    nick_check = 1;
-                }
+                nick_check = 1;
                 if(id_check == 1 && pw_check == 1 && nick_check ==1){
                     InputMethodManager keyboard = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     keyboard.hideSoftInputFromWindow(et_nick.getWindowToken(), 0);
