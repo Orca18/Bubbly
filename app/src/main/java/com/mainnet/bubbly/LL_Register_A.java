@@ -150,6 +150,10 @@ public class LL_Register_A extends AppCompatActivity {
                                    tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 하얀색
                                    next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
                                    next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                               }else{
+                                   tv_next_text.setTextColor(Color.parseColor("#737373"));
+                                   next.setEnabled(false);
+                                   next.setBackgroundColor(Color.parseColor("#eeeeee"));
                                }
                            }
                            else{
@@ -225,6 +229,10 @@ public class LL_Register_A extends AppCompatActivity {
                                     tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
                                     next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
                                     next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                                }else{
+                                    tv_next_text.setTextColor(Color.parseColor("#737373"));
+                                    next.setEnabled(false);
+                                    next.setBackgroundColor(Color.parseColor("#eeeeee"));
                                 }
                             }
                             else{
@@ -254,11 +262,16 @@ public class LL_Register_A extends AppCompatActivity {
                     ck_agree_privatePolicy.setChecked(true);
                     ck_agree_termsToUse.setChecked(true);
                     authentication_check+=2;
-                    if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
-                        tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
-                        next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
-                        next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
-                    }
+
+                }
+                if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                    tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
+                    next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
+                    next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                }else{
+                    tv_next_text.setTextColor(Color.parseColor("#737373"));
+                    next.setEnabled(false);
+                    next.setBackgroundColor(Color.parseColor("#eeeeee"));
                 }
             }
         });
@@ -266,16 +279,20 @@ public class LL_Register_A extends AppCompatActivity {
         ck_agree_privatePolicy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ck_agree_privatePolicy.isChecked()){
+                if(!ck_agree_privatePolicy.isChecked()){
                     authentication_check-=1;
                 }
                 else{
                     authentication_check+=1;
-                    if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
-                        tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
-                        next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
-                        next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
-                    }
+                }
+                if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                    tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
+                    next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
+                    next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                }else{
+                    tv_next_text.setTextColor(Color.parseColor("#737373"));
+                    next.setEnabled(false);
+                    next.setBackgroundColor(Color.parseColor("#eeeeee"));
                 }
             }
         });
@@ -283,16 +300,20 @@ public class LL_Register_A extends AppCompatActivity {
         ck_agree_termsToUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ck_agree_termsToUse.isChecked()){
+                if(!ck_agree_termsToUse.isChecked()){
                     authentication_check-=1;
                 }
                 else{
                     authentication_check+=1;
-                    if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
-                        tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
-                        next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
-                        next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
-                    }
+                }
+                if(authentication_check==authentication_check_target) { // 휴대폰, 이메일 인증 모두 완료 했을 떄
+                    tv_next_text.setTextColor(Color.parseColor("#FFFFFF")); // 인증완료 시 다음 텍스트 색상 검정색
+                    next.setEnabled(true); // 인증완료 시 다음 버튼 활성화
+                    next.setBackgroundColor(Color.parseColor("#FF000000")); // 인증완료 시 다음 버튼 색상 검정색}
+                }else{
+                    tv_next_text.setTextColor(Color.parseColor("#737373"));
+                    next.setEnabled(false);
+                    next.setBackgroundColor(Color.parseColor("#eeeeee"));
                 }
             }
         });

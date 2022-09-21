@@ -142,7 +142,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.mainnet.bubbly.LL_Register_A"
-            android:exported="false" />
+            android:exported="false" ></activity>
         <activity
             android:name="com.mainnet.bubbly.SS_Profile"
             android:exported="false" />
@@ -151,15 +151,10 @@
             android:exported="false" />
         <activity
             android:name="com.mainnet.bubbly.LL_Register_B"
-            android:exported="false" />
+            android:exported="true" ></activity>
         <activity
             android:name="com.mainnet.bubbly.LL_Register_C"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" ></activity>
         <activity
             android:name="com.mainnet.bubbly.LL_Login"
             android:exported="false"
@@ -179,10 +174,10 @@
         <activity
             android:name="com.mainnet.bubbly.LL_Splash"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

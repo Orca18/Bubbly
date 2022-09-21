@@ -126,7 +126,7 @@ public class LL_Login extends AppCompatActivity {
 
                                         SharedPreferences.Editor spfEditor = sharedPreferences.edit();
                                         spfEditor.putString("id", et_login_id.getText().toString());
-                                        spfEditor.putString("pw", pw);
+                                        spfEditor.putString("pw", encryptedPW);
                                         spfEditor.commit();
                                     } catch (GeneralSecurityException e) {
                                         e.printStackTrace();
