@@ -68,6 +68,9 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
         tv_changePW_findID = findViewById(R.id.tv_changePW_findID);
         String  user_id = UserInfo.user_id;
 
+        et_password_check_findID.setEnabled(false);
+        bt_changePW_findID.setEnabled(false);
+
         //비밀번호 변경
         bt_changePW_findID.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -4,7 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -17,6 +19,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mainnet.bubbly.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LL_Register_C extends AppCompatActivity {
 
@@ -117,7 +122,7 @@ public class LL_Register_C extends AppCompatActivity {
 
     private boolean isAppInstalled(String packageName) {
         PackageManager pm = getPackageManager();
-        boolean installed = false;
+        boolean installed;
         try {
             pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
             installed = true;
