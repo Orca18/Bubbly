@@ -105,6 +105,9 @@ public class LL_Login extends AppCompatActivity {
                                 if(response.body().toString().equals("fail")){
                                     Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
                                 }
+                                else if(response.body().toString().equals("stop")){
+                                    Toast.makeText(getApplicationContext(), "정지된 사용자입니다.",Toast.LENGTH_SHORT).show();
+                                }
                                 else{
 //                                    Toast.makeText(getApplicationContext(), "로그인 성공",Toast.LENGTH_SHORT).show();
 

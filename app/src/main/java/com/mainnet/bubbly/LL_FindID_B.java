@@ -41,7 +41,7 @@ public class LL_FindID_B extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ll_findid_b);
         // 툴바
-        toolbar = findViewById(R.id.toolbar_findID_A);
+        toolbar = findViewById(R.id.toolbar_findID_B);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

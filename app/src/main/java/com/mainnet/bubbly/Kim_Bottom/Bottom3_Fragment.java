@@ -133,8 +133,6 @@ public class Bottom3_Fragment extends Fragment {
         sidemenu = view.findViewById(R.id.message_sidemenu);
         // 채팅방 추가 버튼
         sidemenubtnChatRoomAdd= view.findViewById(R.id.message_chat_room_add);
-        // 설정
-        btnChatOption = view.findViewById(R.id.message_option);
         
         // 리사이클러뷰를 새로고침할 수 있게하기 위한 레이아웃
         swipeRefreshLayout = view.findViewById(R.id.message_refresh);
