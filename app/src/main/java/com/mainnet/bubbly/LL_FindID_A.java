@@ -48,7 +48,7 @@ public class LL_FindID_A extends AppCompatActivity {
         bt_send_findID = findViewById(R.id.bt_send_findID);
         et_phone_findID = findViewById(R.id.et_phone_findID);
         tv_send_findID = findViewById(R.id.tv_send_findID);
-
+        bt_send_findID.setEnabled(false);
 
         // 휴대폰 인증번호 전송
         bt_send_findID.setOnClickListener(new View.OnClickListener() {

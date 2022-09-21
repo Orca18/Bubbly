@@ -91,7 +91,7 @@ public class LL_Login extends AppCompatActivity {
                     String encryptedPW = encryption(pw);
                     //둘다 빈칸이 아닐 경우 서버로 로그인을 요청한다.
                     ApiInterface login_api = ApiClient.getApiClient(getApplicationContext()).create(ApiInterface.class);
-                    Call<String> call = login_api.login(et_login_id.getText().toString(),pw);
+                    Call<String> call = login_api.login(et_login_id.getText().toString(),encryptedPW);
                     call.enqueue(new Callback<String>()
                     {
                         @Override

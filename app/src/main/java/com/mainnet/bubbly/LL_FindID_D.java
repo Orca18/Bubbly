@@ -62,6 +62,9 @@ public class LL_FindID_D extends AppCompatActivity {
         Intent mIntent = getIntent();
         String  user_id = mIntent.getStringExtra("user_id");
 
+        et_password_check_findID.setEnabled(false);
+        bt_changePW_findID.setEnabled(false);
+
         //비밀번호 변경
         bt_changePW_findID.setOnClickListener(new View.OnClickListener() {
             @Override
