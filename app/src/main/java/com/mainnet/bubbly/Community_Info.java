@@ -163,7 +163,7 @@ public class Community_Info extends AppCompatActivity {
                         .into(cv_owner);
 
                 nick_owner.setText(responseResult.get(0).getUser_nick());
-                id_owner.setText(responseResult.get(0).getUser_id());
+                id_owner.setText(responseResult.get(0).getLogin_id());
 
             }
 

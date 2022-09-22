@@ -380,6 +380,7 @@ public class Community_MainPage extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Kim_Com_Info_Response>> call, Response<List<Kim_Com_Info_Response>> response) {
 
+                Log.d("디버그태그", "앱 죽음: "+com_id+"/"+response.body()+response.message());
 
                 com_name = response.body().get(0).getCommunity_name();
                 com_owner = response.body().get(0).getCommunity_owner_id();
