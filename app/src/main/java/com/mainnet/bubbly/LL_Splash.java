@@ -62,6 +62,35 @@ public class LL_Splash extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        String mnemonic = "congress uniform famous verify tuna quality fossil ring chief series axis pass furnace tape rely regular cram photo guide reduce scene response kiss abandon noodle";
+        String address = "JI2SUI7REGEGQCUC34BUNOYQMUUGFWVFXK3SWPMDVUODWGDJZGD4P7TUWY";
+        MasterKey masterkey = null;
+        try {
+            masterkey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build(); //암호화 키 생성
+            SharedPreferences sharedPreferences = EncryptedSharedPreferences
+                    .create(getApplicationContext(),
+                            "account",
+                            masterkey,
+                            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, //key(name, 이경우 mnemonic) 암호화 방식
+                            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM); //value 암호화 방식 선택
+
+            SharedPreferences.Editor spfEditor = sharedPreferences.edit();
+            spfEditor.putString("address", address);
+            spfEditor.putString("mnemonic", mnemonic);
+            spfEditor.commit();
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
 
         // 툴바
         toolbar = findViewById(R.id.splash_toolbar);

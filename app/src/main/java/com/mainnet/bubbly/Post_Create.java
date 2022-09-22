@@ -357,8 +357,6 @@ public class Post_Create extends AppCompatActivity {
 
 
     public void createPost() {
-
-
         if (et_content.getText().length() == 0) {
             Toast.makeText(getApplicationContext(), "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
         } else {
@@ -398,49 +396,46 @@ public class Post_Create extends AppCompatActivity {
                         }
                     }
                 }
-
                 @Override
                 public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                     Log.e("게시글 생성 에러", t.getMessage());
                 }
             });
         }
-
-
     }
 
 
-    public void updatePost() {
-        List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
-        //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
-        if (imageList != null) {
-            for (int i = 0; i < imageList.size(); i++) {
-                //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
-                parts.add(prepareFilePart("image" + i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
-            }
-        }
-        RequestBody size = createPartFromString("" + parts.size());
-        ApiInterface updatePost_api = ApiClient.getApiClient(Post_Create.this).create(ApiInterface.class);
-        Call<String> call = updatePost_api.updatePost(post_id, et_content.getText().toString(), size, parts, post_mention, post_mention);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    Log.e("게시글 수정", response.body().toString());
-                    Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
-                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                    startActivity(mIntent);
-                    finish();
-                    Toast.makeText(getApplicationContext(), "게시글 수정 완료!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                Log.e("게시글 수정 에러", t.getMessage());
-            }
-        });
-    }
+//    public void updatePost() {
+//        List<MultipartBody.Part> parts = new ArrayList<>(); //파일 정보를 담는다
+//        //arraylist값이 null이 아니라면 넣는 작업을 진행한다.
+//        if (imageList != null) {
+//            for (int i = 0; i < imageList.size(); i++) {
+//                //parts 에 파일 정보들을 저장 시킵니다. 파트네임은 임시로 설정이 되고, uri값을 통해서 실제 파일을 담는다
+//                parts.add(prepareFilePart("image" + i, imageList.get(i))); //partName 으로 구분하여 이미지를 등록한다. 그리고 파일객체에 값을 넣어준다.
+//            }
+//        }
+//        RequestBody size = createPartFromString("" + parts.size());
+//        ApiInterface updatePost_api = ApiClient.getApiClient(Post_Create.this).create(ApiInterface.class);
+//        Call<String> call = updatePost_api.updatePost(post_id, et_content.getText().toString(), size, parts, post_mention, post_mention);
+//        call.enqueue(new Callback<String>() {
+//            @Override
+//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    Log.e("게시글 수정", response.body().toString());
+//                    Intent mIntent = new Intent(getApplicationContext(), MM_Home.class);
+//                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                    startActivity(mIntent);
+//                    finish();
+//                    Toast.makeText(getApplicationContext(), "게시글 수정 완료!", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+//                Log.e("게시글 수정 에러", t.getMessage());
+//            }
+//        });
+//    }
 
 
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),

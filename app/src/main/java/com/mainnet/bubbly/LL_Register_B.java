@@ -387,8 +387,6 @@ public class LL_Register_B extends AppCompatActivity {
                 done.setBackgroundColor(Color.parseColor("#eeeeee"));
                 nick_check = 1;
                 if(id_check == 1 && pw_check == 1 && nick_check ==1){
-                    InputMethodManager keyboard = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    keyboard.hideSoftInputFromWindow(et_nick.getWindowToken(), 0);
                     tv_done.setTextColor(Color.parseColor("#FFFFFF")); // 아이디,비밀번호 정상 입력시 다음 텍스트 색상 흰색
                     done.setEnabled(true); // 인증완료 시 다음 버튼 활성화
                     done.setBackgroundColor(Color.parseColor("#FF000000")); // 아이디,비밀번호 정상 시 다음 버튼 색상 검정색
