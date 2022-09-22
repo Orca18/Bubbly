@@ -163,7 +163,7 @@ public class Community_Create extends AppCompatActivity {
 
 
         user_id = preferences.getString("user_id", ""); // 로그인한 user_id값
-        Call<String> call = kim_api.createCommunity(user_id, null, title.getText().toString(), desc.getText().toString(), "뭐야", file);
+        Call<String> call = kim_api.createCommunity(user_id, null, title.getText().toString(), desc.getText().toString(), "", file);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
