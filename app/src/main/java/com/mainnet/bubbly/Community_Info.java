@@ -157,10 +157,19 @@ public class Community_Info extends AppCompatActivity {
 
                 Log.d("마지막 테스트", Config.cloudfront_addr+responseResult.get(0).getProfile_file_name()+"하핳");
 
-                Glide.with(Community_Info.this)
-                        .load(Config.cloudfront_addr+responseResult.get(0).getProfile_file_name())
-                        .centerCrop()
-                        .into(cv_owner);
+
+                if(responseResult.get(0).getProfile_file_name()==null){
+                    Glide.with(Community_Info.this)
+                            .load(R.drawable.blank_profile)
+                            .centerCrop()
+                            .into(cv_owner);
+                }else {
+                    Glide.with(Community_Info.this)
+                            .load(Config.cloudfront_addr+responseResult.get(0).getProfile_file_name())
+                            .centerCrop()
+                            .into(cv_owner);
+                }
+
 
                 nick_owner.setText(responseResult.get(0).getUser_nick());
                 id_owner.setText(responseResult.get(0).getLogin_id());
