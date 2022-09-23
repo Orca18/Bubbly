@@ -2,6 +2,7 @@ package com.mainnet.bubbly.retrofit;
 
 import com.mainnet.bubbly.model.Chat_Room_Cre_Or_Del;
 import com.mainnet.bubbly.model.Chat_Room_Info;
+import com.mainnet.bubbly.model.NFTSearched_Item;
 import com.mainnet.bubbly.model.OtherUserInfo;
 
 import java.util.ArrayList;
@@ -362,6 +363,9 @@ public interface ApiInterface {
 
     @GET("nft/selectSelledNftListUsingSellerId") // 특정 사용자가 판매중인 NFT리스트
     Call<List<NFTSell_Item>> selectSelledNftListUsingSellerId(@Query("seller_id") String seller_id);
+
+    @GET("nft/selectNftSearchedResult") // 검색된 nft결과
+    Call<List<NFTSearched_Item>> selectNftSearchedResult(@Query("user_id") String user_id);
 
 
     // todo nft 관련된 api (끝 지점)

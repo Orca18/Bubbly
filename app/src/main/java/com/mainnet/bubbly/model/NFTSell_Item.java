@@ -29,6 +29,8 @@ public class NFTSell_Item {
     @Expose
     @SerializedName("novaland_account_addr") private String novaland_account_addr;
 
+    private String isSell;
+
     public NFTSell_Item(String nft_id, String seller_id, String sell_price, String app_id, String nft_des, String nft_name, String file_save_url, String novaland_account_addr){
         this.nft_id = nft_id;
         this.nft_des = nft_des;
@@ -38,6 +40,14 @@ public class NFTSell_Item {
         this.app_id = app_id;
         this.file_save_url = file_save_url;
         this.novaland_account_addr = novaland_account_addr;
+    }
+
+    public NFTSell_Item(String nft_id, String nft_des, String nft_name, String holder_id, String file_save_url){
+        this.nft_id = nft_id;
+        this.nft_des = nft_des;
+        this.nft_name = nft_name;
+        this.seller_id = holder_id;
+        this.file_save_url = file_save_url;
     }
 
     public String getNft_id() {
@@ -103,5 +113,13 @@ public class NFTSell_Item {
 
     public void setNovaland_account_addr(String novaland_account_addr) {
         this.novaland_account_addr = novaland_account_addr;
+    }
+
+    public String getIsSell() {
+        return isSell;
+    }
+
+    public void setIsSell(String isSell) {
+        this.isSell = isSell;
     }
 }

@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/ll_item_nft_ss_profile_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -18,13 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="#F6F0F0"
+            android:adjustViewBounds="true"
             android:layout_weight="1"
             android:src="@drawable/no_img_box" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:id="@+id/ll_sell"
             android:orientation="horizontal">
 
             <TextView

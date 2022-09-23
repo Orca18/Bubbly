@@ -90,6 +90,9 @@ public class FragmentSR_Tab1_Hot extends Fragment {
 
     public void selectRecentPost(){
         linearLayoutManager = new LinearLayoutManager(getActivity());
+        //인기있는 게시글부터 받아오기 때문에 역순으로 출력해줘야 인기있는 게시글이 위로 올라온다.
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지
         recyclerViewState = recyclerView.getLayoutManager().onSaveInstanceState();

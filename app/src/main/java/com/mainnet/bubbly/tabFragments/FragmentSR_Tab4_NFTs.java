@@ -15,16 +15,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.mainnet.bubbly.R;
 import com.mainnet.bubbly.SS_SearchResult;
-import com.mainnet.bubbly.controller.NFTSell_Adapter;
-import com.mainnet.bubbly.controller.NFT_Adapter;
-import com.mainnet.bubbly.controller.Post_Adapter;
+import com.mainnet.bubbly.controller.SearchedNFT_Adapter;
+import com.mainnet.bubbly.model.NFTSearched_Item;
 import com.mainnet.bubbly.model.NFTSell_Item;
 import com.mainnet.bubbly.model.NFT_Item;
 import com.mainnet.bubbly.model.SearchedUser_Item;
 import com.mainnet.bubbly.model.UserInfo;
 import com.mainnet.bubbly.retrofit.ApiClient;
 import com.mainnet.bubbly.retrofit.ApiInterface;
-import com.mainnet.bubbly.retrofit.post_Response;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,8 +41,8 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
 
     View v;
 
-    private NFTSell_Adapter adapter;
-    private ArrayList<NFTSell_Item> list;
+    private SearchedNFT_Adapter adapter;
+    private ArrayList<NFTSearched_Item> list;
     private ArrayList<SearchedUser_Item> userList;
     LinearLayoutManager linearLayoutManager;
     RecyclerView recyclerView;
@@ -95,7 +93,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
         ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
         list = new ArrayList<>();
         userList = new ArrayList<>();
-        adapter = new NFTSell_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
+        adapter = new SearchedNFT_Adapter(getActivity().getApplicationContext(), this.list, getActivity(),view);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
@@ -113,8 +111,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
                         for(int i=0; i<jsonArray.length(); i++){
                             String jsonString = jsonArray.getString(i);
                             JSONObject jsonObject = new JSONObject(jsonString);
-                            userList.add(new SearchedUser_Item(jsonObject.getString("user_id"),
-                                    jsonObject.getString("nick_name"),
+                            userList.add(new SearchedUser_Item(jsonObject.getString("user_id"),jsonObject.getString("nick_name"),
                                     jsonObject.getString("profile_file_name"),
                                     jsonObject.getString("login_id"),
                                     jsonObject.getString("self_info")));
@@ -124,31 +121,33 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
                     }
 
                     for(int i = 0; i<userList.size(); i++){
-                        Call<List<NFTSell_Item>> call_nft = api.selectSelledNftListUsingSellerId(userList.get(i).getUser_id());
-                        call_nft.enqueue(new Callback<List<NFTSell_Item>>() {
+
+
+                        Call<List<NFTSearched_Item>> call_nft = api.selectNftSearchedResult(userList.get(i).getUser_id());
+                        call_nft.enqueue(new Callback<List<NFTSearched_Item>>() {
                             @Override
-                            public void onResponse(Call<List<NFTSell_Item>> call, Response<List<NFTSell_Item>> response) {
+                            public void onResponse(Call<List<NFTSearched_Item>> call, Response<List<NFTSearched_Item>> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    List<NFTSell_Item> responseResult = response.body();
+                                    List<NFTSearched_Item> responseResult = response.body();
                                     for(int j=0; j<responseResult.size(); j++){
                                         System.out.println("nft 보유 목록"+responseResult.get(j).getNft_id());
-                                        list.add(new NFTSell_Item(responseResult.get(j).getNft_id(),
-                                                responseResult.get(j).getSeller_id(),
-                                                responseResult.get(j).getSell_price(),
-                                                responseResult.get(j).getApp_id(),
-                                                responseResult.get(j).getNft_des(),
-                                                responseResult.get(j).getNft_name(),
-                                                responseResult.get(j).getFile_save_url(),
-                                                responseResult.get(j).getNovaland_account_addr()));
+                                        list.add(new NFTSearched_Item(responseResult.get(j).getProfileImageURL(),responseResult.get(j).getUserName(),responseResult.get(j).getLoginId(),
+                                                responseResult.get(j).getUserId(),responseResult.get(j).getNft_id(),responseResult.get(j).getHolder_id(),
+                                                responseResult.get(j).getCreation_time(), responseResult.get(j).getIsSell(),responseResult.get(j).getSeller_id(),
+                                                responseResult.get(j).getSell_price(),responseResult.get(j).getApp_id(),responseResult.get(j).getNft_des(),
+                                                responseResult.get(j).getNft_name(), responseResult.get(j).getFile_save_url(),responseResult.get(j).getNovaland_account_addr()));
                                     }
                                     adapter.notifyDataSetChanged();
                                 }
                             }
+
                             @Override
-                            public void onFailure(Call<List<NFTSell_Item>> call, Throwable t) {
+                            public void onFailure(Call<List<NFTSearched_Item>> call, Throwable t) {
                                 Log.e("nft 보유목록 가져오기 실패", t.getMessage());
                             }
                         });
+
+
                     }
 
                 }

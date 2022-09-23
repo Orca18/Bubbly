@@ -118,8 +118,6 @@ public class LL_Splash extends AppCompatActivity {
                     overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                     finish();
                 } else {
-
-
                     //만약 쉐어드프리퍼런스에 저장된 사용자 정보기 있으면 login api 요청 후 Home으로 이동
                     ApiInterface login_api = ApiClient.getApiClient(LL_Splash.this).create(ApiInterface.class);
                     Call<String> call = login_api.login(id, pw);
@@ -128,7 +126,6 @@ public class LL_Splash extends AppCompatActivity {
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                             Log.d("디버그태그", "바디:" + response.body());
                             Log.d("디버그태그", "메시지:" + response.message());
-
                             if (response.isSuccessful() && response.body() != null) {
                                 Log.e("로그인 데이터", response.body().toString());
                                 if (response.body().toString().equals("fail")) {
@@ -175,25 +172,39 @@ public class LL_Splash extends AppCompatActivity {
                                             @Override
                                             public void onResponse(@NonNull Call<List<user_Response>> call, @NonNull Response<List<user_Response>> response) {
                                                 System.out.println(response.body());
-                                                //수신한 회원정보를 스태틱으로 저장한다.
-                                                List<user_Response> responseResult = response.body();
-                                                UserInfo.user_id = responseResult.get(0).getUser_id();
-                                                UserInfo.login_id = responseResult.get(0).getLogin_id();
-                                                UserInfo.email_addr = responseResult.get(0).getEmail_addr();
-                                                UserInfo.novaland_account_addr = responseResult.get(0).getNovaland_account_addr();
-                                                UserInfo.phone_num = responseResult.get(0).getPhone_num();
-                                                UserInfo.user_nick = responseResult.get(0).getUser_nick();
-                                                UserInfo.self_info = responseResult.get(0).getSelf_info();
-                                                UserInfo.token = responseResult.get(0).getToken();
+                                                if(response.body().toString().equals("fail")||response.body().toString().equals("stop")){
+                                                    //만약 로그인 실패시 로그인 페이지로 이동한다.
+                                                    Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
+                                                    startActivity(new Intent(LL_Splash.this, LL_Login.class));
+                                                    overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                                    finish();
+                                                }
+                                                else {
+                                                    //수신한 회원정보를 스태틱으로 저장한다.
+                                                    List<user_Response> responseResult = response.body();
+                                                    UserInfo.user_id = responseResult.get(0).getUser_id();
+                                                    UserInfo.login_id = responseResult.get(0).getLogin_id();
+                                                    UserInfo.email_addr = responseResult.get(0).getEmail_addr();
+                                                    UserInfo.novaland_account_addr = responseResult.get(0).getNovaland_account_addr();
+                                                    UserInfo.phone_num = responseResult.get(0).getPhone_num();
+                                                    UserInfo.user_nick = responseResult.get(0).getUser_nick();
+                                                    UserInfo.self_info = responseResult.get(0).getSelf_info();
+                                                    UserInfo.token = responseResult.get(0).getToken();
 
-                                                if (responseResult.get(0).getProfile_file_name() != null && !responseResult.get(0).getProfile_file_name().equals("")) {
-                                                    UserInfo.profile_file_name = Config.cloudfront_addr + responseResult.get(0).getProfile_file_name();
+                                                    if (responseResult.get(0).getProfile_file_name() != null && !responseResult.get(0).getProfile_file_name().equals("")) {
+                                                        UserInfo.profile_file_name = Config.cloudfront_addr + responseResult.get(0).getProfile_file_name();
+                                                    }
                                                 }
                                             }
 
                                             @Override
                                             public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t) {
                                                 Log.e("에러", t.getMessage());
+                                                //만약 로그인 실패시 로그인 페이지로 이동한다.
+                                                Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(LL_Splash.this, LL_Login.class));
+                                                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                                finish();
                                             }
                                         });
                                     } catch (JSONException e) {

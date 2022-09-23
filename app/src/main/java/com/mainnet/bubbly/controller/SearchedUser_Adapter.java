@@ -59,7 +59,13 @@ public class SearchedUser_Adapter extends RecyclerView.Adapter<SearchedUser_Adap
         //binding data
         SearchedUser_Item user_response = lists.get(position);
         holder.tv_user_nick.setText(user_response.getNick_name());
-        holder.tv_user_intro.setText(user_response.getSelf_intro());
+        if(user_response.getSelf_intro()!=null&!user_response.getSelf_intro().equals("")&!user_response.getSelf_intro().equals("null")){
+            holder.tv_user_intro.setText(user_response.getSelf_intro());
+        }else{
+            //만약 자기소개가 없을 경우 해당 영역을 안보이게 한다.
+            holder.tv_user_intro.setVisibility(View.GONE);
+        }
+
         //사용자 로그인 id 나타남
         holder.tv_user_id.setText("@"+user_response.getLogin_id());
 
