@@ -113,7 +113,6 @@ public class FragmentSR_Tab1_Hot extends Fragment {
             {
                 if (response.isSuccessful() && response.body() != null)
                 {
-                    System.out.println(response.body().toString());
                     List<post_Response> responseResult = response.body();
                     for(int i=0; i<responseResult.size(); i++){
                         postList.add(new post_Response(responseResult.get(i).getPost_id(),
@@ -132,6 +131,7 @@ public class FragmentSR_Tab1_Hot extends Fragment {
                                 responseResult.get(i).getCommunity_id(),
                                 responseResult.get(i).getLogin_id(),
                                 responseResult.get(i).getPost_type()));
+                        System.out.println(postList.get(i).getPost_contents());
                     }
                     post_adapter.notifyDataSetChanged();
                 }
