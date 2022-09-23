@@ -416,6 +416,11 @@ public class Community_MainPage extends AppCompatActivity {
                     .load(UserInfo.profile_file_name)
                     .circleCrop()
                     .into(cv_profile);
+        } else {
+            Glide.with(getApplicationContext())
+                    .load(R.drawable.blank_profile)
+                    .circleCrop()
+                    .into(cv_profile);
         }
 
 
@@ -490,7 +495,12 @@ public class Community_MainPage extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-
         GetComInfo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GetComPosters();
     }
 }
