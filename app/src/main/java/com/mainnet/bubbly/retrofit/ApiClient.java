@@ -195,7 +195,10 @@ public class ApiClient {
             }
         });
 
-        OkHttpClient okHttpClient = clientBuilder.build();
+        OkHttpClient okHttpClient = clientBuilder.connectTimeout(100, TimeUnit.SECONDS)
+                .readTimeout(100, TimeUnit.SECONDS)
+                .writeTimeout(100, TimeUnit.SECONDS)
+                .build();
 
 
         Gson gson = new GsonBuilder()
