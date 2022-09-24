@@ -79,7 +79,6 @@ public class Fragment_Tab4_Likes extends Fragment {
         recyclerView = v.findViewById(R.id.tab_recyclerview);
         preferences = getActivity().getSharedPreferences("novarand",MODE_PRIVATE);
 
-        selectLikePost();
         return v;
     }
 
@@ -141,6 +140,6 @@ public class Fragment_Tab4_Likes extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        selectLikePost();
     }
 }

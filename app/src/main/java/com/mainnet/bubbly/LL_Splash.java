@@ -245,6 +245,11 @@ public class LL_Splash extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                             Log.e("로그인 에러", t.getMessage());
+                            //만약 로그인 실패시 로그인 페이지로 이동한다.
+                            Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LL_Splash.this, LL_Login.class));
+                            overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                            finish();
                         }
                     });
                 }

@@ -94,29 +94,6 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
                             }else{
                                 Toast.makeText(getApplicationContext(), "성공적으로 변경했습니다.",Toast.LENGTH_SHORT).show();
 
-                                //자동로그인 : 쉐어드프리퍼런스에 저장한다.
-                                MasterKey masterKey = null;
-                                try {
-                                    masterKey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-                                            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                                            .build(); //암호화 키 생성
-                                    SharedPreferences sharedPreferences = EncryptedSharedPreferences
-                                            .create(getApplicationContext(),
-                                                    "account",
-                                                    masterKey,
-                                                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, //key(name, 이경우 mnemonic) 암호화 방식
-                                                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM); //value 암호화 방식 선택
-
-                                    SharedPreferences.Editor spfEditor = sharedPreferences.edit();
-                                    spfEditor.putString("id", UserInfo.login_id);
-                                    spfEditor.putString("pw", encryptedPW);
-                                    spfEditor.commit();
-                                } catch (GeneralSecurityException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
                                 Intent mIntent = new Intent(getApplicationContext(), SS_Setting_MyAccount.class);
                                 startActivity(mIntent);
                             }

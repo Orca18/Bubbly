@@ -21,8 +21,6 @@ public class FragmentAdapter_SS extends FragmentStateAdapter {
         super(fragmentManager, lifecycle);
         this.uid = uid;
 
-        Log.d("디버그태그", "user_id in post33"+uid);
-
     }
 
 

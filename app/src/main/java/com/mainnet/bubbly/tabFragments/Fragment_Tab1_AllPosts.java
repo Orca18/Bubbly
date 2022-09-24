@@ -75,7 +75,6 @@ public class Fragment_Tab1_AllPosts extends Fragment {
         recyclerView = v.findViewById(R.id.tab_recyclerview);
         preferences = getActivity().getSharedPreferences("novarand",MODE_PRIVATE);
 
-        selectAllPost();
         return v;
     }
 
@@ -136,5 +135,6 @@ public class Fragment_Tab1_AllPosts extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        selectAllPost();
     }
 }

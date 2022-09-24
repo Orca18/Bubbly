@@ -77,7 +77,6 @@ public class Fragment_Tab2_Replies extends Fragment {
         recyclerView = v.findViewById(R.id.tab_recyclerview);
         preferences = getActivity().getSharedPreferences("novarand",MODE_PRIVATE);
 
-        selectCommentUsingCommentWriterId();
         return v;
     }
 
@@ -132,6 +131,6 @@ public class Fragment_Tab2_Replies extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        fillList();
+        selectCommentUsingCommentWriterId();
     }
 }
