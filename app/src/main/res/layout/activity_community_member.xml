@@ -29,33 +29,33 @@
             android:text=" 멤버 목록"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#ddd"/>
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="#ddd"/>-->
 
-    <LinearLayout
-        android:paddingVertical="10dp"
-        android:layout_marginHorizontal="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<!--    <LinearLayout-->
+<!--        android:paddingVertical="10dp"-->
+<!--        android:layout_marginHorizontal="4dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
 
-        <ImageView
-            android:layout_gravity="center"
-            android:scaleType="fitCenter"
-            android:layout_width="30dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_baseline_search_24"/>
+<!--        <ImageView-->
+<!--            android:layout_gravity="center"-->
+<!--            android:scaleType="fitCenter"-->
+<!--            android:layout_width="30dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:src="@drawable/ic_baseline_search_24"/>-->
 
-        <EditText
-            android:hint="멤버 검색"
-            android:fontFamily="@font/spoqa_regular"
-            android:background="@android:color/transparent"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+<!--        <EditText-->
+<!--            android:hint="멤버 검색"-->
+<!--            android:fontFamily="@font/spoqa_regular"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"/>-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
     <View
         android:layout_width="match_parent"
