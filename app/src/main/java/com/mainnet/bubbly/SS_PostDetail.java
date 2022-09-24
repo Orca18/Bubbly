@@ -32,6 +32,10 @@ import com.mainnet.bubbly.config.Config;
 import com.mainnet.bubbly.controller.Reply_Adapter;
 import com.mainnet.bubbly.kim_util_test.BottomSheetFragment;
 import com.mainnet.bubbly.kim_util_test.BottomSheetFragment_owner;
+import com.mainnet.bubbly.kim_util_test.BottomSheetFragment_owner_exnft;
+import com.mainnet.bubbly.kim_util_test.Kim_ApiClient;
+import com.mainnet.bubbly.kim_util_test.Kim_ApiInterface;
+import com.mainnet.bubbly.kim_util_test.Kim_Com_Info_Response;
 import com.mainnet.bubbly.kim_util_test.Kim_DateUtil_Cre;
 import com.mainnet.bubbly.retrofit.ApiClient;
 import com.mainnet.bubbly.retrofit.ApiInterface;
@@ -73,7 +77,7 @@ public class SS_PostDetail extends AppCompatActivity {
 
     ImageView iv_media, iv_options;
     CircleImageView iv_user_image;
-    TextView tv_user_nick, tv_user_id, tv_content, tv_time, tv_like_count,  tv_retweet_count;
+    TextView tv_user_nick, tv_user_id, tv_content, tv_time, tv_like_count, tv_retweet_count;
     EditText et_reply;
     LinearLayout bt_reply_add;
     Toolbar toolbar;
@@ -105,6 +109,11 @@ public class SS_PostDetail extends AppCompatActivity {
 
     public static TextView tv_reply_count;
     public static int reply_count;
+
+    String com_id;
+    TextView com_name;
+    String nft_yn;
+    TextView nft_yn_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,12 +157,31 @@ public class SS_PostDetail extends AppCompatActivity {
 
     } // onCreate 닫는곳
 
+    private void GetComName() {
+        Kim_ApiInterface api2 = Kim_ApiClient.getApiClient(mContext).create(Kim_ApiInterface.class);
+        Call<List<Kim_Com_Info_Response>> call2 = api2.selectCommunityUsingCommunityId(com_id);
+        call2.enqueue(new Callback<List<Kim_Com_Info_Response>>() {
+            @Override
+            public void onResponse(Call<List<Kim_Com_Info_Response>> call2, Response<List<Kim_Com_Info_Response>> response) {
+
+
+                com_name.setText(response.body().get(0).getCommunity_name());
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Kim_Com_Info_Response>> call, Throwable t) {
+
+            }
+        });
+    }
+
     private void listenerLike() {
         iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Log.d("클릭시 상황", "y/n:"+like_yn+",true/false"+like_check);
+                Log.d("클릭시 상황", "y/n:" + like_yn + ",true/false" + like_check);
 
                 // 기본적으로는 n 이고, 좋아요 누른 상태였으면 y 로 바뀜
                 if (like_yn.equals("n")) {
@@ -161,11 +189,11 @@ public class SS_PostDetail extends AppCompatActivity {
                     if (like_check.equals(false)) {
                         like_check = true; // +1 like
                         DislikeToLike();
-                        Log.d("클릭시 상황2", "y/n:"+like_yn+",true/false"+like_check);
+                        Log.d("클릭시 상황2", "y/n:" + like_yn + ",true/false" + like_check);
                     } else { // 두번째 클릭(짝수)은 true => false
                         like_check = false; // -1 dislike
                         LikeToDislike();
-                        Log.d("클릭시 상황2", "y/n:"+like_yn+",true/false"+like_check);
+                        Log.d("클릭시 상황2", "y/n:" + like_yn + ",true/false" + like_check);
 
                     }
                 } else { // 디테일 왔을 때, 좋아요인 상태 y
@@ -173,12 +201,12 @@ public class SS_PostDetail extends AppCompatActivity {
                     if (like_check.equals(false)) {
                         like_check = true; // -1 like
                         DislikeToLike();
-                        Log.d("클릭시 상황3", "y/n:"+like_yn+",true/false"+like_check);
+                        Log.d("클릭시 상황3", "y/n:" + like_yn + ",true/false" + like_check);
 
                     } else { // 두번째 클릭(짝수)은 false => true
                         like_check = false; // +1 dislike
                         LikeToDislike();
-                        Log.d("클릭시 상황4", "y/n:"+like_yn+",true/false"+like_check);
+                        Log.d("클릭시 상황4", "y/n:" + like_yn + ",true/false" + like_check);
 
 
                     }
@@ -197,7 +225,7 @@ public class SS_PostDetail extends AppCompatActivity {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     iv_like.setImageResource(R.drawable.ic_outline_favorite_border_24);
-                    likes = likes-1;
+                    likes = likes - 1;
                     tv_like_count.setText("" + likes);
                 }
             }
@@ -243,6 +271,8 @@ public class SS_PostDetail extends AppCompatActivity {
         iv_user_image = findViewById(R.id.iv_user_image);
         iv_media = findViewById(R.id.iv_media);
         vd_media = findViewById(R.id.vd_media);
+        com_name = findViewById(R.id.post_detail_comname);
+        nft_yn_text = findViewById(R.id.post_detail_nft_yn);
 
         tv_user_nick = findViewById(R.id.tv_user_nick);
         tv_user_id = findViewById(R.id.tv_user_id);
@@ -270,15 +300,22 @@ public class SS_PostDetail extends AppCompatActivity {
     private void listeners() {
         final BottomSheetFragment bottomSheetFragment = new BottomSheetFragment(getApplicationContext(), owner_id, user_id, tv_content.getText().toString());
         final BottomSheetFragment_owner bottomSheetFragment_owner = new BottomSheetFragment_owner(getApplicationContext());
+        final BottomSheetFragment_owner_exnft bottomSheetFragment_owner_exnft = new BottomSheetFragment_owner_exnft(getApplicationContext());
+
+
 
 
 
         iv_options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (user_id.equals(owner_id)) {
+                if (user_id.equals(owner_id) && nft_yn.equals("n")) { // 아직 nft 신청 안함
                     bottomSheetFragment_owner.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
-                } else {
+                }
+                else if (user_id.equals(owner_id) && nft_yn.equals("y")) { // 이미 nft 신청 완료해서, 그냥 사용하는거
+                    bottomSheetFragment_owner_exnft.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                }
+                else {
                     bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 }
             }
@@ -354,8 +391,8 @@ public class SS_PostDetail extends AppCompatActivity {
 
 
                     reply_count = responseResult.size();
-                    Log.d("디버그태그", "Replycount:"+reply_count);
-                    tv_reply_count.setText(""+reply_count);
+                    Log.d("디버그태그", "Replycount:" + reply_count);
+                    tv_reply_count.setText("" + reply_count);
 
                 }
             }
@@ -379,7 +416,7 @@ public class SS_PostDetail extends AppCompatActivity {
                     et_reply.setText("");
 
                     reply_count = reply_count + 1;
-                    tv_reply_count.setText(""+reply_count);
+                    tv_reply_count.setText("" + reply_count);
                     imm.hideSoftInputFromWindow(et_reply.getWindowToken(), 0);
                 }
             }
@@ -409,14 +446,22 @@ public class SS_PostDetail extends AppCompatActivity {
                     likes = Integer.parseInt(responseResultpost.get(0).getLike_count());
                     tv_like_count.setText("" + likes);
 
+                    com_id = responseResultpost.get(0).getCommunity_id();
+                    nft_yn = responseResultpost.get(0).getNft_post_yn();
+
+                    if (nft_yn.equals("y")) {
+                        nft_yn_text.setVisibility(View.VISIBLE);
+                    } else {
+                        nft_yn_text.setVisibility(View.INVISIBLE);
+                    }
 
                     if (responseResultpost.get(0).getLike_yn().equals("y")) { // 좋아요를 누른 상태 일 경우
                         iv_like.setImageResource(R.drawable.ic_baseline_favorite_24);
                         like_check = true;
                         like_yn = "y";
-                        Log.d("게시글 좋아요 여부", "yn"+like_yn+like_check);
+                        Log.d("게시글 좋아요 여부", "yn" + like_yn + like_check);
                     }
-                    Log.d("게시글 좋아요 여부2", "yn"+like_yn+like_check);
+                    Log.d("게시글 좋아요 여부2", "yn" + like_yn + like_check);
 
 
                     try {
@@ -461,7 +506,7 @@ public class SS_PostDetail extends AppCompatActivity {
                                 .into(iv_media);
                     }
 
-                    if(responseResultpost.get(0).getProfile_file_name()==null){
+                    if (responseResultpost.get(0).getProfile_file_name() == null) {
                         Log.d("디버그태그", "null 이다");
                         Glide.with(mContext)
                                 .load(R.drawable.blank_profile)
@@ -473,11 +518,16 @@ public class SS_PostDetail extends AppCompatActivity {
                     }
 
 
-
-
                     SetDate(responseResultpost.get(0).getCre_datetime());
 
                     media_link = responseResultpost.get(0).getFile_save_names();
+
+                    if (!com_id.equals("0")) {
+                        GetComName();
+                    } else {
+                        com_name.setVisibility(View.INVISIBLE);
+                    }
+
                 }
             }
 

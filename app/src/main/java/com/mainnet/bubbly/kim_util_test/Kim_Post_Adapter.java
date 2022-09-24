@@ -100,6 +100,12 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         holder.tv_content.setText(post_response.getPost_contents());
         holder.tv_like_count.setText(post_response.getLike_count());
 
+
+        String nft_yn = post_response.getNft_post_yn();
+        if(nft_yn.equals("n")){
+            holder.tv_nft.setVisibility(View.GONE);
+        }
+
         String a = null;
         try {
             a = Kim_DateUtil.beforeTime(getDate(post_response.getCre_datetime()));
@@ -146,7 +152,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
             @Override
             public void onClick(View view) {
                 PopupMenu popup = new PopupMenu(holder.iv_options.getContext(), holder.itemView);
-                if (user_id.equals(post_response.getPost_writer_id())) {
+                if (user_id.equals(post_response.getPost_writer_id())  && nft_yn.equals("n")) {
 
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
@@ -186,11 +192,62 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
                         }
                     });
-                    popup.inflate(R.menu.main_liist_menu);
+                    popup.inflate(R.menu.main_list_menu);
                     popup.setGravity(Gravity.RIGHT | Gravity.END);
 
                     popup.show();
-                } else                // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
+                }
+
+
+                else if (user_id.equals(post_response.getPost_writer_id()) && nft_yn.equals("y")){ // nft 신청 없는 버전
+
+
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem) {
+                            switch (menuItem.getItemId()) {
+//                            case R.id.action_a:
+//                                Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+//                                return true;
+
+                                case R.id.action_b:
+                                    ApiInterface deletePost_api = ApiClient.getApiClient(mContext).create(ApiInterface.class);
+                                    Call<String> call = deletePost_api.deletePost(post_response.getPost_id());
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                            if (response.isSuccessful() && response.body() != null) {
+                                                //Log.e("delete", String.valueOf(position));
+                                                lists.remove(position);
+                                                notifyItemRemoved(position);
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                            Log.e("에러", t.getMessage());
+                                        }
+                                    });
+                                    return true;
+
+                                case R.id.action_c:
+                                    Toast.makeText(context, "팝업 확인", Toast.LENGTH_SHORT).show();
+                                    return true;
+
+                                default:
+                                    return false;
+                            }
+
+                        }
+                    });
+                    popup.inflate(R.menu.main_list_menu_exnft);
+                    popup.setGravity(Gravity.RIGHT | Gravity.END);
+
+                    popup.show();
+
+                }
+
+                else                // 게시물의 소유자가 아닐 때, '더보기'버튼 invisible
                 {
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
@@ -462,7 +519,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
         CircleImageView iv_user_image;
 
         SimpleExoPlayerView vd_media;
-
+        TextView tv_nft;
         public PostViewHolder(@NonNull View view) {
             super(view);
             ll_item_layout = view.findViewById(R.id.ll_item_layout);
@@ -487,6 +544,9 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
             tv_com_name = view.findViewById(R.id.tv_com_name);
 
             vd_media = view.findViewById(R.id.vd_media);
+
+            tv_nft = view.findViewById(R.id.item_post_nft_yn);
+
         }
 
     }
