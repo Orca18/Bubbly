@@ -10,8 +10,8 @@ android {
         applicationId "com.mainnet.bubbly"
         minSdk 25
         targetSdk 31
-        versionCode 6 // 등록시 수정
-        versionName "1.2" // 플레이스토어에 보이는 앱 버전
+        versionCode 7 // 등록시 수정
+        versionName "1.3" // 플레이스토어에 보이는 앱 버전
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
