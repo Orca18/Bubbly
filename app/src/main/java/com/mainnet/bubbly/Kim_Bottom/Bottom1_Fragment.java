@@ -70,6 +70,23 @@ public class Bottom1_Fragment extends Fragment {
 
     public static int click_position;
 
+    private ActivityResultLauncher<Intent> startActivityResult;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        startActivityResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            showSnackBar();
+                        }
+                    }
+                });
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -96,6 +113,7 @@ public class Bottom1_Fragment extends Fragment {
 
         preferences = getActivity().getSharedPreferences("novarand",MODE_PRIVATE);
         user_id = preferences.getString("user_id", "");
+
     }
 
 
@@ -108,6 +126,7 @@ public class Bottom1_Fragment extends Fragment {
                 Intent tocreating = new Intent(getContext(), Post_Create.class);
                 tocreating.putExtra("com_id", "0");
                 tocreating.putExtra("com_name", "내 피드");
+
                 startActivityResult.launch(new Intent(getContext(), Post_Create.class));
             }
         });
@@ -191,16 +210,6 @@ public class Bottom1_Fragment extends Fragment {
         });
     }
 
-    ActivityResultLauncher<Intent> startActivityResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        showSnackBar();
-                    }
-                }
-            });
 
     //새게시글 등록 시 FCMService에서 sendEmptyMessage로 수신한 0에 대해서 토스트 알림
     final Handler handler = new Handler(){

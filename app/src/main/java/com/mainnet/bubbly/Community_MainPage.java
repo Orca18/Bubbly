@@ -329,7 +329,10 @@ public class Community_MainPage extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경...
                 // 어떻게 해당 커뮤니티에 해당하는 nft를 가져올지 고민하기
-                Toast.makeText(Community_MainPage.this, "준비 중...", Toast.LENGTH_SHORT).show();
+                Intent mIntent = new Intent(getApplicationContext(), Community_NFTlist.class);
+                mIntent.putExtra("com_id", com_id);
+                mIntent.putExtra("com_name", com_name);
+                startActivity(mIntent);
             }
         });
 
@@ -380,6 +383,7 @@ public class Community_MainPage extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Kim_Com_Info_Response>> call, Response<List<Kim_Com_Info_Response>> response) {
 
+                Log.d("디버그태그", "앱 죽음: "+com_id+"/"+response.body()+response.message());
 
                 com_name = response.body().get(0).getCommunity_name();
                 com_owner = response.body().get(0).getCommunity_owner_id();
@@ -413,6 +417,11 @@ public class Community_MainPage extends AppCompatActivity {
         if (UserInfo.profile_file_name != null && !UserInfo.profile_file_name.equals("")) {
             Glide.with(getApplicationContext())
                     .load(UserInfo.profile_file_name)
+                    .circleCrop()
+                    .into(cv_profile);
+        } else {
+            Glide.with(getApplicationContext())
+                    .load(R.drawable.blank_profile)
                     .circleCrop()
                     .into(cv_profile);
         }
@@ -489,7 +498,12 @@ public class Community_MainPage extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-
         GetComInfo();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        GetComPosters();
     }
 }

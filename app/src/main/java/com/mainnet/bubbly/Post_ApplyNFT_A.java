@@ -216,10 +216,9 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
 
                     }
                 });
-                //블록체인 처리가 늦어 timeout되므로 결과와 무관하게 activity 이동
-                Toast.makeText(getApplicationContext(), "NFT신청 완료. 몇초 뒤 NFT 목록을 확인하세요.",Toast.LENGTH_SHORT).show();
-                Intent mIntent = new Intent(getApplicationContext(),MM_Profile.class);
-                startActivity(mIntent);
+                //블록체인 처리가 늦어 timeout되므로 결과와 무관하게 원래 activity 이동
+                Toast.makeText(getApplicationContext(), "NFT신청 완료. 블록체인 반영까지 3~5분이 소요될 수 있습니다.",Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }

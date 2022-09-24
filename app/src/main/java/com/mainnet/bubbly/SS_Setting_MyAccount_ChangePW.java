@@ -61,6 +61,10 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ll_findid_d);
         toolbar = findViewById(R.id.toolbar_findID_D);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         bt_changePW_findID = findViewById(R.id.bt_changePW_findID);
         et_password_findID = findViewById(R.id.et_password_findID);
         et_password_check_findID = findViewById(R.id.et_password_check_findID);
@@ -89,29 +93,6 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "변경에 실패했습니다.",Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(getApplicationContext(), "성공적으로 변경했습니다.",Toast.LENGTH_SHORT).show();
-
-                                //자동로그인 : 쉐어드프리퍼런스에 저장한다.
-                                MasterKey masterKey = null;
-                                try {
-                                    masterKey = new MasterKey.Builder(getApplicationContext(), MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-                                            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                                            .build(); //암호화 키 생성
-                                    SharedPreferences sharedPreferences = EncryptedSharedPreferences
-                                            .create(getApplicationContext(),
-                                                    "account",
-                                                    masterKey,
-                                                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV, //key(name, 이경우 mnemonic) 암호화 방식
-                                                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM); //value 암호화 방식 선택
-
-                                    SharedPreferences.Editor spfEditor = sharedPreferences.edit();
-                                    spfEditor.putString("id", UserInfo.login_id);
-                                    spfEditor.putString("pw", encryptedPW);
-                                    spfEditor.commit();
-                                } catch (GeneralSecurityException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
 
                                 Intent mIntent = new Intent(getApplicationContext(), SS_Setting_MyAccount.class);
                                 startActivity(mIntent);
@@ -147,7 +128,7 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
                 //비밀번호 정규식 확인
                 String pwRex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).{8,16}.$";
                 Pattern pattern = Pattern.compile(pwRex);
-                if(pattern.matcher(et_password_findID.getText().toString()).matches()){
+                if(pattern.matcher(et_password_findID.getText().toString()).matches()&&et_password_findID.getText().toString().equals("")){
                     tv_pw_check_findID.setText("비밀번호 규칮에 맞습니다.");
                     tv_pw_check_findID.setTextColor(Color.parseColor("#002AFF"));
                     et_password_check_findID.setEnabled(true);

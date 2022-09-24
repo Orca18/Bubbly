@@ -142,9 +142,7 @@ public class ModifyProfile extends AppCompatActivity {
                                 @Override
                                 public void updateUserInfo() {
                                     Toast.makeText(getApplicationContext(), "회원 정보가 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                                    Intent mIntent = new Intent(getApplicationContext(), MM_Profile.class);
-                                    mIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                    startActivity(mIntent);
+                                    finish();
                                 }
                             });
                         }else{

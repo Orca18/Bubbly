@@ -139,7 +139,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
 
                         //블록체인에서 nft 관련 트랜잭션이 느린 관계로 모든 response를 수신하기 전 timeout되는 문제가 있음.
                         //따라서 response 수신과 무관하게 토스트를 띄운다.
-                        Toast.makeText(context, "NFT판매 취소 신청 완료. 몇초 뒤 NFT 목록을 확인하세요.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "NFT판매 취소 신청 완료. 블록체인 반영까지 3~5분이 소요될 수 있습니다.",Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -197,7 +197,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
 
                         //블록체인에서 nft 관련 트랜잭션이 느린 관계로 모든 response를 수신하기 전 timeout되는 문제가 있음.
                         //따라서 response 수신과 무관하게 토스트를 띄운다.
-                        Toast.makeText(context, "NFT판매 신청 완료. 몇초 뒤 NFT 목록을 확인하세요.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "NFT판매 신청 완료. 블록체인 반영까지 3~5분이 소요될 수 있습니다.",Toast.LENGTH_SHORT).show();
 
                     }
                 });

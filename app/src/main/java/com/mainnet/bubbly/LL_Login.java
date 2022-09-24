@@ -159,7 +159,7 @@ public class LL_Login extends AppCompatActivity {
                                             Map<String, ?> all = sharedPreferences.getAll();
                                             System.out.println(all.values());
                                             UserInfo.user_addr = sharedPreferences.getString("address","");
-                                            UserInfo.mnemonic = sharedPreferences.getString("mnemonic",""); //니모닉 앞에 file titile이 포함되어서 저장되는 문제가 있음. 추후 수정 예정.
+                                            UserInfo.mnemonic = sharedPreferences.getString("mnemonic","");
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {

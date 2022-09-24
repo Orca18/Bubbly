@@ -1,4 +1,5 @@
 package com.mainnet.bubbly;
+import com.bumptech.glide.Glide;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -47,6 +48,8 @@ import com.mainnet.bubbly.model.OtherUserInfo;
 import com.mainnet.bubbly.model.UserInfo;
 import com.mainnet.bubbly.retrofit.ApiClient;
 import com.mainnet.bubbly.retrofit.ApiInterface;
+import com.mainnet.bubbly.retrofit.ChatApiClient;
+import com.mainnet.bubbly.retrofit.ChatApiInterface;
 import com.mainnet.bubbly.retrofit.user_Response;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -54,6 +57,7 @@ import com.google.android.material.navigation.NavigationView;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -67,6 +71,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
 
     // 뒤로가기 시간
     private long backKeyPressedTime = 0;
@@ -93,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     // 유저 정보
     SharedPreferences preferences;
     String userId;
+    TextView my_nick, my_id;
 
     /**
      * 채팅서비스 연결 로직
@@ -453,8 +459,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.home_frame, bottom1_fragment).commitAllowingStateLoss();
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.home_bottom);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelecedListener2());
 
         navigationView = findViewById(R.id.main_navigation_view);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -470,6 +474,26 @@ public class MainActivity extends AppCompatActivity {
         settingOption = view.findViewById(R.id.navi_header_setting_option);
         info = view.findViewById(R.id.navi_header_info);
         logout = view.findViewById(R.id.navi_header_logout);
+        my_nick = view.findViewById(R.id.navi_tv_nick);
+        my_id = view.findViewById(R.id.navi_tv_id);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.home_bottom);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelecedListener2());
+
+
+        if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
+            Glide.with(MainActivity.this)
+                    .load(UserInfo.profile_file_name)
+                    .circleCrop()
+                    .into(myAccount);
+        } else {
+            Glide.with(MainActivity.this)
+                    .load(R.drawable.blank_profile)
+                    .circleCrop()
+                    .into(myAccount);
+        }
+        my_nick.setText(UserInfo.user_nick);
+        my_id.setText(UserInfo.user_id);
 
         NaviTouch();
     }
@@ -477,6 +501,7 @@ public class MainActivity extends AppCompatActivity {
     private class ItemSelecedListener2 implements BottomNavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
             switch (item.getItemId()) {
@@ -496,6 +521,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.mm_profile:
                     transaction.replace(R.id.home_frame, bottom4_fragment).commitAllowingStateLoss();
                     break;
+
             }
             return true;
         }
@@ -510,13 +536,15 @@ public class MainActivity extends AppCompatActivity {
         myAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.replace(R.id.home_frame, bottom4_fragment).commitAllowingStateLoss();
+
                 drawerLayout.closeDrawers();
-                Intent mIntent3 = new Intent(getApplicationContext(), MM_Profile.class);
-                mIntent3.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(mIntent3);
-                finish();
+                // TODO 프로필 화면으로 이동
             }
         });
+
+
         myActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -572,63 +600,63 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // 로그아웃 시 api 서버의 모든 토큰정보를 지워준다.
-//                ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
-//                Call<String> call = apiClient.logoutFromApiServer(userId);
-//                call.enqueue(new Callback<String>()
-//                {
-//                    @RequiresApi(api = Build.VERSION_CODES.O)
-//                    @Override
-//                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-//                    {
-//                        if (response.isSuccessful() && response.body() != null)
-//                        {
-//                            if(response.body().equals("logout success")){
-//                                // 로그아웃 시 채팅 서버의 모든 토큰정보를 지워준다.
-//                                ChatApiInterface chatApiInterface = ChatApiClient.getApiClient(MainActivity.this).create(ChatApiInterface.class);
-//                                Call<String> call2 = chatApiInterface.logoutFromChatServer(UserInfo.token, userId);
-//                                call2.enqueue(new Callback<String>()
-//                                {
-//                                    @RequiresApi(api = Build.VERSION_CODES.O)
-//                                    @Override
-//                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-//                                    {
-//                                        if (response.isSuccessful() && response.body() != null)
-//                                        {
-//                                            if(response.body().equals("logout success")){
+                ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
+                Call<String> call = apiClient.logoutFromApiServer(userId);
+                call.enqueue(new Callback<String>()
+                {
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                    {
+                        if (response.isSuccessful() && response.body() != null)
+                        {
+                            if(response.body().equals("logout success")){
+                                // 로그아웃 시 채팅 서버의 모든 토큰정보를 지워준다.
+                                ChatApiInterface chatApiInterface = ChatApiClient.getApiClient(MainActivity.this).create(ChatApiInterface.class);
+                                Call<String> call2 = chatApiInterface.logoutFromChatServer(UserInfo.token, userId);
+                                call2.enqueue(new Callback<String>()
+                                {
+                                    @RequiresApi(api = Build.VERSION_CODES.O)
+                                    @Override
+                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
+                                    {
+                                        if (response.isSuccessful() && response.body() != null)
+                                        {
+                                            if(response.body().equals("logout success")){
                 drawerLayout.closeDrawers();
                 Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout);
                 startActivity(toLogin);
                 finish();
                 Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
-//                                            } else {
-//                                                Log.e("채팅 서버 로그아웃 데이터 ", response.body());
-//                                            }
-//                                        } else {
-//                                            Log.e("채팅 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
-//                                        }
-//                                    }
+                                            } else {
+                                                Log.e("채팅 서버 로그아웃 데이터 ", response.body());
+                                            }
+                                        } else {
+                                            Log.e("채팅 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
+                                        }
+                                    }
 
-//                                    @Override
-//                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-//                                    {
-//                                        Log.e("채팅서버 로그아웃 시실패: ", "1111");
-//                                    }
-//                                });
-//                            } else {
-//                                    Log.e("api 서버 로그아웃 데이터 ", response.body());
-//                            }
-//                        } else {
-//                            Log.e("api 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
-//                        }
-//                    }
+                                    @Override
+                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                                    {
+                                        Log.e("채팅서버 로그아웃 시실패: ", "1111");
+                                    }
+                                });
+                            } else {
+                                    Log.e("api 서버 로그아웃 데이터 ", response.body());
+                            }
+                        } else {
+                            Log.e("api 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
+                        }
+                    }
 
-//                    @Override
-//                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-//                    {
-//                        Log.e("api 서버 로그아웃 시실패: ", "1111");
-//                    }
-//                });
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
+                    {
+                        Log.e("api 서버 로그아웃 시실패: ", "1111");
+                    }
+                });
             }
         });
     }

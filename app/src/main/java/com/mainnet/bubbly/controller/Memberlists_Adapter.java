@@ -1,5 +1,6 @@
 package com.mainnet.bubbly.controller;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.Toast;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -52,10 +53,22 @@ public class Memberlists_Adapter extends RecyclerView.Adapter<Memberlists_Adapte
 
         Kim_Com_Members_Response currentItem = this.mData.get(position);
 
-        Glide.with(mContext)
-                .load(Config.cloudfront_addr + currentItem.getProfile_file_name())
-                .centerCrop()
-                .into(holder.cv_profile);
+
+
+
+        if (currentItem.getProfile_file_name() == null) {
+            Log.d("디버그태그", "null 이다");
+            Glide.with(mContext)
+                    .load(R.drawable.blank_profile)
+                    .into(holder.cv_profile);
+        } else {
+            Glide.with(mContext)
+                    .load(Config.cloudfront_addr + currentItem.getProfile_file_name())
+                    .centerCrop()
+                    .into(holder.cv_profile);
+        }
+
+
         
         holder.ll.setOnClickListener(new View.OnClickListener() {
             @Override

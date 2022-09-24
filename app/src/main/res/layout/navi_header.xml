@@ -16,8 +16,7 @@
             android:id="@+id/navi_header_profileimg"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/skeleton"
-            app:civ_border_color="@color/icon_black"
+            app:civ_border_color="#ccc"
             app:civ_border_width="1dp" />
 
         <LinearLayout
@@ -28,22 +27,36 @@
 
 
             <TextView
-                android:id="@+id/tv_name"
+                android:id="@+id/navi_tv_nick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/spoqa_bold"
-                android:text="메인넷"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/tv_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/spoqa_medium"
-                android:text="\u0040orca18"
-                android:textSize="14sp" />
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\u0040"/>
+
+                <TextView
+                    android:id="@+id/navi_tv_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
     </LinearLayout>

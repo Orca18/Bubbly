@@ -64,6 +64,9 @@
             android:name="com.mainnet.bubbly.Community_Memberlist"
             android:exported="false" />
         <activity
+            android:name="com.mainnet.bubbly.Community_NFTlist"
+            android:exported="false" />
+        <activity
             android:name="com.mainnet.bubbly.Community_Create"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
@@ -142,7 +145,7 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.mainnet.bubbly.LL_Register_A"
-            android:exported="false" ></activity>
+            android:exported="false" />
         <activity
             android:name="com.mainnet.bubbly.SS_Profile"
             android:exported="false" />
@@ -151,10 +154,10 @@
             android:exported="false" />
         <activity
             android:name="com.mainnet.bubbly.LL_Register_B"
-            android:exported="true" ></activity>
+            android:exported="false" />
         <activity
             android:name="com.mainnet.bubbly.LL_Register_C"
-            android:exported="true" ></activity>
+            android:exported="false" />
         <activity
             android:name="com.mainnet.bubbly.LL_Login"
             android:exported="false"

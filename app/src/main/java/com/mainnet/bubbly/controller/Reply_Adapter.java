@@ -115,10 +115,18 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         // SNS 형식 시간
         holder.tv_time.setText(a);
 
-        Glide.with(mContext)
-                .load(Config.cloudfront_addr + reply_response.getProfile_file_name())
-                .circleCrop()
-                .into(holder.iv_user_image);
+        if (reply_response.getProfile_file_name() == null) {
+            Log.d("디버그태그", "null 이다");
+            Glide.with(mContext)
+                    .load(R.drawable.blank_profile)
+                    .into(holder.iv_user_image);
+        } else {
+            Glide.with(mContext)
+                    .load(Config.cloudfront_addr + reply_response.getProfile_file_name())
+                    .circleCrop()
+                    .into(holder.iv_user_image);
+        }
+
 
         holder.iv_user_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,6 +136,8 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+
+
 
 
         Log.d("디버그태그", "user_id" + user_id + "/" + reply_response.getComment_writer_id());

@@ -41,6 +41,10 @@ public class SS_Setting_MyAccount_ChangeID extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ss_setting_myaccount_changeid);
         toolbar = findViewById(R.id.toolbar_setting_myAccount_changeID);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         bt_changeID = findViewById(R.id.bt_change_setting_confirmID);
         et_id = findViewById(R.id.et_id_setting_changeID);
         tv_id_check = findViewById(R.id.tv_id_check_setting_changeID);
@@ -61,6 +65,7 @@ public class SS_Setting_MyAccount_ChangeID extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "변경에 실패했습니다.",Toast.LENGTH_SHORT).show();
                             }else{
                                 Toast.makeText(getApplicationContext(), "성공적으로 변경했습니다.",Toast.LENGTH_SHORT).show();
+                                UserInfo.login_id = et_id.getText().toString();
                                 Intent mIntent = new Intent(getApplicationContext(), SS_Setting_MyAccount.class);
                                 startActivity(mIntent);
                             }
@@ -88,7 +93,7 @@ public class SS_Setting_MyAccount_ChangeID extends AppCompatActivity {
                 //아이디 정규식 확인
                 String rex = "^([A-Za-z0-9]*)$";
                 Pattern pattern = Pattern.compile(rex);
-                if(pattern.matcher(et_id.getText().toString()).matches()){
+                if(pattern.matcher(et_id.getText().toString()).matches()&&!et_id.getText().toString().equals("")){
                     tv_id_check.setText("아이디 규칮에 맞습니다.");
                     //아이디 중복 체크
                     ApiInterface selectIsExistingId_api = ApiClient.getApiClient(SS_Setting_MyAccount_ChangeID.this).create(ApiInterface.class);
