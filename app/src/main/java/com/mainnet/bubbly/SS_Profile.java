@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -90,6 +91,9 @@ public class SS_Profile extends AppCompatActivity {
     String profile_file_name;
     String profile_file_name_for_chat;
 
+    /** 채팅방 생성 로딩바*/
+    private ProgressBar progressBar_chat_room_create;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +136,14 @@ public class SS_Profile extends AppCompatActivity {
                 token = responseResult.get(0).getToken();
                 profile_file_name_for_chat = responseResult.get(0).getProfile_file_name();
                 profile_file_name = "";
+
+                // 내 프로필이라면 채팅하기와 팔로우하기, 언팔로우하기 아이콘을 안보여준다.
+                if(user_id.equals(UserInfo.user_id)){
+                    bt_following.setVisibility(View.GONE);
+                    bt_unfollowing.setVisibility(View.GONE);
+                    iv_chat.setVisibility(View.GONE);
+                }
+
                 if (responseResult.get(0).getProfile_file_name() != null && !responseResult.get(0).getProfile_file_name().equals("")) {
                     profile_file_name = Config.cloudfront_addr + responseResult.get(0).getProfile_file_name();
                 }
@@ -284,6 +296,9 @@ public class SS_Profile extends AppCompatActivity {
         bt_following = findViewById(R.id.bt_following_ss_profile);
         bt_unfollowing = findViewById(R.id.bt_unfollowing_ss_profile);
         iv_chat = findViewById(R.id.iv_chat_ss_profile);
+
+        // 채팅 로딩바
+        progressBar_chat_room_create = findViewById(R.id.progressBar_chat_room_create);
     }
 
 
@@ -351,6 +366,12 @@ public class SS_Profile extends AppCompatActivity {
         iv_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 로딩바 시작
+                progressBar_chat_room_create.setVisibility(View.VISIBLE);
+
+                // 화면터치 금지
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                 // 사용자와 채팅을 요청하는 사람의 아이디 가져오기
                 ArrayList<OtherUserInfo> chatMemberList = new ArrayList<>();
 
@@ -485,6 +506,12 @@ public class SS_Profile extends AppCompatActivity {
         // 채팅방 생성 혹은 파괴 객체정보
         mIntent.putExtra("chatRoomCreOrDel", chatRoomCre);
         //Log.d("chatRoomCreOrDel",chatRoomCre.toString());
+
+        // 로딩바 제거
+        progressBar_chat_room_create.setVisibility(View.GONE);
+
+        // 화면터치 금지해제
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         // ChattingRoom화면으로 이동
         startActivity(mIntent);

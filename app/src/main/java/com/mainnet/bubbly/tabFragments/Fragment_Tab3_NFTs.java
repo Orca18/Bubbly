@@ -103,6 +103,11 @@ public class Fragment_Tab3_NFTs extends Fragment {
                     List<NFT_Item> responseResult = response.body();
                     for(int i=0; i<responseResult.size(); i++){
                         System.out.println("nft 보유 목록"+responseResult.get(i).getNft_id());
+
+                        Log.d("responseResult.get(i).getNft_id(): " , responseResult.get(i).getNft_id());
+                        Log.d("responseResult.get(i).getHolder_id(): " , responseResult.get(i).getHolder_id());
+                        Log.d("responseResult.get(i).getFile_save_url(): " , responseResult.get(i).getFile_save_url());
+
                         list.add(new NFT_Item(responseResult.get(i).getNft_id(),
                                 responseResult.get(i).getNft_des(),
                                 responseResult.get(i).getNft_name(),

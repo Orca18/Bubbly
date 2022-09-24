@@ -44,6 +44,7 @@ public class LL_Register_A extends AppCompatActivity {
     WebView wv_privacyPolicy, wv_termsToUse;
     int authentication_check = 0; // 휴대폰,이메일 인증, 약관2개 체크
     int authentication_check_target = 4;
+    boolean isSended = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,32 +177,37 @@ public class LL_Register_A extends AppCompatActivity {
         tv_send_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //하이픈 없이 전송
-                if(et_phone.getText().toString().contains("-")){
-                    Toast.makeText(getApplicationContext(), "숫자만 입력해주세요.",Toast.LENGTH_SHORT).show();
-                }else {
-                    ApiInterface sendPhoneCertificationNum_api = ApiClient.getApiClient(LL_Register_A.this).create(ApiInterface.class);
-                    Call<String> call = sendPhoneCertificationNum_api.sendPhoneCertificationNum(et_phone.getText().toString());
-                    call.enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                            if (response.isSuccessful() && response.body() != null) {
-                                Log.e("휴대폰 인증번호 전송 성공", response.body().toString());
-                                if(response.body().toString().equals("exist")){
-                                    Toast.makeText(getApplicationContext(), "동일한 휴대폰 번호가 이미 존재합니다.",Toast.LENGTH_SHORT).show();
-                                }else if(response.body().toString().equals("fail")){
-                                    Toast.makeText(getApplicationContext(), "문자 전송에 실패했습니다.",Toast.LENGTH_SHORT).show();
-                                }else{
-                                    et_phone.setEnabled(false); // 휴대폰 인증 전송 시 휴대폰번호 입력란 비활성화
-                                    Toast.makeText(getApplicationContext(), "휴대폰 인증 전송", Toast.LENGTH_SHORT).show();
+                if(!isSended){
+                    //하이픈 없이 전송
+                    if(et_phone.getText().toString().contains("-")){
+                        Toast.makeText(getApplicationContext(), "숫자만 입력해주세요.",Toast.LENGTH_SHORT).show();
+                    } else if(et_phone.getText().toString().length() != 10 && et_phone.getText().toString().length() != 11){
+                        Toast.makeText(getApplicationContext(), "정확한 휴대폰 번호를 입력해주세요.",Toast.LENGTH_SHORT).show();
+                    } else {
+                        ApiInterface sendPhoneCertificationNum_api = ApiClient.getApiClient(LL_Register_A.this).create(ApiInterface.class);
+                        Call<String> call = sendPhoneCertificationNum_api.sendPhoneCertificationNum(et_phone.getText().toString());
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful() && response.body() != null) {
+                                    Log.e("휴대폰 인증번호 전송 성공", response.body().toString());
+                                    if(response.body().toString().equals("exist")){
+                                        Toast.makeText(getApplicationContext(), "동일한 휴대폰 번호가 이미 존재합니다.",Toast.LENGTH_SHORT).show();
+                                    }else if(response.body().toString().equals("fail")){
+                                        Toast.makeText(getApplicationContext(), "문자 전송에 실패했습니다.",Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        isSended = true;
+                                        et_phone.setEnabled(false); // 휴대폰 인증 전송 시 휴대폰번호 입력란 비활성화
+                                        Toast.makeText(getApplicationContext(), "휴대폰 인증 전송", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
-                        }
-                        @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                            Log.e("휴대폰 인증번호 전송 에러", t.getMessage());
-                        }
-                    });
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Log.e("휴대폰 인증번호 전송 에러", t.getMessage());
+                            }
+                        });
+                    }
                 }
             }
         });

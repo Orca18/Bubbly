@@ -70,7 +70,7 @@ public class NFTSell_Adapter extends RecyclerView.Adapter<NFTSell_Adapter.ViewHo
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    new SnackAndToast().createToast(context,"NFT 구매가 완료되었습니다.");
+                                    new SnackAndToast().createToast(context,response.body());
 
                                 }
                             }

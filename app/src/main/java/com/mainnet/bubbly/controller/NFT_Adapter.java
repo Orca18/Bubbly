@@ -60,6 +60,9 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         String ipfsUrl = lists.get(position).getFile_save_url();
         System.out.println(ipfsUrl);
+
+        Log.d("ipfsUrl",ipfsUrl);
+
         if(ipfsUrl!=null&&!ipfsUrl.equals("")){
             Glide.with(context)
                     .load(ipfsUrl)
@@ -117,7 +120,8 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                     public void onClick(DialogInterface dialog, int which) {
                         ApiInterface api = ApiClient.getApiClient(context).create(ApiInterface.class);
                         System.out.println(UserInfo.mnemonic+"nftid"+lists.get(position).getNft_id()+lists.get(position).getSell_price()+UserInfo.user_id);
-                        Call<String> call = api.nftStopSell(UserInfo.mnemonic,lists.get(position).getNft_id(),lists.get(position).getApp_id(),lists.get(position).getSell_price());
+
+                        Call<String> call = api.nftStopSell(UserInfo.mnemonic,lists.get(position).getNft_id(),lists.get(position).getApp_id(),"" + lists.get(position).getSell_price());
                         call.enqueue(new Callback<String>() {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
@@ -180,7 +184,7 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                             @Override
                             public void onResponse(Call<String> call, Response<String> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    new SnackAndToast().createToast(context,"NFT 판매가 등록되었습니다.");
+                                    new SnackAndToast().createToast(context, response.body());
                                 }
                             }
 

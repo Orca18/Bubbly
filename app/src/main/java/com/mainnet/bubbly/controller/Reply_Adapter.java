@@ -115,7 +115,6 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         // SNS 형식 시간
         holder.tv_time.setText(a);
 
-
         Glide.with(mContext)
                 .load(Config.cloudfront_addr + reply_response.getProfile_file_name())
                 .circleCrop()
