@@ -8,15 +8,23 @@
     android:orientation="vertical">
 
 
-    <TextView
-        android:id="@+id/tv_com_name"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="19dp"
-        android:layout_marginLeft="76dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="커뮤니티명"
-        android:textSize="15dp" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/tv_com_name"
+            android:layout_width="match_parent"
+            android:layout_height="19dp"
+            android:layout_marginLeft="75dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="커뮤니티명"
+            android:textSize="15dp" />
+    </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/ll_item_layout"
@@ -25,15 +33,33 @@
         android:orientation="horizontal"
         android:paddingHorizontal="6dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_user_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="14dp"
-            android:src="@drawable/profile"
-            app:civ_border_color="@color/gray"
-            app:civ_border_width="1dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_user_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="14dp"
+                android:src="@drawable/profile"
+                app:civ_border_color="@color/gray"
+                app:civ_border_width="1dp" />
+
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/item_post_nft_yn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="NFT   "
+                android:textColor="@color/red" />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,22 +85,22 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:text="\u0040"
                     android:fontFamily="@font/spoqa_medium"
+                    android:gravity="center"
+                    android:text="\u0040"
                     android:textSize="15dp" />
 
                 <TextView
-                    android:gravity="center"
                     android:id="@+id/feed_basic_userID"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/spoqa_medium"
                     android:ellipsize="end"
+                    android:fontFamily="@font/spoqa_medium"
+                    android:gravity="center"
                     android:maxLines="1"
                     android:text="사용자"
                     android:textSize="15dp" />
@@ -98,8 +124,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:paddingRight="3dp"
                     android:gravity="center"
+                    android:paddingRight="3dp"
                     android:text="11h"
                     android:textSize="15dp" />
 
@@ -115,10 +141,10 @@
 
 
             <TextView
-                android:lineSpacingExtra ="2dp"
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lineSpacingExtra="2dp"
                 android:text="Bubble Text - 버블 내용\n간격 테스트"
                 android:textColor="@color/black"
                 android:textSize="17dp" />
@@ -145,7 +171,7 @@
             <com.google.android.exoplayer2.ui.SimpleExoPlayerView
                 android:id="@+id/vd_media"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -193,7 +219,7 @@
                         android:layout_gravity="center"
                         android:layout_marginRight="5dp"
                         android:padding="3dp"
-                        android:src="@drawable/ic_outline_chat_bubble_outline_24"/>
+                        android:src="@drawable/ic_outline_chat_bubble_outline_24" />
 
                     <TextView
                         android:id="@+id/tv_reply_count"
