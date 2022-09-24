@@ -115,9 +115,6 @@ public class Reply_Adapter extends RecyclerView.Adapter<Reply_Adapter.ReplyViewH
         // SNS 형식 시간
         holder.tv_time.setText(a);
 
-
-
-
         if (reply_response.getProfile_file_name() == null) {
             Log.d("디버그태그", "null 이다");
             Glide.with(mContext)

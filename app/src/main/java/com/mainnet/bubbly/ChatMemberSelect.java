@@ -15,7 +15,9 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.mainnet.bubbly.R;
@@ -73,6 +75,9 @@ public class ChatMemberSelect extends AppCompatActivity {
     /** 선택된 사용자 정보를 저장하는 리스트*/
     private ArrayList<OtherUserInfo> searchedUserList;
 
+    /** 채팅방 생성 로딩바*/
+    private ProgressBar progressBar_chat_room_create;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +100,9 @@ public class ChatMemberSelect extends AppCompatActivity {
 
         // 채팅하기 버튼
         btChat = findViewById(R.id.chat_member_select_btn_chat);
+
+        // 채팅 로딩바
+        progressBar_chat_room_create = findViewById(R.id.progressBar_chat_room_create);
 
         // 선택한 사용자를 표시하는 상단 리사이클러뷰 초기화
         clickedUserInfoRecyclerviewInit();
@@ -191,6 +199,12 @@ public class ChatMemberSelect extends AppCompatActivity {
         btChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 로딩바 시작
+                progressBar_chat_room_create.setVisibility(View.VISIBLE);
+
+                // 화면터치 금지
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                 // 선택된 사용자들
                 ArrayList<OtherUserInfo> chatMemberList = chatClickedUserAdapter.getList();
 
@@ -260,6 +274,9 @@ public class ChatMemberSelect extends AppCompatActivity {
                                     // 기존 채팅방으로 이동!
                                     moveToChatListAct(chatRoomId, chatRoomCre, chatMemberList, null, false);
                                 } else { // 두 참여자가 참여하고 있는 채팅방이 존재하지 않는다면
+                                    // 화면터치 금지
+                                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                                     OtherUserInfo other = chatMemberList.get(1);
                                     // 1-1. 채팅방 생성자 채팅방명 만들기(채팅상대의 닉네임)
                                     chatRoomCre.setChatRoomNameCreator(other.getUser_nick());
@@ -365,6 +382,11 @@ public class ChatMemberSelect extends AppCompatActivity {
         // 채팅방 생성 혹은 파괴 객체정보
         mIntent.putExtra("chatRoomCreOrDel", chatRoomCre);
         //Log.d("chatRoomCreOrDel",chatRoomCre.toString());
+
+        // 로딩바 제거
+        progressBar_chat_room_create.setVisibility(View.GONE);
+        // 화면터치 금지해제
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
         // MM_Message화면으로 돌아감
         setResult(Activity.RESULT_OK, mIntent);

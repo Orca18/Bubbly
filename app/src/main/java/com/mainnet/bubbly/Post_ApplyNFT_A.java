@@ -200,13 +200,10 @@ public class Post_ApplyNFT_A extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            if(response.body().equals("success")){
-                                //임시 저장 파일 삭제
-                                ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
-                                new SnackAndToast().createToast(getApplicationContext(),"NFT가 생성되었습니다.");
-                            }else{
-                                Log.e("nft 생성 실패","response fail");
-                            }
+                            //임시 저장 파일 삭제
+                            ViewGroup view = (ViewGroup) v.findViewById(android.R.id.content);
+                            new SnackAndToast().createToast(getApplicationContext(),response.body());
+
                             file.delete();
                         }
                     }

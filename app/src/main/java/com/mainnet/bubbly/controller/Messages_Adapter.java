@@ -98,7 +98,7 @@ public class Messages_Adapter extends RecyclerView.Adapter<Messages_Adapter.Mess
             chatRoomProfile = currentItem.getProfileFileNameOther();
         }
 
-        holder.chatprofile.setImageDrawable(mContext.getDrawable(R.drawable.profile));
+        holder.chatprofile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
 
 
         // 채팅방 프로필

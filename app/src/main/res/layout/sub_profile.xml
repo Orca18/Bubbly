@@ -9,79 +9,98 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            >
 
-            <com.google.android.material.appbar.AppBarLayout
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/ss_profile_toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/white"
-                    app:layout_scrollFlags="scroll|enterAlways">
-
-                    <TextView
-                        android:id="@+id/tv_title_ss_profile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/spoqa_bold"
-                        android:text="사용자 정보"
-                        android:textColor="@color/black"
-                        android:textSize="20dp" />
-<!--                    <ImageView-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_gravity="right"-->
-<!--                        android:layout_marginRight="10dp"-->
-<!--                        android:src="@drawable/ic_baseline_more_vert_24"-->
-<!--                        app:tint="#222" />-->
-
-                    <ImageView
-                        android:id="@+id/bt_search_ss_profile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/ic_baseline_search_24"
-                        app:tint="#222" />
-
-                </androidx.appcompat.widget.Toolbar>
-            </com.google.android.material.appbar.AppBarLayout>
-
-
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/ss_profile_refresh"
+                <com.google.android.material.appbar.AppBarLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <!--                    <ScrollView-->
-                    <!--                        android:id="@+id/ss_text_scrollview"-->
-                    <!--                        android:layout_width="match_parent"-->
-                    <!--                        android:layout_height="match_parent"-->
-                    <!--                        android:fillViewport="true"-->
-                    <!--                        android:nestedScrollingEnabled="true"-->
-                    <!--                        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-                    <include layout="@layout/sub_profile_include" />
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/ss_profile_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@color/white"
+                        app:layout_scrollFlags="scroll|enterAlways">
 
-                    <!--                    </ScrollView>-->
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                        <TextView
+                            android:id="@+id/tv_title_ss_profile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/spoqa_bold"
+                            android:text="사용자 정보"
+                            android:textColor="@color/black"
+                            android:textSize="20dp" />
+                        <!--                    <ImageView-->
+                        <!--                        android:layout_width="wrap_content"-->
+                        <!--                        android:layout_height="wrap_content"-->
+                        <!--                        android:layout_gravity="right"-->
+                        <!--                        android:layout_marginRight="10dp"-->
+                        <!--                        android:src="@drawable/ic_baseline_more_vert_24"-->
+                        <!--                        app:tint="#222" />-->
 
-            </RelativeLayout>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                        <ImageView
+                            android:id="@+id/bt_search_ss_profile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right"
+                            android:layout_marginRight="10dp"
+                            android:src="@drawable/ic_baseline_search_24"
+                            app:tint="#222" />
+
+                    </androidx.appcompat.widget.Toolbar>
+                </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                        android:id="@+id/ss_profile_refresh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!--                    <ScrollView-->
+                        <!--                        android:id="@+id/ss_text_scrollview"-->
+                        <!--                        android:layout_width="match_parent"-->
+                        <!--                        android:layout_height="match_parent"-->
+                        <!--                        android:fillViewport="true"-->
+                        <!--                        android:nestedScrollingEnabled="true"-->
+                        <!--                        app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+                        <include layout="@layout/sub_profile_include" />
+
+                        <!--                    </ScrollView>-->
+                    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+                </RelativeLayout>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar_chat_room_create"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </FrameLayout>

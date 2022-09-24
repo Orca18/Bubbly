@@ -195,9 +195,9 @@ public class ApiClient {
             }
         });
 
-        OkHttpClient okHttpClient = clientBuilder.connectTimeout(100, TimeUnit.SECONDS)
-                .readTimeout(100, TimeUnit.SECONDS)
-                .writeTimeout(100, TimeUnit.SECONDS)
+        OkHttpClient okHttpClient = clientBuilder.connectTimeout(1, TimeUnit.SECONDS)
+                .readTimeout(1, TimeUnit.SECONDS)
+                .writeTimeout(1, TimeUnit.SECONDS)
                 .build();
 
 

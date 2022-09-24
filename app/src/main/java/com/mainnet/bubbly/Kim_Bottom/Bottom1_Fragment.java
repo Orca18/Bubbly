@@ -96,7 +96,6 @@ public class Bottom1_Fragment extends Fragment {
         clickListeners(); // 2. 클릭 리스너
         selectPost_Followee_Communit(); // 3. 나와 팔로워, 속한 커뮤니티의 게시물 조회 api
 
-
         return view;
     }
 
@@ -156,6 +155,7 @@ public class Bottom1_Fragment extends Fragment {
 
 
     private void selectPost_Followee_Communit() {
+        Log.d("fragment1", "호출");
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         //위치 유지
