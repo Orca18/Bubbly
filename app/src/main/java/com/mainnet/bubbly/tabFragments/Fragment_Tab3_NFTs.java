@@ -71,7 +71,6 @@ public class Fragment_Tab3_NFTs extends Fragment {
         // 레이아웃
         v = inflater.inflate(R.layout.fragment_profile_tab1, container, false);
         recyclerView = v.findViewById(R.id.tab_recyclerview);
-        selectNFT();
 
         return v;
     }
@@ -125,6 +124,6 @@ public class Fragment_Tab3_NFTs extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        fillList();
+        selectNFT();
     }
 }
