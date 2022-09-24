@@ -1,4 +1,7 @@
 package com.mainnet.bubbly;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,7 +34,7 @@ public class Community_Memberlist extends AppCompatActivity {
 
     String com_id;
     Memberlists_Adapter adapter;
-    ArrayList<Kim_Com_Members_Response> list;
+    ArrayList<Kim_Com_Members_Response> list, filteredList;
     LinearLayoutManager linearLayoutManager;
 
     SharedPreferences preferences;
@@ -45,6 +48,8 @@ public class Community_Memberlist extends AppCompatActivity {
 
     TextView toolbar_title;
 
+    EditText et_member;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +60,40 @@ public class Community_Memberlist extends AppCompatActivity {
         com_id = intent.getStringExtra("com_id");
         com_name = intent.getStringExtra("com_name");
 
+
         initialize();
         GetComMemberList();
+
+        et_member.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchFilter(et_member.getText().toString());
+            }
+        });
+    }
+
+
+
+    public void searchFilter(String searchText) {
+        filteredList.clear();
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getNick_name().toLowerCase().contains(searchText.toLowerCase()) || list.get(i).getUser_id().toLowerCase().contains(searchText.toLowerCase()) ) {
+                filteredList.add(list.get(i));
+            }
+        }
+
+        adapter.setFilter(filteredList);
     }
 
     private void initialize() {
@@ -70,6 +107,9 @@ public class Community_Memberlist extends AppCompatActivity {
         toolbar_title.setText(com_name);
 
         recyclerView = findViewById(R.id.com_member_list);
+
+        et_member = findViewById(R.id.member_list_search);
+
     }
 
     private void GetComMemberList() {
@@ -81,6 +121,8 @@ public class Community_Memberlist extends AppCompatActivity {
         recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
 
         list = new ArrayList<>();
+        filteredList = new ArrayList<>();
+
         adapter = new Memberlists_Adapter(getApplicationContext(), this.list);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
