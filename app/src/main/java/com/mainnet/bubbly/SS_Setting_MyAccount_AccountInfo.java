@@ -1,14 +1,25 @@
 package com.mainnet.bubbly;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.mainnet.bubbly.R;
 import com.mainnet.bubbly.model.UserInfo;
+import com.mainnet.bubbly.retrofit.ApiClient;
+import com.mainnet.bubbly.retrofit.ApiInterface;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SS_Setting_MyAccount_AccountInfo extends AppCompatActivity {
 
@@ -27,41 +38,6 @@ public class SS_Setting_MyAccount_AccountInfo extends AppCompatActivity {
         tv_phone.setText(UserInfo.phone_num);
         tv_email.setText(UserInfo.email_addr);
         tv_address.setText(UserInfo.user_addr);
-
-        //블록체인 계정 정보 요청
-//        ApiInterface api = ApiClient.getApiClient().create(ApiInterface.class);
-//        Call<String> call_addr = api.selectAddrUsingUserId(UserInfo.user_id);
-//        call_addr.enqueue(new Callback<String>()
-//        {
-//            @Override
-//            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-//            {
-//                if (response.isSuccessful() && response.body() != null)
-//                {
-//                    System.out.println(response.body());
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(response.body());
-//                        String address = jsonObject.getString("address");
-//
-//                        //화면에 개인 정보 표시하기
-//                        tv_id.setText("@"+UserInfo.login_id);
-//                        tv_phone.setText(UserInfo.phone_num);
-//                        tv_email.setText(UserInfo.email_addr);
-//                        tv_address.setText(UserInfo.user_addr);
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//            @Override
-//            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-//            {
-//                Log.e("계정 정보 수신 에러", t.getMessage());
-//            }
-//        });
-
-
     }
 
     // 리소스 아이디 선언

@@ -154,13 +154,11 @@ public class LL_Splash extends AppCompatActivity {
                                                             masterkey,
                                                             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                                                             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+                                            System.out.println(sharedPreferences.getString("mnemonic",""));
                                             Map<String, ?> all = sharedPreferences.getAll();
-                                            System.out.println("모든값" + all.toString());
-                                            System.out.println("모든값" + all.values());
-                                            String address = sharedPreferences.getString("address", "");
-                                            String mnemonic = sharedPreferences.getString("mnemonic", "");
-                                            Log.e("니모닉", mnemonic);
-                                            UserInfo.mnemonic = mnemonic;
+                                            System.out.println(all.values());
+                                            UserInfo.user_addr = sharedPreferences.getString("address","");
+                                            UserInfo.mnemonic = sharedPreferences.getString("mnemonic","");
                                         } catch (GeneralSecurityException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
