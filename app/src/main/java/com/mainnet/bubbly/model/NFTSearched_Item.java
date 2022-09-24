@@ -4,53 +4,51 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class NFTSearched_Item {
-    @Expose
-    @SerializedName("") private String profileImageURL;
 
     @Expose
-    @SerializedName("") private String userName;
+    @SerializedName("profile_file_name") private String profileImageURL;
 
     @Expose
-    @SerializedName("") private String loginId;
+    @SerializedName("nick_name") private String userName;
 
     @Expose
-    @SerializedName("") private String userId;
+    @SerializedName("login_id") private String loginId;
 
     @Expose
-    @SerializedName("") private String comName;
+    @SerializedName("user_id") private String userId;
 
     @Expose
-    @SerializedName("") private String nft_id;
+    @SerializedName("nft_id") private String nft_id;
 
     @Expose
-    @SerializedName("") private String holder_id;
+    @SerializedName("holder_id") private String holder_id;
 
     @Expose
-    @SerializedName("") private String creation_time;
+    @SerializedName("nft_creation_time") private String creation_time;
 
     @Expose
-    @SerializedName("") private String isSell;
+    @SerializedName("is_sell") private String isSell;
 
     @Expose
-    @SerializedName("") private String seller_id;
+    @SerializedName("seller_id") private String seller_id;
 
     @Expose
-    @SerializedName("") private String sell_price;
+    @SerializedName("sell_price") private String sell_price;
 
     @Expose
-    @SerializedName("") private String app_id;
+    @SerializedName("app_id") private String app_id;
 
     @Expose
-    @SerializedName("") private String nft_name;
+    @SerializedName("nft_name") private String nft_name;
 
     @Expose
-    @SerializedName("") private String nft_des;
+    @SerializedName("nft_desc") private String nft_des;
 
     @Expose
-    @SerializedName("") private String file_save_url;
+    @SerializedName("file_save_url") private String file_save_url;
 
     @Expose
-    @SerializedName("") private String novaland_account_addr;
+    @SerializedName("novaland_account_addr") private String novaland_account_addr;
 
     public NFTSearched_Item(String profileImageURL, String userName, String loginId,
                             String userId, String nft_id, String holder_id,
@@ -169,14 +167,6 @@ public class NFTSearched_Item {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getComName() {
-        return comName;
-    }
-
-    public void setComName(String comName) {
-        this.comName = comName;
     }
 
     public String getHolder_id() {

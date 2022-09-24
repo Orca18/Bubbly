@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +22,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.mainnet.bubbly.R;
+import com.mainnet.bubbly.SS_Profile;
+import com.mainnet.bubbly.config.Config;
 import com.mainnet.bubbly.kim_util_test.Kim_DateUtil;
 import com.mainnet.bubbly.model.NFTSearched_Item;
 import com.mainnet.bubbly.model.NFTSell_Item;
@@ -62,7 +66,7 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        holder.bt_sell.setOnClickListener(new View.OnClickListener() {
+        holder.bt_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity).setTitle("NFT 구매");
@@ -116,14 +120,25 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
         System.out.println(user_img);
         if(user_img!=null&&!user_img.equals("")){
             Glide.with(context)
-                    .load(user_img)
+                    .load(Config.cloudfront_addr+user_img)
                     .into(holder.iv_user_image);
 
         }else{
-            //아무런 조치도하지 않는다. xml정의 따름.
+            Glide.with(context)
+                    .load(R.drawable.blank_profile)
+                    .into(holder.iv_user_image);
         }
+        holder.iv_user_image.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent mIntent = new Intent(context, SS_Profile.class);
+                mIntent.putExtra("user_id",lists.get(position).getHolder_id());
+                context.startActivity(mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
 
-        if(lists.get(position).getNft_name().equals("y")){
+
+        if(lists.get(position).getIsSell().equals("y")){
             holder.ll_background.setBackgroundColor(Color.parseColor("#eeeeee"));
             holder.ll_sell.setVisibility(View.VISIBLE);
         }else{
@@ -139,8 +154,6 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
         }
         // SNS 형식 시간
         holder.tv_time.setText(a);
-
-
         String ipfsUrl = lists.get(position).getFile_save_url();
         System.out.println(ipfsUrl);
         if(ipfsUrl!=null&&!ipfsUrl.equals("")){
@@ -149,7 +162,9 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
                     .into(holder.iv_image);
 
         }else{
-            //아무런 조치도하지 않는다. xml정의 따름.
+            Glide.with(context)
+                    .load(R.drawable.no_img_box)
+                    .into(holder.iv_user_image);
         }
         if(lists.get(position).getSell_price()!=null&&!lists.get(position).getSell_price().equals("")){
             holder.tv_price.setText(lists.get(position).getSell_price()+" Bubble");
@@ -169,7 +184,7 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
         LinearLayout ll_background, ll_sell;
         TextView tv_user_nick, feed_basic_userID, tv_time;
         ImageView iv_user_image, iv_image;
-        Button bt_sell;
+        Button bt_buy;
         TextView tv_price;
 
         public ViewHolder(@NonNull View view) {
@@ -180,9 +195,9 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
             feed_basic_userID = view.findViewById(R.id.feed_basic_userID_nftSrCom);
             iv_user_image = view.findViewById(R.id.iv_user_image_nftSrCom);
             tv_time = view.findViewById(R.id.tv_time_nftSrCom);
-            iv_image = view.findViewById(R.id.iv_nft_itemNFT_ssProfile);
-            bt_sell  = view.findViewById(R.id.bt_buy_itemNFT_ssProfile);
-            tv_price = view.findViewById(R.id.tv_price_itemNFT_ssProfile);
+            iv_image = view.findViewById(R.id.iv_nft_nftSrCom);
+            bt_buy  = view.findViewById(R.id.bt_buy_nftSrCom);
+            tv_price = view.findViewById(R.id.tv_price_nftSrCom);
         }
     }
 

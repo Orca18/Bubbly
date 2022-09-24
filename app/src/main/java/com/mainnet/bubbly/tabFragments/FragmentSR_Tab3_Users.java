@@ -33,8 +33,6 @@ import retrofit2.Response;
 
 public class FragmentSR_Tab3_Users extends Fragment {
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-
     View v;
 
     SearchedUser_Adapter adapter;
@@ -73,7 +71,16 @@ public class FragmentSR_Tab3_Users extends Fragment {
         // 레이아웃
         v = inflater.inflate(R.layout.fragment_ss_search_result, container, false);
         recyclerView = v.findViewById(R.id.rv_searchResult);
-
+        //스와이프 리스너
+        // 리사이클러뷰 새로고침 인식
+        SwipeRefreshLayout swipeRefreshLayout = v.findViewById(R.id.refresh_searchResult);
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        selectUser();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }});
         return v;
     }
 

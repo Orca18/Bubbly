@@ -69,6 +69,7 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
             public void onResponse(Call<List<NFTSell_Item>> call, Response<List<NFTSell_Item>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<NFTSell_Item> responseResult = response.body();
+                    lists.get(position).setIsSell("n");
                     for(int i=0; i<responseResult.size(); i++){
                         String element = responseResult.get(i).getNft_id();
                         System.out.println("nft 판매 목록"+element);
@@ -84,9 +85,9 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
                     }
                     if(lists.get(position).getIsSell().equals("y")){
                         holder.ll_background.setBackgroundColor(Color.parseColor("#eeeeee"));
-                        holder.ll_sell.setVisibility(View.GONE);
-                    }else{
                         holder.ll_sell.setVisibility(View.VISIBLE);
+                    }else{
+                        holder.ll_sell.setVisibility(View.GONE);
                     }
                 }
             }
@@ -102,7 +103,6 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
             Glide.with(context)
                     .load(ipfsUrl)
                     .into(holder.iv_image);
-
         }else{
             //아무런 조치도하지 않는다. xml정의 따름.
         }
