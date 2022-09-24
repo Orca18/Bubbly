@@ -21,21 +21,23 @@ public class SearchedUser_Item {
     @SerializedName("self_intro") private String self_intro;
 
 
-    public SearchedUser_Item(String follower_id, String nick_name, String profile_file_name, String login_id, String self_intro) {
-        this.user_id = follower_id;
+    public SearchedUser_Item(String user_id, String nick_name, String profile_file_name, String login_id, String self_intro) {
+        this.user_id = user_id;
         this.nick_name = nick_name;
         this.profile_file_name = profile_file_name;
         this.login_id = login_id;
         this.self_intro = self_intro;
     }
 
-    public SearchedUser_Item(String follower_id, String nick_name, String profile_file_name) {
-        this.user_id = follower_id;
+    public SearchedUser_Item(String user_id, String nick_name, String profile_file_name) {
+        this.user_id = user_id;
         this.nick_name = nick_name;
         this.profile_file_name = profile_file_name;
     }
 
-
+    public SearchedUser_Item(String user_id) {
+        this.user_id = user_id;
+    }
 
     public String getNick_name() {
         return nick_name;

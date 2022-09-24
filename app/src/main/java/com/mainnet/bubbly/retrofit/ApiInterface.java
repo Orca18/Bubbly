@@ -2,6 +2,7 @@ package com.mainnet.bubbly.retrofit;
 
 import com.mainnet.bubbly.model.Chat_Room_Cre_Or_Del;
 import com.mainnet.bubbly.model.Chat_Room_Info;
+import com.mainnet.bubbly.model.NFTSearched_Item;
 import com.mainnet.bubbly.model.OtherUserInfo;
 
 import java.util.ArrayList;
@@ -116,6 +117,9 @@ public interface ApiInterface {
     @GET("userinfo/selectUserSearchResultList") // 사용자 검색 api
     Call<String> selectUserSearchResultList(@Query("user_id") String user_id, //  user_id 값(auto_increment)
                                             @Query("search_text") String search_text); // 검색어
+
+    @GET("userinfo/selectUserNftList") // 검색된 nft결과
+    Call<List<NFTSearched_Item>> selectUserNftList(@Query("user_id") String user_id, @Query("search_text") String search_text);
 
 
     // todo 회정보와 관련된 api (끝 지점)
@@ -363,7 +367,6 @@ public interface ApiInterface {
     @GET("nft/selectSelledNftListUsingSellerId") // 특정 사용자가 판매중인 NFT리스트
     Call<List<NFTSell_Item>> selectSelledNftListUsingSellerId(@Query("seller_id") String seller_id);
 
-
     // todo nft 관련된 api (끝 지점)
 
 
@@ -384,6 +387,10 @@ public interface ApiInterface {
     // 기존에 존재하는 채팅방여부 조회
     @GET("chat/selectExistingChatRoomId")
     Call<String> selectExistingChatRoomId(@Query("chatMember1") String chatMember1, @Query("chatMember2") String chatMember2);
+
+
+    @GET("community/selectCommunityParticipantNftList") // 커뮤니티 nft결과
+    Call<List<NFTSearched_Item>> selectCommunityParticipantNftList( @Query("community_id") String community_id);
 
 
     // todo 채팅 관련api (끝 지점)

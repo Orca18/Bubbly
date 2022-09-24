@@ -61,6 +61,10 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ll_findid_d);
         toolbar = findViewById(R.id.toolbar_findID_D);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         bt_changePW_findID = findViewById(R.id.bt_changePW_findID);
         et_password_findID = findViewById(R.id.et_password_findID);
         et_password_check_findID = findViewById(R.id.et_password_check_findID);
@@ -147,7 +151,7 @@ public class SS_Setting_MyAccount_ChangePW extends AppCompatActivity {
                 //비밀번호 정규식 확인
                 String pwRex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).{8,16}.$";
                 Pattern pattern = Pattern.compile(pwRex);
-                if(pattern.matcher(et_password_findID.getText().toString()).matches()){
+                if(pattern.matcher(et_password_findID.getText().toString()).matches()&&et_password_findID.getText().toString().equals("")){
                     tv_pw_check_findID.setText("비밀번호 규칮에 맞습니다.");
                     tv_pw_check_findID.setTextColor(Color.parseColor("#002AFF"));
                     et_password_check_findID.setEnabled(true);

@@ -64,6 +64,9 @@
             android:name="com.mainnet.bubbly.Community_Memberlist"
             android:exported="false" />
         <activity
+            android:name="com.mainnet.bubbly.Community_NFTlist"
+            android:exported="false" />
+        <activity
             android:name="com.mainnet.bubbly.Community_Create"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />

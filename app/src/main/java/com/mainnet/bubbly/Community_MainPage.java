@@ -329,7 +329,10 @@ public class Community_MainPage extends AppCompatActivity {
             public void onClick(View view) {
                 // TODO 가입함 or 가입가능 상태에 따라 보여주는 상태 변경...
                 // 어떻게 해당 커뮤니티에 해당하는 nft를 가져올지 고민하기
-                Toast.makeText(Community_MainPage.this, "준비 중...", Toast.LENGTH_SHORT).show();
+                Intent mIntent = new Intent(getApplicationContext(), Community_NFTlist.class);
+                mIntent.putExtra("com_id", com_id);
+                mIntent.putExtra("com_name", com_name);
+                startActivity(mIntent);
             }
         });
 
