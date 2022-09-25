@@ -27,15 +27,36 @@
         android:orientation="horizontal"
         android:paddingHorizontal="6dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/iv_user_image_nftSrCom"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="14dp"
-            android:src="@drawable/blank_profile"
-            app:civ_border_color="@color/gray"
-            app:civ_border_width="1dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_user_image_nftSrCom"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="14dp"
+                android:src="@drawable/blank_profile"
+                app:civ_border_color="@color/gray"
+                app:civ_border_width="1dp" />
+
+
+            <TextView
+                android:layout_gravity="center"
+                android:id="@+id/item_post_nft_yn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/spoqa_bold"
+                android:text="FOR SALE"
+                android:textColor="@color/blue" />
+
+        </LinearLayout>
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"

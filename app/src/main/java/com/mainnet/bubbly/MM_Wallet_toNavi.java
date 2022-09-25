@@ -202,7 +202,7 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
                         for(int i = 0; i<jsonAssetArray.length(); i++){
                             JSONObject asset = jsonAssetArray.getJSONObject(i);
                             int assetID = asset.getInt("asset-id");
-                            if(assetID==94434081){
+                            if(assetID==9){
                                 bubble = asset.getInt("amount");
                             }
                         }
@@ -224,57 +224,98 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
         });
     }
 
+    private void selectHistory(){
+        String base_url = "http://221.143.186.194:8980/";
+        String token = "";
+        ApiInterface api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterface.class);
+        Call<String> call = api.transactionHistory(token, address,20,nextToken);
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                System.out.println("거래기록"+response.body()+response.errorBody());
+                System.out.println("거래기록"+response.raw()+response.headers()+response.code());
+                if (response.isSuccessful() && response.body() != null) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response.body());
+                        nextToken = jsonObject.getString("next-token");
+                        JSONArray jsonArray = jsonObject.getJSONArray("transactions");
+                        for(int i = 0; i<jsonArray.length(); i++){
+                            JSONObject tx = jsonArray.getJSONObject(i);
+                            String txId = tx.getString("id");
+                            String sender = tx.getString("sender");
+                            long roundTime = tx.getLong("round-time");
+                            System.out.println(roundTime);
+                            //system time to date
+                            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+                            Date date = new Date();
+                            date.setTime(roundTime * 1000); //epoch seconds to ms
+                            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                            String roundTimeToDate = sdf.format(date);
+                            int fee = tx.getInt("fee");
+                            String txnTypeToString = "";
+                            String txType = tx.getString("tx-type");
+                            switch (txType){
+                                case "pay":
+                                    txnTypeToString = "Payment";
+                                    break;
+                                case "keyreg":
+                                    txnTypeToString = "Key Registration";
+                                    break;
+                                case "acfg":
+                                    txnTypeToString = "Asset Configuration";
+                                    break;
+                                case "axfer":
+                                    txnTypeToString = "Asset Transfer";
+                                    break;
+                                case "afrz":
+                                    txnTypeToString = "Asset Freeze";
+                                    break;
+                                case "appl":
+                                    txnTypeToString = "Application Call";
+                                    break;
+                            }
+                            int amount;
+                            String receiver = null;
+                            int assetId;
+                            if(txType.equals("pay")){
+                                JSONObject txn = tx.getJSONObject("payment-transaction");
+                                amount = txn.getInt("amount");
+                                receiver = txn.getString("receiver");
+                                assetId = 0;
+                            }else if(txType.equals("axfer")){
+                                JSONObject axtx = tx.getJSONObject("asset-transfer-transaction");
+                                amount = axtx.getInt("amount");
+                                receiver = axtx.getString("receiver");
+                                assetId = axtx.getInt("asset-id");
+                            }else{
+                                amount = 0;
+                                receiver = "";
+                                assetId = 0;
+                            }
+                            list.add(new TransactionHistory_Item(
+                                    txnTypeToString,
+                                    txId,
+                                    sender,
+                                    roundTimeToDate,
+                                    ""+fee,
+                                    ""+amount,
+                                    receiver,
+                                    ""+assetId));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-    // 바텀 메뉴 클릭
-//    private void bottomNavi() {
-//        View.OnClickListener clickListener = new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                switch (v.getId()) {
-//                    case R.id.wallet_tohome:
-//                        Intent mIntent1 = new Intent(getApplicationContext(), MM_Home.class);
-//                        mIntent1.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                        startActivity(mIntent1);
-//                        finish();
-//                        break;
-//
-//                    case R.id.wallet_toissue:
-//                        Intent mIntent2 = new Intent(getApplicationContext(), MM_Issue.class);
-//                        mIntent2.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                        startActivity(mIntent2);
-//                        finish();
-//                        break;
-//
-//                    case R.id.wallet_tomessage:
-//                        Intent mIntent3 = new Intent(getApplicationContext(), MM_Message.class);
-//                        mIntent3.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                        startActivity(mIntent3);
-//                        finish();
-//                        break;
-//
-//                    case R.id.wallet_toprofile:
-//                        Intent mIntent4 = new Intent(getApplicationContext(), MM_Profile.class);
-//                        mIntent4.addFlags (Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                        startActivity(mIntent4);
-//                        finish();
-//                        break;
-//
-//                    case R.id.wallet_towallet:
-//                        break;
-//
-//                    default:
-//                        break;
-//                }
-//            }
-//        };
+                    adapter.notifyDataSetChanged();
+                }
+            }
 
-//        bthome.setOnClickListener(clickListener);
-//        btissue.setOnClickListener(clickListener);
-//        btwallet.setOnClickListener(clickListener);
-//        btmessage.setOnClickListener(clickListener);
-//        btprofile.setOnClickListener(clickListener);
-
-//    }
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                Log.e("거래기록 가져오기 실패", t.getMessage());
+            }
+        });
+    }
 
     // 내비 터치치
     private void NaviTouch() {
@@ -333,50 +374,6 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "로그아웃",Toast.LENGTH_SHORT).show();            }
         });
 
-
-//        // TODO 임시 계좌 생성 버튼
-//        createAddress.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent toLogin = new Intent(getApplicationContext(), test_CreateAccount.class);
-//                startActivity(toLogin);
-//            }
-//        });
-//
-//        refreshAmount.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO 잔액 다시 가져오기
-//                AlgoService algoService = new AlgoService(
-//                        "https://node.testnet.algoexplorerapi.io/",
-//                        443,
-//                        null,
-//                        "https://algoindexer.testnet.algoexplorerapi.io/idx2",
-//                        443);
-//
-//                Long amountLong = algoService.getAccountAmount(address).orElse(-1L);
-//
-//                amount.setText(""+amountLong);
-//                Log.d("algoDebugAmount", ""+algoService);
-//                Log.d("algoDebugAmount", ""+amountLong);
-//                Log.d("algoDebugAmount", ""+address);
-//
-//            }
-//        });
-//    private void sendAlgo() {
-//        AlgoService algoService = new AlgoService("https://node.testnet.algoexplorerapi.io/",
-//                443,
-//                null,
-//                "https://algoindexer.testnet.algoexplorerapi.io/idx2",
-//                443,
-//                "니모닉");
-//        try {
-//            String txId = algoService.sendAlgo("받는 주소", 1L, "보내는 사람의 니모닉");
-//            return;
-//        } catch (Exception e) {
-//            return;
-//        }
-//    }
 
     }
 
@@ -541,99 +538,6 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
     }
 
 
-
-    private void selectHistory(){
-        String base_url = "https://testnet-algorand.api.purestake.io/idx2/";
-        String token = "4LS0jVPkU61EBPpW2Ml3A2iaEcEfXK92aCDSzXXr";
-        ApiInterface api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterface.class);
-        Call<String> call = api.transactionHistory(token,address,20,nextToken);
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                System.out.println("거래기록"+response.body()+response.errorBody());
-                System.out.println("거래기록"+response.raw()+response.headers()+response.code());
-                if (response.isSuccessful() && response.body() != null) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response.body());
-                        nextToken = jsonObject.getString("next-token");
-                        JSONArray jsonArray = jsonObject.getJSONArray("transactions");
-                        for(int i = 0; i<jsonArray.length(); i++){
-                            JSONObject tx = jsonArray.getJSONObject(i);
-                            String txId = tx.getString("id");
-                            String sender = tx.getString("sender");
-                            long roundTime = tx.getLong("round-time");
-                            System.out.println(roundTime);
-                            //system time to date
-                            SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-                            Date date = new Date();
-                            date.setTime(roundTime * 1000); //epoch seconds to ms
-                            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-                            String roundTimeToDate = sdf.format(date);
-                            int fee = tx.getInt("fee");
-                            String txnTypeToString = "";
-                            String txType = tx.getString("tx-type");
-                            switch (txType){
-                                case "pay":
-                                    txnTypeToString = "Payment";
-                                    break;
-                                case "keyreg":
-                                    txnTypeToString = "Key Registration";
-                                    break;
-                                case "acfg":
-                                    txnTypeToString = "Asset Configuration";
-                                    break;
-                                case "axfer":
-                                    txnTypeToString = "Asset Transfer";
-                                    break;
-                                case "afrz":
-                                    txnTypeToString = "Asset Freeze";
-                                    break;
-                                case "appl":
-                                    txnTypeToString = "Application Call";
-                                    break;
-                            }
-                            int amount;
-                            String receiver = null;
-                            int assetId;
-                            if(txType.equals("pay")){
-                                JSONObject txn = tx.getJSONObject("payment-transaction");
-                                amount = txn.getInt("amount");
-                                receiver = txn.getString("receiver");
-                                assetId = 0;
-                            }else if(txType.equals("axfer")){
-                                JSONObject axtx = tx.getJSONObject("asset-transfer-transaction");
-                                amount = axtx.getInt("amount");
-                                receiver = axtx.getString("receiver");
-                                assetId = axtx.getInt("asset-id");
-                            }else{
-                                amount = 0;
-                                receiver = "";
-                                assetId = 0;
-                            }
-                            list.add(new TransactionHistory_Item(
-                                    txnTypeToString,
-                                    txId,
-                                    sender,
-                                    roundTimeToDate,
-                                    ""+fee,
-                                    ""+amount,
-                                    receiver,
-                                    ""+assetId));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                Log.e("거래기록 가져오기 실패", t.getMessage());
-            }
-        });
-    }
 
 
     @Override

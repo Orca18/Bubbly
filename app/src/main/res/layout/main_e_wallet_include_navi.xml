@@ -65,6 +65,10 @@
 
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/wallet_refresh"
@@ -84,6 +88,7 @@
 
             </ScrollView>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            </RelativeLayout>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
