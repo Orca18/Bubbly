@@ -404,7 +404,7 @@ public interface ApiInterface {
 
     // todo 블록체인에서 거래기록 가져오기
     @GET("v2/accounts/{address}/transactions")
-    Call<String> transactionHistory(@Header("x-api-key") String token,
+    Call<String> transactionHistory(@Header("X-Indexer-API-Token") String token,
                                     @Path(value = "address", encoded = true) String address,
                                     @Query("limit") int limit, @Query("next") String nextToken);
 
