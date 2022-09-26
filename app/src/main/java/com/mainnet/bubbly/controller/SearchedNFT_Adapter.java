@@ -139,9 +139,10 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
 
 
         if(lists.get(position).getIsSell().equals("y")){
-            holder.ll_background.setBackgroundColor(Color.parseColor("#eeeeee"));
+            holder.tv_forSale.setVisibility(View.VISIBLE);
             holder.ll_sell.setVisibility(View.VISIBLE);
         }else{
+            holder.tv_forSale.setVisibility(View.GONE);
             holder.ll_sell.setVisibility(View.GONE);
         }
 
@@ -182,7 +183,7 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout ll_background, ll_sell;
-        TextView tv_user_nick, feed_basic_userID, tv_time;
+        TextView tv_user_nick, feed_basic_userID, tv_time, tv_forSale;
         ImageView iv_user_image, iv_image;
         Button bt_buy;
         TextView tv_price;
@@ -198,6 +199,7 @@ public class SearchedNFT_Adapter extends RecyclerView.Adapter<SearchedNFT_Adapte
             iv_image = view.findViewById(R.id.iv_nft_nftSrCom);
             bt_buy  = view.findViewById(R.id.bt_buy_nftSrCom);
             tv_price = view.findViewById(R.id.tv_price_nftSrCom);
+            tv_forSale = view.findViewById(R.id.item_nftSrCom_sale_yn);
         }
     }
 

@@ -10,9 +10,19 @@
 
     <LinearLayout
         android:id="@+id/ll_item_nft_ss_profile_background"
+        android:layout_marginBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/item_nft_ss_profile_sale_yn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/spoqa_bold"
+            android:text="FOR SALE"
+            android:textColor="@color/blue" />
 
         <ImageView
             android:id="@+id/iv_nft_itemNFT_ssProfile"
