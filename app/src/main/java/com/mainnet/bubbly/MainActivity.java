@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
                     .into(myAccount);
         }
         my_nick.setText(UserInfo.user_nick);
-        my_id.setText(UserInfo.user_id);
+        my_id.setText(UserInfo.login_id);
 
         NaviTouch();
     }

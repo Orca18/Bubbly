@@ -186,7 +186,10 @@ public class Bottom4_Fragment extends Fragment {
                     .circleCrop()
                     .into(iv_user_image);
         }else{
-            //아무런 처리하지 않음. 레이아웃에 설정된 default 값 표시
+            Glide.with(getContext())
+                    .load(R.drawable.blank_profile)
+                    .circleCrop()
+                    .into(iv_user_image);
         }
 
         if(UserInfo.user_nick!=null && !UserInfo.user_nick.equals("")){
