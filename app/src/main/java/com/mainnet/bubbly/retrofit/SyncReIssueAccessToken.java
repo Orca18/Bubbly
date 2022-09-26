@@ -11,7 +11,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 /**
-* 채팅방 정보를 조회한다.
+* 토큰을 재발급한다.
 * */
 public class SyncReIssueAccessToken extends Thread{
     private Call<String> call;

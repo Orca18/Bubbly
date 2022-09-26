@@ -342,6 +342,17 @@ public class MainActivity extends AppCompatActivity {
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
+
+                                    // 프래그먼트 1을 연결한다.
+                                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                                    transaction.replace(R.id.home_frame, bottom1_fragment).commitAllowingStateLoss();
+
+                                    // 채팅서비스와 연결한다.
+                                    if (!ChatService.IS_BOUND_MAIN_ACTIVITY) {
+                                        connectToService();
+                                        //Toast.makeText(MainActivity.this, "서비스와 연결", Toast.LENGTH_SHORT).show();
+                                    }
+
                                     //회원정보를 요청한다.
                                     Call<List<user_Response>> call_userInfo = login_api.selectUserInfo("" + user_id);
                                     call_userInfo.enqueue(new Callback<List<user_Response>>() {
@@ -393,11 +404,16 @@ public class MainActivity extends AppCompatActivity {
             }
         } else {
             Log.d("리프레시 토큰", "00");
-
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.home_frame, bottom1_fragment).commitAllowingStateLoss();
             FCMService.refreshToken(userId);
 
+            // 채팅서비스와 연결한다.
+            if (!ChatService.IS_BOUND_MAIN_ACTIVITY) {
+                connectToService();
+                //Toast.makeText(MainActivity.this, "서비스와 연결", Toast.LENGTH_SHORT).show();
+            }
         }
-
     }
 
     private void moveToPostDetail(String finalPostWriterId) {
@@ -449,15 +465,10 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences("novarand", MODE_PRIVATE);
         userId = preferences.getString("user_id", "");
 
-        // 채팅서비스와 연결한다.
-        if (!ChatService.IS_BOUND_MAIN_ACTIVITY) {
-            connectToService();
-            //Toast.makeText(MainActivity.this, "서비스와 연결", Toast.LENGTH_SHORT).show();
-        }
         chattingRoomViewModel = new ViewModelProvider(this).get(ChattingRoomViewModel.class);
 
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.home_frame, bottom1_fragment).commitAllowingStateLoss();
+        //FragmentTransaction transaction = fragmentManager.beginTransaction();
+        //transaction.replace(R.id.home_frame, bottom1_fragment).commitAllowingStateLoss();
 
 
         navigationView = findViewById(R.id.main_navigation_view);
