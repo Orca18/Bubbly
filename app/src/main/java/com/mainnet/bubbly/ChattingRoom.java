@@ -674,6 +674,9 @@ public class ChattingRoom extends AppCompatActivity {
         Message msg = Message.obtain(null, ChatService.DISCONNECTED_CHAT_ACT);
 
         try {
+            // 채팅방 나가기
+            chatUtil.updateUserCountMap(chatRoomId,1,chatMemberList.size(), userId);
+
             mServiceMessenger.send(msg);
             Log.e("채팅방 나갈 때 서비스와의 연결 제거 - 서비스로 메시지 전송", msg.toString());
 
@@ -748,9 +751,6 @@ public class ChattingRoom extends AppCompatActivity {
                 }
             });
         }
-
-        // 채팅방 나가기
-        chatUtil.updateUserCountMap(chatRoomId,1,chatMemberList.size(), userId);
 
         super.onDestroy();
     }
