@@ -92,12 +92,13 @@ public class Fragment_Tab3_NFTs_ss extends Fragment {
         // 보유한 nft 목록을 가져온다
         ApiInterface api = ApiClient.getApiClient(requireActivity()).create(ApiInterface.class);
         System.out.println("nfthold"+ UserInfo.user_id);
-        Call<List<NFT_Item>> call = api.selectNftUsingHolderId(UserInfo.user_id);
+        Call<List<NFT_Item>> call = api.selectNftUsingHolderId(uid);
         call.enqueue(new Callback<List<NFT_Item>>() {
             @Override
             public void onResponse(Call<List<NFT_Item>> call, Response<List<NFT_Item>> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     List<NFT_Item> responseResult = response.body();
+                    System.out.println("nft 보유 목록"+responseResult.size());
                     for(int i=0; i<responseResult.size(); i++){
                         System.out.println("nft 보유 목록"+responseResult.get(i).getNft_id());
                         list.add(new NFTSell_Item(responseResult.get(i).getNft_id(),

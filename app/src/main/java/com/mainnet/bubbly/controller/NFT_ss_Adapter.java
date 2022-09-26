@@ -63,7 +63,7 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         //이미 판매중인 nft목록 가져오기 (만약 판매중이라면 판매가 표시하기 위함)
         ApiInterface api = ApiClient.getApiClient(context).create(ApiInterface.class);
-        Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId(UserInfo.user_id);
+        Call<List<NFTSell_Item>> call = api.selectSelledNftListUsingSellerId(lists.get(position).getSeller_id());
         call.enqueue(new Callback<List<NFTSell_Item>>() {
             @Override
             public void onResponse(Call<List<NFTSell_Item>> call, Response<List<NFTSell_Item>> response) {
@@ -72,7 +72,7 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
                     lists.get(position).setIsSell("n");
                     for(int i=0; i<responseResult.size(); i++){
                         String element = responseResult.get(i).getNft_id();
-                        System.out.println("nft 판매 목록"+element);
+                        System.out.println("nft 판매 목록"+element+responseResult.get(i).getSell_price());
                         if (element.equals(lists.get(position).getNft_id())) {
                             lists.get(position).setIsSell("y");
                             lists.get(position).setApp_id(responseResult.get(i).getApp_id());
@@ -90,6 +90,20 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
                         holder.tv_forSale.setVisibility(View.GONE);
                         holder.ll_sell.setVisibility(View.GONE);
                     }
+                    String ipfsUrl = lists.get(position).getFile_save_url();
+                    System.out.println(ipfsUrl);
+                    if(ipfsUrl!=null&&!ipfsUrl.equals("")){
+                        Glide.with(context)
+                                .load(ipfsUrl)
+                                .into(holder.iv_image);
+                    }else{
+                        //아무런 조치도하지 않는다. xml정의 따름.
+                    }
+                    if(lists.get(position).getSell_price()!=null&&!lists.get(position).getSell_price().equals("")){
+                        holder.tv_price.setText(lists.get(position).getSell_price()+" Bubble");
+                    }else{
+                        holder.tv_price.setText("0 Bubble");
+                    }
                 }
             }
             @Override
@@ -98,20 +112,7 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
             }
         });
 
-        String ipfsUrl = lists.get(position).getFile_save_url();
-        System.out.println(ipfsUrl);
-        if(ipfsUrl!=null&&!ipfsUrl.equals("")){
-            Glide.with(context)
-                    .load(ipfsUrl)
-                    .into(holder.iv_image);
-        }else{
-            //아무런 조치도하지 않는다. xml정의 따름.
-        }
-        if(lists.get(position).getSell_price()!=null&&!lists.get(position).getSell_price().equals("")){
-            holder.tv_price.setText(lists.get(position).getSell_price()+" Bubble");
-        }else{
-            holder.tv_price.setText("0 Bubble");
-        }
+
 
         holder.bt_sell.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,8 +161,6 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
                 alert.getButton(alert.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, R.color.blue));
             }
         });
-
-
     }
 
 

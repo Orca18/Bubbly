@@ -110,7 +110,7 @@ public class FragmentSR_Tab4_NFTs extends Fragment {
                 if (response.isSuccessful() && response.body() != null) {
                     List<NFTSearched_Item> responseResult = response.body();
                     for(int i=0; i<responseResult.size(); i++){
-                        System.out.println("nft 보유 목록"+responseResult.get(i).getNft_id());
+                        System.out.println("nft 보유 목록"+responseResult.get(i).getIsSell()+responseResult.get(i).getUserName());
                         list.add(new NFTSearched_Item(responseResult.get(i).getProfileImageURL(),responseResult.get(i).getUserName(),responseResult.get(i).getLoginId(),
                                 responseResult.get(i).getUserId(),responseResult.get(i).getNft_id(),responseResult.get(i).getHolder_id(),
                                 responseResult.get(i).getCreation_time(), responseResult.get(i).getIsSell(),responseResult.get(i).getSeller_id(),
