@@ -564,7 +564,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             /** 프로필, 메시지, 시간 세팅 */
 
             // 프로필 id가 null이라면
-            /*if(currentItem.getProfileImageURL().equals("null")) {
+            /*if(currentItem.getProfileImageURL() == null) {
                 ((MyMsgViewHolder)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((MyMsgViewHolder)holder).user_profile);
@@ -587,7 +587,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         } else if(holder instanceof OpponentMsgViewHolderViewHolder){ //상대방이 작성한 메시지인 경우
             // 프로필파일이 없다면!
-            if(currentItem.getProfileImageURL().equals("null")) {
+            if(currentItem.getProfileImageURL() == null) {
                 ((OpponentMsgViewHolderViewHolder)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolder)holder).user_profile);
@@ -624,7 +624,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithDay)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDay){ //상대방이 작성했고 날짜를 보여줘야 하는 경우
-            if(currentItem.getProfileImageURL().equals("null")) {
+            if(currentItem.getProfileImageURL() == null) {
                 ((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile);
@@ -663,7 +663,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithPhoto)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithPhoto){ //상대방이 작성한 이미지인 경우
-            if(currentItem.getProfileImageURL().equals("null")) {
+            if(currentItem.getProfileImageURL() == null) {
                 ((OpponentMsgViewHolderViewHolderWithPhoto)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithPhoto)holder).user_profile);
@@ -700,7 +700,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ((MyMsgViewHolderWithDayAndPhoto)holder).not_read_user_count.setText("" + currentItem.getNotReadUserCount());
             }
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDayAndPhoto){ //상대방이 작성한 이미지이고 날짜를 보여줘야 하는 경우
-            if(currentItem.getProfileImageURL().equals("null")) {
+            if(currentItem.getProfileImageURL() == null) {
                 ((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndPhoto)holder).user_profile);
@@ -763,7 +763,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithVideo){ //상대방이 작성한 동영상인 경우
-            if(currentItem.getProfileImageURL().equals("null")) {
+            if(currentItem.getProfileImageURL() == null) {
                 ((OpponentMsgViewHolderViewHolderWithVideo)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithVideo)holder).user_profile);
@@ -840,7 +840,7 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 }
             }
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDayAndVideo){ //상대방이 작성한 동영상이고 날짜를 보여줘야 하는 경우
-            if(currentItem.getProfileImageURL().equals("null")) {
+            if(currentItem.getProfileImageURL() == null) {
                 ((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDayAndVideo)holder).user_profile);
@@ -899,6 +899,8 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         boolean isVideoMsg = (chatItemList.get(position).getChatType() == 2);
 
         Log.d("position: ", "" + position);
+        Log.d("채팅작성자 아이디: ", "" +  chatItemList.get(position).getChatUserId());
+        Log.d("UserInfo.user_id: ", "" +  UserInfo.user_id);
 
         isDateShowed = false;
 

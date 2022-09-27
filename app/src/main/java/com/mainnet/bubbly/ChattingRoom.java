@@ -190,9 +190,15 @@ public class ChattingRoom extends AppCompatActivity {
                     // 내가보낸 메시지라면 안읽은 사용자만 업데이트
                     if(read.getChatUserId().equals(userId)){
                         adapter.updateNotReadUserCountOne(read);
-
-
                     } else {
+                        // 채팅 작성자 아이디
+                        String chatWriterId = read.getChatUserId();
+
+                        // 프로필 이미지
+                        String chatProfileFileName = profileMap.get(chatWriterId);
+
+                        read.setProfileImageURL(chatProfileFileName);
+
                         // 수신한 메시지 리사이클러뷰에 표시
                         adapter.addChatMsgInfo(read);
                     }
@@ -297,7 +303,26 @@ public class ChattingRoom extends AppCompatActivity {
                 {
                     Log.e("조회 성공", "11");
                     ArrayList<Chat_Item> chatInfoList = response.body();
+
                     if(chatInfoList.size() > 0){
+                        ArrayList<Chat_Item> tempChatInfoList = new ArrayList<>();
+
+                        // 채팅리스트의 profile이미지 변경해주기
+                        for(Chat_Item c : chatInfoList) {
+                            // 채팅 작성자 아이디
+                            String chatWriterId = c.getChatUserId();
+
+                            // 프로필 이미지
+                            String chatProfileFileName = profileMap.get(chatWriterId);
+
+                            c.setProfileImageURL(chatProfileFileName);
+
+                            tempChatInfoList.add(c);
+                        }
+
+                        // 임시리스트를 채팅리스트에 넣어줌
+                        chatInfoList = tempChatInfoList;
+
                         // 채팅 리스트에 모든 데이터 추가
                         chatItemList.addAll(chatInfoList);
                         adapter.setPageNo(page_no);
