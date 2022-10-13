@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="com.mainnet.bubbly.ChattingRoom">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/chatroom_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:layout_scrollFlags="scroll|enterAlways">
+
+        <TextView
+            android:id="@+id/chatRoomName"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:fontFamily="@font/spoqa_bold"
+            android:text="버블리 챗봇"
+            android:textColor="@color/black"
+            android:textSize="15dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_baseline_list_24"
+            app:tint="#222" />
+    </androidx.appcompat.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.6dp"
+        android:background="#ccc" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatroom_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#ccc" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBaseline_toBottomOf="parent">
+
+        <EditText
+            android:id="@+id/input_text"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <ImageButton
+            android:id="@+id/send_chat"
+            android:paddingHorizontal="11dp"
+            android:layout_margin="4dp"
+            android:background="@null"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_send_24"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <!--<androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBaseline_toBottomOf="parent">
+
+            <LinearLayout
+                android:paddingVertical="5dp"
+                android:paddingHorizontal="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2">
+
+                <ImageView
+                    android:id="@+id/posting_create_addimage"
+                    android:layout_width="38dp"
+                    android:layout_height="39dp"
+                    android:src="@drawable/ic_outline_image_24" />
+
+
+                <ImageView
+                    android:id="@+id/posting_create_addvideo"
+                    android:layout_width="38dp"
+                    android:layout_height="39dp"
+                    android:src="@drawable/ic_baseline_videocam_24" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/input_text"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/send_chat"
+                android:paddingHorizontal="11dp"
+                android:layout_margin="4dp"
+                android:background="@null"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_send_24"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>-->
+</LinearLayout>

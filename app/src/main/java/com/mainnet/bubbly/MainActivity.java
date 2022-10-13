@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 내비뷰 메뉴 레이아웃에 직접 구현
     CircleImageView myAccount;
-    LinearLayout myActivity, myList, myCommunity;
+    LinearLayout myActivity, chatBot, myCommunity;
     TextView settingOption, info, logout;
     View view;
 
@@ -480,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
         // 내비 안 메뉴
         myAccount = view.findViewById(R.id.navi_header_profileimg);
         myActivity = view.findViewById(R.id.navi_header_myActivity);
-        myList = view.findViewById(R.id.navi_header_myList);
+        chatBot = view.findViewById(R.id.navi_header_chatbot);
         myCommunity = view.findViewById(R.id.navi_header_myCommunity);
         settingOption = view.findViewById(R.id.navi_header_setting_option);
         info = view.findViewById(R.id.navi_header_info);
@@ -542,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
     private void NaviTouch() {
         // 내비뷰 메뉴 레이아웃에 직접 구현
         // CircleImageView myAccount;
-        // LinearLayout myActivity, myList, myCommunity;
+        // LinearLayout myActivity, chatBot, myCommunity;
         // TextView settingOption, info, logout;
         myAccount.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -564,11 +564,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(wallet);
             }
         });
-        myList.setOnClickListener(new View.OnClickListener() {
+        chatBot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawerLayout.closeDrawers();
-                //Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
+                Intent wallet = new Intent(getApplicationContext(), ChattingRoom_ChatBot.class);
+                startActivity(wallet);
             }
         });
         myCommunity.setOnClickListener(new View.OnClickListener() {

@@ -144,6 +144,10 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name="com.mainnet.bubbly.ChattingRoom_ChatBot"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name="com.mainnet.bubbly.LL_Register_A"
             android:exported="false" />
         <activity

@@ -417,7 +417,7 @@ public class MM_Message extends AppCompatActivity {
         // 내 활동
         myActivity = view.findViewById(R.id.navi_header_myActivity);
         // 리스트
-        myList = view.findViewById(R.id.navi_header_myList);
+        //myList = view.findViewById(R.id.navi_header_myList);
         // 커뮤니티
         myCommunity = view.findViewById(R.id.navi_header_myCommunity);
         // 설정
@@ -533,12 +533,12 @@ public class MM_Message extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
             }
         });
-        myList.setOnClickListener(new View.OnClickListener() {
+        /*myList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               //  Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         myCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
