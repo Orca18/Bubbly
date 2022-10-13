@@ -588,7 +588,12 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else if(holder instanceof OpponentMsgViewHolderViewHolder){ //상대방이 작성한 메시지인 경우
             // 프로필파일이 없다면!
             if(currentItem.getProfileImageURL() == null) {
-                ((OpponentMsgViewHolderViewHolder)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
+                // 채팅봇이 아니라면
+                if(!currentItem.getChatUserId().equals("chatBot")){
+                    ((OpponentMsgViewHolderViewHolder)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
+                } else { // 채팅봇이 이라면
+                    ((OpponentMsgViewHolderViewHolder)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.bubblychatbot));
+                }
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolder)holder).user_profile);
             }
@@ -625,7 +630,12 @@ public class Chat_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         } else if(holder instanceof OpponentMsgViewHolderViewHolderWithDay){ //상대방이 작성했고 날짜를 보여줘야 하는 경우
             if(currentItem.getProfileImageURL() == null) {
-                ((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
+                // 채팅봇이 아니라면
+                if(!currentItem.getChatUserId().equals("chatBot")){
+                    ((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.blank_profile));
+                } else { // 채팅봇이 이라면
+                    ((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile.setImageDrawable(mContext.getDrawable(R.drawable.bubblychatbot));
+                }
             } else{
                 Glide.with(mContext).load(Config.cloudfront_addr + currentItem.getProfileImageURL()).into(((OpponentMsgViewHolderViewHolderWithDay)holder).user_profile);
             }

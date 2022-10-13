@@ -169,7 +169,7 @@ MM_Profile extends AppCompatActivity {
         view = navigationView.getHeaderView(0);
         myAccount = view.findViewById(R.id.navi_header_profileimg);
         myActivity = view.findViewById(R.id.navi_header_myActivity);
-        myList = view.findViewById(R.id.navi_header_myList);
+        //myList = view.findViewById(R.id.navi_header_myList);
         myCommunity = view.findViewById(R.id.navi_header_myCommunity);
         settingOption = view.findViewById(R.id.navi_header_setting_option);
         info = view.findViewById(R.id.navi_header_info);
@@ -283,12 +283,12 @@ MM_Profile extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "TODO 보상 체계 구현 (with 지갑)", Toast.LENGTH_SHORT).show();
             }
         });
-        myList.setOnClickListener(new View.OnClickListener() {
+        /*myList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               //  Toast.makeText(getApplicationContext(), "겉멋", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         myCommunity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

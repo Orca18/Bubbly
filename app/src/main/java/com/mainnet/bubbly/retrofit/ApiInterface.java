@@ -411,4 +411,8 @@ public interface ApiInterface {
     // todo 액세스 토큰 갱신
     @GET("login/reIssueAccessToken")
     Call<String> reIssueAccessToken(@Query("token") String refreshToken);
+
+    // 챗봇 데이터 가져오기
+    @GET("/chatbot/q")
+    Call<String> requestChatBotAnswer(@Query("s") String text);
 }

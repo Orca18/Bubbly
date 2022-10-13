@@ -31,6 +31,7 @@ public class ApiClient {
     private static Retrofit retrofit;
     private static Retrofit retrofit2;
     private static Retrofit retrofit_pure_stake;
+    private static Retrofit retrofit_chat_bot;
 
     /*public static Retrofit getApiClient()
     {
@@ -221,9 +222,9 @@ public class ApiClient {
     {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         OkHttpClient okHttpClient = clientBuilder.connectTimeout(100, TimeUnit.SECONDS)
-                                                 .readTimeout(100, TimeUnit.SECONDS)
-                                                 .writeTimeout(100, TimeUnit.SECONDS)
-                                                 .build();
+                .readTimeout(100, TimeUnit.SECONDS)
+                .writeTimeout(100, TimeUnit.SECONDS)
+                .build();
 
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -240,4 +241,26 @@ public class ApiClient {
         return retrofit_pure_stake;
     }
 
+    public static Retrofit getChatBotClientWithUrlInput(String url)
+    {
+        OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
+        OkHttpClient okHttpClient = clientBuilder.connectTimeout(30, TimeUnit.SECONDS)
+                                                 .readTimeout(30, TimeUnit.SECONDS)
+                                                 .writeTimeout(30, TimeUnit.SECONDS)
+                                                 .build();
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        if (retrofit_chat_bot == null) {
+            retrofit_chat_bot = new Retrofit.Builder()
+                    .baseUrl(url)
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClient)
+                    .build();
+        }
+        return retrofit_chat_bot;
+    }
 }
