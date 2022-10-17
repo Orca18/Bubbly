@@ -49,7 +49,10 @@ public class Kim_Com_post_Response {
     @Expose
     @SerializedName("post_type") private String post_type;
 
-    public Kim_Com_post_Response(String post_id, String post_writer_id, String nick_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String profile_file_name, String cre_datetime, String community_id, String[] mentioned_user_list, String post_type) {
+    @Expose
+    @SerializedName("login_id") private String login_id;
+
+    public Kim_Com_post_Response(String post_id, String post_writer_id, String nick_name, String post_contents, String file_save_names, String like_count, String like_yn, String share_post_yn, String nft_post_yn, String profile_file_name, String cre_datetime, String community_id, String[] mentioned_user_list, String post_type, String login_id) {
         this.post_id = post_id;
         this.post_writer_id = post_writer_id;
         this.nick_name = nick_name;
@@ -64,6 +67,7 @@ public class Kim_Com_post_Response {
         this.community_id = community_id;
         this.mentioned_user_list = mentioned_user_list;
         this.post_type = post_type;
+        this.login_id = login_id;
     }
 
     public String getPost_id() {
@@ -72,6 +76,14 @@ public class Kim_Com_post_Response {
 
     public void setPost_id(String post_id) {
         this.post_id = post_id;
+    }
+
+    public String getLogin_id() {
+        return login_id;
+    }
+
+    public void setLogin_id(String login_id) {
+        this.login_id = login_id;
     }
 
     public String getPost_writer_id() {

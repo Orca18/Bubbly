@@ -469,7 +469,8 @@ public class Community_MainPage extends AppCompatActivity {
                                 responseResult.get(i).getCre_datetime(),
                                 responseResult.get(i).getCommunity_id(),
                                 responseResult.get(i).getMentioned_user_list(),
-                                responseResult.get(i).getPost_type()
+                                responseResult.get(i).getPost_type(),
+                                responseResult.get(i).getLogin_id()
                         ));
                     }
                     post_adapter.notifyDataSetChanged();

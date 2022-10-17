@@ -1,4 +1,5 @@
 package com.mainnet.bubbly;
+
 import com.bumptech.glide.Glide;
 
 import androidx.annotation.NonNull;
@@ -492,7 +493,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new ItemSelecedListener2());
 
 
-        if(UserInfo.profile_file_name!=null && !UserInfo.profile_file_name.equals("")){
+        if (UserInfo.profile_file_name != null && !UserInfo.profile_file_name.equals("")) {
             Glide.with(MainActivity.this)
                     .load(UserInfo.profile_file_name)
                     .circleCrop()
@@ -602,7 +603,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     startActivity(email);
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "이메일 관련 앱이 존재하지 않습니다.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "이메일 관련 앱이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -614,33 +615,27 @@ public class MainActivity extends AppCompatActivity {
                 // 로그아웃 시 api 서버의 모든 토큰정보를 지워준다.
                 ApiInterface apiClient = ApiClient.getApiClient(MainActivity.this).create(ApiInterface.class);
                 Call<String> call = apiClient.logoutFromApiServer(userId);
-                call.enqueue(new Callback<String>()
-                {
+                call.enqueue(new Callback<String>() {
                     @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                    {
-                        if (response.isSuccessful() && response.body() != null)
-                        {
-                            if(response.body().equals("logout success")){
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            if (response.body().equals("logout success")) {
                                 // 로그아웃 시 채팅 서버의 모든 토큰정보를 지워준다.
                                 ChatApiInterface chatApiInterface = ChatApiClient.getApiClient(MainActivity.this).create(ChatApiInterface.class);
                                 Call<String> call2 = chatApiInterface.logoutFromChatServer(UserInfo.token, userId);
-                                call2.enqueue(new Callback<String>()
-                                {
+                                call2.enqueue(new Callback<String>() {
                                     @RequiresApi(api = Build.VERSION_CODES.O)
                                     @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response)
-                                    {
-                                        if (response.isSuccessful() && response.body() != null)
-                                        {
-                                            if(response.body().equals("logout success")){
-                drawerLayout.closeDrawers();
-                Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
-                startActivity(toLogin);
-                finish();
-                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
+                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                        if (response.isSuccessful() && response.body() != null) {
+                                            if (response.body().equals("logout success")) {
+                                                drawerLayout.closeDrawers();
+                                                Intent toLogin = new Intent(getApplicationContext(), LL_Login.class);
+                                                overridePendingTransition(R.anim.fadein, R.anim.fadeout);
+                                                startActivity(toLogin);
+                                                finish();
+                                                Toast.makeText(getApplicationContext(), "로그아웃", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 Log.e("채팅 서버 로그아웃 데이터 ", response.body());
                                             }
@@ -650,13 +645,12 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                     @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                                    {
+                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                         Log.e("채팅서버 로그아웃 시실패: ", "1111");
                                     }
                                 });
                             } else {
-                                    Log.e("api 서버 로그아웃 데이터 ", response.body());
+                                Log.e("api 서버 로그아웃 데이터 ", response.body());
                             }
                         } else {
                             Log.e("api 서버 로그아웃 성공했지만 데이터 없음 ", "1111");
@@ -664,8 +658,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
-                    {
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                         Log.e("api 서버 로그아웃 시실패: ", "1111");
                     }
                 });

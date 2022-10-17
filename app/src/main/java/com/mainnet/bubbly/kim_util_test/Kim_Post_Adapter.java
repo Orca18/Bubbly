@@ -117,7 +117,7 @@ public class Kim_Post_Adapter extends RecyclerView.Adapter<Kim_Post_Adapter.Post
 
 
         // TODO 유저 login_id & 커뮤니티 이름 뜨게 만들기
-        holder.tv_user_id.setText(post_response.getPost_writer_id());
+        holder.tv_user_id.setText(post_response.getLogin_id());
 
 
         // TODO 커뮤니티 이름 가져오긴 하는데, 성능 저하 문제는 나중에 고려
