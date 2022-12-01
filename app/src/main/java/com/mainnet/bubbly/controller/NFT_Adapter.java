@@ -83,6 +83,8 @@ public class NFT_Adapter extends RecyclerView.Adapter<NFT_Adapter.ViewHolder> {
                     for(int i=0; i<responseResult.size(); i++){
                         String element = responseResult.get(i).getNft_id();
                         System.out.println("nft 판매 목록"+element);
+                        System.out.println("nft정보1"+ responseResult.get(i).toString());
+
                         if (element.equals(lists.get(position).getNft_id())) {
                             lists.get(position).setAlreadySell(true);
                             lists.get(position).setApp_id(responseResult.get(i).getApp_id());

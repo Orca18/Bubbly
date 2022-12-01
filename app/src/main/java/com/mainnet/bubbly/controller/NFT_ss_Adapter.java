@@ -70,8 +70,12 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
                 if (response.isSuccessful() && response.body() != null) {
                     List<NFTSell_Item> responseResult = response.body();
                     lists.get(position).setIsSell("n");
+
                     for(int i=0; i<responseResult.size(); i++){
+                        lists.get(position).setNovaland_account_addr(responseResult.get(i).getNovaland_account_addr());
                         String element = responseResult.get(i).getNft_id();
+
+                        System.out.println("nft 판매 목록---: "+element);
                         System.out.println("nft 판매 목록"+element+responseResult.get(i).getSell_price());
                         if (element.equals(lists.get(position).getNft_id())) {
                             lists.get(position).setIsSell("y");
@@ -82,6 +86,8 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
                         } else {
                             lists.get(position).setIsSell("n");
                         }
+
+                        System.out.println("nft정보1"+ lists.get(i).toString());
                     }
                     if(lists.get(position).getIsSell().equals("y")){
                         holder.tv_forSale.setVisibility(View.VISIBLE);
@@ -125,6 +131,8 @@ public class NFT_ss_Adapter extends RecyclerView.Adapter<NFT_ss_Adapter.ViewHold
                     public void onClick(DialogInterface dialog, int which) {
                         ApiInterface api = ApiClient.getApiClient(context).create(ApiInterface.class);
                         System.out.println(UserInfo.mnemonic+"nftid"+lists.get(position).getNft_id()+UserInfo.user_id);
+                        System.out.println(lists.get(position).toString());
+
                         Call<String> call = api.nftBuy(lists.get(position).getNovaland_account_addr(),UserInfo.mnemonic,lists.get(position).getNft_id(),lists.get(position).getApp_id(),lists.get(position).getSell_price(),UserInfo.user_id);
                         call.enqueue(new Callback<String>() {
                             @Override

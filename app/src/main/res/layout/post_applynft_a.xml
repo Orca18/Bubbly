@@ -152,7 +152,6 @@
                         <ImageView
                             android:adjustViewBounds="true"
                             android:maxHeight="340dp"
-                            android:scaleType="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/iv_media_applyNFT" />

@@ -104,4 +104,19 @@ public class NFT_Item {
     public void setApp_id(String app_id) {
         this.app_id = app_id;
     }
+
+    @Override
+    public String toString() {
+        return "NFT_Item{" +
+                "nft_id='" + nft_id + '\'' +
+                ", holder_id='" + holder_id + '\'' +
+                ", nft_name='" + nft_name + '\'' +
+                ", nft_des='" + nft_des + '\'' +
+                ", file_save_url='" + file_save_url + '\'' +
+                ", isAlreadySell=" + isAlreadySell +
+                ", seller_id='" + seller_id + '\'' +
+                ", sell_price='" + sell_price + '\'' +
+                ", app_id='" + app_id + '\'' +
+                '}';
+    }
 }
