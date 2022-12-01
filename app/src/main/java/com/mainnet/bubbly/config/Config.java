@@ -21,6 +21,9 @@ public class Config {
     public static String cloudfront_addr = null;
     public static String mqtt_server = null;
     public static String s3_bucket_name = null;
+    public static int token_id = 0;
+    public static String novarand_node_ip = null;
+    public static String novarand_indexer_ip = null;
 
     public Config(Context context) throws IOException, JSONException {
         this.context = context;
@@ -56,5 +59,8 @@ public class Config {
         cloudfront_addr = jsonObj.getString("cloudfront_addr");
         mqtt_server = jsonObj.getString("mqtt_server");
         s3_bucket_name = jsonObj.getString("s3_bucket_name");
+        token_id = jsonObj.getInt("token_id");
+        novarand_node_ip = jsonObj.getString("novarand_node_ip");
+        novarand_indexer_ip = jsonObj.getString("novarand_indexer_ip");
     }
 }

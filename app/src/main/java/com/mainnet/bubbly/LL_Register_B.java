@@ -7,8 +7,10 @@ import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,6 +66,9 @@ public class LL_Register_B extends AppCompatActivity {
     EditText et_id, et_password, et_password_check, et_nick;
     TextView tv_id_check, tv_pw_check, tv_done;
 
+    ProgressBar progressBar_register;
+    TextView register_text;
+
     int id_check, pw_check, nick_check;
 
     @Override
@@ -85,6 +90,8 @@ public class LL_Register_B extends AppCompatActivity {
         et_nick = findViewById(R.id.et_nick);
         done = findViewById(R.id.done);
         tv_done = findViewById(R.id.tv_done);
+        progressBar_register = findViewById(R.id.progressBar_register);
+        register_text = findViewById(R.id.register_text);
 
         Intent mIntent = getIntent();
         String user_email = mIntent.getStringExtra("user_email");
@@ -96,6 +103,12 @@ public class LL_Register_B extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(tv_id_check.getText().toString().equals("사용가능한 아이디입니다.") && tv_pw_check.getText().toString().equals("비밀번호가 일치합니다.")){
+                    progressBar_register.setVisibility(View.VISIBLE);
+                    register_text.setVisibility(View.VISIBLE);
+
+                    // 화면터치 금지
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
                     //클라이언트 비밀번호 암호화
                     String pw =  et_password.getText().toString();
                     String encryptedPW = encryption(pw);
@@ -110,7 +123,7 @@ public class LL_Register_B extends AppCompatActivity {
                             {
                                 Log.e("희원가입 성공", response.body().toString());
                                 if(response.body().toString().equals("success")){
-                                    Toast.makeText(getApplicationContext(), "희원가입 성공",Toast.LENGTH_SHORT).show();
+                                    //Toast.makeText(getApplicationContext(), "희원가입 성공",Toast.LENGTH_SHORT).show();
                                     //현 시점에서 userID 알수 없어, 로그인해서 userID 가져오기
                                     ApiInterface login_api = ApiClient.getApiClient(LL_Register_B.this).create(ApiInterface.class);
                                     Call<String> call_login = login_api.login(et_id.getText().toString(), encryptedPW);
@@ -123,6 +136,8 @@ public class LL_Register_B extends AppCompatActivity {
                                             {
                                                 Log.e("로그인 데이터", response.body().toString());
                                                 if(response.body().toString().equals("fail")){
+                                                    progressBar_register.setVisibility(View.GONE);
+                                                    register_text.setVisibility(View.GONE);
                                                     Toast.makeText(getApplicationContext(), "로그인 실패",Toast.LENGTH_SHORT).show();
                                                 }
                                                 else{
@@ -190,6 +205,12 @@ public class LL_Register_B extends AppCompatActivity {
                                                                                     e.printStackTrace();
                                                                                 }
 
+                                                                                // 화면터치 금지해제
+                                                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                                                progressBar_register.setVisibility(View.GONE);
+                                                                                register_text.setVisibility(View.GONE);
+
                                                                                 //인텐트 전달
                                                                                 Intent mIntent = new Intent(getApplicationContext(), LL_Register_C.class);
                                                                                 mIntent.putExtra("address",address);
@@ -197,6 +218,11 @@ public class LL_Register_B extends AppCompatActivity {
                                                                                 startActivity(mIntent);
 
                                                                             }else{
+                                                                                // 화면터치 금지해제
+                                                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                                                progressBar_register.setVisibility(View.GONE);
+                                                                                register_text.setVisibility(View.GONE);
                                                                                 Toast.makeText(getApplicationContext(), "블록체인 계정 생성에 실패하였습니다.",Toast.LENGTH_SHORT).show();
                                                                             }
                                                                         }
@@ -204,6 +230,11 @@ public class LL_Register_B extends AppCompatActivity {
                                                                     @Override
                                                                     public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
                                                                     {
+                                                                        // 화면터치 금지해제
+                                                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                                        progressBar_register.setVisibility(View.GONE);
+                                                                        register_text.setVisibility(View.GONE);
                                                                         Log.e("니모닉 생성 에러", t.getMessage());
                                                                     }
                                                                 });
@@ -212,10 +243,20 @@ public class LL_Register_B extends AppCompatActivity {
                                                             @Override
                                                             public void onFailure(@NonNull Call<List<user_Response>> call, @NonNull Throwable t)
                                                             {
+                                                                // 화면터치 금지해제
+                                                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                                progressBar_register.setVisibility(View.GONE);
+                                                                register_text.setVisibility(View.GONE);
                                                                 Log.e("에러", t.getMessage());
                                                             }
                                                         });
                                                     } catch (JSONException e) {
+                                                        // 화면터치 금지해제
+                                                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                                        progressBar_register.setVisibility(View.GONE);
+                                                        register_text.setVisibility(View.GONE);
                                                         e.printStackTrace();
                                                     }
                                                 }
@@ -224,6 +265,11 @@ public class LL_Register_B extends AppCompatActivity {
                                         @Override
                                         public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
                                         {
+                                            // 화면터치 금지해제
+                                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                                            progressBar_register.setVisibility(View.GONE);
+                                            register_text.setVisibility(View.GONE);
                                             Log.e("로그인 에러", t.getMessage());
                                         }
                                     });
@@ -237,6 +283,11 @@ public class LL_Register_B extends AppCompatActivity {
                         @Override
                         public void onFailure(@NonNull Call<String> call, @NonNull Throwable t)
                         {
+                            // 화면터치 금지해제
+                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+
+                            progressBar_register.setVisibility(View.GONE);
+                            register_text.setVisibility(View.GONE);
                             Log.e("희원가입 에러", t.getMessage());
                         }
                     });

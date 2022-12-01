@@ -32,6 +32,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.mainnet.bubbly.R;
+import com.mainnet.bubbly.config.Config;
 import com.mainnet.bubbly.controller.TransactionHistory_Adapter;
 import com.mainnet.bubbly.model.TransactionHistory_Item;
 import com.mainnet.bubbly.model.UserInfo;
@@ -202,7 +203,7 @@ public class MM_Wallet extends AppCompatActivity {
                         for(int i = 0; i<jsonAssetArray.length(); i++){
                             JSONObject asset = jsonAssetArray.getJSONObject(i);
                             int assetID = asset.getInt("asset-id");
-                            if(assetID==94434081){
+                            if(assetID== Config.token_id){
                                 bubble = asset.getInt("amount");
                             }
                         }

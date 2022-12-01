@@ -32,6 +32,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.mainnet.bubbly.R;
+import com.mainnet.bubbly.config.Config;
 import com.mainnet.bubbly.controller.TransactionHistory_Adapter;
 import com.mainnet.bubbly.model.TransactionHistory_Item;
 import com.mainnet.bubbly.model.UserInfo;
@@ -202,7 +203,7 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
                         for(int i = 0; i<jsonAssetArray.length(); i++){
                             JSONObject asset = jsonAssetArray.getJSONObject(i);
                             int assetID = asset.getInt("asset-id");
-                            if(assetID==9){
+                            if(assetID== Config.token_id){
                                 bubble = asset.getInt("amount");
                             }
                         }
@@ -225,7 +226,10 @@ public class MM_Wallet_toNavi extends AppCompatActivity {
     }
 
     private void selectHistory(){
-        String base_url = "http://221.143.186.194:8980/";
+        String base_url = Config.novarand_indexer_ip;
+
+        Log.d("novarand_indexer_ip", base_url);
+
         String token = "";
         ApiInterface api = ApiClient.getApiClientWithUrlInput(base_url).create(ApiInterface.class);
         Call<String> call = api.transactionHistory(token, address,20,nextToken);
