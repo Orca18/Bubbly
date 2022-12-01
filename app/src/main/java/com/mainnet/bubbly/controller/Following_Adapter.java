@@ -68,7 +68,10 @@ public class Following_Adapter extends RecyclerView.Adapter<Following_Adapter.Fo
                     .circleCrop()
                     .into(holder.iv_user_image);
         }else{
-            //아무 처리도 하지 않는다. default 프로필 이미지 나타남.
+            Glide.with(mContext)
+                    .load(R.drawable.blank_profile)
+                    .circleCrop()
+                    .into(holder.iv_user_image);
         }
         holder.iv_user_image.setOnClickListener(new View.OnClickListener() {
             @Override

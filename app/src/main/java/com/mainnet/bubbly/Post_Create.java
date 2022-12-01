@@ -188,6 +188,11 @@ public class Post_Create extends AppCompatActivity {
                     .load(UserInfo.profile_file_name)
                     .circleCrop()
                     .into(cv_profile);
+        }else{
+            Glide.with(getApplicationContext())
+                    .load(R.drawable.blank_profile)
+                    .circleCrop()
+                    .into(cv_profile);
         }
     }
 
